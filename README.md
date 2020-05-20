@@ -1,1 +1,1 @@
-# ItProjektSS20
+# IT-Projekt-SS2020
