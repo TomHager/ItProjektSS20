@@ -27,15 +27,15 @@ class User (bo.BusinessObject):
 
     def get_external_id(self):
         """Auslesen der externen User ID (z.B. Google ID)."""
-        return self.__user_id
+        return self.__external_id
 
     def set_external_id(self, value):
         """Setzen der externen User ID (z.B. Google ID)."""
-        self.__user_id = value
+        self.__external_id = value
 
     def __str__(self):
         """Erzeugen einer einfachen textuellen Darstellung der jeweiligen Instanz."""
-        return "User: {}, {}, {}, {}".format(self.get_id(), self.__name, self.__email, self.__user_id)
+        return "User: {}, {}, {}, {}".format(self.get_id(), self.__name, self.__email, self.__external_id)
 
     @staticmethod
     def from_dict(dictionary=dict()):
@@ -44,5 +44,5 @@ class User (bo.BusinessObject):
         obj.set_id(dictionary["id"])  # eigentlich Teil von BusinessObject !
         obj.set_name(dictionary["name"])
         obj.set_email(dictionary["email"])
-        obj.set_external_id(dictionary["user_id"])
+        obj.set_external_id(dictionary["external_id"])
         return obj
