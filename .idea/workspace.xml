@@ -1,13 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="2c1c77a4-6169-48a4-a7a4-a8dc3ff2c5dd" name="Default Changelist" comment="" />
+    <list default="true" id="2c1c77a4-6169-48a4-a7a4-a8dc3ff2c5dd" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="Git.Settings">
+    <option name="PREVIOUS_COMMIT_AUTHORS">
+      <list>
+        <option value="FinkRobin &lt;60145607+finkrobin@users.noreply.github.com&gt;" />
+      </list>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectId" id="1cZzS4F54H0o1nwqmovqldhqfKv" />
@@ -32,12 +39,36 @@
       <option name="presentableId" value="Default" />
       <updated>1590750899324</updated>
     </task>
+    <task id="LOCAL-00001" summary="Grundstruktur angelegt">
+      <created>1591100860448</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1591100860448</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Grundstruktur angelegt" />
+    <option name="LAST_COMMIT_MESSAGE" value="Grundstruktur angelegt" />
+  </component>
   <component name="WindowStateProjectService">
+    <state x="311" y="14" key="CommitChangelistDialog2" timestamp="1591100858138">
+      <screen x="0" y="0" width="1368" height="872" />
+    </state>
+    <state x="311" y="14" key="CommitChangelistDialog2/0.0.1368.872@0.0.1368.872" timestamp="1591100858138" />
     <state x="186" y="81" key="SettingsEditor" timestamp="1591099689649">
       <screen x="0" y="0" width="1368" height="872" />
     </state>
     <state x="186" y="81" key="SettingsEditor/0.0.1368.872@0.0.1368.872" timestamp="1591099689649" />
+    <state x="277" y="169" key="Vcs.Push.Dialog.v2" timestamp="1591102475697">
+      <screen x="0" y="0" width="1368" height="872" />
+    </state>
+    <state x="277" y="169" key="Vcs.Push.Dialog.v2/0.0.1368.872@0.0.1368.872" timestamp="1591102475697" />
+    <state x="492" y="350" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1591101361416">
+      <screen x="0" y="0" width="1368" height="872" />
+    </state>
+    <state x="492" y="350" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1368.872@0.0.1368.872" timestamp="1591101361416" />
   </component>
 </project>
