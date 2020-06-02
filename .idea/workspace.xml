@@ -20,15 +20,12 @@
       <path>
         <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
         <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
-        <item name="BRANCH:master" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="BRANCH:FinkRobin" type="e8cecc67:BranchNodeDescriptor" />
       </path>
     </select>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b4314190-678c-4d64-b8b2-8b1bebea7c42" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/ItProjektSS20.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/ItProjektSS20.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="2c1c77a4-6169-48a4-a7a4-a8dc3ff2c5dd" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -39,11 +36,6 @@
       <list>
         <option value="FinkRobin &lt;60145607+finkrobin@users.noreply.github.com&gt;" />
       </list>
-    </option>
-    <option name="RECENT_BRANCH_BY_REPOSITORY">
-      <map>
-        <entry key="$PROJECT_DIR$" value="master" />
-      </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
@@ -63,7 +55,6 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../untitled" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="SvnConfiguration">
@@ -116,7 +107,6 @@
         </entry>
       </map>
     </option>
-    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Grundstruktur angelegt" />
@@ -124,31 +114,21 @@
     <option name="LAST_COMMIT_MESSAGE" value="test" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="530" y="262" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1591108377003">
-      <screen x="0" y="0" width="1536" height="920" />
-    </state>
-    <state x="530" y="262" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1536.920@0.0.1536.920" timestamp="1591108377003" />
     <state x="311" y="14" key="CommitChangelistDialog2" timestamp="1591102565280">
       <screen x="0" y="0" width="1368" height="872" />
     </state>
     <state x="311" y="14" key="CommitChangelistDialog2/0.0.1368.872@0.0.1368.872" timestamp="1591102565280" />
-    <state x="549" y="215" key="FileChooserDialogImpl" timestamp="1591110209255">
-      <screen x="0" y="0" width="1536" height="920" />
-    </state>
-    <state x="549" y="215" key="FileChooserDialogImpl/0.0.1536.920@0.0.1536.920" timestamp="1591110209255" />
-    <state x="209" y="85" key="SettingsEditor" timestamp="1591108795257">
-      <screen x="0" y="0" width="1536" height="920" />
+    <state x="186" y="81" key="SettingsEditor" timestamp="1591099689649">
+      <screen x="0" y="0" width="1368" height="872" />
     </state>
     <state x="186" y="81" key="SettingsEditor/0.0.1368.872@0.0.1368.872" timestamp="1591099689649" />
-    <state x="209" y="85" key="SettingsEditor/0.0.1536.920@0.0.1536.920" timestamp="1591108795257" />
     <state x="277" y="169" key="Vcs.Push.Dialog.v2" timestamp="1591102583667">
       <screen x="0" y="0" width="1368" height="872" />
     </state>
     <state x="277" y="169" key="Vcs.Push.Dialog.v2/0.0.1368.872@0.0.1368.872" timestamp="1591102583667" />
-    <state x="552" y="369" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1591108070039">
-      <screen x="0" y="0" width="1536" height="920" />
+    <state x="492" y="350" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1591103046248">
+      <screen x="0" y="0" width="1368" height="872" />
     </state>
     <state x="492" y="350" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1368.872@0.0.1368.872" timestamp="1591103046248" />
-    <state x="552" y="369" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1536.920@0.0.1536.920" timestamp="1591108070039" />
   </component>
 </project>
