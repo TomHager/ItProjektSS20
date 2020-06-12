@@ -182,7 +182,7 @@ class RetailerMapper (Mapper):
 
 
 if (__name__ == "__main__"):
-    with UserMapper() as mapper:
+    with RetailerMapper() as mapper:
         result = mapper.find_all()
         for retailer in result:
             print(retailer)
