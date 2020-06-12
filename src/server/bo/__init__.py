@@ -1,1 +1,1 @@
-print("Business Object (bo) package initialisiert...")
+print("Business Object (bo) package initialised...")
