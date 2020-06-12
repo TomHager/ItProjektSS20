@@ -56,7 +56,7 @@ class RetailerEntryListMapper (Mapper):
                 davon aus, dass die Tabelle leer ist und wir mit der ID 1 beginnen können."""
                 retailerentrylist.set_id(1)
 
-        command = "INSERT INTO users (id, name, email, external_id) VALUES (%s,%s,%s,%s)"
+        command = "INSERT INTO retailerentrylist (id, user_id, user_name,retailer_id, retailer_name, shoppinglist_id) VALUES (%s,%s,%s,%s,%s)"
         data = (retailerentrylist.get_id(), retailerentrylist.get_user_id(),retailerentrylist.get_user_name(), retailerentrylist.get_retailer_id(), retailerentrylist.get_retailer_name(), retailerentrylist.get_shopping_list_id())
         cursor.execute(command, data)
 
@@ -250,8 +250,7 @@ class RetailerEntryListMapper (Mapper):
         """
         result = []
         cursor = self._cnx.cursor()
-        command = "SELECT id, user_id, user_name, retailer_id, retailer_name, shoppinglist_id FROM retailerentrylist WHERE user_id LIKE '{}' ORDER BY user_id".format(
-            retailer_entry_list)
+        command = "SELECT id, user_id, user_name, retailer_id, retailer_name, shoppinglist_id FROM retailerentrylist WHERE user_id LIKE '{}' ORDER BY user_id".format(retailer_entry_list)
         cursor.execute(command)
         tuples = cursor.fetchall()
 

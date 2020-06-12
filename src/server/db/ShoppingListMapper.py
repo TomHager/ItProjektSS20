@@ -1,4 +1,4 @@
-from server.bo.ShopingList import ShoppingList
+from server.bo.ShoppingList import ShoppingList
 from server.db.Mapper import Mapper
 
 
@@ -177,7 +177,6 @@ class ShoppingListMapper (Mapper):
         cursor.close()
 
         return result
-
 
 
 

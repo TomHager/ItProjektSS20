@@ -19,7 +19,7 @@ class RetailerMapper (Mapper):
         tuples = cursor.fetchall()
 
         for (id, name, group_id) in tuples:
-            retailer = retailer()
+            retailer = Retailer()
             retailer.set_id(id)
             retailer.set_name(name)
             retailer.set_group_id(group_id)

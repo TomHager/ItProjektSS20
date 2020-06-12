@@ -27,7 +27,7 @@
   <component name="ChangeListManager">
     <list default="true" id="519d2149-eced-47de-9dbd-9ec56ba1e253" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/server/bo/ShopingList.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/bo/ShopingList.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/server/bo/ShopingList.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/bo/ShoppingList.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/server/db/RetailerEntryListMapper.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/db/RetailerEntryListMapper.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/server/db/RetailerMapper.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/db/RetailerMapper.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/server/db/ShoppingListMapper.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/db/ShoppingListMapper.py" afterDir="false" />
@@ -102,7 +102,14 @@
       <option name="project" value="LOCAL" />
       <updated>1591832048672</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="RetailerMapper.py, RetailerEntryListMapper.py und ShoppingListMapper.py weiter angepasst.&#10;&#10;Fehler in ShopingList.py geändert.">
+      <created>1591954309900</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1591954309900</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -133,13 +140,14 @@
     <MESSAGE value="Grundstruktur angelegt" />
     <MESSAGE value="test" />
     <MESSAGE value="RetailerMapper.py, RetailerEntryListMapper.py und ShoppingListMapper.py angepasst.&#10;&#10;RetailerMapper.py bereit zum testen." />
-    <option name="LAST_COMMIT_MESSAGE" value="RetailerMapper.py, RetailerEntryListMapper.py und ShoppingListMapper.py angepasst.&#10;&#10;RetailerMapper.py bereit zum testen." />
+    <MESSAGE value="RetailerMapper.py, RetailerEntryListMapper.py und ShoppingListMapper.py weiter angepasst.&#10;&#10;Fehler in ShopingList.py geändert." />
+    <option name="LAST_COMMIT_MESSAGE" value="RetailerMapper.py, RetailerEntryListMapper.py und ShoppingListMapper.py weiter angepasst.&#10;&#10;Fehler in ShopingList.py geändert." />
   </component>
   <component name="WindowStateProjectService">
-    <state x="311" y="14" key="CommitChangelistDialog2" timestamp="1591832046989">
+    <state x="311" y="6" key="CommitChangelistDialog2" timestamp="1591954308074">
       <screen x="0" y="0" width="1368" height="872" />
     </state>
-    <state x="311" y="14" key="CommitChangelistDialog2/0.0.1368.872@0.0.1368.872" timestamp="1591832046989" />
+    <state x="311" y="6" key="CommitChangelistDialog2/0.0.1368.872@0.0.1368.872" timestamp="1591954308074" />
     <state x="186" y="81" key="SettingsEditor" timestamp="1591108101784">
       <screen x="0" y="0" width="1368" height="872" />
     </state>
