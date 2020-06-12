@@ -171,28 +171,6 @@ class GroupMapper(Mapper):
 
         return result
 
-    def find_user_list_by_group(self, group):
-        """Auslesen einer Mitgliederliste anhand einer Gruppe.
-
-                        :param group die gesuchten Gruppe.
-                        :return user_id_list, der gewählten Gruppe.
-                        """
-
-        result = []
-        cursor = self._cnx.cursor()
-        command = "SELECT user_id_list FROM groups WHERE group={} ORDER BY user".format(group)
-        cursor.execute(command)
-        tuples = cursor.fetchall()
-
-        for (user_id_list) in tuples:
-            group = Group()
-            group.set_user_id_list(user_id_list)
-            result.append(group)
-
-        self._cnx.commit()
-        cursor.close()
-
-        return result
 
 """Zu Testzwecken können wir diese Datei bei Bedarf auch ausführen, 
 um die grundsätzliche Funktion zu überprüfen.
