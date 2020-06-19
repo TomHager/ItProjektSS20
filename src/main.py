@@ -443,7 +443,7 @@ class RetailerByRetailerEntryListOperations(Resource):
         "Auslesen eines bestimmten Retailer-Objekts nach RetailerEntry"
 
         adm = ShoppingListAdministration()
-        r = adm.get_retailer_by_retailer_entry(retailer_entry_list)
+        r = adm.get_retailer_by_retailer_entry_list(retailer_entry_list)
         return r
 
 
