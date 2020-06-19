@@ -41,8 +41,9 @@ Namespace anlegen, erlaubt Strukturierung von APIs, fasst alle iKauf relevanten 
 
 ikauf = api.namespace('iKauf', description='Funktionen der App iKauf')
 
-if __name__ == '__main__':
-  app.run (port=1337, debug=True)
+"""
+Anlegen von transferierbaren Straukturen.
+"""
 
 bo = api.model('BusinessObject', {
     'id': fields.Integer(attribute='_id', description='Der Unique Identifier eines Business Object')
@@ -285,7 +286,7 @@ class GroupOperations(Resource):
 
     @secured
     def delete(self, id):
-        "Läschen eines bestimmten Gruppen-Objekts"
+        "Löschen eines bestimmten Gruppen-Objekts"
 
         adm = ShoppingListAdministration()
         g = adm.get_group_by_id(id)
@@ -296,15 +297,12 @@ class GroupOperations(Resource):
     @banking.expect(group, validate=True)
     @secured
     def put(self, id):
-        "Update eines bestimmten Customer-Objekts."
+        "Update eines bestimmten Gruppen-Objekts."
 
         adm = ShoppingListdministration()
         g = group.from_dict(api.payload)
 
         if g is not None:
-            """Hierdurch wird die id des zu überschreibenden (vgl. Update) Customer-Objekts gesetzt.
-            Siehe Hinweise oben.
-            """
             g.set_id(id)
             adm.save_group(g)
             return '', 200
@@ -731,7 +729,7 @@ class ShoppingistListOperations(Resource):
         sl = adm.get_all_shopping_list()
         return sl
     def post(self):
-        "Anlegen eines neuen Entry-Objekts"
+        "Anlegen eines neuen ShoppingList-Objekts"
 
         adm = ShoppingListAdministration()
 
@@ -938,7 +936,7 @@ class ArticleRelatedByStandardBooleanOperations(Resource):
         return a
 
     def put(self, article_boolean):
-        """Update eines bestimmten Entry-Objekts."""
+        """Update eines bestimmten Article-Objekts."""
 
         adm = ShoppingListdministration()
         a = article.from_dict(api.payload)
