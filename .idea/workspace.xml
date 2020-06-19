@@ -19,18 +19,16 @@
     <select>
       <path>
         <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
-        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
-        <item name="BRANCH:RobinFink" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="BRANCH:origin/dev" type="e8cecc67:BranchNodeDescriptor" />
       </path>
     </select>
   </component>
   <component name="ChangeListManager">
     <list default="true" id="519d2149-eced-47de-9dbd-9ec56ba1e253" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/server/bo/ShopingList.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/bo/ShoppingList.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/server/db/RetailerEntryListMapper.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/db/RetailerEntryListMapper.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/server/db/RetailerMapper.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/db/RetailerMapper.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/server/db/ShoppingListMapper.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/db/ShoppingListMapper.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -123,7 +121,7 @@
                   <entry key="branch">
                     <value>
                       <list>
-                        <option value="RobinFink" />
+                        <option value="origin/dev" />
                       </list>
                     </value>
                   </entry>
@@ -153,10 +151,10 @@
     </state>
     <state x="186" y="81" key="SettingsEditor/0.0.1368.872/2736.0.2560.1400@0.0.1368.872" timestamp="1591106811525" />
     <state x="186" y="81" key="SettingsEditor/0.0.1368.872@0.0.1368.872" timestamp="1591108101784" />
-    <state x="277" y="169" key="Vcs.Push.Dialog.v2" timestamp="1591102583667">
+    <state x="277" y="169" key="Vcs.Push.Dialog.v2" timestamp="1591961378486">
       <screen x="0" y="0" width="1368" height="872" />
     </state>
-    <state x="277" y="169" key="Vcs.Push.Dialog.v2/0.0.1368.872@0.0.1368.872" timestamp="1591102583667" />
+    <state x="277" y="169" key="Vcs.Push.Dialog.v2/0.0.1368.872@0.0.1368.872" timestamp="1591961378486" />
     <state x="492" y="350" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1591103046248">
       <screen x="0" y="0" width="1368" height="872" />
     </state>
