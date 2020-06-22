@@ -23,7 +23,7 @@ class RetailerGroup(Mapper):
         result = []
 
         cursor = self._cnx.cursor()
-        cursor.execute("SELECT * FROM retailerGroup")
+        cursor.execute("SELECT * FROM retailerGroups")
         tuples = cursor.fetchall()
 
         for (retailer_member, retailer_group) in tuples:
@@ -48,13 +48,13 @@ class RetailerGroup(Mapper):
         """
 
         cursor = self._cnx.cursor()
-        cursor.execute("SELECT MAX(id) AS maxid FROM retailerGroup ")
+        cursor.execute("SELECT MAX(id) AS maxid FROM retailerGroups")
         tuples = cursor.fetchall()
 
         for (maxid) in tuples:
             retailer_group.set_id(maxid[0] + 1)
 
-        command = "INSERT INTO retailer_group (retailer_member, retailer_group) VALUES (%s,%s)"
+        command = "INSERT INTO retailerGroups (retailer_member, retailer_group) VALUES (%s,%s)"
         data = (retailer_group.get_retailer_member(), retailer_group.get_retailer_group())
         cursor.execute(command, data)
 
@@ -70,7 +70,7 @@ class RetailerGroup(Mapper):
 
         cursor = self._cnx.cursor()
 
-        command = "UPDATE retailergroup " + "SET retailer_member=%s, retailer_group=%s WHERE id=%s"
+        command = "UPDATE retailerGroups " + "SET retailer_member=%s, retailer_group=%s WHERE id=%s"
         data = (retailer_group.get_retailer_member(), retailer_group.get_retailer_group())
         cursor.execute(command, data)
 
@@ -85,7 +85,7 @@ class RetailerGroup(Mapper):
 
         cursor = self._cnx.cursor()
 
-        command = "DELETE FROM retailerGroup WHERE id={}".format(retailer_group.get_id())
+        command = "DELETE FROM retailerGroups WHERE id={}".format(retailer_group.get_id())
         cursor.execute(command)
 
         self._cnx.commit()
@@ -103,7 +103,7 @@ class RetailerGroup(Mapper):
         result = None
 
         cursor = self._cnx.cursor()
-        command = "SELECT * FROM retailerGroup WHERE id={}".format(key)
+        command = "SELECT * FROM retailerGroups WHERE id={}".format(key)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
@@ -134,7 +134,7 @@ class RetailerGroup(Mapper):
         cursor.execute(command)
         tuples = cursor.fetchall()
 
-        for (retailer_member, RetailerGroup) in tuples:
+        for (retailer_member, retailer_group) in tuples:
             retailer_group = retailer_group()
             retailer_group.set_member(id)
             retailer_group.set_group_membership(retailer_group)

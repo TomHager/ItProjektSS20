@@ -27,7 +27,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="519d2149-eced-47de-9dbd-9ec56ba1e253" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/server/db/RetailerGroupMapper.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/db/RetailerGroupMapper.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -113,7 +113,14 @@
       <option name="project" value="LOCAL" />
       <updated>1592565176164</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="RetailerGroup.py und RetailerGroup.py erstellt!">
+      <created>1592864660265</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1592864660265</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -146,13 +153,14 @@
     <MESSAGE value="RetailerMapper.py, RetailerEntryListMapper.py und ShoppingListMapper.py angepasst.&#10;&#10;RetailerMapper.py bereit zum testen." />
     <MESSAGE value="RetailerMapper.py, RetailerEntryListMapper.py und ShoppingListMapper.py weiter angepasst.&#10;&#10;Fehler in ShopingList.py geändert." />
     <MESSAGE value="RetailerEntryListMapper.py geändert." />
-    <option name="LAST_COMMIT_MESSAGE" value="RetailerEntryListMapper.py geändert." />
+    <MESSAGE value="RetailerGroup.py und RetailerGroup.py erstellt!" />
+    <option name="LAST_COMMIT_MESSAGE" value="RetailerGroup.py und RetailerGroup.py erstellt!" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="311" y="6" key="CommitChangelistDialog2" timestamp="1592565174245">
+    <state x="311" y="6" key="CommitChangelistDialog2" timestamp="1592864658447">
       <screen x="0" y="0" width="1368" height="872" />
     </state>
-    <state x="311" y="6" key="CommitChangelistDialog2/0.0.1368.872@0.0.1368.872" timestamp="1592565174245" />
+    <state x="311" y="6" key="CommitChangelistDialog2/0.0.1368.872@0.0.1368.872" timestamp="1592864658447" />
     <state x="186" y="81" key="SettingsEditor" timestamp="1591108101784">
       <screen x="0" y="0" width="1368" height="872" />
     </state>
