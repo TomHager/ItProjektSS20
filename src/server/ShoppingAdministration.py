@@ -191,7 +191,123 @@ class ShoppingAdministration (object):
                     self.delete_retailer(r)
 
             mapper.delete(retailer)
+
+
+
     """
     Article-spezifische Methoden
     """
-    def
+
+
+   def get_all_articels(self):
+     """Alle Artikel auslesen."""
+        with ArticleMapper() as mapper:
+           return mapper.find_all()
+
+
+   def create_article(self, article_name):
+     """Einen Article anlegen."""
+       article = Article()
+       article.set_article_name(article_name)
+       article.set_id(1)
+
+
+   def get_article_by_id(self, id):
+      """Article mit der gegebenen ID auslesen."""
+
+
+       with ArticleMapper() as mapper:
+       return mapper.find_by_id(id)
+
+
+   def delete_article_by_id(self, article):
+     """gegebenen Artikel löschen."""
+     with ArticleMapper() as mapper:
+        article = self.get_article_by_id(article) #TODO Article oder Articels als variablen name? Und Put Methode fehlt
+
+        if not (article is None):
+            for a in article:
+                self.delete_article(a)
+
+        mapper.delete(article)
+
+
+   def get_article_by_name(self, article_name):
+      """Alle Article mit übergebenem article-namen auslesen."""
+
+        with ArticleMapper() as mapper:
+            return mapper.find_by_article_name(article_name)
+
+
+
+   def get_article_by_standart_boolean(self, article): #todo Übergabe parameter korrekt?
+     """Alle Article mit passendem Boolean"""
+
+        with ArticleMapper() as mapper:
+            return mapper.find_article_by_standard(article)#
+
+
+   """
+   ShoppingList-spezifische Methoden
+   """
+   def get_all_shopping_list(self):
+     """Alle ShoppingLists auslesen."""
+        with ShoppingListMapper() as mapper:
+           return mapper.find_all()
+
+#todo Gehört hier noch entry rein?
+   def create_shopping_list(self, shopping_list_name):
+     """Eine ShoppingList anlegen."""
+       shoppinglist = ShoppingList()
+       shoppinglist.set_shopping_list_name(shopping_list_name)
+       shoppinglist.set_id(1)
+
+
+   def get_shopping_list_by_id(self, id):
+      """Article mit der gegebenen ID auslesen."""
+
+
+       with ShoppingListMapper() as mapper:
+       return mapper.find_by_id(id)
+
+
+   def delete_shopping_list_by_id(self, shoppinglist):
+     """gegebene ShoppingList löschen."""
+     with ShoppingListMapper() as mapper:
+        shoppinglist = self.get_shopping_list_by_id(shoppinglist)
+
+        if not (shoppinglist is None):
+            for s in shoppinglist:
+                self.delete_shopping_list(s)
+
+        mapper.delete(shoppinglist)
+
+
+   def get_shopping_list_by_name(self, shopping_list_name): #todo nicht fertig bzw iwas fehlt glaube methode find by name in db
+      """ShoppingList mit übergebenem shopping-list-name auslesen."""
+
+        with ShoppingListMapper() as mapper:
+            return mapper.find_shopping_list_by_name(shopping_list_name)
+
+
+
+
+   def get_shopping_list_by_group_id(self, group):
+        """Retailer mit der gegebenen Group auslesen."""
+        with ShoppingListMapper() as mapper:
+            return mapper.find_shopping_list_by_group(group)
+
+
+
+
+   """
+   Entry-spezifische Methoden
+   """
+
+
+
+
+
+
+
+
