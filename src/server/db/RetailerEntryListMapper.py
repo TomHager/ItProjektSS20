@@ -18,12 +18,13 @@ class RetailerEntryListMapper (Mapper):
         cursor.execute("SELECT * from retailerentrylist")
         tuples = cursor.fetchall()
 
-        for (id, user_id, retailer_id, shopping_list_id) in tuples:
+        for (id, user_id, retailer_id, shopping_list_id, entry_id) in tuples:
             retailerentrylist = RetailerEntryList()
             retailerentrylist.set_id(id)
             retailerentrylist.set_user_id(user_id)
             retailerentrylist.set_retailer_id(retailer_id)
             retailerentrylist.set_shopping_list_id(shopping_list_id)
+            retailerentrylist.set_entry_id(entry_id)
             result.append(retailerentrylist)
 
         self._cnx.commit()
