@@ -283,7 +283,7 @@ class ShoppingAdministration (object):
         mapper.delete(shoppinglist)
 
 
-   def get_shopping_list_by_name(self, shopping_list_name): #todo nicht fertig bzw iwas fehlt glaube methode find by name in db
+   def get_shopping_list_by_name(self, shopping_list_name): #todo nicht fertig bzw iwas fehlt
       """ShoppingList mit übergebenem shopping-list-name auslesen."""
 
         with ShoppingListMapper() as mapper:
@@ -299,13 +299,83 @@ class ShoppingAdministration (object):
 
 
 
-
    """
    Entry-spezifische Methoden
    """
 
 
 
+   def get_all_entrys(self):
+     """Alle Artikel auslesen."""
+        with EntryMMapper() as mapper:
+           return mapper.find_all()
+
+
+   def create_entry(self, entry): #todo entry besteht aus mehreren objekt attributen welcher übergabeparamter`?
+     """Einen Article anlegen."""
+       entry = Entry()
+       entry.set_article_id(entry)
+       entry.set_unit(entry)
+       entry.set_amount(entry)
+       entry.set_article_standard(entry)
+       entry.set_modification_date(entry)
+       entry.set_article_name(entry)
+       entry.set_id(1)
+
+     def delete_entry_by_id(self, entry_id):
+     """gegebenen Entry löschen."""
+     with EntryMapper() as mapper:
+        entry = self.get_entry_by_id(entry_id)
+
+        if not (entry is None):
+            for e in entry:
+                self.delete_entry(e)
+
+        mapper.delete(entry)
+
+     #todo put methode fehlt
+
+   def get_entry_by_id(self, entry_id):
+      """Entry mit der gegebenen ID auslesen."""
+
+
+       with EntryMapper() as mapper:
+       return mapper.find_by_key(entry_id)
+
+   def get_entry_by_article(self, article_id):   #todo alle entrys oder nur einer?
+      """Auslesen aller Eintrags-ID anhand des Artike"""
+
+
+       with EntryMapper() as mapper:
+       return mapper.find_entry_id_by_article(article_id)
+
+
+   def get_amount_by_entry(self, entry):
+     """gegebenen Artikel löschen."""
+     with EntryMapper() as mapper:
+        return  mapper.find_amount_by_entry(entry)
+
+
+   def get_unit_by_entry(self, entry):
+      """Alle Article mit übergebenem article-namen auslesen."""
+
+        with EntryMapperr() as mapper:
+            return mapper.find_unit_by_entry(entry)
+
+
+
+   def get_entry_by_modification_date(self, modification_date): #todo Übergabe parameter korrekt?
+     """Alle Article mit passendem Boolean"""
+
+        with EntryMapper() as mapper:
+            return mapper.find_entry_by_modification_date(modification_date)
+
+
+   def get_entry_by_retailer_entry_list(self, retailer_entry_list):
+      """Alle Article mit übergebenem article-namen auslesen."""
+
+        with EntryMapperr() as mapper:
+            return mapper.find_entry_by_retailer_entry_list(retailer_entry_list)
 
 
 
