@@ -19,16 +19,16 @@
     <select>
       <path>
         <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
-        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
-        <item name="BRANCH:dev" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="BRANCH:origin/dev" type="e8cecc67:BranchNodeDescriptor" />
       </path>
     </select>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2c1c77a4-6169-48a4-a7a4-a8dc3ff2c5dd" name="Default Changelist" comment="update alle Klassen, Operationen und Kommentare.&#10;&#10;Ergänzung erfolgt später">
+    <list default="true" id="519d2149-eced-47de-9dbd-9ec56ba1e253" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/server/ShoppingAdministration.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/ShoppingAdministration.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/server/db/RetailerEntryListMapper.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/db/RetailerEntryListMapper.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -66,7 +66,6 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="last_opened_file_path" value="$USER_HOME$/Desktop/PythonBankBeispiel-RELEASE_1.0" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="SvnConfiguration">
@@ -74,7 +73,7 @@
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="2c1c77a4-6169-48a4-a7a4-a8dc3ff2c5dd" name="Default Changelist" comment="" />
+      <changelist id="519d2149-eced-47de-9dbd-9ec56ba1e253" name="Default Changelist" comment="" />
       <created>1590750899324</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
@@ -94,14 +93,56 @@
       <option name="project" value="LOCAL" />
       <updated>1591102567014</updated>
     </task>
-    <task id="LOCAL-00003" summary="alle Klassen, Operationen, imports und Kommentare fertigestellt.&#10;&#10;Ergänzung erfolgt später">
-      <created>1592580894314</created>
+    <task id="LOCAL-00003" summary="RetailerMapper.py, RetailerEntryListMapper.py und ShoppingListMapper.py angepasst.&#10;&#10;RetailerMapper.py bereit zum testen.">
+      <created>1591832048672</created>
       <option name="number" value="00003" />
       <option name="presentableId" value="LOCAL-00003" />
       <option name="project" value="LOCAL" />
-      <updated>1592580894314</updated>
+      <updated>1591832048672</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="RetailerMapper.py, RetailerEntryListMapper.py und ShoppingListMapper.py weiter angepasst.&#10;&#10;Fehler in ShopingList.py geändert.">
+      <created>1591954309900</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1591954309900</updated>
+    </task>
+    <task id="LOCAL-00005" summary="RetailerEntryListMapper.py geändert.">
+      <created>1592565176164</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1592565176164</updated>
+    </task>
+    <task id="LOCAL-00006" summary="RetailerGroup.py und RetailerGroup.py erstellt!">
+      <created>1592864660265</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1592864660265</updated>
+    </task>
+    <task id="LOCAL-00007" summary="RetailerGroup.py und RetailerGroup.py geändert!">
+      <created>1592864846999</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1592864846999</updated>
+    </task>
+    <task id="LOCAL-00008" summary="RetailerEntryList.py geändert!">
+      <created>1592907521386</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1592907521386</updated>
+    </task>
+    <task id="LOCAL-00009" summary="RetailerEntryList.py geändert!">
+      <created>1592907992932</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1592907992932</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -115,7 +156,7 @@
                   <entry key="branch">
                     <value>
                       <list>
-                        <option value="dev" />
+                        <option value="origin/dev" />
                       </list>
                     </value>
                   </entry>
@@ -131,41 +172,31 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Grundstruktur angelegt" />
     <MESSAGE value="test" />
-    <MESSAGE value="alle Klassen, Operationen, imports und Kommentare fertigestellt.&#10;&#10;Ergänzung erfolgt später" />
-    <option name="LAST_COMMIT_MESSAGE" value="alle Klassen, Operationen, imports und Kommentare fertigestellt.&#10;&#10;Ergänzung erfolgt später" />
+    <MESSAGE value="RetailerMapper.py, RetailerEntryListMapper.py und ShoppingListMapper.py angepasst.&#10;&#10;RetailerMapper.py bereit zum testen." />
+    <MESSAGE value="RetailerMapper.py, RetailerEntryListMapper.py und ShoppingListMapper.py weiter angepasst.&#10;&#10;Fehler in ShopingList.py geändert." />
+    <MESSAGE value="RetailerEntryListMapper.py geändert." />
+    <MESSAGE value="RetailerGroup.py und RetailerGroup.py erstellt!" />
+    <MESSAGE value="RetailerGroup.py und RetailerGroup.py geändert!" />
+    <MESSAGE value="RetailerEntryList.py geändert!" />
+    <option name="LAST_COMMIT_MESSAGE" value="RetailerEntryList.py geändert!" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="311" y="6" key="CommitChangelistDialog2" timestamp="1591954308074">
+    <state x="311" y="6" key="CommitChangelistDialog2" timestamp="1592907991119">
       <screen x="0" y="0" width="1368" height="872" />
     </state>
-    <state x="311" y="14" key="CommitChangelistDialog2/0.0.1368.872@0.0.1368.872" timestamp="1591102565280" />
-    <state x="260" y="274" key="FileChooserDialogImpl" timestamp="1592567022576">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="260" y="274" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1592567022576" />
-    <state x="261" y="97" key="SettingsEditor" timestamp="1591198734743">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state x="311" y="6" key="CommitChangelistDialog2/0.0.1368.872@0.0.1368.872" timestamp="1592907991119" />
+    <state x="186" y="81" key="SettingsEditor" timestamp="1591108101784">
+      <screen x="0" y="0" width="1368" height="872" />
     </state>
     <state x="186" y="81" key="SettingsEditor/0.0.1368.872/2736.0.2560.1400@0.0.1368.872" timestamp="1591106811525" />
     <state x="186" y="81" key="SettingsEditor/0.0.1368.872@0.0.1368.872" timestamp="1591108101784" />
-    <state x="389" y="202" key="Vcs.Push.Dialog.v2" timestamp="1592581903463">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state x="277" y="169" key="Vcs.Push.Dialog.v2" timestamp="1592907534126">
+      <screen x="0" y="0" width="1368" height="872" />
     </state>
-    <state x="277" y="169" key="Vcs.Push.Dialog.v2/0.0.1368.872@0.0.1368.872" timestamp="1591102583667" />
-    <state x="389" y="202" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1592581903463" />
-    <state x="691" y="417" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1592581891025">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state x="277" y="169" key="Vcs.Push.Dialog.v2/0.0.1368.872@0.0.1368.872" timestamp="1592907534126" />
+    <state x="492" y="350" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1591103046248">
+      <screen x="0" y="0" width="1368" height="872" />
     </state>
-    <state x="461" y="273" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1280.680@0.0.1280.680" timestamp="1591810812407" />
     <state x="492" y="350" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1368.872@0.0.1368.872" timestamp="1591103046248" />
-    <state x="691" y="417" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1040@0.0.1920.1040" timestamp="1592581891025" />
-    <state x="0" y="0" width="960" height="577" key="dock-window-1" timestamp="1592594794188">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="0" y="0" width="960" height="577" key="dock-window-1/0.0.1920.1040@0.0.1920.1040" timestamp="1592594794188" />
-    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup" timestamp="1592572505612">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1592572505612" />
   </component>
 </project>
