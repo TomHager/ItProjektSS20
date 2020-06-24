@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Paper, Typography, Tabs, Tab } from '@material-ui/core';
-// import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 
 /**
  * Shows the header with the main navigation Tabs within a Paper.
@@ -11,51 +11,49 @@ import { Paper, Typography, Tabs, Tab } from '@material-ui/core';
  * 
  */
 class Header extends Component {
+    constructor(props) {
+         super(props);
 
-  constructor(props) {
-    super(props);
+        // Init an empty state
+        this.state = {
+            tabindex: 0
+        };
+    }
 
-    // Init an empty state
-    this.state = {
-      tabindex: 0
+    /** Handles onChange events of the Tabs component */
+    handleTabChange = (e, newIndex) => {
+        // console.log(newValue)
+        this.setState({
+            tabindex: newIndex
+        })
     };
-  }
 
-  /** Handles onChange events of the Tabs component */
-  handleTabChange = (e, newIndex) => {
-    // console.log(newValue)
-    this.setState({
-      tabindex: newIndex
-    })
-  };
+    /** Renders the component */
+    render() {
+        // const { user } = this.props;
 
-  /** Renders the component */
-  render() {
-    // const { user } = this.props;
-
-    return (
-      <Paper variant='outlined'>
-        {/* <ProfileDropDown user={user} /> */}
-        <Typography variant='h3' component='h1' align='center'>
-          <b>iKauf</b> your futuristic Shoppingapp 
+        return (
+            <Paper variant='outlined'>
+                {/* <ProfileDropDown user={user} /> */}
+                <Typography variant='h3' component='h1' align='center'>
+                    <b>iKauf</b> your futuristic Shoppingapp
         </Typography>
-        <Typography variant='h4' component='h2' align='center'>
-          <u>Overview</u>
-        </Typography>
-        {
-        //   user ?
-            <Tabs indicatorColor='primary' textColor='primary' centered value={this.state.tabindex} onChange={this.handleTabChange} >
-                 {/* component={RouterLink} to={`/customers`}  */}
-              <Tab label='Groups'/>
-              <Tab label='My Shoppinglists'/>
-              <Tab label='Profile'/>
-              <Tab label='About'/>
-            </Tabs>
-            // : null
-        }
-      </Paper>
-    )
-  }
+                <Typography variant='h4' component='h2' align='center'>
+                    <u>Overview</u>
+                </Typography>
+                {
+                    //   user ?
+                    <Tabs indicatorColor='primary' textColor='primary' centered value={this.state.tabindex} onChange={this.handleTabChange} >
+                        <Tab label='Group' component={RouterLink} to={`/groupList`}/>
+                        <Tab label='My Shoppinglists' />
+                        <Tab label='Profile' />
+                        <Tab label='About' component={RouterLink} to={`/about`}/>
+                    </Tabs>
+                    // : null
+                }
+            </Paper>
+        )
+    }
 }
 
 /** PropTypes */

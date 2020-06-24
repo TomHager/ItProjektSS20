@@ -1,78 +1,107 @@
+// import { withRouter } from "react-router-dom";
+// import React, { Component }  from 'react';
+// // import { withStyles, Button, TextField, InputAdornment, IconButton, Grid, Typography } from '@material-ui/core';
+// // // import AddIcon from '@material-ui/icons/Add';
+// // // import ClearIcon from '@material-ui/icons/Clear'
+// // import PropTypes from 'prop-types';
+
+// // class GroupList extends Component {
+
+// //     constructor(props) {
+// //         super(props);
+// //         // console.log(props);
+
+// //         this.state = {
+
+// //         }
+// //     }
+
+// //   render() {
+// //     const { classes } = this.props;
+// //     const { groupFilter } = this.state;
+
+// //     return (
+// //     //   <div className={classes.root}>
+// //     //     <Grid
+// //     //       className={classes.groupFilter}
+// //     //       container
+// //     //       spacing={1}
+// //     //       justify="flex-start"
+// //     //       alignItems="center"
+// //     //     >
+// //     //       <Grid item>
+// //     //         <Typography>Filter group list by name:</Typography>
+// //     //       </Grid>
+// //     //       <Grid item xs={4}>
+// //     //         <TextField
+// //     //           autoFocus
+// //     //           fullWidth
+// //     //           id="groupFilter"
+// //     //           type="text"
+// //     //           value={groupFilter}
+// //     //           onChange={this.filterFieldValueChange}
+// //     //           InputProps={{
+// //     //             endAdornment: (
+// //     //               <InputAdornment position="end">
+// //     //                 <IconButton onClick={this.clearFilterFieldButtonClicked}>
+// //     //                   {/* <ClearIcon /> */}
+// //     //                 </IconButton>
+// //     //               </InputAdornment>
+// //     //             ),
+// //     //           }}
+// //     //         />
+// //     //       </Grid>
+// //     //     </Grid>
+// //     //   </div>
+// //         <div>
+// //             <table>
+// //                 <th>hallo</th>
+// //             </table>
+// //         </div>
+// //     );
+// //   }
+// // }
+
+// // /** PropTypes */
+// // GroupList.propTypes = {
+// //     /** @ignore */
+// //     classes: PropTypes.object.isRequired,
+// //     /** @ignore */
+// //     location: PropTypes.object.isRequired,
+// //   }
+
+// export default withRouter(GroupList);
+// // // withRouter(withStyles(styles)(GroupList));
+
 import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import ListSubheader from "@material-ui/core/ListSubheader";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
-import Collapse from "@material-ui/core/Collapse";
-import InboxIcon from "@material-ui/icons/MoveToInbox";
-import DraftsIcon from "@material-ui/icons/Drafts";
-import SendIcon from "@material-ui/icons/Send";
-import ExpandLess from "@material-ui/icons/ExpandLess";
-import ExpandMore from "@material-ui/icons/ExpandMore";
-import StarBorder from "@material-ui/icons/StarBorder";
+import { makeStyles, Paper, Typography, Link } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     width: "100%",
-    maxWidth: 360,
-    backgroundColor: theme.palette.background.paper,
+    marginTop: theme.spacing(2),
+    marginBottom: theme.spacing(2),
+    padding: theme.spacing(1),
   },
-  nested: {
-    paddingLeft: theme.spacing(4),
+  content: {
+    margin: theme.spacing(1),
   },
 }));
 
-export function NestedList() {
+/**
+ * Shows the about page with the impressum
+ */
+function GroupList() {
   const classes = useStyles();
-  const [open, setOpen] = React.useState(true);
-
-  const handleClick = () => {
-    setOpen(!open);
-  };
 
   return (
-    <List
-      component="nav"
-      aria-labelledby="nested-list-subheader"
-      subheader={
-        <ListSubheader component="div" id="nested-list-subheader">
-          Nested List Items
-        </ListSubheader>
-      }
-      className={classes.root}
-    >
-      <ListItem button>
-        <ListItemIcon>
-          <SendIcon />
-        </ListItemIcon>
-        <ListItemText primary="Sent mail" />
-      </ListItem>
-      <ListItem button>
-        <ListItemIcon>
-          <DraftsIcon />
-        </ListItemIcon>
-        <ListItemText primary="Drafts" />
-      </ListItem>
-      <ListItem button onClick={handleClick}>
-        <ListItemIcon>
-          <InboxIcon />
-        </ListItemIcon>
-        <ListItemText primary="Inbox" />
-        {open ? <ExpandLess /> : <ExpandMore />}
-      </ListItem>
-      <Collapse in={open} timeout="auto" unmountOnExit>
-        <List component="div" disablePadding>
-          <ListItem button className={classes.nested}>
-            <ListItemIcon>
-              <StarBorder />
-            </ListItemIcon>
-            <ListItemText primary="Starred" />
-          </ListItem>
-        </List>
-      </Collapse>
-    </List>
+    <Paper elevation={0} className={classes.root}>
+      <div className={classes.content}>
+        <Typography variant="h6">KEIN Project</Typography>
+        <br />
+        <Typography>Writen by NULL</Typography>
+      </div>
+    </Paper>
   );
 }
 
