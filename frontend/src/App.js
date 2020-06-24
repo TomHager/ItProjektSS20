@@ -2,6 +2,8 @@ import React from "react";
 import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
 import { Container, ThemeProvider, CssBaseline } from "@material-ui/core";
 import Header from "./components/layout/Header";
+import About from "./components/pages/About";
+//import GroupList from "./components/pages/GroupList";
 // import Theme from './Theme';
 // import SignIn from './components/pages/SignIn';
 // import LoadingProgress from './components/dialogs/LoadingProgress';
@@ -27,7 +29,24 @@ class App extends React.Component {
 
   /** Renders the whole app */
   render() {
-    return <Header />;
+    return (
+      <Router basename={process.env.PUBLIC_URL}>
+        <Header />
+        <>
+          {/* <Redirect from="/" to="customers" />
+                <Route exact path="/customers">
+                  <CustomerList />
+                </Route>
+                <Route path="/transactions">
+                  <TransactionList />
+                </Route>
+                <Route path="/accounts">
+                  <AllAccountList />
+                </Route> */}
+        </>
+      </Router>
+    );
   }
 }
+
 export default App;
