@@ -4,7 +4,7 @@ from server.bo.User import User
 from server.db.Mapper import Mapper
 
 
-class GroupMapper(Mapper):
+class GroupMembershipMapper(Mapper):
     """Mapper-Klasse, die Account-Objekte auf eine relationale
         Datenbank abbildet. Hierzu wird eine Reihe von Methoden zur Verfügung
         gestellt, mit deren Hilfe z.B. Objekte gesucht, erzeugt, modifiziert und
