@@ -1,0 +1,57 @@
+[
+  {
+    "name": "Gruppe 1",
+    "user_id_list": 1,
+    "id": 1
+  },
+  {
+    "name": "Gruppe 2",
+    "user_id_list": 2,
+    "id": 2
+  },
+  {
+    "name": "Gruppe 3",
+    "user_id_list": 3,
+    "id": 3
+  },
+  {
+    "name": "Gruppe 4",
+    "user_id_list": 4,
+    "id": 4
+  },
+  {
+    "name": "Gruppe 5",
+    "user_id_list": 5,
+    "id": 5
+  },
+  {
+    "name": "Gruppe 6",
+    "user_id_list": 6,
+    "id": 6
+  },
+  {
+    "name": "Gruppe 7",
+    "user_id_list": 7,
+    "id": 7
+  },
+  {
+    "name": "Gruppe 8",
+    "user_id_list": 8,
+    "id": 8
+  },
+  {
+    "name": "Gruppe 9",
+    "user_id_list": 9,
+    "id": 9
+  },
+  {
+    "name": "Gruppe 10",
+    "user_id_list": 10,
+    "id": 10
+  },
+  {
+    "name": "Gruppe 11",
+    "user_id_list": 11,
+    "id": 11
+  }
+]

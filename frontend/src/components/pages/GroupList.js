@@ -74,17 +74,23 @@
 // // // withRouter(withStyles(styles)(GroupList));
 
 import React from "react";
-import { makeStyles, Paper, Typography, Link } from "@material-ui/core";
+import {
+  makeStyles,
+  Paper,
+  Typography,
+  Link,
+  Grid,
+  TextField,
+} from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    width: "100%",
-    marginTop: theme.spacing(2),
-    marginBottom: theme.spacing(2),
-    padding: theme.spacing(1),
+    flexGrow: 1,
   },
-  content: {
-    margin: theme.spacing(1),
+  paper: {
+    padding: theme.spacing(2),
+    textAlign: "left",
+    color: theme.palette.text.secondary,
   },
 }));
 
@@ -95,13 +101,13 @@ function GroupList() {
   const classes = useStyles();
 
   return (
-    <Paper elevation={0} className={classes.root}>
-      <div className={classes.content}>
-        <Typography variant="h6">KEIN Project</Typography>
-        <br />
-        <Typography>Writen by NULL</Typography>
-      </div>
-    </Paper>
+    <div className={classes.content}>
+      <Grid container spacing={3}>
+        <Grid item xs={9}>
+          <Paper className={classes.paper}>Gruppe 1</Paper>
+        </Grid>
+      </Grid>
+    </div>
   );
 }
 
