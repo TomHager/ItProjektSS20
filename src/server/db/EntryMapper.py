@@ -132,7 +132,7 @@ class EntryMapper(Mapper):
 
         return result
 
-    def find_entry_id_by_article(self, article):
+    def find_entries_by_article(self, article):
         """Auslesen aller Eintrags-ID anhand des Artikels
 
                         :param article

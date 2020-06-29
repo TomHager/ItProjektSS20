@@ -148,7 +148,7 @@ class UserOperations(Resource):
         else:
             return '', 500
 
-#TODO wird eine Klassse UserListOperations benötigt, die alle User ausgibt? Sinn + Zweck?
+#TODO wird eine Klassse UserListOperations benötigt, die alle User ausgibt? Sinn + Zweck? Einfach mal mit rein nehmen
 
 @ikauf.route('/user-by-name/<string:name>')
 @ikauf.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
@@ -212,7 +212,7 @@ class GroupByUserOperations(Resource):
         return cust
 
 
-@ikauf.route('/user-by-list')   ???
+@ikauf.route('/user-by-list')
 @ikauf.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class UserListOperations(Resource):
   @ikauf.marshal_list_with(user)
@@ -232,7 +232,7 @@ class UserListOperations(Resource):
     prosposal = user.from_dict(api.payload)
 
     if prosposal is not None:
-      x = adm.create_user(prosposal.get_user_name(), prosposal.get_user_id())
+      x = adm.create_user(prosposal.get_user_name(), prosposal.get_external_id())
       return x, 200
     else:
         return '', 500
@@ -337,7 +337,7 @@ class GroupRelatedByUserOperations(Resource):
         g= adm.get_group_by_user()
         return g
 
-#TODO Ändern mit Zwischentabelle
+#TODO Ändern mit Zwischentabelle - Ziwschentabelle existiert zwischen Gruppe und User
 
 @ikauf.route('/user-by-group/<int:groupId>')
 @ikauf.response(500, 'Falls Server-seitiger Fehler')
@@ -377,7 +377,7 @@ class RetailerListOperations(Resource):
         r = adm.get_all_retailer()
         return r
 
-#TODO anschauen und bearbeiten
+#TODO anschauen und bearbeiten Zwischentabelle existiert zwischen Retailer Gruppe
 
  """  def post(self):
         "Anlegen eines neuen Retailer-Objekts für einen gegebene Group"
@@ -474,7 +474,7 @@ class RetailerRelatedByGroupOperations(Resource):
         r = adm.get_retailer_by_group(group)
         return r
 
-#TODO RetailerEntryList ändern, nur mit nur mit Foreignkeys als Attribute
+#TODO RetailerEntryList ändern, nur mit nur mit Foreignkeys als Attribute - Eintrag: ID User: ID ShoppingList: ID Retailer: ID gegeben
 
 
 
@@ -496,7 +496,7 @@ class RetailerEntryListListOperations(Resource):
         rel = adm.get_all_retailer_entry_list()
         return rel
 
-#TODO anschauen und bearbeiten... wieso nochmal? wegen Zwischentabelle?
+#TODO anschauen und bearbeiten... wieso nochmal? wegen Zwischentabelle? Schon beantwortet
 
 """    def post(self):
         "Anlegen eines neuen RetailerEntryList-Objekts für einen gegebene Group"
@@ -524,7 +524,7 @@ class RetailerEntryListOperations(Resource):
         """Auslesen eines bestimmten RetailerEntryList-Objekts"""
 
         adm = ShoppingListAdministration()
-        rel = adm.get_retailer_entry_list_by_id(id)
+        rel = adm.get_retailer_member(id)
         return rel
 
     @secured
@@ -610,7 +610,7 @@ class EntryListOperations(Resource):
         prosposal = Entry.from_dict(api.payload)
 
         if prosposal is not None:
-          x = adm.create_entry(prosposal.get_entry_name()) #todo überlgen ob : prosposal.get_entry_list() sinn macht
+          x = adm.create_entry(prosposal.get_entry_name()) #todo überlgen ob : prosposal.get_entry_list() sinn macht  Erik hats gerafft er machts
           return x, 200
         else:
           return '', 500
@@ -675,10 +675,10 @@ class EntryRelatedByAmountOperations(Resource):
     @ikauf.marshal_with(entry)
     @secured
     def get(self, amount):
-        "Auslesen eines bestimmten Entry-Objekts nach Amount"
+        "Auslesen eines Amounts aus einem Entry"
 
         adm = ShoppingListAdministration()
-        am = adm.get_entry_by_amount(amount)
+        am = adm.get_amount_by_entry(amount)
         return am
 
 
@@ -736,7 +736,7 @@ class ShoppingistListOperations(Resource):
         prosposal = ShoppingList.from_dict(api.payload)
 
         if prosposal is not None:
-          x = adm.create_shopping_list(prosposal.get_shopping_list_name(), prosposal.get_entry()) #todo macht get_entry sinn? vllt, dass bereits 1 als beispiel angelegt ist?
+          x = adm.create_shopping_list(prosposal.get_shopping_list_name(), prosposal.get_entry()
           return x, 200
         else:
           return '', 500
@@ -832,6 +832,7 @@ class ArticleListOperations(Resource):
         adm = ShoppingListAdministration()
         a = adm.get_all_article()
         return a
+
     def post(self):
         "Anlegen eines neuen Article-Objekts"
 
@@ -920,7 +921,7 @@ class ArticleRelatedByRetailerIdOperations(Resource):
 
 #Todo boolean : .... was für wert bzw. Übergabeparameter hat es ? oder vllt mit <int: articleId>/<boolean>: ... ?
 # ich denke das mit den Boolean ist so nicht richtig, statt True false / 1 oder 0 zu machen, habe ich es sozusagen
-# "geupdatet" zu einem speziellen status, was wiederum (denke ich) eine neue Tabelle benötigt
+# "geupdatet" zu einem speziellen status, was wiederum (denke ich) eine neue Tabelle benötigt - Boolean nutzen Eik
 
 @ikauf.route('/article-by-standard-boolean/<boolean: ... ')
 @ikauf.response(500, 'Falls Server-seitiger Fehler')
@@ -951,6 +952,7 @@ class ArticleRelatedByStandardBooleanOperations(Resource):
 
 #todo anlegen einer neuen Klasse um alle Standard objekte aufzurufen und dem Eintrag der Gruppe hinzuzüfugen.
 
+#todo doppelt ArticleRelatedByStandardBooleanOperations?
 
 @ikauf.route('/article-by-standard-boolean/<boolean: ... ')
 @ikauf.response(500, 'Falls Server-seitiger Fehler')
@@ -964,6 +966,29 @@ class ArticleRelatedByStandardBooleanOperations(Resource):
         adm = ShoppingListAdministration()
         a = adm.get_all_article_by_standard_boolean()
         return a
+
+
+"""
+Klassen und Operationen für RetailerGroup
+"""
+
+
+@ikauf.route('/entry-by-id/<int:entryId>')
+@ikauf.response(500, 'Falls Server-seitiger Fehler')
+@ikauf.param('id', 'ID des Entry-Objekts')
+
+class RetailerGroupOperationsResource):
+    @ikauf.marshal_with(entry)
+    @secured
+    def get(self, id):
+        """Auslesen aller Einträge"""
+
+        adm = ShoppingListAdministration()
+        e = adm.get_reta(id)
+        return e
+
+    @secured
+
 
 """
 Start der main.py um zu testen ob es funktioniert (in der lokalen Entwicklerumgebung).

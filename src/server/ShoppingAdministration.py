@@ -51,10 +51,10 @@ class ShoppingAdministration (object):
 
     #todo google_user_id ändern zu external_id, right?
 
-    def get_user_by_google_user_id(self, id):
+    def get_user_by_external_id(self, id):
         """Den Benutzer mit der gegebenen Google ID auslesen."""
         with UserMapper() as mapper:
-            return mapper.find_by_google_user_id(id)
+            return mapper.find_by_external_id(id)
 
     def get_all_users(self):
         """Alle Benutzer auslesen."""
@@ -97,7 +97,7 @@ class ShoppingAdministration (object):
     def get_group_by_user(self, user):
         """Group mit der gegebenen User auslesen."""
         with GroupMapper() as mapper:
-            return mapper.find_by_user(user)
+            return mapper.find_by_user(user) #todo is falsch keine find_by_user
 
     #hier vllt bei Gruppe hinzufügen , aber diese methode steht in main.py bei gruppe, da dies eien Funktion der
     #der gruppenbedienoberfläche sein soll, du weißt ;) ( noch nach logik fehleher schauen/ abgleich mit den mappern)
@@ -112,7 +112,7 @@ class ShoppingAdministration (object):
     def get_groups_of_user(self, user):
         """Alle Groups des gegebenen Usser auslesen."""
         with GroupMapper() as mapper:
-            return mapper.find_by_owner_id(user.get_id()) # Vorsicht: nicht geprüft!
+            return mapper.find_by_owner_id(user.get_id()) # Vorsicht: nicht geprüft! #todo find_all
 
     def get_all_groups(self):
         """Alle Kunden auslesen."""
@@ -208,7 +208,7 @@ class ShoppingAdministration (object):
    def create_article(self, article_name):
      """Einen Article anlegen."""
        article = Article()
-       article.set_article_name(article_name)
+       article.set_article_name(article_name) #todo ammount unit gehört hier noch rein
        article.set_id(1)
 
 
@@ -223,7 +223,7 @@ class ShoppingAdministration (object):
    def delete_article_by_id(self, article):
      """gegebenen Artikel löschen."""
      with ArticleMapper() as mapper:
-        article = self.get_article_by_id(article) #TODO Article oder Articels als variablen name? Und Put Methode fehlt
+        article = self.get_article_by_id(article) #TODO Article oder Articels als variablen name? Und Update
 
         if not (article is None):
             for a in article:
@@ -311,7 +311,7 @@ class ShoppingAdministration (object):
            return mapper.find_all()
 
 
-   def create_entry(self, entry): #todo entry besteht aus mehreren objekt attributen welcher übergabeparamter`?
+   def create_entry(self, entry):
      """Einen Article anlegen."""
        entry = Entry()
        entry.set_article_id(entry)
@@ -333,7 +333,7 @@ class ShoppingAdministration (object):
 
         mapper.delete(entry)
 
-     #todo put methode fehlt
+
 
    def get_entry_by_id(self, entry_id):
       """Entry mit der gegebenen ID auslesen."""
@@ -342,7 +342,7 @@ class ShoppingAdministration (object):
        with EntryMapper() as mapper:
        return mapper.find_by_key(entry_id)
 
-   def get_entry_by_article(self, article_id):   #todo alle entrys oder nur einer?
+   def get_entries_by_article(self, article_id):
       """Auslesen aller Eintrags-ID anhand des Artike"""
 
 
@@ -364,7 +364,7 @@ class ShoppingAdministration (object):
 
 
 
-   def get_entry_by_modification_date(self, modification_date): #todo Übergabe parameter korrekt?
+   def get_entry_by_modification_date(self, modification_date):
      """Alle Article mit passendem Boolean"""
 
         with EntryMapper() as mapper:
@@ -376,6 +376,8 @@ class ShoppingAdministration (object):
 
         with EntryMapperr() as mapper:
             return mapper.find_entry_by_retailer_entry_list(retailer_entry_list)
+
+
 
 
 

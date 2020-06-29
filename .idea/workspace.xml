@@ -26,9 +26,12 @@
     </select>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="519d2149-eced-47de-9dbd-9ec56ba1e253" name="Default Changelist" comment="">
+    <list default="true" id="2c1c77a4-6169-48a4-a7a4-a8dc3ff2c5dd" name="Default Changelist" comment="Updated ShoppingAdministration.py&#10;Updated Entry Methods">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/server/db/RetailerEntryListMapper.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/db/RetailerEntryListMapper.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/SecurityDecorater.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/SecurityDecorater.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/server/ShoppingAdministration.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/ShoppingAdministration.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/server/db/EntryMapper.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/db/EntryMapper.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -73,7 +76,7 @@
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="519d2149-eced-47de-9dbd-9ec56ba1e253" name="Default Changelist" comment="" />
+      <changelist id="2c1c77a4-6169-48a4-a7a4-a8dc3ff2c5dd" name="Default Changelist" comment="Updated ShoppingAdministration.py&#10;Updated Entry Methods" />
       <created>1590750899324</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
