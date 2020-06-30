@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
-import { Container, ThemeProvider, CssBaseline } from '@material-ui/core';
+// import { Container, ThemeProvider, CssBaseline } from '@material-ui/core';
 import Header from './components/layout/Header';
 import About from './components/pages/About'
 import GroupList from './components/pages/GroupList'
