@@ -24,7 +24,7 @@ function About() {
       <div className={classes.content}>
         <Typography variant="h6">iKauf Project</Typography>
         <br />
-        <Typography>Writen by Group 6</Typography>
+        <Typography>Written by Group 6</Typography>
       </div>
     </Paper>
   );

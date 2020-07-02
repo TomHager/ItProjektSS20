@@ -4,12 +4,19 @@ class Entry (bo.BusinessObject):
 
     def __init__(self):
         super().__init__()
+        self.__bought = ""
         self.__unit = ""
         self.__amount = ""
         self.__article_id = ""
         self.__article_name = ""
         self.__article_standard = ""
         self.__modification_date = ""
+
+    def get_bought(self):
+        return self.__bought
+
+    def set_bought(self, value):
+        self.__bought = value
 
     def get_unit(self):
         return self.__unit

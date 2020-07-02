@@ -1,5 +1,5 @@
 import React from "react";
-import { makeStyles, Paper, Typography } from "@material-ui/core";
+import { makeStyles, Container } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -16,18 +16,26 @@ const useStyles = makeStyles((theme) => ({
 /**
  * Shows the about page with the impressum
  */
-function About() {
+function Report() {
   const classes = useStyles();
 
   return (
-    <Paper elevation={0} className={classes.root}>
-      <div className={classes.content}>
-        <Typography variant="h6">iKauf Project</Typography>
-        <br />
-        <Typography>Written by Group 6</Typography>
-      </div>
-    </Paper>
+    <React.Fragment>
+      <CssBaseline />
+    <Container>
+    {/* GroupSelection */}
+    
+    </Container>
+    <Container>
+      {/* RetailerSelection */}
+
+    </Container>
+    <Container>
+      {/* DateSelection */}
+
+    </Container>
+    </React.Fragment>
   );
 }
 
-export default About;
+export default Report;
