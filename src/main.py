@@ -1,18 +1,18 @@
-#Flask import da der Service darauf basiert
+# Flask import da der Service darauf basiert
 from flask import Flask
 from flask_restx import Resource, Api, fields
 from flask_cors import CORS
 
-#Zugriff auf BusinessObject Klassen und Applikationslogik
-from server.ShoppingAdministration import ShoppingAdministration
+# Zugriff auf BusinessObject Klassen und Applikationslogik
+from server.ShoppingAdministration import ShoppingListAdministration
 from server.bo.Group import Group
 from server.bo.Retailer import Retailer
 from server.bo.RetailerEntryList import RetailerEntryList
 from server.bo.Entry import Entry
-from server.bo.ShoppingList import  ShoppingList
+from server.bo.ShoppingList import ShoppingList
 from server.bo.Article import Article
 
-# selbstgeshcriebener Decorat, übernimmt Authentifikation
+# selbstgeschriebener Decorator, übernimmt Authentifikation
 
 from SecurityDecorater import secured
 
@@ -32,7 +32,7 @@ api = Api(app)
 Alle Ressourcen mit den mit dem Präfix /iKauf sind für Cors freigegeben.
 """
 
-CORS(app, resources = r'/iKauf/*')
+CORS(app, resources=r'/iKauf/*')
 
 """
 Namespace anlegen, erlaubt Strukturierung von APIs, fasst alle iKauf relevanten Operationen unter dem Präfix
@@ -57,8 +57,8 @@ user = api.inherit('User', bo, {
 })
 
 group = api.inherit('Group', bo, {
-  'group_name' : fields.String(attribute = '_group_name', description='Name einer Gruppe'),
-  'user_list' : fields.List(attribute = '_user_list',description='Alle Benutzer einer Gruppe')
+    'group_name': fields.String(attribute='_group_name', description='Name einer Gruppe'),
+    'user_list': fields.List(attribute='_user_id_list', description='Alle Benutzer einer Gruppe')
 })
 
 retailer = api.inherit('retailer', bo, {
@@ -66,37 +66,34 @@ retailer = api.inherit('retailer', bo, {
     'group_id': fields.Integer(attribute='_group_id', description='ID einer Gruppe')
 })
 
-retailer_entry_list = api.inherit('RetailerEntryList', bo,{
-  'retailer' : fields.String(attribute = '_retailer', description='Name eines Verkäufers'),
-  'user' : fields.String(attribute = '_user', description='Name eines Benutzers'),
-  'shopping_list_id' : fields.Intengar(attribute = '_shopping_list_id',description='ID einer Shopping List' )
+retailer_entry_list = api.inherit('RetailerEntryList', bo, {
+  'retailer': fields.String(attribute='_retailer', description='Name eines Verkäufers'),
+  'user': fields.String(attribut='_user', description='Name eines Benutzers'),
+  'shopping_list_id': fields.Integer(attribute='_shopping_list_id', description='ID einer Shopping List')
 })
 
 entry = api.inherit('Entry', bo, {
-  'article' : fields.String(attribute = '_article', discription = 'Name eines Artikel'),
-  'unit' : fields.String(attribute = '_unit', discription = 'Name der Einheit'),
-  'amount': fields.Intengar(attribute = '_amount', discription = 'Menge eines Artikel'),
-  'modification_date': fields.Date(attribute = '_modification_date', discription = 'Änderungsdatum der Entry' ),
-  'retailer_entry_list_id': fields.Intengar(attrubute = '_retailer_entry_list_id', discription = 'ID der RetailerEntryList')
+  'article': fields.String(attribute='_article', discription='Name eines Artikel'),
+  'unit': fields.String(attribute='_unit', discription='Name der Einheit'),
+  'amount': fields.Integer(attribute='_amount', discription='Menge eines Artikel'),
+  'modification_date': fields.Date(attribute='_modification_date', discription='Änderungsdatum der Entry'),
+  'retailer_entry_list_id': fields.Integer(attrubute='_retailer_entry_list_id', discription='ID der RetailerEntryList')
 })
 
 shopping_list = api.inherit('ShoppingList', bo, {
-  'shopping_list_name' : fields.String(attribute = '_shopping_list_name', discription = 'Name einer Shoppingliste'),
-  'group_id' : fields.Intengar(attribute = '_group_id', discription = 'ID einer Gruppe')
+  'shopping_list_name': fields.String(attribute='_shopping_list_name', discription='Name einer Shoppingliste'),
+  'group_id': fields.Integer(attribute='_group_id', discription='ID einer Gruppe')
 })
 
 article = api.inherit('Article', bo, {
-    'name': fields.String(attribute='_name' , description='Name eines Artikels'),
-    'standart_boolean': fields.Boolean(attribute='_standart_boolean', description= 'Prüfung auf Standartikel'),#Description anpassen
-    'retailer_id': fields.Intenger(attribute='_retailer_id', description='ID eines Verkäufers')
+    'name': fields.String(attribute='_name', description='Name eines Artikels'),
+    'standart_boolean': fields.Boolean(attribute='_standart_boolean', description='Prüfung auf Standartikel'),
+    'retailer_id': fields.Integer(attribute='_retailer_id', description='ID eines Verkäufers')
 })\
-
-
 
 """
 Klassen und Operationen für User
 """
-
 
 
 @ikauf.route('/user/<int:id>')
@@ -148,7 +145,6 @@ class UserOperations(Resource):
         else:
             return '', 500
 
-#TODO wird eine Klassse UserListOperations benötigt, die alle User ausgibt? Sinn + Zweck?
 
 @ikauf.route('/user-by-name/<string:name>')
 @ikauf.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
@@ -156,7 +152,7 @@ class UserOperations(Resource):
 class UserByNameOperations(Resource):
     @ikauf.marshal_with(user)
     @secured
-    def get(self,name):
+    def get(self, name):
         """ Auslesen von User-Objekten, die durch den Namen bestimmt werden.
 
         Die auszulesenden Objekte werden durch ```name``` in dem URI bestimmt.
@@ -172,7 +168,7 @@ class UserByNameOperations(Resource):
 class UserByExternalIdOperations(Resource):
     @ikauf.marshal_with(user)
     @secured
-    def get(self,external_id):
+    def get(self, external_id):
         """ Auslesen von User-Objekten, die durch eine externe Id bestimmt werden.
 
         Die auszulesenden Objekte werden durch ```external_id``` in dem URI bestimmt.
@@ -181,13 +177,14 @@ class UserByExternalIdOperations(Resource):
         cust = adm.get_user_by_external_id(external_id)
         return cust
 
+
 @ikauf.route('/user-by-email/<string:email>')
 @ikauf.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 @ikauf.param('email', 'Die Email des User')
 class UserByEmailOperations(Resource):
     @ikauf.marshal_with(user)
     @secured
-    def get(self,email):
+    def get(self, email):
         """ Auslesen von User-Objekten, die durch die E-Mail bestimmt werden.
 
         Die auszulesenden Objekte werden durch ```email``` in dem URI bestimmt.
@@ -196,13 +193,14 @@ class UserByEmailOperations(Resource):
         cust = adm.get_user_by_email(email)
         return cust
 
-@ikauf.route('/group-by-user/int:id>')  #String? Oder was???  GroupId UserId
+
+@ikauf.route('/group-by-user/int:id>')
 @ikauf.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 @ikauf.param('userId', 'Das User Objekt')
 class GroupByUserOperations(Resource):
     @ikauf.marshal_with(user)
     @secured
-    def get(self,user):
+    def get(self, user):
         """ Auslesen von Gruppen-Objekten, die durch den User bestimmt werden.
 
         Die auszulesenden Objekte werden durch ```user``` in dem URI bestimmt.
@@ -212,30 +210,30 @@ class GroupByUserOperations(Resource):
         return cust
 
 
-@ikauf.route('/user-by-list')   ???
+@ikauf.route('/user')
 @ikauf.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class UserListOperations(Resource):
-  @ikauf.marshal_list_with(user)
-  @secured
-  def get(self):
-      "Auslesen aller User-Objekte"
+    @ikauf.marshal_list_with(user)
+    @secured
+    def get(self):
+        """Auslesen aller User-Objekte"""
 
-      adm = ShoppingListAdministration()
-      user = adm.get_all_user()
-      return user
+        adm = ShoppingListAdministration()
+        user = adm.get_all_users()
+        return user
 
-  def post(self):
-    "Anlegen eines neuen User-Objekts"
+    def post(self):
+        """Anlegen eines neuen User-Objekts"""
 
-    adm = ShoppingListAdministration()
+        adm = ShoppingListAdministration()
 
-    prosposal = user.from_dict(api.payload)
+        proposal = user.from_dict(api.payload)
 
-    if prosposal is not None:
-      x = adm.create_user(prosposal.get_user_name(), prosposal.get_user_id())
-      return x, 200
-    else:
-        return '', 500
+        if proposal is not None:
+            x = adm.create_user(proposal.get_name(), proposal.get_email(), proposal.get_external_id())
+            return x, 200
+        else:
+            return '', 500
 
 
 
@@ -244,31 +242,30 @@ Klassen und Operationen zu Gruppen
 """
 
 
-
 @ikauf.route('/group')
 @ikauf.route(500, "Falls Server-seitiger Fehler")
 class GroupListOperations(Resource):
-  @ikauf.marshal_list_with(group)
-  @secured
-  def get(self):
-      "Auslesen aller Gruppen-Objekte"
+    @ikauf.marshal_list_with(group)
+    @secured
+    def get(self):
+        """Auslesen aller Retailer-Objekte"""
 
-      adm = ShoppingListAdministration()
-      g = adm.get_all_groups()
-      return g
+        adm = ShoppingListAdministration()
+        g = adm.get_all_groups()
+        return g
 
-  def post(self):
-    "Anlegen eines neuen Gruppen-Objekts"
+    def post(self):
+        """Anlegen eines neuen Gruppen-Objekts"""
 
-    adm = ShoppingListAdministration()
+        adm = ShoppingListAdministration()
 
-    prosposal = Group.from_dict(api.payload)
+        prosposal = Group.from_dict(api.payload)
 
-    if prosposal is not None:
-      x = adm.create_group(prosposal.get_group_name(), prosposal.get_user_list())
-      return x, 200
-    else:
-      return '', 500
+        if prosposal is not None:
+            x = adm.create_group(prosposal.get_name())
+            return x, 200
+        else:
+            return '', 500
 
 
 @ikauf.route('/group/<int:groupId>')
@@ -293,13 +290,13 @@ class GroupOperations(Resource):
         adm.delete_group(g)
         return '', 200
 
-    @banking.marshal_with(group)
-    @banking.expect(group, validate=True)
+    @ikauf.marshal_with(group)
+    @ikauf.expect(group, validate=True)
     @secured
     def put(self, id):
         "Update eines bestimmten Gruppen-Objekts."
 
-        adm = ShoppingListdministration()
+        adm = ShoppingListAdministration()
         g = group.from_dict(api.payload)
 
         if g is not None:
@@ -317,10 +314,10 @@ class GroupRelatedByNameOperations(Resource):
     @ikauf.marshal_with(group)
     @secured
     def get(self, name):
-        "Auslesen eines bestimmten Gruppen-Objekts nach Namen"
+        """Auslesen eines bestimmten Gruppen-Objekts nach Namen"""
 
         adm = ShoppingListAdministration()
-        g = adm.get_group_by_name()
+        g = adm.get_group_by_name(name)
         return g
 
 
@@ -331,13 +328,11 @@ class GroupRelatedByUserOperations(Resource):
     @ikauf.marshal_with(user)
     @secured
     def get(self, user):
-        "Auslesen eines bestimmten Gruppen-Objekt nach User"
+        """Auslesen eines bestimmten Gruppen-Objekt nach User"""
 
         adm = ShoppingListAdministration()
-        g= adm.get_group_by_user()
+        g = adm.get_group_by_user(user)
         return g
-
-#TODO Ändern mit Zwischentabelle
 
 @ikauf.route('/user-by-group/<int:groupId>')
 @ikauf.response(500, 'Falls Server-seitiger Fehler')
@@ -352,17 +347,15 @@ class UserRelatedByGroupOperations(Resource):
 
         g = adm.get_group_by_id(id)
         if g is not None:
-            group_list = adm.get_user_by_group()
+            group_list = adm.get_user_by_group(group)
             return group_list
         else:
             return "Gruppe nicht gefunden", 500
 
 
-
 """
 Klassen und Operationen zu Retailer
 """
-
 
 
 @ikauf.route('/retailer')
@@ -371,27 +364,24 @@ class RetailerListOperations(Resource):
     @ikauf.marshal_list_with(retailer)
     @secured
     def get(self):
-        "Auslesen aller Retailer-Objekte"
+        """Auslesen aller Retailer-Objekte"""
 
         adm = ShoppingListAdministration()
         r = adm.get_all_retailer()
         return r
 
-#TODO anschauen und bearbeiten
-
- """  def post(self):
-        "Anlegen eines neuen Retailer-Objekts für einen gegebene Group"
+    def post(self):
+        """Anlegen eines neuen Retailer-Objekts für einen gegebene Group"""
 
         adm = ShoppingListAdministration()
 
-        prosposal = Retailer.get_group_id(groupId)
+        r = adm.get_retailer_by_id(id)
 
-        if prosposal is not None:
-            x = adm.create_retailer(prosposal.get_retailer_name(), prosposal.get_group_id())
+        if r is not None:
+            x = adm.create_retailer(r)
             return x, 200
         else:
-            return '', 500
-            """
+            return 'Group unknown', 500
 
 
 @ikauf.route('/retailer/<int:groupId>')
@@ -409,20 +399,20 @@ class RetailerOperations(Resource):
 
     @secured
     def delete(self, id):
-        "Läschen eines bestimmten Retailer-Objekts"
+        """Löschen eines bestimmten Retailer-Objekts"""
 
         adm = ShoppingListAdministration()
         r = adm.get_retailer_by_id(id)
         adm.delete_retailer(r)
         return '', 200
 
-    @banking.marshal_with(retailer)
-    @banking.expect(retailer, validate=True)
+    @ikauf.marshal_with(retailer)
+    @ikauf.expect(retailer, validate=True)
     @secured
     def put(self, id):
-        "Update eines bestimmten Retailer-Objekts."
+        """Update eines bestimmten Retailer-Objekts."""
 
-        adm = ShoppingListdministration()
+        adm = ShoppingListAdministration()
         r = Retailer.from_dict(api.payload)
 
         if r is not None:
@@ -440,7 +430,7 @@ class RetailerByRetailerEntryListOperations(Resource):
     @ikauf.marshal_with(retailer)
     @secured
     def get(self, retailer_entry_list):
-        "Auslesen eines bestimmten Retailer-Objekts nach RetailerEntry"
+        """"Auslesen eines bestimmten Retailer-Objekts nach RetailerEntry"""
 
         adm = ShoppingListAdministration()
         r = adm.get_retailer_by_retailer_entry_list(retailer_entry_list)
@@ -454,10 +444,10 @@ class RetailerRelatedByNameOperations(Resource):
     @ikauf.marshal_with(retailer)
     @secured
     def get(self, name):
-        "Auslesen eines bestimmten Retailer-Objekt nach Name"
+        """Auslesen eines bestimmten Retailer-Objekt nach Name"""
 
         adm = ShoppingListAdministration()
-        r= adm.get_retailer_by_name(name)
+        r = adm.get_retailer_by_name(name)
         return r
 
 
@@ -468,20 +458,16 @@ class RetailerRelatedByGroupOperations(Resource):
     @ikauf.marshal_with(retailer)
     @secured
     def get(self, group):
-        "Auslesen eines bestimmten Retailer-Objekts nach Gruppe"
+        """Auslesen eines bestimmten Retailer-Objekts nach Gruppe"""
 
         adm = ShoppingListAdministration()
         r = adm.get_retailer_by_group(group)
         return r
 
-#TODO RetailerEntryList ändern, nur mit nur mit Foreignkeys als Attribute
-
-
 
 """
 Klassen und operationen für RetailerEntryList
 """
-
 
 
 @ikauf.route('/retailer-entry-list')
@@ -496,23 +482,22 @@ class RetailerEntryListListOperations(Resource):
         rel = adm.get_all_retailer_entry_list()
         return rel
 
-#TODO anschauen und bearbeiten... wieso nochmal? wegen Zwischentabelle?
+# TODO schauen ob es jetzt richtig ist
 
-"""    def post(self):
-        "Anlegen eines neuen RetailerEntryList-Objekts für einen gegebene Group"
+    def post(self):
+
+        """Anlegen eines neuen RetailerEntryList-Objekts für einen gegebene Group"""
 
         adm = ShoppingListAdministration()
 
-        prosposal = RetailerEntryList.from_dict(api.payload)
+        rel = adm.get_retailer_entry_list_by_id(id)
 
-        if prosposal is not None:
-            x = adm.create_retailer_entry_list(prosposal.get_retailer_name())
+        if rel is not None:
+            x = adm.create_retailer_entry_list(rel)
             return x, 200
         else:
-            return '', 500
+            return 'Group unknown', 500
 
-        "hier bei x nochmal schauen ob es Sinn macht"
-"""
 
 @ikauf.route('/retailer-entry-list/<int:retailerEntryListId>')
 @ikauf.response(500, 'Falls Server-seitiger Fehler')
@@ -529,20 +514,20 @@ class RetailerEntryListOperations(Resource):
 
     @secured
     def delete(self, id):
-        """Läschen eines bestimmten RetailerEntryList-Objekts"""
+        """Löschen eines bestimmten RetailerEntryList-Objekts"""
 
         adm = ShoppingListAdministration()
         rel = adm.get_retailer_entry_list_by_id(id)
         adm.delete_retailer_entry_list(rel)
         return '', 200
 
-    @banking.marshal_with(retailer_entry_list)
-    @banking.expect(retailer_entry_list, validate=True)
+    @ikauf.marshal_with(retailer_entry_list)
+    @ikauf.expect(retailer_entry_list, validate=True)
     @secured
     def put(self, id):
         """Update eines bestimmten RetailerEntryList-Objekts."""
 
-        adm = ShoppingListdministration()
+        adm = ShoppingListAdministration()
         rel = RetailerEntryList.from_dict(api.payload)
 
         if rel is not None:
@@ -579,10 +564,10 @@ class RetailerEntryListRelatedByRetailerOperations(Resource):
     @ikauf.marshal_with(retailer_entry_list)
     @secured
     def get(self, retailer):
-        "Auslesen eines bestimmten RetailerEntryList-Objekt nach Retailer"
+        """Auslesen eines bestimmten RetailerEntryList-Objekt nach Retailer"""
 
         adm = ShoppingListAdministration()
-        rel= adm.get_retailer_entry_list_by_retailer(retailer)
+        rel = adm.get_retailer_entry_list_by_retailer(retailer)
         return rel
 
 
@@ -603,17 +588,17 @@ class EntryListOperations(Resource):
         return e
 
     def post(self):
-        "Anlegen eines neuen Entry-Objekts"
+        """Anlegen eines neuen Entry-Objekts"""
 
         adm = ShoppingListAdministration()
 
-        prosposal = Entry.from_dict(api.payload)
+        proposal = Entry.from_dict(api.payload)
 
-        if prosposal is not None:
-          x = adm.create_entry(prosposal.get_entry_name()) #todo überlgen ob : prosposal.get_entry_list() sinn macht
-          return x, 200
+        if proposal is not None:
+            x = adm.create_entry(proposal.get_entry_name()) #todo überlgen ob : prosposal.get_entry_list() sinn macht
+            return x, 200
         else:
-          return '', 500
+            return '', 500
 
 @ikauf.route('/entry-by-id/<int:entryId>')
 @ikauf.response(500, 'Falls Server-seitiger Fehler')
@@ -637,13 +622,13 @@ class EntryOperations(Resource):
         adm.delete_entry(e)
         return '', 200
 
-    @banking.marshal_with(entry)
-    @banking.expect(entry, validate=True)
+    @ikauf.marshal_with(entry)
+    @ikauf.expect(entry, validate=True)
     @secured
     def put(self, id):
         """Update eines bestimmten Entry-Objekts."""
 
-        adm = ShoppingListdministration()
+        adm = ShoppingListAdministration()
         e = entry.from_dict(api.payload)
 
         if e is not None:
@@ -661,7 +646,7 @@ class EntryRelatedByArticleOperations(Resource):
     @ikauf.marshal_with(entry)
     @secured
     def get(self, article):
-        "Auslesen eines bestimmten Entry-Objekts nach Article"
+        """Auslesen eines bestimmten Entry-Objekts nach Article"""
 
         adm = ShoppingListAdministration()
         e = adm.get_entry_by_article(article)
@@ -675,7 +660,7 @@ class EntryRelatedByAmountOperations(Resource):
     @ikauf.marshal_with(entry)
     @secured
     def get(self, amount):
-        "Auslesen eines bestimmten Entry-Objekts nach Amount"
+        """Auslesen eines bestimmten Entry-Objekts nach Amount"""
 
         adm = ShoppingListAdministration()
         am = adm.get_entry_by_amount(amount)
@@ -689,10 +674,10 @@ class EntryRelatedByModificationDateOperations(Resource):
     @ikauf.marshal_with(entry)
     @secured
     def get(self, modification_date):
-        "Auslesen eines bestimmten Entry-Objekt nach Modification-Date"
+        """Auslesen eines bestimmten Entry-Objekt nach Modification-Date"""
 
         adm = ShoppingListAdministration()
-        md= adm.get_entry_by_modification_date(modification_date)
+        md = adm.get_entry_by_modification_date(modification_date)
         return md
 
 
@@ -703,10 +688,10 @@ class EntryRelatedByRetailerEntryListOperations(Resource):
     @ikauf.marshal_with(entry)
     @secured
     def get(self, retailer_entry_list):
-        "Auslesen eines bestimmten Entry-Objekt nach RetailerEntryList"
+        """Auslesen eines bestimmten Entry-Objekt nach RetailerEntryList"""
 
         adm = ShoppingListAdministration()
-        rel= adm.get_entry_by_retailer_entry_list(retailer_entry_list)
+        rel = adm.get_entry_by_retailer_entry_list(retailer_entry_list)
         return rel
 
 
@@ -719,7 +704,7 @@ Klassen und Operationen für ShoppingList
 
 @ikauf.route('/shopping-list')
 @ikauf.response(500, "Falls Server-seitiger Fehler")
-class ShoppingistListOperations(Resource):
+class ShoppingListListOperations(Resource):
     @ikauf.marshal_list_with(shopping_list)
     @secured
     def get(self):
@@ -729,17 +714,17 @@ class ShoppingistListOperations(Resource):
         sl = adm.get_all_shopping_list()
         return sl
     def post(self):
-        "Anlegen eines neuen ShoppingList-Objekts"
+        """Anlegen eines neuen ShoppingList-Objekts"""
 
         adm = ShoppingListAdministration()
 
         prosposal = ShoppingList.from_dict(api.payload)
 
         if prosposal is not None:
-          x = adm.create_shopping_list(prosposal.get_shopping_list_name(), prosposal.get_entry()) #todo macht get_entry sinn? vllt, dass bereits 1 als beispiel angelegt ist?
-          return x, 200
+            x = adm.create_shopping_list(prosposal.get_shopping_list_name(), prosposal.get_entry())
+            return x, 200
         else:
-          return '', 500
+            return '', 500
 
 
 @ikauf.route('/shopping-list-by-id/<int:shoppingListId>')
@@ -757,20 +742,20 @@ class ShoppingListOperations(Resource):
 
     @secured
     def delete(self, id):
-        """Läschen eines bestimmten ShoppingList-Objekts"""
+        """Löschen eines bestimmten ShoppingList-Objekts"""
 
         adm = ShoppingListAdministration()
         sl = adm.get_shopping_list_by_id(id)
         adm.delete_shopping_list_by_id(sl)
         return '', 200
 
-    @banking.marshal_with(shopping_list)
-    @banking.expect(shopping_list, validate=True)
+    @ikauf.marshal_with(shopping_list)
+    @ikauf.expect(shopping_list, validate=True)
     @secured
     def put(self, id):
         """Update eines bestimmten ShoppingList-Objekts."""
 
-        adm = ShoppingListdministration()
+        adm = ShoppingListAdministration()
         sl = shopping_list.from_dict(api.payload)
 
         if sl is not None:
@@ -793,7 +778,7 @@ class ShoppingListRelatedByNameOperations(Resource):
     @ikauf.marshal_with(shopping_list)
     @secured
     def get(self, name):
-        "Auslesen eines bestimmten ShoppingList-Objekts nach Name"
+        """Auslesen eines bestimmten ShoppingList-Objekts nach Name"""
 
         adm = ShoppingListAdministration()
         sl = adm.get_shopping_list_by_name(name)
@@ -807,7 +792,7 @@ class ShoppingListRelatedByGroupIdOperations(Resource):
     @ikauf.marshal_with(shopping_list)
     @secured
     def get(self, id):
-        "Auslesen eines bestimmten ShoppingList-Objekts nach Group ID"
+        """Auslesen eines bestimmten ShoppingList-Objekts nach Group ID"""
 
         adm = ShoppingListAdministration()
         sl = adm.get_shopping_list_by_group_id(id)
@@ -833,17 +818,17 @@ class ArticleListOperations(Resource):
         a = adm.get_all_article()
         return a
     def post(self):
-        "Anlegen eines neuen Article-Objekts"
+        """Anlegen eines neuen Article-Objekts"""
 
         adm = ShoppingListAdministration()
 
-        prosposal = Article.from_dict(api.payload)
+        proposal = Article.from_dict(api.payload)
 
-        if prosposal is not None:
-          x = adm.create_article(prosposal.get_article_name(), prosposal.get_article_id()) #todo macht article_id sinn?
-          return x, 200
+        if proposal is not None:
+            x = adm.create_article(proposal.get_article_name(), proposal.get_article_id())
+            return x, 200
         else:
-          return '', 500
+            return '', 500
 
 
 @ikauf.route('/article-by-id/<int:articleId>')
@@ -868,13 +853,13 @@ class ArticleOperations(Resource):
         adm.delete_article_by_id(a)
         return '', 200
 
-    @banking.marshal_with(article)
-    @banking.expect(article, validate=True)
+    @ikauf.marshal_with(article)
+    @ikauf.expect(article, validate=True)
     @secured
     def put(self, id):
         """Update eines bestimmten Article-Objekts."""
 
-        adm = ShoppingListdministration()
+        adm = ShoppingListAdministration()
         a = article.from_dict(api.payload)
 
         if a is not None:
@@ -897,7 +882,7 @@ class ArticleRelatedByNameOperations(Resource):
     @ikauf.marshal_with(article)
     @secured
     def get(self, name):
-        "Auslesen eines bestimmten Article-Objekts nach Name"
+        """Auslesen eines bestimmten Article-Objekts nach Name"""
 
         adm = ShoppingListAdministration()
         a = adm.get_article_by_name(name)
@@ -911,7 +896,7 @@ class ArticleRelatedByRetailerIdOperations(Resource):
     @ikauf.marshal_with(article)
     @secured
     def get(self, id):
-        "Auslesen eines bestimmten Article-Objekts nach Retailer ID"
+        """Auslesen eines bestimmten Article-Objekts nach Retailer ID"""
 
         adm = ShoppingListAdministration()
         a = adm.get_article_by_retailer_id(id)
@@ -929,7 +914,7 @@ class ArticleRelatedByStandardBooleanOperations(Resource):
     @ikauf.marshal_with(article)
     @secured
     def get(self, article):
-        "Auslesen eines bestimmten Article-Objekts der als Standard markiert wurde"
+        """Auslesen eines bestimmten Article-Objekts der als Standard markiert wurde"""
 
         adm = ShoppingListAdministration()
         a = adm.get_article_by_standard_boolean(article)
@@ -938,7 +923,7 @@ class ArticleRelatedByStandardBooleanOperations(Resource):
     def put(self, article_boolean):
         """Update eines bestimmten Article-Objekts."""
 
-        adm = ShoppingListdministration()
+        adm = ShoppingListAdministration()
         a = article.from_dict(api.payload)
 
         if a is not None:
@@ -949,9 +934,6 @@ class ArticleRelatedByStandardBooleanOperations(Resource):
             return '', 500
 
 
-#todo anlegen einer neuen Klasse um alle Standard objekte aufzurufen und dem Eintrag der Gruppe hinzuzüfugen.
-
-
 @ikauf.route('/article-by-standard-boolean/<boolean: ... ')
 @ikauf.response(500, 'Falls Server-seitiger Fehler')
 @ikauf.param('...', 'True or False des zugehörigen Article-Objekts')
@@ -959,7 +941,7 @@ class ArticleRelatedByStandardBooleanOperations(Resource):
     @ikauf.marshal_with(article)
     @secured
     def get(self):
-        "Auslesen eines bestimmten Article-Objekts der als Standard markiert wurde"
+        """Auslesen eines bestimmten Article-Objekts der als Standard markiert wurde"""
 
         adm = ShoppingListAdministration()
         a = adm.get_all_article_by_standard_boolean()
