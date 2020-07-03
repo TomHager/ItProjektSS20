@@ -73,8 +73,8 @@ class RetailerEntryListMapper(Mapper):
         """
         cursor = self._cnx.cursor()
 
-        command = "UPDATE retailerentrylists " + "SET user_id=%s, retailer_id=%s, shoppinglist_id=%s " \
-                                                 "WHERE entry_id=%s"
+        command = "UPDATE retailerentrylists " + "SET user_id=%s, retailer_id=%s, shoppinglist_id=%s, entry_id=%s " \
+                                                 "WHERE id=%s"
         data = (retailer_entry_list.get_user_id(), retailer_entry_list.get_retailer_id(),
                 retailer_entry_list.get_shopping_list_id(), retailer_entry_list.get_entry_id())
         cursor.execute(command, data)

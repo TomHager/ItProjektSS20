@@ -43,14 +43,15 @@ class Entry(bo.BusinessObject):
 
     def __str__(self):
         """Erzeugen einer einfachen textuellen Darstellung der jeweiligen Instanz."""
-        return "Entry: {}, {}, {}, {}, {}".format(self.get_id(), self.__unit, self.__amount,
-                                                  self.__article_id, self.__modification_date)
+        return "Entry: {}, {}, {}, {}, {}, {}".format(self.get_id(), self.__bought, self.__unit, self.__amount,
+                                                      self.__article_id, self.__modification_date)
 
     @staticmethod
     def from_dict(dictionary=dict()):
         """Umwandeln eines Python dict() in einen Entry()."""
         obj = Entry()
         obj.set_id(dictionary["id"])  # eigentlich Teil von BusinessObject !
+        obj.set_bought(dictionary["bought"])
         obj.set_unit(dictionary["unit"])
         obj.set_amount(dictionary["amount"])
         obj.set_article_id(dictionary["article_id"])

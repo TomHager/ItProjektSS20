@@ -154,7 +154,7 @@ class ShoppingListMapper (Mapper):
         :return Eine Sammlung mit User-Objekten, die sämtliche Benutzer
             mit der gewünschten E-Mail-Adresse enthält.
         """
-        result = None
+        result = []
 
         cursor = self._cnx.cursor()
         command = "SELECT * FROM shoppinglists WHERE group_id={}".format(group_id)
