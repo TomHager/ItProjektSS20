@@ -1,9 +1,11 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
-import { Container, ThemeProvider, CssBaseline } from "@material-ui/core";
+// import { Container, ThemeProvider, CssBaseline } from '@material-ui/core';
 import Header from "./components/layout/Header";
 import About from "./components/pages/About";
 import GroupList from "./components/pages/GroupList";
+import ShoppingList from "./components/pages/ShoppingList";
+
 // import Theme from './Theme';
 // import SignIn from './components/pages/SignIn';
 // import LoadingProgress from './components/dialogs/LoadingProgress';
@@ -30,16 +32,21 @@ class App extends React.Component {
   /** Renders the whole app */
   render() {
     return (
-      <Router basename={process.env.PUBLIC_URL}>
-        <Header />
-        <Redirect from="/" to="groupList" />
-        <Route exact path="/groupList">
-          <GroupList />
-        </Route>
-        <Route path="/about">
-          <About />
-        </Route>
-      </Router>
+      <div style={{ backgroundColor: "#f4f4f4" }}>
+        <Router basename={process.env.PUBLIC_URL}>
+          <Header />
+          <Route path="/groupList">
+            <GroupList />
+          </Route>
+          <Redirect from="/" to="/shoppingList" />
+          <Route exact path="/shoppingList">
+            <ShoppingList />
+          </Route>
+          <Route path="/about">
+            <About />
+          </Route>
+        </Router>
+      </div>
     );
   }
 }

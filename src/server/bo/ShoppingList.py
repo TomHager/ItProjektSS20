@@ -1,5 +1,6 @@
 from server.bo import BusinessObject as bo
 
+
 class ShoppingList (bo.BusinessObject):
 
     def __init__(self):
@@ -16,12 +17,12 @@ class ShoppingList (bo.BusinessObject):
     def get_group_id(self):
         return self.__group_id
 
-    def set_group_id(self, value):
-        self.__group_id = value
+    def set_group_id(self, group):
+        self.__group_id = group.get_id()
 
     def __str__(self):
         """Erzeugen einer einfachen textuellen Darstellung der jeweiligen Instanz."""
-        return "ShoppingList: {}, {}, {}".format(self.get_id(), self.__name, self.__group_id)
+        return "ShoppingList: {}, {}, {}".format(self.get_id(), self.__name, self.get_group_id())
 
     @staticmethod
     def from_dict(dictionary=dict()):
@@ -30,4 +31,5 @@ class ShoppingList (bo.BusinessObject):
         obj.set_id(dictionary["id"])  # eigentlich Teil von BusinessObject !
         obj.set_name(dictionary["name"])
         obj.set_group_id(dictionary["group_id"])
+
         return obj

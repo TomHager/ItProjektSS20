@@ -44,7 +44,7 @@ def secured(function):
                     email = claims.get("email")
                     name = claims.get("name")
 
-                    user = adm.get_user_by_google_user_id(google_user_id)
+                    user = adm.get_user_by_external_id(google_user_id)
                     if user is not None:
                         """Fall: Der Benutzer ist unserem System bereits bekannt.
                         Wir gehen davon aus, dass die google_user_id sich nicht ändert.
