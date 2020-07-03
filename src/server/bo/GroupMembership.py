@@ -1,7 +1,4 @@
-from server.bo import BusinessObject as bo
-
-
-class GroupMembership (bo.BusinessObject):
+class GroupMembership:
 
     def __init__(self):
         super().__init__()

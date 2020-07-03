@@ -3,14 +3,14 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Jun 05, 2020 at 12:59 PM
--- Server version: 5.7.24
--- PHP Version: 7.4.1
+-- Erstellungszeit: 03. Jul 2020 um 10:26
+-- Server-Version: 5.7.24
+-- PHP-Version: 7.4.1
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
 START TRANSACTION;
-SET time_zone = "+00:00";
+SET time_zone = "+02:00";
 
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -19,226 +19,208 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `it-projekt-ss2020`
+-- Datenbank: `it-projekt-ss2020`
 --
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `article`
+-- Tabellenstruktur für Tabelle `articles`
 --
 
-CREATE TABLE `article` (
-  `articleId` int(11) NOT NULL,
-  `articleName` varchar(100) NOT NULL,
-  `articleStandard` tinyint(1) NOT NULL,
-  `articleRetailerId` int(11) NOT NULL
+CREATE TABLE `articles` (
+  `id` int(11) NOT NULL,
+  `name` varchar(50) NOT NULL,
+  `standard` tinyint(1) NOT NULL,
+  `retailer_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `entry`
+-- Tabellenstruktur für Tabelle `entries`
 --
 
-CREATE TABLE `entry` (
-  `entryId` int(11) NOT NULL,
-  `entryUnit` varchar(50) NOT NULL,
-  `entryAmount` int(11) NOT NULL,
-  `entryArticleId` int(11) NOT NULL,
-  `entryArticleName` varchar(100) NOT NULL,
-  `entryArticleStandard` tinyint(1) NOT NULL,
-  `entryModificationDate` date NOT NULL
+CREATE TABLE `entries` (
+  `id` int(11) NOT NULL,
+  `unit` varchar(50) NOT NULL,
+  `amount` int(11) NOT NULL,
+  `article_id` int(11) NOT NULL,
+  `modification_date` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `groups`
+-- Tabellenstruktur für Tabelle `groupmemberships`
+--
+
+CREATE TABLE `groupmemberships` (
+  `member` int(11) NOT NULL,
+  `group_membership` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Daten für Tabelle `groupmemberships`
+--
+
+INSERT INTO `groupmemberships` (`member`, `group_membership`) VALUES
+(1, 1),
+(1, 2),
+(2, 2);
+
+-- --------------------------------------------------------
+
+--
+-- Tabellenstruktur für Tabelle `groups`
 --
 
 CREATE TABLE `groups` (
-  `groupId` int(11) NOT NULL,
-  `groupName` varchar(50) NOT NULL,
-  `groupGroupUserListId` int(11) NOT NULL
+  `id` int(11) NOT NULL,
+  `name` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Daten für Tabelle `groups`
+--
+
+INSERT INTO `groups` (`id`, `name`) VALUES
+(1, 'Alpha'),
+(2, 'Bravo'),
+(3, 'Charlie');
+
+-- --------------------------------------------------------
+
+--
+-- Tabellenstruktur für Tabelle `retailerentrylists`
+--
+
+CREATE TABLE `retailerentrylists` (
+  `shopping_list_id` int(11) NOT NULL,
+  `retailer_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `entry_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `groupuserlist`
+-- Tabellenstruktur für Tabelle `retailergroups`
 --
 
-CREATE TABLE `groupuserlist` (
-  `groupUserListId` int(11) NOT NULL,
-  `groupUserListUserId` int(11) NOT NULL,
-  `groupUserListGroupId` int(11) NOT NULL
+CREATE TABLE `retailergroups` (
+  `retailer_member` int(11) NOT NULL,
+  `retailer_group` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `retailer`
+-- Tabellenstruktur für Tabelle `retailers`
 --
 
-CREATE TABLE `retailer` (
-  `retailerId` int(11) NOT NULL,
-  `retailerName` varchar(50) NOT NULL,
-  `retailerGroupId` int(11) NOT NULL
+CREATE TABLE `retailers` (
+  `id` int(11) NOT NULL,
+  `name` varchar(50) NOT NULL,
+  `groups_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `retailerentrylist`
+-- Tabellenstruktur für Tabelle `shoppinglists`
 --
 
-CREATE TABLE `retailerentrylist` (
-  `retailerEntryListId` int(11) NOT NULL,
-  `retailerEntryListUserId` int(11) NOT NULL,
-  `retailerEntryListUserName` varchar(50) NOT NULL,
-  `retailerEntryListRetailerId` int(11) NOT NULL,
-  `retailerEntryListRetailerName` varchar(50) NOT NULL,
-  `retailerEntryListShoppingListId` int(11) NOT NULL
+CREATE TABLE `shoppinglists` (
+  `id` int(11) NOT NULL,
+  `name` varchar(50) NOT NULL,
+  `groups_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `shoppinglist`
+-- Tabellenstruktur für Tabelle `users`
 --
 
-CREATE TABLE `shoppinglist` (
-  `shoppingListId` int(11) NOT NULL,
-  `shoppingListName` varchar(50) NOT NULL,
-  `shoppingListGroupId` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `user`
---
-
-CREATE TABLE `user` (
-  `userId` int(11) NOT NULL,
-  `userName` varchar(50) NOT NULL,
-  `userEmail` varchar(100) NOT NULL
+CREATE TABLE `users` (
+  `id` int(11) NOT NULL,
+  `name` varchar(50) NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `external_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Indexes for dumped tables
+-- Daten für Tabelle `users`
+--
+
+INSERT INTO `users` (`id`, `name`, `email`, `external_id`) VALUES
+(1, 'Alex', 'alexalex', 1),
+(2, 'Bernd', 'berndbernd', 2),
+(3, 'Chris', 'chrischris', 3);
+
+--
+-- Indizes der exportierten Tabellen
 --
 
 --
--- Indexes for table `article`
+-- Indizes für die Tabelle `articles`
 --
-ALTER TABLE `article`
-  ADD PRIMARY KEY (`articleId`),
-  ADD KEY `retailerId` (`articleRetailerId`) USING BTREE;
+ALTER TABLE `articles`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `retailer.id` (`retailer_id`) USING BTREE;
 
 --
--- Indexes for table `entry`
+-- Indizes für die Tabelle `entries`
 --
-ALTER TABLE `entry`
-  ADD PRIMARY KEY (`entryId`),
-  ADD KEY `articleId` (`entryArticleId`,`entryArticleName`,`entryArticleStandard`) USING BTREE;
+ALTER TABLE `entries`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `article_id` (`article_id`);
 
 --
--- Indexes for table `groups`
+-- Indizes für die Tabelle `groupmemberships`
+--
+ALTER TABLE `groupmemberships`
+  ADD KEY `groupMembership` (`member`,`group_membership`),
+  ADD KEY `group_membership` (`group_membership`);
+
+--
+-- Indizes für die Tabelle `groups`
 --
 ALTER TABLE `groups`
-  ADD PRIMARY KEY (`groupId`),
-  ADD KEY `groupUserListId` (`groupGroupUserListId`) USING BTREE;
+  ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `groupuserlist`
+-- Indizes für die Tabelle `retailerentrylists`
 --
-ALTER TABLE `groupuserlist`
-  ADD PRIMARY KEY (`groupUserListId`),
-  ADD KEY `userId` (`groupUserListUserId`) USING BTREE,
-  ADD KEY `groupId` (`groupUserListGroupId`) USING BTREE;
+ALTER TABLE `retailerentrylists`
+  ADD KEY `retailer_entry_list` (`shopping_list_id`,`retailer_id`,`user_id`,`entry_id`);
 
 --
--- Indexes for table `retailer`
+-- Indizes für die Tabelle `retailergroups`
 --
-ALTER TABLE `retailer`
-  ADD PRIMARY KEY (`retailerId`),
-  ADD KEY `groupId` (`retailerGroupId`) USING BTREE;
+ALTER TABLE `retailergroups`
+  ADD KEY `retailergroup` (`retailer_member`,`retailer_group`);
 
 --
--- Indexes for table `retailerentrylist`
+-- Indizes für die Tabelle `retailers`
 --
-ALTER TABLE `retailerentrylist`
-  ADD PRIMARY KEY (`retailerEntryListId`),
-  ADD KEY `userRetailerEntryList` (`retailerEntryListUserId`,`retailerEntryListUserName`),
-  ADD KEY `RetailerRetailerEntryList` (`retailerEntryListRetailerId`,`retailerEntryListRetailerName`),
-  ADD KEY `ShoppingListRetailerEntryList` (`retailerEntryListShoppingListId`);
+ALTER TABLE `retailers`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `groups_id` (`groups_id`);
 
 --
--- Indexes for table `shoppinglist`
+-- Indizes für die Tabelle `shoppinglists`
 --
-ALTER TABLE `shoppinglist`
-  ADD PRIMARY KEY (`shoppingListId`),
-  ADD KEY `groupId` (`shoppingListGroupId`) USING BTREE;
+ALTER TABLE `shoppinglists`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `groups_id` (`groups_id`);
 
 --
--- Indexes for table `user`
+-- Indizes für die Tabelle `users`
 --
-ALTER TABLE `user`
-  ADD PRIMARY KEY (`userId`);
-
---
--- AUTO_INCREMENT for dumped tables
---
-
---
--- AUTO_INCREMENT for table `article`
---
-ALTER TABLE `article`
-  MODIFY `articleId` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `entry`
---
-ALTER TABLE `entry`
-  MODIFY `entryId` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `groups`
---
-ALTER TABLE `groups`
-  MODIFY `groupId` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `groupuserlist`
---
-ALTER TABLE `groupuserlist`
-  MODIFY `groupUserListId` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `retailer`
---
-ALTER TABLE `retailer`
-  MODIFY `retailerId` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `retailerentrylist`
---
-ALTER TABLE `retailerentrylist`
-  MODIFY `retailerEntryListId` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `shoppinglist`
---
-ALTER TABLE `shoppinglist`
-  MODIFY `shoppingListId` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `user`
---
-ALTER TABLE `user`
-  MODIFY `userId` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

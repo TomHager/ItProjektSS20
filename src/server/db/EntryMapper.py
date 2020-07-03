@@ -1,3 +1,4 @@
+from datetime import date
 from server.bo.Entry import Entry
 from server.db.Mapper import Mapper
 
@@ -26,12 +27,13 @@ class EntryMapper(Mapper):
 
         tuples = cursor.fetchall()
 
-        for (id, unit, amount, article_id, modification_date) in tuples:
+        for (id, bought, unit, amount, article, modification_date) in tuples:
             entry = Entry()
             entry.set_id(id)
+            entry.set_bought(bought)
             entry.set_unit(unit)
             entry.set_amount(amount)
-            entry.set_article_id(article_id)
+            entry.set_article(article)
             entry.set_modification_date(modification_date)
 
             result.append(entry)
@@ -58,9 +60,10 @@ class EntryMapper(Mapper):
         for (maxid) in tuples:
             entry.set_id(maxid[0] + 1)
 
-        command = "INSERT INTO entries (id, unit, amount, article_id, modification_date) " \
-                  "VALUES (%s,%s,%s,%s,%s)"
-        data = (entry.get_id(), entry.get_unit(), entry.get_amount(), entry.get_article_id, entry.get_modification_date())
+        command = "INSERT INTO entries (id, bought, unit, amount, article, modification_date) " \
+                  "VALUES (%s,%s,%s,%s,%s,%s)"
+        data = (entry.get_id(), entry.get_bought(), entry.get_unit(), entry.get_amount(), entry.get_article(),
+                entry.get_modification_date())
         cursor.execute(command, data)
 
         self._cnx.commit()
@@ -75,8 +78,9 @@ class EntryMapper(Mapper):
 
         cursor = self._cnx.cursor()
 
-        command = "UPDATE entry " + "SET unit=%s, amount=%s, article_id=%s WHERE id=%s"
-        data = (entry.get_unit(), entry.get_amount(), entry.get_article_id, entry.get_modification_date())
+        command = "UPDATE entry " + "SET unit=%s, bought=%s, amount=%s, article=%s WHERE id=%s"
+        data = (entry.get_unit(), entry.get_bought(), entry.get_amount(), entry.get_article,
+                entry.get_modification_date())
         cursor.execute(command, data)
 
         self._cnx.commit()
@@ -113,39 +117,42 @@ class EntryMapper(Mapper):
         tuples = cursor.fetchall()
 
         if tuples[0] is not None:
-            (id, unit, amount, article_id, modification_date) = tuples[0]
+            (id, bought, unit, amount, article, modification_date) = tuples[0]
             entry = Entry()
             entry.set_id(id)
+            entry.set_bought(bought)
             entry.set_unit(unit)
             entry.set_amount(amount)
-            entry.set_article_id(article_id)
+            entry.set_article(article)
             entry.set_modification_date(modification_date)
 
-        result = entry
+            result = entry
 
         self._cnx.commit()
         cursor.close()
 
         return result
 
-    def find_entry_id_by_article(self, article_id):
+    def find_entry_id_by_article(self, article):
         """Auslesen aller Eintrags-ID anhand des Artikels
 
-                        :param article_id
+                        :param article
                         :return entry_id, mit den zugehörigen Artikeln.
                         """
 
         result = []
         cursor = self._cnx.cursor()
-        command = "SELECT * FROM entries WHERE article_id={} ORDER BY article".format(article_id)
+        command = "SELECT * FROM entries WHERE article={} ORDER BY article".format(article)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
-        for (id, unit, amount, article_id, modification_date) in tuples:
+        for (id, bought, unit, amount, article, modification_date) in tuples:
             entry = Entry()
+            entry.set_id(id)
+            entry.set_bought(bought)
             entry.set_unit(unit)
             entry.set_amount(amount)
-            entry.set_article_id(article_id)
+            entry.set_article(article)
             entry.set_modification_date(modification_date)
 
         self._cnx.commit()
@@ -153,7 +160,7 @@ class EntryMapper(Mapper):
 
         return result
 
-    def find_amount_by_entry(self, entry_id):
+    def find_unit_amount_by_entry(self, entry_id):
         """Auslesen Menge anhand des Eintrags
 
                                 :param entry_id
@@ -162,12 +169,13 @@ class EntryMapper(Mapper):
 
         result = []
         cursor = self._cnx.cursor()
-        command = "SELECT amount FROM entries WHERE entry={} ORDER BY entry".format(entry_id)
+        command = "SELECT unit, amount FROM entries WHERE entry={} ORDER BY entry".format(entry_id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
-        for (amount) in tuples:
+        for (unit, amount) in tuples:
             entry = Entry()
+            entry.set_unit(unit)
             entry.set_amount(amount)
             result.append(entry)
 
@@ -176,7 +184,7 @@ class EntryMapper(Mapper):
 
         return result
 
-    def find_unit_by_entry(self, entry_id):
+    def find_bought_by_entry(self, entry_id):
         """Auslesen Einheit anhand des Eintrags
 
                                         :param entry_id
@@ -185,13 +193,14 @@ class EntryMapper(Mapper):
 
         result = []
         cursor = self._cnx.cursor()
-        command = "SELECT unit FROM entries WHERE entry={} ORDER BY entry".format(entry_id)
+        command = "SELECT bought, article FROM entries WHERE entry={} ORDER BY entry".format(entry_id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
-        for (unit) in tuples:
+        for (bought, article) in tuples:
             entry = Entry()
-            entry.set_unit(unit)
+            entry.set_bought(bought)
+            entry.set_article(article)
             result.append(entry)
 
         self._cnx.commit()
@@ -208,16 +217,18 @@ class EntryMapper(Mapper):
 
         result = []
         cursor = self._cnx.cursor()
-        command = "SELECT * FROM entries WHERE modification_date={} ORDER BY modification_date".format(modification_date)
+        command = "SELECT * FROM entries WHERE modification_date={} ORDER BY modification_date".format(
+            modification_date)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
-        for (id, unit, amount, article_id, modification_date) in tuples:
+        for (id, bought, unit, amount, article, modification_date) in tuples:
             entry = Entry()
             entry.set_id(id)
+            entry.set_bought(bought)
             entry.set_unit(unit)
             entry.set_amount(amount)
-            entry.set_article_id(article_id)
+            entry.set_article(article)
             entry.set_modification_date(modification_date)
             result.append(entry)
 

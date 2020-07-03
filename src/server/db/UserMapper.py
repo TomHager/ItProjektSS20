@@ -2,7 +2,7 @@ from server.bo.User import User
 from server.db.Mapper import Mapper
 
 
-class UserMapper (Mapper):
+class UserMapper(Mapper):
 
     def __init__(self):
         super().__init__()
@@ -205,7 +205,8 @@ class UserMapper (Mapper):
         self._cnx.commit()
         cursor.close()
 
-if (__name__ == "__main__"):
+
+if __name__ == "__main__":
     with UserMapper() as mapper:
         result = mapper.find_all()
         for user in result:
