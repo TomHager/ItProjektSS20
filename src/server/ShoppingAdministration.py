@@ -6,7 +6,7 @@ from .bo.RetailerEntryList import RetailerEntryList
 from .bo.ShoppingList import ShoppingList
 from .bo.User import User
 
-from .db.ArticleMapper import ArticleMapper
+from .db.FavoriteMapper import ArticleMapper
 from .db.EntryMapper import EntryMapper
 from .db.GroupMapper import GroupMapper
 from .db.RetailerEntryListMapper import RetailerEntryListMapper

@@ -1,7 +1,4 @@
-from server.bo import BusinessObject as bo
-
-
-class RetailerGroup (bo.BusinessObject):
+class RetailerGroup:
 
     def __init__(self):
         super().__init__()
@@ -15,7 +12,7 @@ class RetailerGroup (bo.BusinessObject):
         self.__retailer_member = retailer.get_id()
 
     def get_retailer_group(self):
-        return self._retailer_group
+        return self.__retailer_group
 
     def set_retailer_group(self, group):
         self.__retailer_group = group.get_id()
