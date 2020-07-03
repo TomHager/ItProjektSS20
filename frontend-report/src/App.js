@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
 // import { Container, ThemeProvider, CssBaseline } from '@material-ui/core';
 import Header from './components/layout/Header';
 import About from './components/pages/About'
-import Report from './components/pages/Report'
+import Report from './components/pages/ReportMenu'
 
 // import Theme from './Theme';
 // import SignIn from './components/pages/SignIn';
@@ -36,7 +36,7 @@ class App extends React.Component {
         <Header />
         <Redirect from='/' to='/report' />
         <Route exact path='/report'>
-          <Report />
+          <ReportMenu />
         </Route>
         <Route  path='/about'>
             <About />
