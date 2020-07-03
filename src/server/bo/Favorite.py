@@ -5,17 +5,10 @@ class Entry(bo.BusinessObject):
 
     def __init__(self):
         super().__init__()
-        self.__bought = ""
         self.__unit = ""
         self.__amount = ""
         self.__article = ""
-        self.__modification_date = ""
-
-    def get_bought(self):
-        return self.__bought
-
-    def set_bought(self, value):
-        self.__bought = value
+        self.__favorite = ""
 
     def get_unit(self):
         return self.__unit
@@ -35,26 +28,25 @@ class Entry(bo.BusinessObject):
     def set_article(self, value):
         self.__article = value
 
-    def get_modification_date(self):
-        return self.__modification_date
+    def get_favorite(self):
+        return self.__favorite
 
-    def set_modification_date(self, value):
-        self.__modification_date = value
+    def set_favorite(self, value):
+        self.__favorite = value
 
     def __str__(self):
         """Erzeugen einer einfachen textuellen Darstellung der jeweiligen Instanz."""
-        return "Entry: {}, {}, {}, {}, {}, {}".format(self.get_id(), self.__bought(), self.__unit, self.__amount,
-                                                  self.__article, self.__modification_date)
+        return "Entry: {}, {}, {}, {}, {}".format(self.get_id(), self.__unit, self.__amount,
+                                                  self.__article, self.__favorite)
 
     @staticmethod
     def from_dict(dictionary=dict()):
         """Umwandeln eines Python dict() in einen Entry()."""
         obj = Entry()
         obj.set_id(dictionary["id"])  # eigentlich Teil von BusinessObject !
-        obj.set_bought(dictionary["bought"])
         obj.set_unit(dictionary["unit"])
         obj.set_amount(dictionary["amount"])
         obj.set_article(dictionary["article"])
-        obj.set_modification_date(dictionary["modification_date"])
+        obj.set_favorite(dictionary["favorite"])
 
         return obj
