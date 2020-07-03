@@ -20,18 +20,18 @@ class EntryMapper(Mapper):
                        """
 
         result = []
+
         cursor = self._cnx.cursor()
-        cursor.execute("SELECT unit, amount, article_id, article_name, article_standard, modification_date "
-                       "from entries")
+        cursor.execute("SELECT * FROM entries")
+
         tuples = cursor.fetchall()
 
-        for (unit, amount, article_id, article_name, article_standard, modification_date) in tuples:
+        for (id, unit, amount, article_id, modification_date) in tuples:
             entry = Entry()
+            entry.set_id(id)
             entry.set_unit(unit)
             entry.set_amount(amount)
             entry.set_article_id(article_id)
-            entry.set_article_name(article_name)
-            entry.set_article_standard(article_standard)
             entry.set_modification_date(modification_date)
 
             result.append(entry)
@@ -58,10 +58,9 @@ class EntryMapper(Mapper):
         for (maxid) in tuples:
             entry.set_id(maxid[0] + 1)
 
-        command = "INSERT INTO entries (unit, amount, article_id, article_name, article_standard, modification_date) " \
-                  "VALUES (%s,%s,%s,%s,%s,%s)"
-        data = (entry.get_unit(), entry.get_amount(), entry.get_article_id, entry.get_article_name(),
-                entry.get_article_standard(), entry.get_modification_date())
+        command = "INSERT INTO entries (id, unit, amount, article_id, modification_date) " \
+                  "VALUES (%s,%s,%s,%s,%s)"
+        data = (entry.get_id(), entry.get_unit(), entry.get_amount(), entry.get_article_id, entry.get_modification_date())
         cursor.execute(command, data)
 
         self._cnx.commit()
@@ -76,9 +75,8 @@ class EntryMapper(Mapper):
 
         cursor = self._cnx.cursor()
 
-        command = "UPDATE entry " + "SET unit=%s, amount=%s, article_id=%s, article_name=%s, article_standard=%s, " \
-                                    "modification_date=%s WHERE id=%s"
-        data = (entry.get_owner(), entry.get_id())
+        command = "UPDATE entry " + "SET unit=%s, amount=%s, article_id=%s WHERE id=%s"
+        data = (entry.get_unit(), entry.get_amount(), entry.get_article_id, entry.get_modification_date())
         cursor.execute(command, data)
 
         self._cnx.commit()
@@ -102,7 +100,7 @@ class EntryMapper(Mapper):
         """Suchen eines Eintrags mit vorgegebener ID. Da diese eindeutig ist,
                         wird genau ein Objekt zurückgegeben.
 
-                        :param id Primärschlüsselattribut (->DB)
+                        :param key Primärschlüsselattribut (->DB)
                         :return Eintrag-Objekt, das dem übergebenen Schlüssel entspricht, None bei
                             nicht vorhandenem DB-Tupel.
                         """
@@ -110,19 +108,17 @@ class EntryMapper(Mapper):
         result = None
 
         cursor = self._cnx.cursor()
-        command = "SELECT unit, amount, article_id, article_name, article_standard, modification_date FROM entries " \
-                  "WHERE id={}".format(key)
+        command = "SELECT * FROM entries WHERE id={}".format(key)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
         if tuples[0] is not None:
-            (unit, amount, article_id, article_name, article_standard, modification_date) = tuples[0]
+            (id, unit, amount, article_id, modification_date) = tuples[0]
             entry = Entry()
+            entry.set_id(id)
             entry.set_unit(unit)
             entry.set_amount(amount)
             entry.set_article_id(article_id)
-            entry.set_article_name(article_name)
-            entry.set_article_standard(article_standard)
             entry.set_modification_date(modification_date)
 
         result = entry
@@ -132,27 +128,24 @@ class EntryMapper(Mapper):
 
         return result
 
-    def find_entry_id_by_article(self, article):
+    def find_entry_id_by_article(self, article_id):
         """Auslesen aller Eintrags-ID anhand des Artikels
 
-                        :param article
+                        :param article_id
                         :return entry_id, mit den zugehörigen Artikeln.
                         """
 
         result = []
         cursor = self._cnx.cursor()
-        command = "SELECT unit, amount, article_id, article_name, article_standard, modification_date " \
-                  "FROM entries WHERE owner={} ORDER BY article".format(article)
+        command = "SELECT * FROM entries WHERE article_id={} ORDER BY article".format(article_id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
-        for (unit, amount, article_id, article_name, article_standard, modification_date) in tuples:
+        for (id, unit, amount, article_id, modification_date) in tuples:
             entry = Entry()
             entry.set_unit(unit)
             entry.set_amount(amount)
             entry.set_article_id(article_id)
-            entry.set_article_name(article_name)
-            entry.set_article_standard(article_standard)
             entry.set_modification_date(modification_date)
 
         self._cnx.commit()
@@ -160,21 +153,21 @@ class EntryMapper(Mapper):
 
         return result
 
-    def find_amount_by_entry(self, entry):
+    def find_amount_by_entry(self, entry_id):
         """Auslesen Menge anhand des Eintrags
 
-                                :param entry
+                                :param entry_id
                                 :return amount, mit den zugehörigen Eintrag.
                                 """
 
         result = []
         cursor = self._cnx.cursor()
-        command = "SELECT amount FROM entries WHERE entry={} ORDER BY entry".format(entry)
+        command = "SELECT amount FROM entries WHERE entry={} ORDER BY entry".format(entry_id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
         for (amount) in tuples:
-            entry = entry()
+            entry = Entry()
             entry.set_amount(amount)
             result.append(entry)
 
@@ -183,22 +176,21 @@ class EntryMapper(Mapper):
 
         return result
 
-
-    def find_unit_by_entry(self, entry):
+    def find_unit_by_entry(self, entry_id):
         """Auslesen Einheit anhand des Eintrags
 
-                                        :param entry
+                                        :param entry_id
                                         :return unit, zum zugehörigen Eintrag.
                                         """
 
         result = []
         cursor = self._cnx.cursor()
-        command = "SELECT unit, article_name FROM entries WHERE entry={} ORDER BY entry".format(entry)
+        command = "SELECT unit FROM entries WHERE entry={} ORDER BY entry".format(entry_id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
-        for (unit, article_name) in tuples:
-            entry = entry()
+        for (unit) in tuples:
+            entry = Entry()
             entry.set_unit(unit)
             result.append(entry)
 
@@ -216,18 +208,16 @@ class EntryMapper(Mapper):
 
         result = []
         cursor = self._cnx.cursor()
-        command = "SELECT unit, amount, article_id, article_name, article_standard, modification_date FROM entries " \
-                  "WHERE modification_date={} ORDER BY modification_date".format(modification_date)
+        command = "SELECT * FROM entries WHERE modification_date={} ORDER BY modification_date".format(modification_date)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
-        for (unit, amount, article_id, article_name, article_standard, modification_date) in tuples:
-            entry = entry()
+        for (id, unit, amount, article_id, modification_date) in tuples:
+            entry = Entry()
+            entry.set_id(id)
             entry.set_unit(unit)
             entry.set_amount(amount)
             entry.set_article_id(article_id)
-            entry.set_article_name(article_name)
-            entry.set_article_standard(article_standard)
             entry.set_modification_date(modification_date)
             result.append(entry)
 
@@ -236,32 +226,6 @@ class EntryMapper(Mapper):
 
         return result
 
-    def find_entry_by_retailer_entry_list(self, retailer_entry_list):
-        """Auslesen Eintrag anhand der Händlereintragsliste
-                                        :param retailer_entry_list
-                                        :return entry, in der zuftreffenden Händlereintragsliste.
-                                                """
-
-        result = []
-        cursor = self._cnx.cursor()
-        command = "SELECT unit, amount, article_id, article_name, article_standard, modification_date FROM entries " \
-                  "WHERE retailer_entry_list={} ORDER BY retailer_entry_list".format(retailer_entry_list)
-        cursor.execute(command)
-        tuples = cursor.fetchall()
-
-        for (unit, amount, article_id, article_name, article_standard, modification_date) in tuples:
-            entry = entry()
-            entry.set_unit(unit)
-            entry.set_amount(amount)
-            entry.set_article_id(article_id)
-            entry.set_article_name(article_name)
-            entry.set_article_standard(article_standard)
-            entry.set_modification_date(modification_date)
-
-        self._cnx.commit()
-        cursor.close()
-
-        return result
 
 """Zu Testzwecken können wir diese Datei bei Bedarf auch ausführen, 
 um die grundsätzliche Funktion zu überprüfen.

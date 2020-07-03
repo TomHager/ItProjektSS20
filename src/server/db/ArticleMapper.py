@@ -20,13 +20,15 @@ class ArticleMapper(Mapper):
                """
         result = []
         cursor = self._cnx.cursor()
-        cursor.execute("SELECT id, name, standard, retailer_id from articles")
+        cursor.execute("SELECT * FROM articles")
         tuples = cursor.fetchall()
 
-        for (id, name) in tuples:
+        for (id, name, standard, retailer_id) in tuples:
             article = Article()
             article.set_id(id)
             article.set_name(name)
+            article.set_standard(standard)
+            article.set_retailer_id(retailer_id)
             result.append(article)
 
         self._cnx.commit()
@@ -67,7 +69,7 @@ class ArticleMapper(Mapper):
 
         cursor = self._cnx.cursor()
 
-        command = "UPDATE article " + "SET name=%s, standard=%s, retailer_id=%s WHERE id=%s"
+        command = "UPDATE articles " + "SET name=%s, standard=%s, retailer_id=%s WHERE id=%s"
         data = (article.get_id(), article.get_name(), article.get_standard(), article.get_retailer_id())
         cursor.execute(command, data)
 
@@ -91,7 +93,7 @@ class ArticleMapper(Mapper):
         """Suchen eines Artikels mit vorgegebener ID. Da diese eindeutig ist,
                 wird genau ein Objekt zurückgegeben.
 
-                :param id Primärschlüsselattribut (->DB)
+                :param key Primärschlüsselattribut (->DB)
                 :return Artikel-Objekt, das dem übergebenen Schlüssel entspricht, None bei
                     nicht vorhandenem DB-Tupel.
                 """
@@ -99,18 +101,22 @@ class ArticleMapper(Mapper):
         result = None
 
         cursor = self._cnx.cursor()
-        command = "SELECT id, name, standard, retailer_id FROM articles WHERE key={}".format(key)
+        command = "SELECT * FROM articles WHERE id={}".format(key)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
-        for (id, name, standard, retailer_id) in tuples:
+        try:
+            (id, name, standard, retailer_id) = tuples[0]
             article = Article()
             article.set_id(id)
             article.set_name(name)
             article.set_standard(standard)
             article.set_retailer_id(retailer_id)
-
-        result = article
+            result = article
+        except IndexError:
+            """Der IndexError wird oben beim Zugriff auf tuples[0] auftreten, wenn der vorherige SELECT-Aufruf
+            keine Tupel liefert, sondern tuples = cursor.fetchall() eine leere Sequenz zurück gibt."""
+            result = None
 
         self._cnx.commit()
         cursor.close()
@@ -127,7 +133,7 @@ class ArticleMapper(Mapper):
 
         result = []
         cursor = self._cnx.cursor()
-        command = "SELECT id, name, standard, retailer_id FROM articles WHERE standard={}".format(standard)
+        command = "SELECT * FROM articles WHERE standard={}".format(standard)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
@@ -155,7 +161,7 @@ class ArticleMapper(Mapper):
 
         result = []
         cursor = self._cnx.cursor()
-        command = "SELECT id, name, standard, retailer_id FROM articles WHERE retailer_id={}".format(retailer_id)
+        command = "SELECT * FROM articles WHERE retailer_id={}".format(retailer_id)
         tuples = cursor.fetchall()
 
         for (id, name, standard, retailer_id) in tuples:
@@ -171,9 +177,6 @@ class ArticleMapper(Mapper):
         cursor.close()
 
         return result
-
-
-
 
 
 """Zu Testzwecken können wir diese Datei bei Bedarf auch ausführen, 

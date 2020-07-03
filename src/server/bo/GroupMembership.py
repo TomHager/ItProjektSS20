@@ -1,35 +1,34 @@
 from server.bo import BusinessObject as bo
-from server.bo.User import User
-from server.bo.Group import Group
+
 
 class GroupMembership (bo.BusinessObject):
-
 
     def __init__(self):
         super().__init__()
         self.__member = None
-        self.__group_membership = None
+        self.__membership = None
 
     def get_member(self):
-        return self._member
+        return self.__member
 
     def set_member(self, user):
-        self.__member = user.__id
+        self.__member = user.get_id()
 
-    def get_group_membership(self):
-        return self._group_membership
+    def get_membership(self):
+        return self.__membership
 
-    def set_group_membership(self, group):
-        self.__group_membership = group.__id
+    def set_membership(self, group):
+        self.__membership = group.get_id()
 
     def __str__(self):
         """Erzeugen einer einfachen textuellen Darstellung der jeweiligen Instanz."""
-        return "GroupMembership: {}, {}".format(self.get_group_id(), self.get_user_id())
+        return "GroupMembership: {}, {}".format(self.get_member(), self.get_membership())
 
     @staticmethod
     def from_dict(dictionary=dict()):
         """Umwandeln eines Python dict() in eine GroupMembership()."""
         obj = GroupMembership()
         obj.set_member(dictionary["member"])
-        obj.set_group_membership(dictionary["group_membership"])
+        obj.set_membership(dictionary["membership"])
+
         return obj

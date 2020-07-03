@@ -21,14 +21,13 @@ class GroupMapper(Mapper):
         result = []
 
         cursor = self._cnx.cursor()
-        cursor.execute("SELECT id, name, user_id_list from groups")
+        cursor.execute("SELECT * FROM groups")
         tuples = cursor.fetchall()
 
-        for (id, name, user_id_list) in tuples:
+        for (id, name) in tuples:
             group = Group()
             group.set_id(id)
             group.set_name(name)
-            group.set_user_id_list(user_id_list)
             result.append(group)
 
         self._cnx.commit()
@@ -53,8 +52,8 @@ class GroupMapper(Mapper):
         for (maxid) in tuples:
             group.set_id(maxid[0] + 1)
 
-        command = "INSERT INTO groups (id, name, user_id_list) VALUES (%s,%s,%s)"
-        data = (group.get_id(), group.get_name(), group.get_user_id_list())
+        command = "INSERT INTO groups (id, name) VALUES (%s,%s)"
+        data = (group.get_id(), group.get_name())
         cursor.execute(command, data)
 
         self._cnx.commit()
@@ -69,8 +68,8 @@ class GroupMapper(Mapper):
 
         cursor = self._cnx.cursor()
 
-        command = "UPDATE group " + "SET id=%s, name=%s, user_id_list=%s WHERE id=%s"
-        data = (group.get_id(), group.get_name(), group.get_user_id_list())
+        command = "UPDATE group " + "SET name=%s WHERE id=%s"
+        data = (group.get_name())
         cursor.execute(command, data)
 
         self._cnx.commit()
@@ -91,27 +90,26 @@ class GroupMapper(Mapper):
         cursor.close()
 
     def find_by_key(self, key):
-       """Suchen einer Gruppe mit vorgegebener Gruppennummer. Da diese eindeutig ist
-        wird genau ein Objekt zurückgegeben.
+        """Suchen einer Gruppe mit vorgegebener Gruppennummer. Da diese eindeutig ist
+            wird genau ein Objekt zurückgegeben.
 
-        :param key Primärschlüsselattribut (->DB)
-        :return Gruppen-Objekt, das dem übergebenen Schlüssel entspricht, None bei
+            :param key Primärschlüsselattribut (->DB)
+            :return Gruppen-Objekt, das dem übergebenen Schlüssel entspricht, None bei
             nicht vorhandenem DB-Tupel.
-        """
+            """
 
         result = None
 
         cursor = self._cnx.cursor()
-        command = "SELECT id, name, user_id_list FROM groups WHERE id={}".format(key)
+        command = "SELECT * FROM groups WHERE id={}".format(key)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
         if tuples[0] is not None:
-            (id, name, user_id_list) = tuples[0]
+            (id, name) = tuples[0]
             group = Group()
             group.set_id(id)
             group.set_name(name)
-            group.set_user_id_list()
 
         result = group
 
@@ -130,37 +128,11 @@ class GroupMapper(Mapper):
 
         result = []
         cursor = self._cnx.cursor()
-        command = "SELECT id, name, user_id_list FROM groups WHERE name={} ORDER BY name".format(name)
+        command = "SELECT * FROM groups WHERE name={} ORDER BY name".format(name)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
-        for (id, name, user_id_list) in tuples:
-            group = Group()
-            group.set_id(id)
-            group.set_name(name)
-            group.set_user_id_list()
-            result.append(group)
-
-        self._cnx.commit()
-        cursor.close()
-
-        return result
-
-    def find_group_by_user(self, user_id_list):
-        """Auslesen einer Gruppe anhand des Users.
-
-                        :param user_id_list User-ID der gesuchten Gruppe.
-                        :return Das Gruppen-Objekt,
-                            mit dem gewünschten Mitglied.
-                        """
-
-        result = []
-        cursor = self._cnx.cursor()
-        command = "SELECT id, name, user_id_list FROM groups WHERE user_id_list={} ORDER BY user".format(user_id_list)
-        cursor.execute(command)
-        tuples = cursor.fetchall()
-
-        for (id, name, user_id_list) in tuples:
+        for (id, name) in tuples:
             group = Group()
             group.set_id(id)
             group.set_name(name)

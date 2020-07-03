@@ -1,5 +1,6 @@
 from server.bo import BusinessObject as bo
 
+
 class User (bo.BusinessObject):
 
     def __init__(self):
@@ -7,7 +8,6 @@ class User (bo.BusinessObject):
         self.__name = ""  # Der Name des Benutzers.
         self.__email = ""  # Die E-Mail-Adresse des Benutzers.
         self.__external_id = ""  # Die extern verwaltete User ID.
-
 
     def get_name(self):
         """Auslesen des Benutzernamens."""
@@ -45,4 +45,5 @@ class User (bo.BusinessObject):
         obj.set_name(dictionary["name"])
         obj.set_email(dictionary["email"])
         obj.set_external_id(dictionary["external_id"])
+
         return obj

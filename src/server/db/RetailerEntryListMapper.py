@@ -2,7 +2,7 @@ from server.bo.RetailerEntryList import RetailerEntryList
 from server.db.Mapper import Mapper
 
 
-class RetailerEntryListMapper (Mapper):
+class RetailerEntryListMapper(Mapper):
 
     def __init__(self):
         super().__init__()
@@ -15,77 +15,81 @@ class RetailerEntryListMapper (Mapper):
         """
         result = []
         cursor = self._cnx.cursor()
-        cursor.execute("SELECT * from retailerentrylist")
+        cursor.execute("SELECT * from retailerentrylists")
         tuples = cursor.fetchall()
 
         for (id, user_id, retailer_id, shopping_list_id, entry_id) in tuples:
-            retailerentrylist = RetailerEntryList()
-            retailerentrylist.set_id(id)
-            retailerentrylist.set_user_id(user_id)
-            retailerentrylist.set_retailer_id(retailer_id)
-            retailerentrylist.set_shopping_list_id(shopping_list_id)
-            retailerentrylist.set_entry_id(entry_id)
-            result.append(retailerentrylist)
+            retailer_entry_list = RetailerEntryList()
+            retailer_entry_list.set_id(id)
+            retailer_entry_list.set_user_id(user_id)
+            retailer_entry_list.set_retailer_id(retailer_id)
+            retailer_entry_list.set_shopping_list_id(shopping_list_id)
+            retailer_entry_list.set_entry_id(entry_id)
+            result.append(retailer_entry_list)
 
         self._cnx.commit()
         cursor.close()
 
         return result
 
-    def insert(self, retailerentrylist):
+    def insert(self, retailer_entry_list):
         """Einfügen eines User-Objekts in die Datenbank.
 
         Dabei wird auch der Primärschlüssel des übergebenen Objekts geprüft und ggf.
         berichtigt.
 
-        :param user das zu speichernde Objekt
+        :param retailer_entry_list das zu speichernde Objekt
         :return das bereits übergebene Objekt, jedoch mit ggf. korrigierter ID.
         """
         cursor = self._cnx.cursor()
-        cursor.execute("SELECT MAX(id) AS maxid FROM retailerentrylist")
+        cursor.execute("SELECT MAX(id) AS maxid FROM retailerentrylists")
         tuples = cursor.fetchall()
 
         for (maxid) in tuples:
             if maxid[0] is not None:
                 """Wenn wir eine maximale ID festellen konnten, zählen wir diese
                 um 1 hoch und weisen diesen Wert als ID dem User-Objekt zu."""
-                retailerentrylist.set_id(maxid[0] + 1)
+                retailer_entry_list.set_id(maxid[0] + 1)
             else:
                 """Wenn wir KEINE maximale ID feststellen konnten, dann gehen wir
                 davon aus, dass die Tabelle leer ist und wir mit der ID 1 beginnen können."""
-                retailerentrylist.set_id(1)
+                retailer_entry_list.set_id(1)
 
-        command = "INSERT INTO retailerentrylist (id, user_id,retailer_id, shoppinglist_id, entry_id) VALUES (%s,%s,%s,%s,%s)"
-        data = (retailerentrylist.get_id(), retailerentrylist.get_user_id(), retailerentrylist.get_retailer_id(), retailerentrylist.get_shopping_list_id())
+        command = "INSERT INTO retailerentrylists (id, user_id,retailer_id, shoppinglist_id, entry_id) " \
+                  "VALUES (%s,%s,%s,%s,%s)"
+        data = (retailer_entry_list.get_id(), retailer_entry_list.get_user_id(), retailer_entry_list.get_retailer_id(),
+                retailer_entry_list.get_shopping_list_id())
         cursor.execute(command, data)
 
         self._cnx.commit()
         cursor.close()
 
-        return retailerentrylist
+        return retailer_entry_list
 
-    def update(self, retailerentrylist):
+    def update(self, retailer_entry_list):
         """Wiederholtes Schreiben eines Objekts in die Datenbank.
 
-        :param user das Objekt, das in die DB geschrieben werden soll
+        :param retailer_entry_list das Objekt, das in die DB geschrieben werden soll
         """
         cursor = self._cnx.cursor()
 
-        command = "UPDATE retailerentrylist " + "SET user_id=%s, retailer_id=%s, shoppinglist_id=%s WHERE id=%s, entry_id=%s"
-        data = (retailerentrylist.get_user_id(), retailerentrylist.get_retailer_id(),retailerentrylist.get_shopping_list_id(), retailerentrylist.get_entry_id())
+        command = "UPDATE retailerentrylists " + "SET user_id=%s, retailer_id=%s, shoppinglist_id=%s " \
+                                                 "WHERE entry_id=%s"
+        data = (retailer_entry_list.get_user_id(), retailer_entry_list.get_retailer_id(),
+                retailer_entry_list.get_shopping_list_id(), retailer_entry_list.get_entry_id())
         cursor.execute(command, data)
 
         self._cnx.commit()
         cursor.close()
 
-    def delete(self, retailerentrylist):
+    def delete(self, retailer_entry_list):
         """Löschen der Daten eines User-Objekts aus der Datenbank.
 
-        :param user das aus der DB zu löschende "Objekt"
+        :param retailer_entry_list das aus der DB zu löschende "Objekt"
         """
         cursor = self._cnx.cursor()
 
-        command = "DELETE FROM retailerentrylist WHERE id={}".format(retailerentrylist.get_id())
+        command = "DELETE FROM retailerentrylists WHERE id={}".format(retailer_entry_list.get_id())
         cursor.execute(command)
 
         self._cnx.commit()
@@ -103,19 +107,19 @@ class RetailerEntryListMapper (Mapper):
         result = None
 
         cursor = self._cnx.cursor()
-        command = "SELECT id, user_id, retailer_id, shoppinglist_id, entry_id FROM retailerentrylist WHERE id={}".format(key)
+        command = "SELECT * FROM retailerentrylists WHERE id={}".format(key)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
         try:
             (id, user_id, retailer_id, shoppinglist_id, entry_id) = tuples[0]
-            retailerentrylist = RetailerEntryList()
-            retailerentrylist.set_id(id)
-            retailerentrylist.set_user_id(user_id)
-            retailerentrylist.set_retailer_id(retailer_id)
-            retailerentrylist.set_shopping_list_id(shoppinglist_id)
-            retailerentrylist.set_entry_id()
-            result = retailerentrylist
+            retailer_entry_list = RetailerEntryList()
+            retailer_entry_list.set_id(id)
+            retailer_entry_list.set_user_id(user_id)
+            retailer_entry_list.set_retailer_id(retailer_id)
+            retailer_entry_list.set_shopping_list_id(shoppinglist_id)
+            retailer_entry_list.set_entry_id(entry_id)
+            result = retailer_entry_list
         except IndexError:
             """Der IndexError wird oben beim Zugriff auf tuples[0] auftreten, wenn der vorherige SELECT-Aufruf
             keine Tupel liefert, sondern tuples = cursor.fetchall() eine leere Sequenz zurück gibt."""
@@ -129,24 +133,25 @@ class RetailerEntryListMapper (Mapper):
     def find_user_by_retailer_entry_list(self, retailer_entry_list):
         """Auslesen aller Benutzer anhand des Benutzernamens.
 
-        :param name Name der zugehörigen Benutzer.
+        :param retailer_entry_list Name der zugehörigen Benutzer.
         :return Eine Sammlung mit User-Objekten, die sämtliche Benutzer
             mit dem gewünschten Namen enthält.
         """
         result = []
         cursor = self._cnx.cursor()
-        command = "SELECT id, user_id, retailer_id, shoppinglist_id, entry_id FROM retailerentrylist WHERE user_id LIKE '{}' ORDER BY user_id".format(retailer_entry_list)
+        command = "SELECT id, user_id, retailer_id, shoppinglist_id, entry_id FROM retailerentrylists " \
+                  "WHERE user_id LIKE '{}' ORDER BY user_id".format(retailer_entry_list)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
         for (id, user_id, retailer_id, shopping_list_id, entry_id) in tuples:
-            retailerentrylist = RetailerEntryList()
-            retailerentrylist.set_id(id)
-            retailerentrylist.set_user_id(user_id)
-            retailerentrylist.set_retailer_id(retailer_id)
-            retailerentrylist.set_shopping_list_id()
-            retailerentrylist.set_entry_id()
-            result.append(retailerentrylist)
+            retailer_entry_list = RetailerEntryList()
+            retailer_entry_list.set_id(id)
+            retailer_entry_list.set_user_id(user_id)
+            retailer_entry_list.set_retailer_id(retailer_id)
+            retailer_entry_list.set_shopping_list_id(shopping_list_id)
+            retailer_entry_list.set_entry_id(entry_id)
+            result.append(retailer_entry_list)
 
         self._cnx.commit()
         cursor.close()
@@ -156,51 +161,52 @@ class RetailerEntryListMapper (Mapper):
     def find_retailer_by_retailer_entry_list(self, retailer_entry_list):
         """Auslesen aller Benutzer anhand der zugeordneten E-Mail-Adresse.
 
-        :param mail_address E-Mail-Adresse der zugehörigen Benutzer.
+        :param retailer_entry_list E-Mail-Adresse der zugehörigen Benutzer.
         :return Eine Sammlung mit User-Objekten, die sämtliche Benutzer
             mit der gewünschten E-Mail-Adresse enthält.
         """
         result = []
         cursor = self._cnx.cursor()
-        command = "SELECT id, user_id, retailer_id, shoppinglist_id, entry_id FROM retailerentrylist WHERE retailer_id LIKE '{}' ORDER BY retailer_id".format(retailer_entry_list)
+        command = "SELECT retailer_id FROM retailerentrylists " \
+                  "WHERE id={} ORDER BY retailer_id".format(retailer_entry_list)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
         for (id, user_id, retailer_id, shopping_list_id, entry_id) in tuples:
-            retailerentrylist = RetailerEntryList()
-            retailerentrylist.set_id(id)
-            retailerentrylist.set_user_id(user_id)
-            retailerentrylist.set_retailer_id(retailer_id)
-            retailerentrylist.set_shopping_list_id()
-            retailerentrylist.set_entry_id()
-            result.append(retailerentrylist)
+            retailer_entry_list = RetailerEntryList()
+            retailer_entry_list.set_id(id)
+            retailer_entry_list.set_user_id(user_id)
+            retailer_entry_list.set_retailer_id(retailer_id)
+            retailer_entry_list.set_shopping_list_id(shopping_list_id)
+            retailer_entry_list.set_entry_id(entry_id)
+            result.append(retailer_entry_list)
 
         self._cnx.commit()
         cursor.close()
 
         return result
 
-    def find_retailer_entry_list_by_shopping_list(self, shopping_list):
+    def find_retailer_entry_list_by_shopping_list(self, shopping_list_id):
         """Auslesen aller Benutzer anhand der zugeordneten E-Mail-Adresse.
 
-        :param mail_address E-Mail-Adresse der zugehörigen Benutzer.
+        :param shopping_list_id E-Mail-Adresse der zugehörigen Benutzer.
         :return Eine Sammlung mit User-Objekten, die sämtliche Benutzer
             mit der gewünschten E-Mail-Adresse enthält.
         """
         result = []
         cursor = self._cnx.cursor()
-        command = "SELECT id, user_id, retailer_id, shoppinglist_id, entry_id FROM retailerentrylist WHERE id LIKE '{}' ORDER BY id".format(shopping_list)
+        command = "SELECT * FROM retailerentrylists WHERE shopping_list_id LIKE '{}' ORDER BY id".format(shopping_list_id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
         for (id, user_id, retailer_id, shopping_list_id, entry_id) in tuples:
-            retailerentrylist = RetailerEntryList()
-            retailerentrylist.set_id(id)
-            retailerentrylist.set_user_id(user_id)
-            retailerentrylist.set_retailer_id(retailer_id)
-            retailerentrylist.set_shopping_list_id()
-            retailerentrylist.set_entry_id()
-            result.append(retailerentrylist)
+            retailer_entry_list = RetailerEntryList()
+            retailer_entry_list.set_id(id)
+            retailer_entry_list.set_user_id(user_id)
+            retailer_entry_list.set_retailer_id(retailer_id)
+            retailer_entry_list.set_shopping_list_id(shopping_list_id)
+            retailer_entry_list.set_entry_id(entry_id)
+            result.append(retailer_entry_list)
 
         self._cnx.commit()
         cursor.close()
@@ -210,58 +216,57 @@ class RetailerEntryListMapper (Mapper):
     def find_retailer_entry_list_by_user(self, user_id):
         """Auslesen aller Benutzer anhand der zugeordneten E-Mail-Adresse.
 
-        :param mail_address E-Mail-Adresse der zugehörigen Benutzer.
+        :param user_id E-Mail-Adresse der zugehörigen Benutzer.
         :return Eine Sammlung mit User-Objekten, die sämtliche Benutzer
             mit der gewünschten E-Mail-Adresse enthält.
         """
         result = []
         cursor = self._cnx.cursor()
-        command = "SELECT id, user_id, retailer_id, shoppinglist_id, entry_id FROM retailerentrylist WHERE user_id LIKE '{}' ORDER BY user_id".format(user_id)
+        command = "SELECT * FROM retailerentrylists WHERE user_id LIKE '{}' ORDER BY user_id".format(user_id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
         for (id, user_id, retailer_id, shopping_list_id, entry_id) in tuples:
-            retailerentrylist = RetailerEntryList()
-            retailerentrylist.set_id(id)
-            retailerentrylist.set_user_id(user_id)
-            retailerentrylist.set_retailer_id(retailer_id)
-            retailerentrylist.set_shopping_list_id()
-            retailerentrylist.set_entry_id()
-            result.append(retailerentrylist)
+            retailer_entry_list = RetailerEntryList()
+            retailer_entry_list.set_id(id)
+            retailer_entry_list.set_user_id(user_id)
+            retailer_entry_list.set_retailer_id(retailer_id)
+            retailer_entry_list.set_shopping_list_id(shopping_list_id)
+            retailer_entry_list.set_entry_id(entry_id)
+            result.append(retailer_entry_list)
 
         self._cnx.commit()
         cursor.close()
 
         return result
 
-    def find_entry_by_retailer_entry_list(self, retailer_entry_list):
+    def find_entry_by_retailer_entry_list(self, id):
         """Suchen eines Benutzers mit vorgegebener Google ID. Da diese eindeutig ist,
         wird genau ein Objekt zurückgegeben.
 
-        :param external_id die Google ID des gesuchten Users.
+        :param id die Google ID des gesuchten Users.
         :return User-Objekt, das die übergebene Google ID besitzt,
             None bei nicht vorhandenem DB-Tupel.
         """
         result = []
         cursor = self._cnx.cursor()
-        command = "SELECT id, user_id, retailer_id, shoppinglist_id, entry_id FROM retailerentrylist WHERE user_id LIKE '{}' ORDER BY user_id".format(retailer_entry_list)
+        command = "SELECT entry_id FROM retailerentrylists WHERE id LIKE '{}' ORDER BY entry_id".format(id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
         for (id, user_id, retailer_id, shopping_list_id, entry_id) in tuples:
-            retailerentrylist = RetailerEntryList()
-            retailerentrylist.set_id(id)
-            retailerentrylist.set_user_id(user_id)
-            retailerentrylist.set_retailer_id(retailer_id)
-            retailerentrylist.set_shopping_list_id()
-            retailerentrylist.set_entry_id()
-            result.append(retailerentrylist)
+            retailer_entry_list = RetailerEntryList()
+            retailer_entry_list.set_id(id)
+            retailer_entry_list.set_user_id(user_id)
+            retailer_entry_list.set_retailer_id(retailer_id)
+            retailer_entry_list.set_shopping_list_id(shopping_list_id)
+            retailer_entry_list.set_entry_id(entry_id)
+            result.append(retailer_entry_list)
 
         self._cnx.commit()
         cursor.close()
 
         return result
-
 
 
 if (__name__ == "__main__"):

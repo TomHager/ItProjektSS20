@@ -15,14 +15,13 @@ class RetailerMapper (Mapper):
         """
         result = []
         cursor = self._cnx.cursor()
-        cursor.execute("SELECT * from users")
+        cursor.execute("SELECT * from retailers")
         tuples = cursor.fetchall()
 
-        for (id, name, group_id) in tuples:
+        for (id, name) in tuples:
             retailer = Retailer()
             retailer.set_id(id)
             retailer.set_name(name)
-            retailer.set_group_id(group_id)
             result.append(retailer)
 
         self._cnx.commit()
@@ -40,7 +39,7 @@ class RetailerMapper (Mapper):
         :return das bereits übergebene Objekt, jedoch mit ggf. korrigierter ID.
         """
         cursor = self._cnx.cursor()
-        cursor.execute("SELECT MAX(id) AS maxid FROM retailer ")
+        cursor.execute("SELECT MAX(id) AS maxid FROM retailers ")
         tuples = cursor.fetchall()
 
         for (maxid) in tuples:
@@ -53,8 +52,8 @@ class RetailerMapper (Mapper):
                 davon aus, dass die Tabelle leer ist und wir mit der ID 1 beginnen können."""
                 retailer.set_id(1)
 
-        command = "INSERT INTO retailer (id, name, group_id) VALUES (%s,%s,%s)"
-        data = (retailer.get_id(), retailer.get_name(), retailer.get_group_id())
+        command = "INSERT INTO retailers (id, name) VALUES (%s,%s)"
+        data = (retailer.get_id(), retailer.get_name())
         cursor.execute(command, data)
 
         self._cnx.commit()
@@ -69,8 +68,8 @@ class RetailerMapper (Mapper):
         """
         cursor = self._cnx.cursor()
 
-        command = "UPDATE retailer " + "SET name=%s WHERE group_id=%s"
-        data = (retailer.get_name(), retailer.get_group_id())
+        command = "UPDATE retailers " + "SET name=%s WHERE id=%s"
+        data = (retailer.get_name())
         cursor.execute(command, data)
 
         self._cnx.commit()
@@ -83,7 +82,7 @@ class RetailerMapper (Mapper):
         """
         cursor = self._cnx.cursor()
 
-        command = "DELETE FROM retailer WHERE id={}".format(retailer.get_id())
+        command = "DELETE FROM retailers WHERE id={}".format(retailer.get_id())
         cursor.execute(command)
 
         self._cnx.commit()
@@ -101,16 +100,15 @@ class RetailerMapper (Mapper):
         result = None
 
         cursor = self._cnx.cursor()
-        command = "SELECT id, name, group_id FROM retailer WHERE id={}".format(key)
+        command = "SELECT * FROM retailers WHERE id={}".format(key)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
         try:
-            (id, name, group_id) = tuples[0]
+            (id, name) = tuples[0]
             retailer = Retailer()
             retailer.set_id(id)
             retailer.set_name(name)
-            retailer.set_group_id(group_id)
             result.append(retailer)
         except IndexError:
             """Der IndexError wird oben beim Zugriff auf tuples[0] auftreten, wenn der vorherige SELECT-Aufruf
@@ -131,54 +129,20 @@ class RetailerMapper (Mapper):
         """
         result = []
         cursor = self._cnx.cursor()
-        command = "SELECT id, name, group_id FROM retailer WHERE name LIKE '{}' ORDER BY name".format(name)
+        command = "SELECT * FROM retailers WHERE name LIKE '{}' ORDER BY name".format(name)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
-        for (id, name, group_id) in tuples:
+        for (id, name) in tuples:
             retailer = retailer()
             retailer.set_id(id)
             retailer.set_name(name)
-            retailer.set_group_id(group_id)
             result.append(retailer)
 
         self._cnx.commit()
         cursor.close()
 
         return result
-
-    def find_retailer_by_group_id(self, group_id):
-        """Suchen eines Händlers mit vorgegebener Gruppen ID. Da diese eindeutig ist,
-        wird genau ein Objekt zurückgegeben.
-
-        :param group_id die Gruppen ID des gesuchten Retailers.
-        :return Retailer-Objekt, das die übergebene Gruppen ID besitzt,
-            None bei nicht vorhandenem DB-Tupel.
-        """
-        result = None
-
-        cursor = self._cnx.cursor()
-        command = "SELECT id, name, group_id FROM retailer WHERE group_id='{}'".format(group_id)
-        cursor.execute(command)
-        tuples = cursor.fetchall()
-
-        try:
-            (id, name, group_id) = tuples[0]
-            r = retailer()
-            r.set_id(id)
-            r.set_name(name)
-            r.set_group_id(group_id)
-            result = r
-        except IndexError:
-            """Der IndexError wird oben beim Zugriff auf tuples[0] auftreten, wenn der vorherige SELECT-Aufruf
-            keine Tupel liefert, sondern tuples = cursor.fetchall() eine leere Sequenz zurück gibt."""
-            result = None
-
-        self._cnx.commit()
-        cursor.close()
-
-        return result
-
 
 
 if (__name__ == "__main__"):
