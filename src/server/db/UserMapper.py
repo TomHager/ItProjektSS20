@@ -40,7 +40,7 @@ class UserMapper (Mapper):
         """
         result = []
         cursor = self._cnx.cursor()
-        command = "SELECT id, name, email, external_id FROM users WHERE name LIKE '{}' ORDER BY name".format(name)
+        command = "SELECT * FROM users WHERE name LIKE '{}' ORDER BY name".format(name)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
@@ -69,7 +69,7 @@ class UserMapper (Mapper):
         result = None
 
         cursor = self._cnx.cursor()
-        command = "SELECT id, name, email, external_id FROM users WHERE id={}".format(key)
+        command = "SELECT * FROM users WHERE id={}".format(key)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
@@ -91,32 +91,27 @@ class UserMapper (Mapper):
 
         return result
 
-    def find_by_email(self, mail_address):
+    def find_by_email(self, email):
         """Auslesen aller Benutzer anhand der zugeordneten E-Mail-Adresse.
 
-        :param mail_address E-Mail-Adresse der zugehörigen Benutzer.
+        :param email E-Mail-Adresse der zugehörigen Benutzer.
         :return Eine Sammlung mit User-Objekten, die sämtliche Benutzer
             mit der gewünschten E-Mail-Adresse enthält.
         """
         result = None
 
         cursor = self._cnx.cursor()
-        command = "SELECT id, name, email, external_id FROM users WHERE email={}".format(mail_address)
+        command = "SELECT * FROM users WHERE email={}".format(email)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
-        try:
-            (id, name, email, external_id) = tuples[0]
+        for (id, name, email, external_id) in tuples:
             user = User()
             user.set_id(id)
             user.set_name(name)
             user.set_email(email)
             user.set_external_id(external_id)
-            result = user
-        except IndexError:
-            """Der IndexError wird oben beim Zugriff auf tuples[0] auftreten, wenn der vorherige SELECT-Aufruf
-            keine Tupel liefert, sondern tuples = cursor.fetchall() eine leere Sequenz zurück gibt."""
-            result = None
+            result.append(user)
 
         self._cnx.commit()
         cursor.close()
@@ -134,22 +129,17 @@ class UserMapper (Mapper):
         result = None
 
         cursor = self._cnx.cursor()
-        command = "SELECT id, name, email, external_id FROM users WHERE external_id='{}'".format(external_id)
+        command = "SELECT * FROM users WHERE external_id='{}'".format(external_id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
-        try:
-            (id, name, email, external_id) = tuples[0]
-            u = User()
-            u.set_id(id)
-            u.set_name(name)
-            u.set_email(email)
-            u.set_external_id(external_id)
-            result = u
-        except IndexError:
-            """Der IndexError wird oben beim Zugriff auf tuples[0] auftreten, wenn der vorherige SELECT-Aufruf
-            keine Tupel liefert, sondern tuples = cursor.fetchall() eine leere Sequenz zurück gibt."""
-            result = None
+        for (id, name, email, external_id) in tuples:
+            user = User()
+            user.set_id(id)
+            user.set_name(name)
+            user.set_email(email)
+            user.set_external_id(external_id)
+            result.append(user)
 
         self._cnx.commit()
         cursor.close()

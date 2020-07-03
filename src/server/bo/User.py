@@ -1,5 +1,6 @@
 from server.bo import BusinessObject as bo
 
+
 class User (bo.BusinessObject):
 
     def __init__(self):
@@ -44,4 +45,5 @@ class User (bo.BusinessObject):
         obj.set_name(dictionary["name"])
         obj.set_email(dictionary["email"])
         obj.set_external_id(dictionary["external_id"])
+
         return obj

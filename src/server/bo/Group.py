@@ -1,5 +1,6 @@
 from server.bo import BusinessObject as bo
 
+
 class Group (bo.BusinessObject):
 
     def __init__(self):
@@ -22,4 +23,5 @@ class Group (bo.BusinessObject):
         obj = Group()
         obj.set_id(dictionary["id"])  # eigentlich Teil von BusinessObject !
         obj.set_name(dictionary["name"])
+
         return obj

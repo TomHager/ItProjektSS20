@@ -1,5 +1,6 @@
 from server.bo import BusinessObject as bo
 
+
 class Article (bo.BusinessObject):
 
     def __init__(self):
@@ -28,7 +29,7 @@ class Article (bo.BusinessObject):
 
     def __str__(self):
         """Erzeugen einer einfachen textuellen Darstellung der jeweiligen Instanz."""
-        return "User: {}, {}, {}, {}".format(self.get_id(), self.__name, self.__standard, self.__retailer_id)
+        return "Article: {}, {}, {}, {}".format(self.get_id(), self.__name, self.__standard, self.__retailer_id)
 
     @staticmethod
     def from_dict(dictionary=dict()):
@@ -36,6 +37,6 @@ class Article (bo.BusinessObject):
         obj = Article()
         obj.set_id(dictionary["id"])  # eigentlich Teil von BusinessObject !
         obj.set_name(dictionary["name"])
-        obj.set_email(dictionary["standard"])
-        obj.set_external_id(dictionary["retailer_id"])
+        obj.set_standard(dictionary["standard"])
+        obj.set_retailer_id(dictionary["retailer_id"])
         return obj
