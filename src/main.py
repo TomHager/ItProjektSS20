@@ -58,7 +58,7 @@ user = api.inherit('User', bo, {
 
 group = api.inherit('Group', bo, {
     'group_name': fields.String(attribute='_group_name', description='Name einer Gruppe'),
-    'user_list': fields.List(attribute='_user_id_list', description='Alle Benutzer einer Gruppe')
+    'user_list': fields.List(attribute='_user_id_list', description='Alle Benutzer einer Gruppe') #todo muss entfernt werden?
 })
 
 retailer = api.inherit('retailer', bo, {
@@ -90,6 +90,19 @@ article = api.inherit('Article', bo, {
     'standart_boolean': fields.Boolean(attribute='_standart_boolean', description='Prüfung auf Standartikel'),
     'retailer_id': fields.Integer(attribute='_retailer_id', description='ID eines Verkäufers')
 })\
+
+favorite = api.inherit('Favorite', bo, {
+    'unit': fields.Integer(attribute='_unit', description='Stückzahl eines Artikels'), #todo Stückzahl oder Gewichtseinheit?
+    'amount': fields.Integer(attribute='_amount', description='Menge eines Artikels'),
+    'article': fields.Integer(attribute='article', description='ID eines Artikels)
+})\
+
+retailer_group = api.inherit('RetailerGroup', bo, {
+    'retailer_member': fields.Integer(attribute='_retailer_member', description='Bestimmtes Retailer Objekt'), #todo beschreibungen okay?
+    'retailer_group': fields.Integer(attribute='_retailer_group', description='Retailer innerhalb einer bestimmten Gruppe'),
+
+})\
+
 
 """
 Klassen und Operationen für User
@@ -248,7 +261,7 @@ class GroupListOperations(Resource):
     @ikauf.marshal_list_with(group)
     @secured
     def get(self):
-        """Auslesen aller Retailer-Objekte"""
+        """Auslesen aller Gruppen-Objekte"""
 
         adm = ShoppingListAdministration()
         g = adm.get_all_groups()
@@ -353,6 +366,7 @@ class UserRelatedByGroupOperations(Resource):
             return "Gruppe nicht gefunden", 500
 
 
+
 """
 Klassen und Operationen zu Retailer
 """
@@ -375,7 +389,7 @@ class RetailerListOperations(Resource):
 
         adm = ShoppingListAdministration()
 
-        r = adm.get_retailer_by_id(id)
+        r = adm.get_retailer_by_group(id) #todo stimmt id?
 
         if r is not None:
             x = adm.create_retailer(r)
@@ -394,7 +408,7 @@ class RetailerOperations(Resource):
         "Auslesen eines bestimmten Retailer-Objekts"
 
         adm = ShoppingListAdministration()
-        r = adm.get_retailer_by_id(id)
+        r = adm.get_retailer_by_group(id)  #todo get retailer by group oder name?
         return r
 
     @secured
@@ -402,7 +416,7 @@ class RetailerOperations(Resource):
         """Löschen eines bestimmten Retailer-Objekts"""
 
         adm = ShoppingListAdministration()
-        r = adm.get_retailer_by_id(id)
+        r = adm.get_retailer_by_group(id)
         adm.delete_retailer(r)
         return '', 200
 
@@ -721,7 +735,7 @@ class ShoppingListListOperations(Resource):
         prosposal = ShoppingList.from_dict(api.payload)
 
         if prosposal is not None:
-            x = adm.create_shopping_list(prosposal.get_shopping_list_name(), prosposal.get_entry())
+            x = adm.create_shopping_list(prosposal.get_shopping_list_name)
             return x, 200
         else:
             return '', 500
@@ -760,7 +774,7 @@ class ShoppingListOperations(Resource):
 
         if sl is not None:
             sl.set_id(id)
-            adm.save_shopping_list(sl)
+            adm.save_shopping_list(sl) #todo eik was kommt hier nei?
             return '', 200
         else:
             return '', 500
@@ -936,7 +950,7 @@ class ArticleRelatedByStandardBooleanOperations(Resource):
 
 @ikauf.route('/article-by-standard-boolean/<boolean: ... ')
 @ikauf.response(500, 'Falls Server-seitiger Fehler')
-@ikauf.param('...', 'True or False des zugehörigen Article-Objekts')
+@ikauf.param('...', 'True or False des zugehörigen Article-Objekts') #todo ...?
 class ArticleRelatedByStandardBooleanOperations(Resource):
     @ikauf.marshal_with(article)
     @secured
@@ -946,6 +960,124 @@ class ArticleRelatedByStandardBooleanOperations(Resource):
         adm = ShoppingListAdministration()
         a = adm.get_all_article_by_standard_boolean()
         return a
+
+
+
+
+"""
+Klassen und Operationen für RetailerGroup
+"""
+
+
+
+@ikauf.route('/retailer-by-group')
+@ikauf.route(500, 'Falls Server-seitiger Fehler')
+@ikauf.param('id', 'ID des RetailerGroup-Objekts')
+class RetailerGroupOperations(Resource):
+    @ikauf.marshal_with(retailer_group)
+    @secured
+    def get(self):
+        adm = ShoppingListAdministration()
+        a = adm.get_all_retailer_members()
+        return a
+
+    @secured
+    def delete(self, id):
+        """Löschen eines bestimmten RetailerGroup-Objekts"""
+
+        adm = ShoppingListAdministration()
+        a = adm.get_retailer_by_group(id)
+        adm.delete_retailer_by_group(a)
+        return '', 200
+
+    @ikauf.marshal_with(retailer_group)
+    @ikauf.expect(favorite, validate=True)
+    @secured
+    def put(self, id):
+        """Update eines bestimmten RetailerGroup-Objekts."""
+
+        adm = ShoppingListAdministration()
+        a = favorite.from_dict(api.payload)
+
+        if a is not None:
+            a.set_id(id)
+            adm.save_retailer_group(a)
+            return '', 200
+        else:
+            return '', 500
+
+
+"""
+Klassen und Operationen für Favorite
+"""
+
+
+@ikauf.route('/favorite')
+@ikauf.response(500, "Falls Server-seitiger Fehler")
+class FavoriteListOperations(Resource):
+    @ikauf.marshal_list_with(article)
+    @secured
+    def get(self):
+        """Auslesen aller Favorit-Objekte"""
+
+        adm = ShoppingListAdministration()
+        a = adm.get_all_favorits()
+        return a
+
+    def post(self):
+        """Anlegen eines neuen Favorit-Objekts"""
+
+        adm = ShoppingListAdministration()
+
+        proposal = Favorite.from_dict(api.payload)
+
+        if proposal is not None:
+            x = adm.create_favorite(proposal.get_favorit) #todo unfilled?
+            return x, 200
+        else:
+            return '', 500
+
+
+@ikauf.route('favorite-by-id/<int:favoriteId>')
+@ikauf.response(500, 'Falls Server-seitiger Fehler')
+@ikauf.param('id', 'ID des Favorite-Objektes')
+class FavoriteOperations(Resource):
+    @ikauf.marshal_with(favorite)
+    @secured
+    def get(self, id):
+        """Auslesen eines bestimmten Favorite-Objekts"""
+
+        adm = ShoppingListAdministration()
+        a = adm.get_favorite_by_id(id)
+        return a
+
+    @secured
+    def delete(self, id):
+        """Löschen eines bestimmten Favorite-Objekts"""
+
+        adm = ShoppingListAdministration()
+        a = adm.get_favorite_by_id(id)
+        adm.delete_favorite_by_id(a)
+        return '', 200
+
+    @ikauf.marshal_with(favorite)
+    @ikauf.expect(favorite, validate=True)
+    @secured
+    def put(self, id):
+        """Update eines bestimmten Favorite-Objekts."""
+
+        adm = ShoppingListAdministration()
+        a = favorite.from_dict(api.payload)
+
+        if a is not None:
+            a.set_id(id)
+            adm.save_favorite(a)
+            return '', 200
+        else:
+            return '', 500
+
+
+
 
 """
 Start der main.py um zu testen ob es funktioniert (in der lokalen Entwicklerumgebung).
