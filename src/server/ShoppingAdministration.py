@@ -1,4 +1,3 @@
-from .bo.Article import Article
 from .bo.Entry import Entry
 from .bo.Group import Group
 from .bo.Retailer import Retailer
@@ -7,7 +6,7 @@ from .bo.ShoppingList import ShoppingList
 from .bo.User import User
 from .bo.Favorite import Favorite
 
-from .db.FavoriteMapper import ArticleMapper
+
 from .db.EntryMapper import EntryMapper
 from .db.GroupMapper import GroupMapper
 from .db.RetailerEntryListMapper import RetailerEntryListMapper
@@ -251,51 +250,6 @@ class ShoppingListAdministration (object):
 
 
     """
-    Article-spezifische Methoden
-    """
-
-    def create_article(self, article_name):
-        """Einen Article anlegen."""
-        article = Article()
-        article.set_article_name(article_name)
-        article.set_id(1)
-
-
-    def get_all_articels(self):
-        """Alle Artikel auslesen."""
-        with ArticleMapper() as mapper:
-            return mapper.find_all()
-
-
-    def get_article_by_id(self, id):
-        """Article mit der gegebenen ID auslesen."""
-        with ArticleMapper() as mapper:
-            return mapper.find_by_id(id)
-
-    def delete_article_by_id(self, article):
-        """gegebenen Artikel löschen."""
-        with ArticleMapper() as mapper:
-            article = self.get_article_by_id(article) #TODO Article oder Articels als variablen name? Und Put Methode fehlt
-
-        if not (article is None):
-            for a in article:
-                self.delete(a)
-
-        mapper.delete(article)
-
-    def get_article_by_name(self, article_name):
-        """Alle Article mit übergebenem article-namen auslesen."""
-
-        with ArticleMapper() as mapper:
-            return mapper.find_by_article_name(article_name)
-
-    def get_article_by_standart_boolean(self, article): #todo Übergabe parameter korrekt?
-        """Alle Article mit passendem Boolean"""
-
-        with ArticleMapper() as mapper:
-            return mapper.find_article_by_standard(article)
-
-    """
     ShoppingList-spezifische Methoden
     """
 
@@ -350,7 +304,6 @@ class ShoppingListAdministration (object):
     def create_entry(self, entry): #todo prüfen
         """Einen Article anlegen."""
         entry = Entry()
-        entry.set_article_id(entry)
         entry.set_unit(entry)
         entry.set_amount(entry)
         entry.set_bought((entry)
@@ -443,6 +396,7 @@ class ShoppingListAdministration (object):
         if not (retailer_group is None):
             for e in retailer_group:
                 mapper.delete(e)
+
 
 
 

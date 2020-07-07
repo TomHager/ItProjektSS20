@@ -10,7 +10,8 @@ from server.bo.Retailer import Retailer
 from server.bo.RetailerEntryList import RetailerEntryList
 from server.bo.Entry import Entry
 from server.bo.ShoppingList import ShoppingList
-from server.bo.Article import Article
+from server.bo.Favorite import Favorite
+from server.bo.RetailerGroup import RetailerGroup
 
 # selbstgeschriebener Decorator, übernimmt Authentifikation
 
@@ -89,16 +90,16 @@ article = api.inherit('Article', bo, {
     'name': fields.String(attribute='_name', description='Name eines Artikels'),
     'standart_boolean': fields.Boolean(attribute='_standart_boolean', description='Prüfung auf Standartikel'),
     'retailer_id': fields.Integer(attribute='_retailer_id', description='ID eines Verkäufers')
-})\
+})
 
 favorite = api.inherit('Favorite', bo, {
-    'unit': fields.Integer(attribute='_unit', description='Stückzahl eines Artikels'), #todo Stückzahl oder Gewichtseinheit?
+    'unit': fields.Integer(attribute='_unit', description='Einheit eines Artikels'), #todo Stückzahl oder Gewichtseinheit?
     'amount': fields.Integer(attribute='_amount', description='Menge eines Artikels'),
-    'article': fields.Integer(attribute='article', description='ID eines Artikels)
-})\
+    'article': fields.Integer(attribute='article', description='ID eines Artikels')
+})
 
 retailer_group = api.inherit('RetailerGroup', bo, {
-    'retailer_member': fields.Integer(attribute='_retailer_member', description='Bestimmtes Retailer Objekt'), #todo beschreibungen okay?
+    'retailer_member': fields.Integer(attribute='_retailer_member', description='Bestimmte Id eines Retailer Objektes'),
     'retailer_group': fields.Integer(attribute='_retailer_group', description='Retailer innerhalb einer bestimmten Gruppe'),
 
 })\
@@ -815,156 +816,6 @@ class ShoppingListRelatedByGroupIdOperations(Resource):
 
 
 """
-Klassen und Operationen für Article
-"""
-
-
-
-@ikauf.route('/atricle')
-@ikauf.response(500, "Falls Server-seitiger Fehler")
-class ArticleListOperations(Resource):
-    @ikauf.marshal_list_with(article)
-    @secured
-    def get(self):
-        """Auslesen aller Article-Objekte"""
-
-        adm = ShoppingListAdministration()
-        a = adm.get_all_article()
-        return a
-    def post(self):
-        """Anlegen eines neuen Article-Objekts"""
-
-        adm = ShoppingListAdministration()
-
-        proposal = Article.from_dict(api.payload)
-
-        if proposal is not None:
-            x = adm.create_article(proposal.get_article_name(), proposal.get_article_id())
-            return x, 200
-        else:
-            return '', 500
-
-
-@ikauf.route('/article-by-id/<int:articleId>')
-@ikauf.response(500, 'Falls Server-seitiger Fehler')
-@ikauf.param('id', 'ID des Article-Objekts')
-class ArticleOperations(Resource):
-    @ikauf.marshal_with(article)
-    @secured
-    def get(self, id):
-        """Auslesen eines bestimmten Article-Objekts"""
-
-        adm = ShoppingListAdministration()
-        a = adm.get_article_by_id(id)
-        return a
-
-    @secured
-    def delete(self, id):
-        """Löschen eines bestimmten Article-Objekts"""
-
-        adm = ShoppingListAdministration()
-        a = adm.get_article_by_id(id)
-        adm.delete_article_by_id(a)
-        return '', 200
-
-    @ikauf.marshal_with(article)
-    @ikauf.expect(article, validate=True)
-    @secured
-    def put(self, id):
-        """Update eines bestimmten Article-Objekts."""
-
-        adm = ShoppingListAdministration()
-        a = article.from_dict(api.payload)
-
-        if a is not None:
-            a.set_id(id)
-            adm.save_article(a)
-            return '', 200
-        else:
-            return '', 500
-
-
-"""ShoppingListRealatedByIdOperations wird weggelassen, da das holen der shoppinglist bereits über 
-ShoppingListOperations realisiert wird. Deshalbt hat ShoppingListRealatedByIdOperations  keine 
-daseinberechtigung"""
-
-
-@ikauf.route('/article-by-name/<string:name>')
-@ikauf.response(500, 'Falls Server-seitiger Fehler')
-@ikauf.param('name', 'Name des zugehörigen Article-Objekts')
-class ArticleRelatedByNameOperations(Resource):
-    @ikauf.marshal_with(article)
-    @secured
-    def get(self, name):
-        """Auslesen eines bestimmten Article-Objekts nach Name"""
-
-        adm = ShoppingListAdministration()
-        a = adm.get_article_by_name(name)
-        return a
-
-
-@ikauf.route('/article-by-retailer/<int: retailerId>')
-@ikauf.response(500, 'Falls Server-seitiger Fehler')
-@ikauf.param('retailerId', 'Retailer ID des zugehörigen Article-Objekts')
-class ArticleRelatedByRetailerIdOperations(Resource):
-    @ikauf.marshal_with(article)
-    @secured
-    def get(self, id):
-        """Auslesen eines bestimmten Article-Objekts nach Retailer ID"""
-
-        adm = ShoppingListAdministration()
-        a = adm.get_article_by_retailer_id(id)
-        return a
-
-
-#Todo boolean : .... was für wert bzw. Übergabeparameter hat es ? oder vllt mit <int: articleId>/<boolean>: ... ?
-# ich denke das mit den Boolean ist so nicht richtig, statt True false / 1 oder 0 zu machen, habe ich es sozusagen
-# "geupdatet" zu einem speziellen status, was wiederum (denke ich) eine neue Tabelle benötigt
-
-@ikauf.route('/article-by-standard-boolean/<boolean: ... ')
-@ikauf.response(500, 'Falls Server-seitiger Fehler')
-@ikauf.param('...', 'True or False des zugehörigen Article-Objekts')
-class ArticleRelatedByStandardBooleanOperations(Resource):
-    @ikauf.marshal_with(article)
-    @secured
-    def get(self, article):
-        """Auslesen eines bestimmten Article-Objekts der als Standard markiert wurde"""
-
-        adm = ShoppingListAdministration()
-        a = adm.get_article_by_standard_boolean(article)
-        return a
-
-    def put(self, article_boolean):
-        """Update eines bestimmten Article-Objekts."""
-
-        adm = ShoppingListAdministration()
-        a = article.from_dict(api.payload)
-
-        if a is not None:
-            a.set_article_boolean(article_boolean)
-            adm.save_article_boolean(a)
-            return '', 200
-        else:
-            return '', 500
-
-
-@ikauf.route('/article-by-standard-boolean/<boolean: ... ')
-@ikauf.response(500, 'Falls Server-seitiger Fehler')
-@ikauf.param('...', 'True or False des zugehörigen Article-Objekts') #todo ...?
-class ArticleRelatedByStandardBooleanOperations(Resource):
-    @ikauf.marshal_with(article)
-    @secured
-    def get(self):
-        """Auslesen eines bestimmten Article-Objekts der als Standard markiert wurde"""
-
-        adm = ShoppingListAdministration()
-        a = adm.get_all_article_by_standard_boolean()
-        return a
-
-
-
-
-"""
 Klassen und Operationen für RetailerGroup
 """
 
@@ -1015,7 +866,7 @@ Klassen und Operationen für Favorite
 @ikauf.route('/favorite')
 @ikauf.response(500, "Falls Server-seitiger Fehler")
 class FavoriteListOperations(Resource):
-    @ikauf.marshal_list_with(article)
+    @ikauf.marshal_list_with(favorite)
     @secured
     def get(self):
         """Auslesen aller Favorit-Objekte"""
