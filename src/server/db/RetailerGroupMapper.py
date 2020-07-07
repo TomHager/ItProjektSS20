@@ -3,7 +3,7 @@ from server.bo.RetailerGroup import RetailerGroup
 from server.db.Mapper import Mapper
 
 
-class RetailerGroup(Mapper):
+class RetailerGroupMapper(Mapper):
     """Mapper-Klasse, die Account-Objekte auf eine relationale
         Datenbank abbildet. Hierzu wird eine Reihe von Methoden zur Verfügung
         gestellt, mit deren Hilfe z.B. Objekte gesucht, erzeugt, modifiziert und
@@ -144,6 +144,8 @@ class RetailerGroup(Mapper):
         cursor.close()
 
         return result
+
+    #todo fnd_retailer_by_group und find_by_key ist doch doppeklt gemoppelt?!
 
     def find_retailer_by_group(self, retailer_group):
         """Auslesen einer Gruppe anhand des Gruppennames.
