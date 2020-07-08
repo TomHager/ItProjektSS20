@@ -174,6 +174,48 @@
 // //   //   fetchData();
 // //   // }, []);
 
+/** Updates the entry */
+// updateEntry = (newData) => {
+//     ShoppingAPI.getAPI().updateEntry(newData);
+//     this.refresh()
+//   }
+    // clone the original cutomer, in case the backend call fails
+    // let updatedEntry = Object.assign(new EntryBO(), oldData);
+    // set the new attributes from our dialog
+    // updatedEntry.setBought(newData.bought);
+    // updatedEntry.setUnit(newData.unit);
+    // updatedEntry.setAmount(newData.amount);
+    // updatedEntry.setArticleId(newData.articleId);
+    // updatedEntry.setArticleName(newData.articleName);
+    // updatedEntry.setArticleStandard(newData.articleStandard);
+    // updatedEntry.setModificationDate(newData.modificationDate);
+    // ShoppingAPI.getAPI().updateEntry(newData).then(entry => {
+    //   this.setState({
+        // updatingInProgress: false,              // disable loading indicator  
+        // updatingError: null                     // no error message
+      //   refresh();
+      // });
+      // // keep the new state as base state
+      // this.baseState.bought = this.state.data.bought;
+      // this.baseState.unit = this.state.data.unit;
+      // this.baseState.amount = this.state.data.amount;
+      // this.baseState.articleName = this.state.data.articleName;
+      // this.baseState.articleStandard = this.state.data.articleStandard;
+      // this.baseState.modificationDate = this.state.data.modificationDate;
+      // this.props.onClose(updatedEntry);      // call the parent with the new entry
+    // }).catch(e =>
+    //   this.setState({
+        // updatingInProgress: false,              // disable loading indicator 
+        // updatingError: e                        // show error message
+      //   refresh()
+      // })
+    // );
+    // set loading to true
+    // this.setState({
+    //   updatingInProgress: true,                 // show loading indicator
+    //   updatingError: null                       // disable error message
+    // });
+  // }
 
 // //   // TODO: select resposible shopper DropDown
 // //   return (
