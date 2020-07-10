@@ -313,7 +313,7 @@ class ShoppingListAdministration(object):
 
         if not (entry is None):
             for e in entry:
-                mapper.delete(e)  # todo so richtig?
+                mapper.delete(e)
 
         mapper.delete(entry)
 
@@ -343,6 +343,11 @@ class ShoppingListAdministration(object):
         """Alle Article mit übergebenem article-namen auslesen."""
         with EntryMapper() as mapper:
             return mapper.find_entry_by_retailer_entry_list(retailer_entry_list)
+
+    def save_entry(self, entry):
+        """Update eines Retailers innerhalb einer Gruppe"""  # todo Richtig beschrieben?
+        with EntryMapper() as mapper:
+            mapper.update(entry)
 
     """
     RetailerGroup-spezifische Methoden

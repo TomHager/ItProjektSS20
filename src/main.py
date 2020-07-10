@@ -594,7 +594,7 @@ class EntryListOperations(Resource):
         """Auslesen aller Entry-Objekte"""
 
         adm = ShoppingListAdministration()
-        e = adm.get_all_entry()
+        e = adm.get_all_entrys()
         return e
 
     def post(self):
@@ -629,7 +629,7 @@ class EntryOperations(Resource):
 
         adm = ShoppingListAdministration()
         e = adm.get_entry_by_id(id)
-        adm.delete_entry(e)
+        adm.delete_entry_by_id(e)
         return '', 200
 
     @ikauf.marshal_with(entry)
@@ -770,7 +770,7 @@ class ShoppingListOperations(Resource):
 
         if sl is not None:
             sl.set_id(id)
-            adm.save_shopping_list(sl) #todo eik was kommt hier nei?
+            adm.save_shopping_list(sl)
             return '', 200
         else:
             return '', 500
@@ -946,6 +946,8 @@ class FavoriteOperations(Resource):
             return '', 200
         else:
             return '', 500
+
+
 
 
 
