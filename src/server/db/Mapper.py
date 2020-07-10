@@ -4,7 +4,7 @@ from contextlib import AbstractContextManager
 from abc import ABC, abstractmethod
 
 
-class Mapper (AbstractContextManager, ABC):
+class Mapper(AbstractContextManager, ABC):
 
     def __init__(self):
         self._cnx = None
@@ -13,14 +13,15 @@ class Mapper (AbstractContextManager, ABC):
 
         if os.getenv('GAE_ENV', '').startswith('standard'):
 
-            # self._cnx = connector.connect(user='demo', password='demo',
-            #                               unix_socket='/cloudsql/python-bankprojekt-thies:europe-west3:bank-db-thies',
-            #                               database='ikauf')
+            """self._cnx = connector.connect(user='demo', password='demo',
+                                          unix_socket='/cloudsql/python-bankprojekt-thies:europe-west3:bank-db-thies',
+                                          database='ikauf')"""
+
         else:
 
-            self._cnx = connector.connect(user='demo', password='demo',
-                                  host='127.0.0.1',
-                                  database='ikauf')
+            self._cnx = connector.connect(user='root', password='1234',
+                                          host='127.0.0.1',
+                                          database='it-projekt-ss2020')
 
         return self
 

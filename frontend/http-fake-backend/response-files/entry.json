@@ -2,9 +2,8 @@
     {
     "id":1,
     "bought": true,
-    "entryUnit":3,
+    "entryUnit":1,
     "entryAmount":3,
-    "articleId":1,
     "articleName":"Apfel",
     "articleStandard": false,
     "modificationDate": "2020-05-24"
@@ -12,20 +11,18 @@
     "id":2,
     "bought": false,
     "entryUnit":3,
-    "entryAmount":3,
-    "articleId":2,
+    "entryAmount":1,
     "articleName":"Birne",
     "articleStandard": false,
-    "modificationDate": "2020-05-24"
+    "modificationDate": null
 }, {
     "id":3,
     "bought": false,
-    "entryUnit":3,
-    "entryAmount":3,
-    "articleId":3,
+    "entryUnit":2,
+    "entryAmount":4,
     "articleName":"Banane",
     "articleStandard": false,
-    "modificationDate": "2020-05-24"
+    "modificationDate": null
 }
 
 ]

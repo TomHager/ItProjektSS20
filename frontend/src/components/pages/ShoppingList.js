@@ -1,9 +1,13 @@
-import { Container, CssBaseline, IconButton } from "@material-ui/core";
+import {
+  Container,
+  CssBaseline,
+  IconButton,
+  Select,
+  Input,
+} from "@material-ui/core";
 import Checkbox from "@material-ui/core/Checkbox";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import {
-  Favorite,
-  FavoriteBorder,
   AddShoppingCartOutlined,
   Search,
   Delete,
@@ -19,16 +23,16 @@ import {
   MoreVert,
   ArrowUpward,
   Refresh,
-  SpaceBar,
 } from "@material-ui/icons";
 import React, { Component } from "react";
-import MaterialTable, { MTableToolbar } from "material-table";
-// import { ShoppingAPI } from '../../api'
+import MaterialTable from "material-table";
+import ShoppingAPI from "../../api/ShoppingAPI";
+import EntryBO from "../../api/EntryBO";
 
 /**
  * Displays a ShoppingList for given Data
  *
- * @author Tom Hagerw
+ * @author Tom Hager
  *
  */
 
@@ -43,27 +47,27 @@ export default class ShoppingList extends Component {
         {
           align: "center",
           title: "bought",
-          field: "bought",
+          field: "modificationDate",
           defaultSort: "asc",
-          type: "boolean",
-          customSort: (a, b) => a.bought - b.bought,
-          // editComponent: props => (
-          //   <Checkbox
-          //     type="boolean"
-          //     value={props.value}
-          //     onChange={e => props.onChange(!e.target.value)}
-          //   />
-          // ),
+          type: "date",
+          editComponent: (props) => (
+            <Checkbox type="boolean" icon={<CheckBoxOutlineBlank checkedIcon={<CheckBox />} onChange={(e) => (this.state.data.modificationDate = this.setModDate(this.state.data.modificationDate))}/>} />
+          // console.log(this.state.data.modificationDate)
+            
+            ),
           render: (data) => (
             <FormControlLabel
               control={
                 <Checkbox
                   icon={<CheckBoxOutlineBlank />}
                   checkedIcon={<CheckBox />}
-                  checked={data.bought}
+                  checked={data.modificationDate != null}
                   onChange={(e) => (
-                    (data.bought = !data.bought),
-                    e,
+                    (data.modificationDate = this.setModDate(
+                      data.modificationDate
+                    )),
+                    // (this.updateEntry(data)),
+                    console.log(data.modificationDate),
                     this.setState((prevState) => {
                       const data = [...prevState.data];
                       return { ...prevState, data };
@@ -80,19 +84,31 @@ export default class ShoppingList extends Component {
           title: "Article",
           field: "articleName",
           align: "center",
-          sorting: false,
         },
         {
           title: "Amount",
           field: "entryAmount",
           type: "numeric",
           align: "center",
-          sorting: false,
+          editComponent: (props) => (
+          
+          // editComponent: (onChange()) => (
+          //   validity.valid||(props='')
+            // )
+            // onChange = (props) => (validity.valid||(props=''))
+            <input
+              name= "entryAmount"
+              type="number"
+              value= {this.state.data.entryAmount}
+              min="0"
+              oninput="validity.valid||(value='');"
+              
+            />
+          ),
         },
         {
           title: "Unit",
           field: "entryUnit",
-          sorting: false,
           align: "center",
           lookup: {
             1: "KG",
@@ -107,41 +123,52 @@ export default class ShoppingList extends Component {
             10: "m",
           },
         },
-        {
-          title: "Favorite     ",
-          align: "center",
-          field: "articleStandard",
-          type: "boolean",
-          sorting: false,
-          render: (data) => (
-            <FormControlLabel
-              control={
-                <Checkbox
-                  icon={<FavoriteBorder />}
-                  checkedIcon={<Favorite />}
-                  checked={data.articleStandard}
-                  onChange={(e) => (
-                    (data.articleStandard = !data.articleStandard),
-                    e,
-                    this.setState((prevState) => {
-                      const data = [...prevState.data];
-                      return { ...prevState, data };
-                    })
-                  )}
-                  name="favoriteButton"
-                  color="primary"
-                />
-              }
-            />
-          ),
-        },
       ],
 
       data: [],
+
+      members: [
+        {
+          member: "Tom",
+        },
+        {
+          member: "Klaus",
+        },
+      ],
+      retailerName: "Default",
     };
   }
 
-  async fetchEntries() {
+  setModDate = (date) => {
+    if (date == null) {
+      date = this.curday();
+    } else {
+      date = null;
+    }
+    return date;
+  };
+
+  curday = () => {
+    let today = new Date();
+    let dd = String(today.getDate()).padStart(2, "0");
+    let mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
+    let yyyy = today.getFullYear();
+
+    today = yyyy + "-" + mm + "-" + dd;
+    return today;
+  };
+
+  // changeModificationDate(modDate) {
+  //   if (modDate == null) {
+  //     modDate = this.curday();
+  //     return modDate;
+  //   } else {
+  //     modDate = null;
+  //     return modDate;
+  //   }
+  // }
+
+  async  fetchEntries() {
     const res = await fetch("http://desktop-du328lq:8081/api/iKauf/entry");
     const resjson = await res.json();
     this.setState({ data: resjson });
@@ -151,34 +178,58 @@ export default class ShoppingList extends Component {
     this.fetchEntries();
   }
 
-  refresh() {
+  /** Updates the entry */
+  async updateEntry(newData) {
+    ShoppingAPI.getAPI().updateEntry(newData);
     this.fetchEntries();
-  }
-  // getEntriesHandler = (getEntries);
+  };
 
-  // componentDidMount() {
-  // this.getEntriesHandler();
+  handleChange = (e) => {
+    let selectedValue = e.target.value;
+    this.state.members.onSelectChange(selectedValue);
+    // console.log(e.taget.value)
+  };
+  // memberButton = () => {
+  //   this.MakeItem = function(X) {
+  //     return <MenuItem >{X}</MenuItem >;
+  //   }
+  //   return(
+  //     <Select
+  //       value={this.state.members}
+  //     >
+  //       {this.state.members.map(this.MakeItem)};
+  //     </Select>
+  //   )
+  //   let members = this.state.members;
+  //   let options = members.map((data) =>
+  //       <option
+  //           key={data.member}
+  //           value={data.member}
+  //       >
+  //           {data.member}
+  //       </option>
+  //   );
+  //   return (
+
+  //     <select name="memberList" onChange={this.handleChange}>
+  //         <option>Select Responsible</option>
+  //         {options}
+  //    </select>
+  //   )
   // }
 
   render() {
     const state = this.state;
-    console.log(state.data);
     return (
       <React.Fragment>
-          <Container maxWidth="sm">
+        <Container maxWidth="md">
           <CssBaseline />
-          <IconButton
-            onClick={(e) => this.refresh()}
-          >
+          <IconButton onClick={(e) => this.fetchEntries()}>
             <Refresh />
           </IconButton>
+          {/* {this.memberButton()} */}
           <MaterialTable
-            // MTableToolbar={{}}
-            // components={{
-            //   Toolbar
-            // }}
-            size="small"
-            title="Rewe"
+            title={state.retailerName}
             columns={state.columns}
             data={state.data}
             icons={{
@@ -204,7 +255,8 @@ export default class ShoppingList extends Component {
               showTextRowsSelected: false,
               sorting: true,
               rowStyle: (rowData) => ({
-                backgroundColor: rowData.bought ? "#039be5" : "#fff",
+                backgroundColor:
+                  rowData.modificationDate != null ? "#039be5" : "#fff",
               }),
             }}
             // onSelectionChange={(row, rowData) => {
@@ -214,7 +266,7 @@ export default class ShoppingList extends Component {
             //   });
             // }}
             editable={{
-              isEditable: (rowData) => rowData.bought === false,
+              isEditable: (rowData) => rowData.modificationDate == null,
               onRowAdd: (newData) =>
                 new Promise((resolve) => {
                   setTimeout(() => {
@@ -227,6 +279,8 @@ export default class ShoppingList extends Component {
                   }, 600);
                 }),
               onRowUpdate: (newData, oldData) =>
+                // new Promise((this.updateEntry(oldData))
+                // new Promise(this.fetchEntries()),
                 new Promise((resolve) => {
                   setTimeout(() => {
                     resolve();

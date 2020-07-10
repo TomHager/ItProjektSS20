@@ -1,5 +1,4 @@
 from server.bo.GroupMembership import GroupMembership
-
 from server.db.Mapper import Mapper
 
 
@@ -112,7 +111,7 @@ class GroupMembershipMapper(Mapper):
             group_membership.set_member(member)
             group_membership.set_membership(membership)
 
-        result = group_membership
+            result = group_membership
 
         self._cnx.commit()
         cursor.close()
@@ -169,3 +168,13 @@ class GroupMembershipMapper(Mapper):
 
         return result
 
+
+"""Zu Testzwecken können wir diese Datei bei Bedarf auch ausführen, 
+um die grundsätzliche Funktion zu überprüfen.
+
+Anmerkung: Nicht professionell aber hilfreich..."""
+if (__name__ == "__main__"):
+    with GroupMembershipMapper() as mapper:
+        result = mapper.find_all()
+        for p in result:
+            print(p)
