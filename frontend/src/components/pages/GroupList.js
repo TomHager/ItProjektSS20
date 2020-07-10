@@ -1,5 +1,9 @@
 import React from "react";
-import { makeStyles, Paper, Typography } from "@material-ui/core";
+import { makeStyles, Paper, Typography, Grid } from "@material-ui/core";
+import Accordion from "@material-ui/core/Accordion";
+import AccordionSummary from "@material-ui/core/AccordionSummary";
+import AccordionDetails from "@material-ui/core/AccordionDetails";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -20,11 +24,21 @@ function GroupList() {
 
   return (
     <div className={classes.content}>
-      <Grid container spacing={3}>
-        <Grid item xs={9}>
-          <Paper className={classes.paper}>Gruppe 1</Paper>
-        </Grid>
-      </Grid>
+      <Accordion>
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="GroupList-content"
+          id="GroupList-header"
+        >
+          <Paper>Group 1</Paper>
+        </AccordionSummary>
+        <AccordionDetails>
+          <Paper>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
+            malesuada lacus ex, sit amet blandit leo lobortis eget.
+          </Paper>
+        </AccordionDetails>
+      </Accordion>
     </div>
   );
 }
