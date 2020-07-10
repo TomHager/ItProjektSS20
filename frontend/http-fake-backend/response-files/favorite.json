@@ -2,9 +2,9 @@
     {
     "id":10,
     "bought": true,
-    "entryUnit":8,
+    "entryUnit":9,
     "entryAmount":6,
-    "articleName":"Brownie",
+    "articleName":"Vodka",
     "articleStandard": false,
     "modificationDate": "2020-05-24"
 }

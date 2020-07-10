@@ -1,102 +1,93 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   makeStyles,
-  Container,
-  CssBaseline,
   Table,
-  TableHead,
   TableBody,
-  TableRow,
+  TableCell,
   TableContainer,
+  TableHead,
+  TableRow,
   Paper,
 } from "@material-ui/core";
-import Checkbox from "@material-ui/core/Checkbox";
-import { CheckBox, CheckBoxOutlineBlank } from "@material-ui/icons";
-import { TableCell } from "@material-ui/core";
+// import { RadioButtonChecked, RadioButtonUnchecked } from "@material-ui/icons";
+import ShoppingAPI from "../../api/ShoppingAPI";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles({
   root: {
-    width: "30%",
-    marginTop: theme.spacing(2),
-    marginBottom: theme.spacing(2),
-    padding: theme.spacing(1),
+    width: Math.round(window.innerWidth * 0.3),
   },
-  content: {
-    margin: theme.spacing(1),
+  table: {
+    minWidth: 200,
   },
-  table: {},
-}));
+});
 
-/**
- * Shows the about page with the impressum
- */
+
+function writeGroups() {
+  const groups=[];
+  for (let i = 0; i < fetchGroups.length; i++) {
+    
+    groups.push(createRow(fetchGroups[i]));
+  };
+  console.log(groups);
+  return groups;
+}
+// const groupRows= writeGroups();
+
+function createRow(group) {
+  return { group };
+}
+
+// TODO: Just fetch Group by User without createRow
+const groupRows = [
+  createRow("Paperclips (Box)"),
+  createRow("Paper (Case)"),
+  createRow("Wates Basket"),
+];
+
+async function fetchGroups() {
+  const res = await fetch("http://desktop-du328lq:8081/api/iKauf/groups");
+  const resjson = await res.json();
+  // this.setState({ data: resjson });
+  // console.log({ data: resjson });
+  return {data:resjson};
+}
+
+const componentDidMount = () => {
+  writeGroups();
+  console.log("TEST");
+}
+
 export default function ReportMenu() {
   const classes = useStyles();
-
   return (
-    <div className={classes.root}>
-      <React.Fragment>
-        <CssBaseline />
-        <Container>
-          <TableContainer component={Paper}>
-            <Table name="groupSelection" aria-label="simple table" size="small" >
-              <TableRow>
-                <TableHead>Select Group:</TableHead>
-              </TableRow>
-              <TableBody>
-                <TableRow>
-                  <TableCell>
-                    <Checkbox
-                      type="boolean"
-                      icon={
-                        <CheckBoxOutlineBlank
-                          checkedIcon={<CheckBox />}
-                          onChange={(e) => e}
-                        />
-                      }
-                    />
-                  </TableCell>
-                  <TableCell>Group 1</TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell>
-                    <Checkbox
-                      type="boolean"
-                      icon={
-                        <CheckBoxOutlineBlank
-                          checkedIcon={<CheckBox />}
-                          onChange={(e) => e}
-                        />
-                      }
-                    />
-                  </TableCell>
-                  <TableCell>Group 1</TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell>
-                    <Checkbox
-                      type="boolean"
-                      icon={
-                        <CheckBoxOutlineBlank
-                          checkedIcon={<CheckBox />}
-                          onChange={(e) => e}
-                        />
-                      }
-                    />
-                  </TableCell>
-                  <TableCell>Group 1</TableCell>
-                </TableRow>
-              </TableBody>
-            </Table>
-          </TableContainer>
-          <TableContainer component={Paper}>
-            {/* RetailerSelection */}
-          </TableContainer>
-          <TableContainer component={Paper}>
-            {/* DateSelection */}
-          </TableContainer>
-        </Container>
-      </React.Fragment>
-    </div>
+    componentDidMount(),
+    <TableContainer className={classes.root} component={Paper}>
+      <Table className={classes.table} size="small" aria-label="spanning table">
+        <TableHead>
+          <TableRow>
+            <TableCell colSpan={2}>
+              <b>Select Group:</b>
+            </TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {groupRows.map((row) => (
+            <TableRow key={row.group}>
+              <TableCell>
+                <input
+                  type="radio"
+                  name="radioButton"
+                  // value={result.radioButton}
+                  // checked={console.log(row.group)}
+                />
+              </TableCell>
+              <TableCell style={{ maxWidth: 100 }} align="left">
+                {row.group}
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
   );
 }
