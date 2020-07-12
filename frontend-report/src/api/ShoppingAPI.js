@@ -199,7 +199,7 @@ export default class ShoppingAPI {
 
     getUsers() {
         return this.#fetchAdvanced(this.#getUsersURL()).then((responseJSON) => {
-            let userBO = UserBO.fromJSON(responseJSON);
+            let userBOs = UserBO.fromJSON(responseJSON);
             // console.info(userBOs);
             return new Promise(function (resolve) {
                 resolve(userBOs);
@@ -246,7 +246,7 @@ export default class ShoppingAPI {
             body: JSON.stringify(userBO)
         }).then((responseJSON) => {
             // We always get an array of UserBOs.fromJSON
-            let responseUseryBO = UserBO.fromJSON(responseJSON)[0];
+            let responseUserBO = UserBO.fromJSON(responseJSON)[0];
             // console.info(userBOs);
             return new Promise(function (resolve) {
                 resolve(responseUserBO);

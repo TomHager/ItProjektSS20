@@ -34,7 +34,7 @@ export default class EntryBO extends BusinessObject {
     return this.name;
   }
 
-  setName(articleName) {
+  setName(name) {
     this.name = name;
   }
 
