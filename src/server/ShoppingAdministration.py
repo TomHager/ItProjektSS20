@@ -115,10 +115,10 @@ class ShoppingListAdministration(object):
     def get_groups_of_user(self, user):
         """Alle Groups des gegebenen Usser auslesen."""
         with GroupMapper() as mapper:
-            return mapper.find_by_owner_id(user.get_id())  # Vorsicht: nicht geprüft!
+            return mapper.find_by_owner_id(user.get_id())  # Vorsicht: nicht geprüft! #todo nochmal anschauen groupmembership
 
     def get_all_groups(self):
-        """Alle Kunden auslesen."""
+        """Alle Gruppen Objekte auslesen."""
         with GroupMapper() as mapper:
             return mapper.find_all()
 
@@ -162,7 +162,7 @@ class ShoppingListAdministration(object):
             return mapper.find_all()
 
     def get_retailer_by_retailer_entry_list(self, retailer_entry_list):
-        """Alle Kunden auslesen."""
+        """Alle Retailer aus der Retailer Entry List auslesen."""
         with RetailerMapper() as mapper:
             return mapper.find_retailer_by_retailer_entry_list(retailer_entry_list)
 
@@ -192,7 +192,7 @@ class ShoppingListAdministration(object):
     """
 
     def create_retailer_entry_list_for_group(self, group):
-        """für einen gegebe Gruppe ein neuen Händereintragsliste anlegen"""
+        """Für einen gegebe Gruppe ein neue RetailerEntryList anlegen"""
         with RetailerEntryListMapper() as mapper:
             if group is not None:
                 rel = RetailerEntryList()
@@ -204,7 +204,7 @@ class ShoppingListAdministration(object):
                 return None
 
     def get_retailer_entry_list_by_name(self, retailer_entry_list_name):
-        """Alle RetailerEntryList mit übergebenem RetailerEntryList-namen auslesen."""
+        """Alle RetailerEntryList Objekte mit übergebenem RetailerEntryList-namen auslesen."""
         with RetailerEntryListMapper() as mapper:
             return mapper.find_by_retailer_entry_list_name(retailer_entry_list_name)
 
@@ -219,25 +219,25 @@ class ShoppingListAdministration(object):
             return mapper.find_by_group(group)
 
     def get_all_retailer_entry_list(self):
-        """Alle RetailerEntryLists auslesen."""
+        """Alle RetailerEntryList Objekte auslesen."""
         with RetailerEntryListMapper() as mapper:
             return mapper.find_all()
 
     def get_retailer_entry_list_by_retailer(self, retailer_entry_list):
-        """Alle RetailerEntryList nach Retailer auslesen."""
+        """Alle RetailerEntryList Objekte nach Retailer auslesen."""
         with RetailerEntryListMapper() as mapper:
             return mapper.find_retailer_by_retailer_entry_list(retailer_entry_list)
 
     def save_retailer_entry_list(self, retailer):
-        """gegebene Group speichern."""
+        """gegebene RetailerEntryList Speichern."""
         with RetailerEntryListMapper() as mapper:
             mapper.update(retailer)
 
     # passt das hier mit .get_retailer_of_user ? Mapper schauen und mit anderen verständigen
     def delete_retailer_entry_list(self, retailer_entry_list):
-        """gegebene Group löschen."""
+        """gegebene RetailerEntryList löschen."""
         with RetailerEntryListMapper() as mapper:
-            retailers = self.get_retailer_entry_list_of_group(retailer_entry_list)
+            retailers = self.get_retailer_entry_list_by_group(retailer_entry_list)
 
             if not (retailers is None):
                 for r in retailers:
@@ -262,7 +262,7 @@ class ShoppingListAdministration(object):
         shoppinglist.set_id(1)
 
     def get_shopping_list_by_id(self, id):
-        """Article mit der gegebenen ID auslesen."""
+        """ShoppingList mit der gegebenen ID auslesen."""
         with ShoppingListMapper() as mapper:
             return mapper.find_by_id(id)
 
@@ -284,25 +284,29 @@ class ShoppingListAdministration(object):
             return mapper.find_shopping_list_by_name(shopping_list_name)
 
     def get_shopping_list_by_group_id(self, group):
-        """Retailer mit der gegebenen Group auslesen."""
+        """ShoppingList mit der gegebenen Group auslesen."""
         with ShoppingListMapper() as mapper:
             return mapper.find_shopping_list_by_group(group)
+
+    def save_shopping_list(self, shopping_list):
+        """Update eines Shoppinglist Objektes"""  # todo Richtig beschrieben?
+        with ShoppingListMapper() as mapper:
+            mapper.update(shopping_list)
 
     """
     Entry-spezifische Methoden
     """
 
     def get_all_entrys(self):
-        """Alle Artikel auslesen."""
+        """Alle Entry Objekte auslesen."""
         with EntryMapper() as mapper:
             return mapper.find_all()
 
     def create_entry(self, entry1):  # todo prüfen
-        """Einen Article anlegen."""
+        """Einen Entry anlegen."""
         entry = Entry()
         entry.set_unit(entry1)
         entry.set_amount(entry1)
-        entry.set_modification_date(entry1)
         entry.set_article(entry1)
         entry.set_id(1)
 
@@ -325,27 +329,27 @@ class ShoppingListAdministration(object):
             return mapper.find_by_key(entry_id)
 
     def get_entry_by_article(self, article_id):  # todo alle entrys oder nur einer?
-        """Auslesen aller Eintrags-ID anhand des Artikel-ID´s"""
+        """Auslesen aller Entry Objekte anhand des Artikel-ID´s"""
         with EntryMapper() as mapper:
             return mapper.find_entry_id_by_article(article_id)
 
     def get_amount_by_entry(self, entry):
-        """gegebenen Artikel löschen."""
+        """gegebenen Entry löschen."""
         with EntryMapper() as mapper:
             return mapper.find_amount_by_entry(entry)
 
     def get_unit_by_entry(self, entry):
-        """Alle Article mit übergebenem article-namen auslesen."""
+        """Unit mit übergebenem Entry auslesen."""
         with EntryMapper() as mapper:
             return mapper.find_unit_by_entry(entry)
 
     def get_entry_by_retailer_entry_list(self, retailer_entry_list):
-        """Alle Article mit übergebenem article-namen auslesen."""
+        """Entry mit übergebenem RetailerEntryList auslesen."""
         with EntryMapper() as mapper:
             return mapper.find_entry_by_retailer_entry_list(retailer_entry_list)
 
     def save_entry(self, entry):
-        """Update eines Retailers innerhalb einer Gruppe"""  # todo Richtig beschrieben?
+        """Update eines Entry Objektes"""  # todo Richtig beschrieben?
         with EntryMapper() as mapper:
             mapper.update(entry)
 
@@ -403,7 +407,7 @@ class ShoppingListAdministration(object):
     """
 
     def create_favorite(self, favorite_id, amount, article, unit):
-        """Favorit-Objekte erzeugen."""
+        """Favorite Objekte erzeugen."""
         favorite = Favorite()
         favorite.set_amount(amount)
         favorite.set_unit(unit)
@@ -411,17 +415,17 @@ class ShoppingListAdministration(object):
         favorite.set_id(favorite_id)  # todo so richtig?
 
     def get_all_favorits(self):
-        """Alle Favorits-Objekte auslesen."""
+        """Alle Favorite Objekte auslesen."""
         with FavoriteMapper as mapper:
             return mapper.find_all()
 
     def get_favorite_by_id(self, favorite_id):
-        """Favorite-Objekt mit übergebener favorit-id auslesen."""
+        """Favorite Objekt mit übergebener favorit-id auslesen."""
         with FavoriteMapper as mapper:
             return mapper.find_by_key(favorite_id)
 
     def delete_favorite_by_id(self, favorite_id):
-        """gegebenes Favorite-Objekt löschen."""
+        """gegebenes Favorite Objekt löschen."""
 
         with FavoriteMapper() as mapper:
             favorite = self.get_favorite_by_id(favorite_id)
@@ -433,5 +437,6 @@ class ShoppingListAdministration(object):
             mapper.delete(favorite)
 
     def save_favorite(self, favorite):
+        """Update eines Favorite Objektes."""
         with FavoriteMapper() as mapper:
             mapper.update(favorite)

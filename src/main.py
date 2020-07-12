@@ -673,22 +673,9 @@ class EntryRelatedByAmountOperations(Resource):
         """Auslesen eines bestimmten Entry-Objekts nach Amount"""
 
         adm = ShoppingListAdministration()
-        am = adm.get_entry_by_amount(amount)
+        am = adm.get_amount_by_entry(amount)
         return am
 
-
-@ikauf.route('/entry-by-modification-date/<date:modification-date>')
-@ikauf.response(500, 'Falls Server-seitiger Fehler')
-@ikauf.param('modification-date', 'Modification-Date eines Entry-Objekts')
-class EntryRelatedByModificationDateOperations(Resource):
-    @ikauf.marshal_with(entry)
-    @secured
-    def get(self, modification_date):
-        """Auslesen eines bestimmten Entry-Objekt nach Modification-Date"""
-
-        adm = ShoppingListAdministration()
-        md = adm.get_entry_by_modification_date(modification_date)
-        return md
 
 
 @ikauf.route('/entry-by-retailer-entry-list/<list:retailer-entry-list>')
@@ -889,21 +876,21 @@ class FavoriteListOperations(Resource):
     @ikauf.marshal_list_with(favorite)
     @secured
     def get(self):
-        """Auslesen aller Favorit-Objekte"""
+        """Auslesen aller Favorite-Objekte"""
 
         adm = ShoppingListAdministration()
         a = adm.get_all_favorits()
         return a
 
     def post(self):
-        """Anlegen eines neuen Favorit-Objekts"""
+        """Anlegen eines neuen Favorite-Objekts"""
 
         adm = ShoppingListAdministration()
 
         proposal = Favorite.from_dict(api.payload)
 
         if proposal is not None:
-            x = adm.create_favorite(proposal.get_favorit) #todo unfilled?
+            x = adm.create_favorite(proposal.get_favorit()) #todo unfilled konnten problem nicht lösen
             return x, 200
         else:
             return '', 500
@@ -946,9 +933,6 @@ class FavoriteOperations(Resource):
             return '', 200
         else:
             return '', 500
-
-
-
 
 
 
