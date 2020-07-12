@@ -1,11 +1,9 @@
 [
     {
     "id":10,
-    "bought": true,
-    "entryUnit":8,
-    "entryAmount":6,
-    "articleName":"Brownie",
-    "articleStandard": false,
+    "unit":8,
+    "amount":6,
+    "name":"Brownie",
     "modificationDate": "2020-05-24"
 }
 
