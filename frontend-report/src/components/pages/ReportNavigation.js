@@ -108,8 +108,7 @@ export default class ReportNavigation extends Component {
           aria-label="spanning table"
           state="Disable"
           style={{
-            backgroundColor:
-              this.state.retailerActive ? "white" : "grey",
+            backgroundColor: this.state.retailerActive ? "white" : "grey",
           }}
         >
           <TableHead>
@@ -117,7 +116,14 @@ export default class ReportNavigation extends Component {
               <TableCell>
                 <b>Select Retailer:</b>
               </TableCell>
-              <TableCell><Button onClick={this.retailerToggleHandler.bind(this)}>Disable Filter</Button></TableCell>
+              <TableCell>
+                <Button
+                  style={{ backgroundColor: "lightblue" }}
+                  onClick={this.retailerToggleHandler.bind(this)}
+                >
+                  Disable Filter
+                </Button>
+              </TableCell>
             </TableRow>
           </TableHead>
 
@@ -127,9 +133,9 @@ export default class ReportNavigation extends Component {
                 key={row.id}
                 style={{
                   backgroundColor:
-                    row.id === this.state.retailerIndex ? "#0090FF" : "white" |
+                    row.id === this.state.retailerIndex ? "#0090FF" : "white" | 
                     this.state.retailerActive ? "white" : "grey",
-                }}
+                  }}
                 onClick={this.retailerClickHandler.bind(this, row)}
               >
                 <TableCell colSpan={2}>{row.name}</TableCell>
