@@ -1,132 +1,88 @@
 import React, { Component } from "react";
 import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
   Paper,
-  Typography,
-  Grid,
-  IconButton,
-  Container,
 } from "@material-ui/core";
-// import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import { withStyles } from "@material-ui/core/styles";
-import ShoppingAPI from "../../api/ShoppingAPI";
-import EditIcon from "@material-ui/icons/Edit";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemText from "@material-ui/core/ListItemText";
-// import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
-import GroupDialog from "../dialogs/GroupDialog";
-import PropTypes from "prop-types";
+// import ShoppingAPI from "../../api/ShoppingAPI";
 
-class GroupList extends Component {
+/**
+ * Shows the about page with the impressum
+ *
+ * @author Tom Hager
+ */
+
+export default class ReportNavigation extends Component {
   constructor(props) {
     super(props);
 
+    // Init an empty state
     this.state = {
-      groups: [],
-      users: ["Jens", "Philips", "Dieter", "Günther", "Gustav"],
-      showGroupDialog: false,
+      groupRows: [],
+      groupIndex: -1,
     };
   }
 
+  //Group Functions
   async fetchGroups() {
-    const res = await fetch("http://desktop-s3rcllp:8081/api/iKauf/groups");
+    const res = await fetch("http://desktop-du328lq:8081/api/iKauf/groups");
     const resjson = await res.json();
-    this.setState({ groups: resjson });
-    console.log(this.state.groups);
+    this.setState({ groupRows: resjson });
+    console.log(resjson);
   }
 
-  async updateGroup(newData) {
-    ShoppingAPI.getAPI().updateGroup(newData);
+  groupClickHandler(group) {
+    this.setState({ groupIndex: group.id });
+    console.log(`Selected: ${group.name} with index of ${group.id}`);
+  }
+
+  //calls all Callbacks for Repor Selection
+  componentDidMount = () => {
     this.fetchGroups();
-  }
-
-  componentDidMount() {
-    this.fetchGroups();
-  }
-
-  editGroupButtonClicked = (event) => {
-    event.stopPropagation();
-    this.setState({
-      showGroupDialog: true,
-    });
-  };
-
-  customerFormClosed = (customer) => {
-    console.log("It works");
-    this.setState({
-      showGroupDialog: false,
-    });
+    console.log("All Callbacks initialised");
   };
 
   render() {
-    const { classes } = this.props;
-    const { users } = this.state;
-    const { groups } = this.state;
-    const showGroupDialog = this.state;
+    const groupRows = this.state.groupRows;
     return (
-      <div align="center" direction="row">
-        <Paper className={classes.accordion}>
-          {groups.map((group) => (
-            <div key={group.id}>
-              <Grid container>
-                <Grid item xs={12}>
-                  <Typography align="left" className={classes.listHeading}>
-                    {group.name}
-                    <IconButton
-                      aria-label="edit"
-                      style={{ padding: "10px", marginLeft: "1em" }}
-                      onClick={this.editGroupButtonClicked}
-                    >
-                      <EditIcon />
-                    </IconButton>
-                  </Typography>
-                </Grid>
-                <Grid item>
-                  <div className={classes.lists}>
-                    {users.map((user, index) => (
-                      <div key={index}>
-                        <List>
-                          <ListItem>
-                            <ListItemText primary={user} />
-                          </ListItem>
-                        </List>
-                      </div>
-                    ))}
-                  </div>
-                </Grid>
-              </Grid>
-            </div>
-          ))}
-        </Paper>
-        <GroupDialog show={showGroupDialog} onClose={this.customerFormClosed} />
-      </div>
+      <TableContainer
+        style={{ width: Math.round(window.innerWidth * 0.3) }}
+        component={Paper}
+      >
+        {/* Group Table */}
+        <Table
+          size="small"
+          aria-label="spanning table"
+          // style={{ height: Math.round(window.innerHeight * 0.3) }}
+        >
+          <TableHead>
+            <TableRow>
+              <TableCell>
+                <b>Select Group:</b>
+              </TableCell>
+            </TableRow>
+          </TableHead>
+
+          <TableBody>
+            {groupRows.map((row) => (
+              <TableRow
+                key={row.id}
+                style={{
+                  backgroundColor:
+                    row.id === this.state.groupIndex ? "#0090FF" : "white",
+                }}
+                onClick={this.groupClickHandler.bind(this, row)}
+              >
+                <TableCell>{row.name}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
     );
   }
 }
-
-const styles = (theme) => ({
-  accordion: {
-    width: "57em",
-    marginTop: "3em",
-    padding: "2em",
-  },
-  heading: {
-    fontWeight: theme.typography.fontWeightRegular,
-    fontWeight: "bolder",
-  },
-  lists: {
-    fontFamily: "Roboto",
-  },
-  listHeading: {
-    fontWeight: "bolder",
-  },
-  page: {
-    width: "70em",
-    padding: "2em",
-    backgroundColor: "#E3E0DF",
-    marginTop: "3em",
-    marginLeft: "4em",
-  },
-});
-
-export default withStyles(styles)(GroupList);

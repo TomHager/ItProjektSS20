@@ -1,6 +1,6 @@
-import React, { Component } from "react";
-import { Paper, Typography, Tabs, Tab } from "@material-ui/core";
-import { Link as RouterLink } from "react-router-dom";
+import React, { Component } from 'react';
+import { Paper, Typography, Tabs, Tab } from '@material-ui/core';
+import { Link as RouterLink } from 'react-router-dom';
 
 /**
  * Shows the header with the main navigation Tabs within a Paper.
@@ -8,7 +8,10 @@ import { Link as RouterLink } from "react-router-dom";
  * @see See Material-UIs [Tabs](https://material-ui.com/components/tabs/)
  * @see See Material-UIs [Paper](https://material-ui.com/components/paper/)
  *
+ * @author Tom Hager
+ * @author Christoph Kunz
  */
+
 class Header extends Component {
   constructor(props) {
     super(props);
@@ -32,7 +35,7 @@ class Header extends Component {
     // const { user } = this.props;
 
     return (
-      <div style={{ backgroundColor: "#f4f4f4" }}>
+      <div style={{ backgroundColor: '#f4f4f4' }}>
         <Paper variant="outlined">
           {/* <ProfileDropDown user={user} /> */}
           <Typography variant="h3" component="h1" align="center">

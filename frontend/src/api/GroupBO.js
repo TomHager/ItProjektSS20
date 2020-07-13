@@ -1,13 +1,16 @@
-import BusinessObject from "./BusinessObject";
+import BusinessObject from './BusinessObject';
+
+/**
+ * @author Tom Hager
+ * @author Christoph Kunz
+ */
 
 export default class GroupBO extends BusinessObject {
-  constructor(
-    name,
-  ) {
+  constructor(name) {
     super();
     this.name = name;
   }
-  
+
   getName() {
     return this.name;
   }

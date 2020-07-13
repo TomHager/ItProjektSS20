@@ -19,7 +19,10 @@ import ShoppingList from "./components/pages/ShoppingList";
  * @see See Google [firebase.auth().signInWithRedirect](https://firebase.google.com/docs/reference/js/firebase.auth.Auth#signinwithredirect)
  * @see [react-router-dom](https://reacttraining.com/react-router/web/guides/quick-start)
  *
+ * @author Tom Hager
+ * @author Christoph Kunz
  */
+
 class App extends React.Component {
   /** Constructor of the app, which initializes firebase  */
   constructor(props) {
@@ -35,10 +38,10 @@ class App extends React.Component {
       <div style={{ backgroundColor: "#f4f4f4" }}>
         <Router basename={process.env.PUBLIC_URL}>
           <Header />
-          <Redirect from="/" to="/groupList" />
-          <Route exact path="/groupList">
+          <Route path="/groupList">
             <GroupList />
           </Route>
+          <Redirect from="/" to="/shoppingList" />
           <Route exact path="/shoppingList">
             <ShoppingList />
           </Route>

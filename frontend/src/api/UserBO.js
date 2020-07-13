@@ -5,29 +5,12 @@ import BusinessObject from './BusinessObject';
  * @author Christoph Kunz
  */
 
-export default class EntryBO extends BusinessObject {
-  constructor(unit, amount, name, modificationDate) {
+export default class GroupBO extends BusinessObject {
+  constructor(name, email, externalId) {
     super();
-    this.unit = unit;
-    this.amount = amount;
     this.name = name;
-    this.modification_date = modificationDate;
-  }
-
-  getUnit() {
-    return this.unit;
-  }
-
-  setUnit(unit) {
-    this.unit = unit;
-  }
-
-  getAmount() {
-    return this.amount;
-  }
-
-  setAmount(amount) {
-    this.amount = amount;
+    this.email = email;
+    this.external_id = externalId;
   }
 
   getName() {
@@ -38,12 +21,20 @@ export default class EntryBO extends BusinessObject {
     this.name = name;
   }
 
-  getModificationDate(modificationDate) {
-    return this.modification_date;
+  getEmail() {
+    return this.email;
   }
 
-  setModificationDate(modificationDate) {
-    this.modification_date = modificationDate;
+  setEmail(email) {
+    this.email = email;
+  }
+
+  getExternalId() {
+    return this.external_id;
+  }
+
+  setExternalId(externalId) {
+    this.external_id = externalId;
   }
 
   /*
@@ -58,18 +49,18 @@ export default class EntryBO extends BusinessObject {
     */
 
   // Returns an Array of CustomerBOs from a given JSON structure
-  static fromJSON(entries) {
+  static fromJSON(groups) {
     let result = [];
 
-    if (Array.isArray(entries)) {
-      entries.forEach((c) => {
-        Object.setPrototypeOf(c, EntryBO.prototype);
+    if (Array.isArray(groups)) {
+      groups.forEach((c) => {
+        Object.setPrototypeOf(c, GroupBO.prototype);
         result.push(c);
       });
     } else {
       // Es handelt sich offenbar um ein singuläres Objekt
-      let c = entries;
-      Object.setPrototypeOf(c, EntryBO.prototype);
+      let c = groups;
+      Object.setPrototypeOf(c, GroupBO.prototype);
       result.push(c);
     }
 

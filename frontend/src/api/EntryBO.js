@@ -1,31 +1,17 @@
-import BusinessObject from "./BusinessObject";
+import BusinessObject from './BusinessObject';
+
+/**
+ * @author Tom Hager
+ * @author Christoph Kunz
+ */
 
 export default class EntryBO extends BusinessObject {
-  constructor(
-    bought,
-    unit,
-    amount,
-    articleId,
-    articleName,
-    articleStandard,
-    modificationDate
-  ) {
+  constructor(unit, amount, name, modificationDate) {
     super();
-    this.bought = bought;
     this.unit = unit;
     this.amount = amount;
-    this.article_id = articleId;
-    this.article_name = articleName;
-    this.article_standard = articleStandard;
+    this.name = name;
     this.modification_date = modificationDate;
-  }
-  
-  getBought() {
-    return this.bought;
-  }
-
-  setBought(bought) {
-    this.bought = bought;
   }
 
   getUnit() {
@@ -44,28 +30,12 @@ export default class EntryBO extends BusinessObject {
     this.amount = amount;
   }
 
-  getArticleId() {
-    return this.article_id;
+  getName() {
+    return this.name;
   }
 
-  setArticleId(articleId) {
-    this.article_id = articleId;
-  }
-
-  getArticleName() {
-    return this.article_name;
-  }
-
-  setArticleName(articleName) {
-    this.article_name = articleName;
-  }
-
-  getArticleStandard() {
-    return this.article_standard;
-  }
-
-  setArticleStandard(articleStandard) {
-    this.article_standard = articleStandard;
+  setName(name) {
+    this.name = name;
   }
 
   getModificationDate(modificationDate) {
