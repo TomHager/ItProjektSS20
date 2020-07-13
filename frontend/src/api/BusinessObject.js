@@ -1,23 +1,26 @@
-export default class BusinessObject {
+/**
+ * @author Tom Hager
+ * @author Christoph Kunz
+ */
 
-    constructor() {
-         this.id = 0;
+export default class BusinessObject {
+  constructor() {
+    this.id = 0;
+  }
+
+  setID(id) {
+    this.id = id;
+  }
+
+  getID() {
+    return this.id;
+  }
+
+  toString() {
+    let result = '';
+    for (var prop in this) {
+      result += prop + ': ' + this[prop] + ' ';
     }
- 
-     setID(id) {
-         this.id = id
-     }
- 
-     getID() {
-         return this.id
-     }
- 
-     toString() {
-         let result = ''
-         for (var prop in this) {
-             result += prop + ': ' + this[prop] + ' ';
-         }
-         return result;
-     }
- 
- }
+    return result;
+  }
+}

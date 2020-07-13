@@ -1,6 +1,9 @@
 from server.bo import BusinessObject as bo
 
-
+""" 
+@author Tom Hager
+ """
+ 
 class ShoppingList (bo.BusinessObject):
 
     def __init__(self):

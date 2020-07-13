@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 import {
   Table,
   TableBody,
@@ -8,8 +8,14 @@ import {
   TableRow,
   Paper,
   Button,
-} from "@material-ui/core";
+} from '@material-ui/core';
 // import ShoppingAPI from "../../api/ShoppingAPI";
+
+/**
+ * Displays the Navigation for the report generator
+ *
+ * @author Tom Hager
+ */
 
 export default class ReportNavigation extends Component {
   constructor(props) {
@@ -27,7 +33,7 @@ export default class ReportNavigation extends Component {
 
   //Group Functions
   async fetchGroups() {
-    const res = await fetch("http://desktop-du328lq:8081/api/iKauf/groups");
+    const res = await fetch('http://desktop-du328lq:8081/api/iKauf/groups');
     const resjson = await res.json();
     this.setState({ groupRows: resjson });
     console.log(resjson);
@@ -40,7 +46,7 @@ export default class ReportNavigation extends Component {
 
   // Retailer Functions
   async fetchRetailers() {
-    const res = await fetch("http://desktop-du328lq:8081/api/iKauf/entries");
+    const res = await fetch('http://desktop-du328lq:8081/api/iKauf/entries');
     const resjson = await res.json();
     this.setState({ retailerRows: resjson });
     console.log(resjson);
@@ -61,7 +67,7 @@ export default class ReportNavigation extends Component {
   componentDidMount = () => {
     this.fetchGroups();
     this.fetchRetailers();
-    console.log("All Callbacks initialised");
+    console.log('All Callbacks initialised');
   };
 
   render() {
@@ -91,8 +97,7 @@ export default class ReportNavigation extends Component {
               <TableRow
                 key={row.id}
                 style={{
-                  backgroundColor:
-                    row.id === this.state.groupIndex ? "#0090FF" : "white",
+                  backgroundColor: row.id === this.state.groupIndex ? '#0090FF' : 'white',
                 }}
                 onClick={this.groupClickHandler.bind(this, row)}
               >
@@ -108,7 +113,7 @@ export default class ReportNavigation extends Component {
           aria-label="spanning table"
           state="Disable"
           style={{
-            backgroundColor: this.state.retailerActive ? "white" : "grey",
+            backgroundColor: this.state.retailerActive ? 'white' : 'grey',
           }}
         >
           <TableHead>
@@ -118,7 +123,7 @@ export default class ReportNavigation extends Component {
               </TableCell>
               <TableCell>
                 <Button
-                  style={{ backgroundColor: "lightblue" }}
+                  style={{ backgroundColor: 'lightblue' }}
                   onClick={this.retailerToggleHandler.bind(this)}
                 >
                   Disable Filter
@@ -133,9 +138,12 @@ export default class ReportNavigation extends Component {
                 key={row.id}
                 style={{
                   backgroundColor:
-                    row.id === this.state.retailerIndex ? "#0090FF" : "white" | 
-                    this.state.retailerActive ? "white" : "grey",
-                  }}
+                    row.id === this.state.retailerIndex
+                      ? '#0090FF'
+                      : 'white' | this.state.retailerActive
+                      ? 'white'
+                      : 'grey',
+                }}
                 onClick={this.retailerClickHandler.bind(this, row)}
               >
                 <TableCell colSpan={2}>{row.name}</TableCell>

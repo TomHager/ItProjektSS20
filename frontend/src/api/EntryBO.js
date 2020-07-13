@@ -1,19 +1,19 @@
-import BusinessObject from "./BusinessObject";
+import BusinessObject from './BusinessObject';
+
+/**
+ * @author Tom Hager
+ * @author Christoph Kunz
+ */
 
 export default class EntryBO extends BusinessObject {
-  constructor(
-    unit,
-    amount,
-    name,
-    modificationDate
-  ) {
+  constructor(unit, amount, name, modificationDate) {
     super();
     this.unit = unit;
     this.amount = amount;
     this.name = name;
     this.modification_date = modificationDate;
   }
-  
+
   getUnit() {
     return this.unit;
   }

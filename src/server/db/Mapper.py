@@ -3,7 +3,11 @@ import os
 from contextlib import AbstractContextManager
 from abc import ABC, abstractmethod
 
-
+""" 
+@author Tom Hager
+@author Peter Thies
+ """
+ 
 class Mapper(AbstractContextManager, ABC):
 
     def __init__(self):

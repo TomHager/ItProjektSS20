@@ -1,7 +1,11 @@
 from server.bo.User import User
 from server.db.Mapper import Mapper
 
-
+""" 
+@author Tom Hager
+@author Peter Thies
+ """
+ 
 class UserMapper(Mapper):
 
     def __init__(self):

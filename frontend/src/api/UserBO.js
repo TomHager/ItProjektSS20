@@ -1,17 +1,18 @@
-import BusinessObject from "./BusinessObject";
+import BusinessObject from './BusinessObject';
+
+/**
+ * @author Tom Hager
+ * @author Christoph Kunz
+ */
 
 export default class GroupBO extends BusinessObject {
-  constructor(
-    name,
-    email,
-    externalId,
-  ) {
+  constructor(name, email, externalId) {
     super();
     this.name = name;
     this.email = email;
     this.external_id = externalId;
   }
-  
+
   getName() {
     return this.name;
   }
@@ -21,19 +22,19 @@ export default class GroupBO extends BusinessObject {
   }
 
   getEmail() {
-      return this.email;
+    return this.email;
   }
 
   setEmail(email) {
-      this.email = email;
+    this.email = email;
   }
 
   getExternalId() {
-      return this.external_id;
+    return this.external_id;
   }
 
   setExternalId(externalId) {
-      this.external_id = externalId;
+    this.external_id = externalId;
   }
 
   /*

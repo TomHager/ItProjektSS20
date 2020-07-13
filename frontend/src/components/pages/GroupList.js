@@ -10,6 +10,12 @@ import {
 } from '@material-ui/core';
 // import ShoppingAPI from "../../api/ShoppingAPI";
 
+/**
+ * Shows the about page with the impressum
+ *
+ * @author Tom Hager
+ */
+
 export default class ReportNavigation extends Component {
   constructor(props) {
     super(props);
