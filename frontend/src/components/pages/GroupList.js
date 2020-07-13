@@ -1,16 +1,21 @@
 import React, { Component } from "react";
-import { makeStyles, Paper, Typography, Grid } from "@material-ui/core";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import Accordion from "@material-ui/core/Accordion";
-import AccordionSummary from "@material-ui/core/AccordionSummary";
-import AccordionDetails from "@material-ui/core/AccordionDetails";
-import { SentimentSatisfied } from "@material-ui/icons";
+import {
+  Paper,
+  Typography,
+  Grid,
+  IconButton,
+  Container,
+} from "@material-ui/core";
+// import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { withStyles } from "@material-ui/core/styles";
 import ShoppingAPI from "../../api/ShoppingAPI";
-
-/**
- * Shows the about page with the impressum
- */
+import EditIcon from "@material-ui/icons/Edit";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemText from "@material-ui/core/ListItemText";
+// import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
+import GroupDialog from "../dialogs/GroupDialog";
+import PropTypes from "prop-types";
 
 class GroupList extends Component {
   constructor(props) {
@@ -19,6 +24,7 @@ class GroupList extends Component {
     this.state = {
       groups: [],
       users: ["Jens", "Philips", "Dieter", "Günther", "Gustav"],
+      showGroupDialog: false,
     };
   }
 
@@ -26,7 +32,7 @@ class GroupList extends Component {
     const res = await fetch("http://desktop-s3rcllp:8081/api/iKauf/groups");
     const resjson = await res.json();
     this.setState({ groups: resjson });
-    console.log(this.groups);
+    console.log(this.state.groups);
   }
 
   async updateGroup(newData) {
@@ -38,47 +44,71 @@ class GroupList extends Component {
     this.fetchGroups();
   }
 
+  editGroupButtonClicked = (event) => {
+    event.stopPropagation();
+    this.setState({
+      showGroupDialog: true,
+    });
+  };
+
+  customerFormClosed = (customer) => {
+    console.log("It works");
+    this.setState({
+      showGroupDialog: false,
+    });
+  };
+
   render() {
     const { classes } = this.props;
     const { users } = this.state;
     const { groups } = this.state;
+    const showGroupDialog = this.state;
     return (
-      <div>
-        <Grid
-          container
-          direction="column"
-          className={classes.lists}
-          align="left"
-        >
-          <Grid item>
-            <Accordion>
-              {users.map((group) => (
-                <AccordionSummary
-                  expandIcon={<ExpandMoreIcon />}
-                  aria-controls="panel1a-content"
-                  id="panel1a-header"
-                  key={group.id}
-                >
-                  {group.name}
-                </AccordionSummary>
-              ))}
-              <AccordionDetails>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                Suspendisse malesuada lacus ex, sit amet blandit leo lobortis
-                eget.
-              </AccordionDetails>
-            </Accordion>
-          </Grid>
-        </Grid>
+      <div align="center" direction="row">
+        <Paper className={classes.accordion}>
+          {groups.map((group) => (
+            <div key={group.id}>
+              <Grid container>
+                <Grid item xs={12}>
+                  <Typography align="left" className={classes.listHeading}>
+                    {group.name}
+                    <IconButton
+                      aria-label="edit"
+                      style={{ padding: "10px", marginLeft: "1em" }}
+                      onClick={this.editGroupButtonClicked}
+                    >
+                      <EditIcon />
+                    </IconButton>
+                  </Typography>
+                </Grid>
+                <Grid item>
+                  <div className={classes.lists}>
+                    {users.map((user, index) => (
+                      <div key={index}>
+                        <List>
+                          <ListItem>
+                            <ListItemText primary={user} />
+                          </ListItem>
+                        </List>
+                      </div>
+                    ))}
+                  </div>
+                </Grid>
+              </Grid>
+            </div>
+          ))}
+        </Paper>
+        <GroupDialog show={showGroupDialog} onClose={this.customerFormClosed} />
       </div>
     );
   }
 }
 
 const styles = (theme) => ({
-  root: {
-    width: "100%",
-    paddingTop: "1em",
+  accordion: {
+    width: "57em",
+    marginTop: "3em",
+    padding: "2em",
   },
   heading: {
     fontWeight: theme.typography.fontWeightRegular,
@@ -86,7 +116,6 @@ const styles = (theme) => ({
   },
   lists: {
     fontFamily: "Roboto",
-    listStyleType: "none",
   },
   listHeading: {
     fontWeight: "bolder",
@@ -97,7 +126,6 @@ const styles = (theme) => ({
     backgroundColor: "#E3E0DF",
     marginTop: "3em",
     marginLeft: "4em",
-    // border: "1px solid #000000",
   },
 });
 
