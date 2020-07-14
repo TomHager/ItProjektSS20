@@ -8,56 +8,51 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import PropTypes from "prop-types";
 
+/**
+ * Shows the about page with the impressum
+ *
+ * @author Lukas Rutkauskas
+ */
+
 export class GroupDialog extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      open: false,
-      setOpen: false,
-    };
-    this.baseState = this.state;
+    this.state = {};
   }
 
-  handleClickOpen = () => {
-    this.setOpen(true);
-  };
+  // handleClickOpen = () => {
+  //   this.setState({ open: true });
+  //   console.log(this.open);
+  // };
 
-  handleClose = () => {
-    this.setState(this.baseState);
-    this.props.onClose(null);
-  };
+  // handleClose = () => {
+  //   this.setState({ open: false });
+  //   console.log(this.open);
+  // };
+
+  // handleSubmit = () => {
+
+  // }
 
   render() {
-    const setOpen = this.state;
     const open = this.state;
-    const show = this.props;
 
-    return show ? (
+    return (
       <div>
-        <Button
-          variant="outlined"
-          color="primary"
-          onClick={this.handleClickOpen}
-        >
-          Open form dialog
-        </Button>
         <Dialog
-          open={show}
+          open={open}
           onClose={this.handleClose}
           aria-labelledby="form-dialog-title"
         >
-          <DialogTitle id="form-dialog-title">Subscribe</DialogTitle>
+          <DialogTitle id="form-dialog-title">Edit Group</DialogTitle>
           <DialogContent>
-            <DialogContentText>
-              To subscribe to this website, please enter your email address
-              here. We will send updates occasionally.
-            </DialogContentText>
+            <DialogContentText>Please enter a new group name</DialogContentText>
             <TextField
               autoFocus
               margin="dense"
               id="name"
-              label="Email Address"
+              label="Group name"
               type="email"
               fullWidth
             />
@@ -67,12 +62,12 @@ export class GroupDialog extends Component {
               Cancel
             </Button>
             <Button onClick={this.handleClose} color="primary">
-              Subscribe
+              Submit
             </Button>
           </DialogActions>
         </Dialog>
       </div>
-    ) : null;
+    );
   }
 }
 
