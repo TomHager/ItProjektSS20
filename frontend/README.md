@@ -66,21 +66,3 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/de
 ### `npm run build` fails to minify
 
 This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
-
-```
-match (r:Recipe)-[:CONTAINS]->(i:Ingredient)<-[:CONTAINS]-(rec:Recipe) where r.id =$id with rec, r
-
-unwind[(rec) - [:CONTAINS]->(i) | i.name] as ings with collect(distinct ings) as ingreds, … [same for r]
-
-unwind[(rec) - [:CONTAINS]->(i)<-[:CONTAINS]-(r:Recipe) | i.totalinrecipes] as ing_freq, min(ing_freq) as min_freq, ...
-
-unwind[(rec) - [:CONTAINS]->(i)<-[:CONTAINS]-(r:Recipe) | i.name] as common_ings  with collect(distinct common_ings) as
-common_ingreds, count (distinct common_ings) as common_ingreds_count, ...
-
-unwind(ingreds + original_ingreds) as all_ings with count(distinct all_ings) as all_ingreds_count , collect(distinct all_ings) as
-all_ingreds, …
-
-[same for keywords]
-
-return ... order BY log(common_ingreds_count/all_ingreds_count)/log(min_freq)*log(common_keywds_count/all_keywds_count) desc
-```
