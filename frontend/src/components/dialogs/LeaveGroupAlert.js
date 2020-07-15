@@ -1,21 +1,14 @@
 import React, { Component } from "react";
+import IconButton from "@material-ui/core/IconButton";
 import Button from "@material-ui/core/Button";
-import TextField from "@material-ui/core/TextField";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
-import EditIcon from "@material-ui/icons/Edit";
-import IconButton from "@material-ui/core/IconButton";
+import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 
-/**
- *
- *
- * @author Lukas Rutkauskas
- */
-
-export class EditGroup extends Component {
+export default class LeaveGroupAlert extends Component {
   constructor(props) {
     super(props);
 
@@ -43,31 +36,26 @@ export class EditGroup extends Component {
           style={{ float: "right" }}
           onClick={this.handleClickOpen}
         >
-          <EditIcon />
+          <ExitToAppIcon />
         </IconButton>
         <Dialog
           open={open}
           onClose={this.handleClose}
-          aria-labelledby="form-dialog-title"
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
         >
-          <DialogTitle id="form-dialog-title">Edit Group</DialogTitle>
+          <DialogTitle id="alert-dialog-title">{"Leave the group"}</DialogTitle>
           <DialogContent>
-            <DialogContentText>Please enter a new group name</DialogContentText>
-            <TextField
-              autoFocus
-              margin="dense"
-              id="name"
-              label="Group name"
-              type="email"
-              fullWidth
-            />
+            <DialogContentText id="alert-dialog-description">
+              Do you really want to leave the group?
+            </DialogContentText>
           </DialogContent>
           <DialogActions>
             <Button onClick={this.handleClose} color="primary">
-              Cancel
+              Yes
             </Button>
-            <Button onClick={this.handleClose} color="primary">
-              Submit
+            <Button onClick={this.handleClose} color="primary" autoFocus>
+              No
             </Button>
           </DialogActions>
         </Dialog>
@@ -75,5 +63,3 @@ export class EditGroup extends Component {
     );
   }
 }
-
-export default EditGroup;

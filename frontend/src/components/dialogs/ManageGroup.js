@@ -17,6 +17,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import PersonIcon from "@material-ui/icons/Person";
+import DeleteIcon from "@material-ui/icons/Delete";
 
 /**
  *
@@ -50,7 +51,7 @@ export class EditGroup extends Component {
   // }
 
   async fetchGroups() {
-    const res = await fetch("http://DESKTOP-S3RCLLP:8081/api/iKauf/groups");
+    const res = await fetch("http://DESKTOP-S3RCLLP:8081/api/iKauf/users");
     const resjson = await res.json();
     this.setState({ memberRows: resjson });
     console.log(this.memberRows);
@@ -59,6 +60,12 @@ export class EditGroup extends Component {
   componentDidMount = () => {
     this.fetchGroups();
     console.log("All Callbacks initialised");
+  };
+
+  delUser = (id) => {
+    this.setState({
+      memberRows: [...this.state.memberRows.filter((user) => user.id != id)],
+    });
   };
 
   render() {
@@ -75,12 +82,11 @@ export class EditGroup extends Component {
           <PersonIcon />
         </IconButton>
         <Dialog
+          align="center"
           open={open}
           onClose={this.handleClose}
           aria-labelledby="form-dialog-title"
-          scroll="paper"
-          fullWidth={true}
-          maxWidth="md"
+          fullScreen={true}
         >
           <DialogTitle id="form-dialog-title">Groupmembers</DialogTitle>
           <DialogContent>
@@ -115,7 +121,13 @@ export class EditGroup extends Component {
                     >
                       <TableCell>{row.name}</TableCell>
                       <TableCell>
-                        <Typography>test</Typography>
+                        <IconButton
+                          aria-label="Edit"
+                          style={{ float: "right" }}
+                          onClick={this.delUser.bind(this, row.id)}
+                        >
+                          <DeleteIcon />
+                        </IconButton>
                       </TableCell>
                     </TableRow>
                   ))}

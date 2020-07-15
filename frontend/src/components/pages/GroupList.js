@@ -13,6 +13,7 @@ import {
 import EditGroup from "../dialogs/EditGroup";
 import ManageGroup from "../dialogs/ManageGroup";
 import CreateGroup from "../dialogs/CreateGroup";
+import LeaveGroupAlert from "../dialogs/LeaveGroupAlert";
 
 /**
  *
@@ -71,8 +72,8 @@ export default class GroupList extends Component {
                   <b>Your Groups:</b>
                 </TableCell>
                 <TableCell></TableCell>
+                <TableCell></TableCell>
                 <TableCell>
-                  {" "}
                   <CreateGroup />
                 </TableCell>
               </TableRow>
@@ -89,6 +90,9 @@ export default class GroupList extends Component {
                   // onClick={this.groupClickHandler.bind(this, row)}
                 >
                   <TableCell>{row.name}</TableCell>
+                  <TableCell>
+                    <LeaveGroupAlert />
+                  </TableCell>
                   <TableCell>
                     <EditGroup />
                   </TableCell>

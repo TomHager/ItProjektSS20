@@ -100,5 +100,18 @@ module.exports = SetupEndpoint({
             //         response: '/response-files/favorite.json'
             //     }]
         },
+        {
+            params: "/users",
+            requests: [
+                {
+                    method: "GET",
+                    response: "/response-files/users.json",
+                },
+                {
+                    method: ["POST"],
+                    response: "/response-files/users.json",
+                },
+            ],
+        },
     ],
 });

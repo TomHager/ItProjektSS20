@@ -1,6 +1,12 @@
-import { Container, CssBaseline, IconButton, Select, Input } from '@material-ui/core';
-import Checkbox from '@material-ui/core/Checkbox';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
+import {
+  Container,
+  CssBaseline,
+  IconButton,
+  Select,
+  Input,
+} from "@material-ui/core";
+import Checkbox from "@material-ui/core/Checkbox";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
 import {
   AddShoppingCartOutlined,
   Search,
@@ -17,11 +23,11 @@ import {
   MoreVert,
   ArrowUpward,
   Refresh,
-} from '@material-ui/icons';
-import React, { Component } from 'react';
-import MaterialTable from 'material-table';
-import ShoppingAPI from '../../api/ShoppingAPI';
-import EntryBO from '../../api/EntryBO';
+} from "@material-ui/icons";
+import React, { Component } from "react";
+import MaterialTable from "material-table";
+import ShoppingAPI from "../../api/ShoppingAPI";
+import EntryBO from "../../api/EntryBO";
 
 /**
  * Displays a ShoppingList for given Data
@@ -38,11 +44,11 @@ export default class ShoppingList extends Component {
       //passed Columns and Data loaded into state
       columns: [
         {
-          align: 'center',
-          title: 'bought',
-          field: 'modificationDate',
-          defaultSort: 'asc',
-          type: 'date',
+          align: "center",
+          title: "bought",
+          field: "modificationDate",
+          defaultSort: "asc",
+          type: "date",
           editComponent: (props) => (
             <Checkbox
               type="boolean"
@@ -67,7 +73,9 @@ export default class ShoppingList extends Component {
                   checkedIcon={<CheckBox />}
                   checked={data.modificationDate != null}
                   onChange={(e) => (
-                    (data.modificationDate = this.setModDate(data.modificationDate)),
+                    (data.modificationDate = this.setModDate(
+                      data.modificationDate
+                    )),
                     // (this.updateEntry(data)),
                     console.log(data.modificationDate),
                     this.setState((prevState) => {
@@ -83,15 +91,15 @@ export default class ShoppingList extends Component {
           ),
         },
         {
-          title: 'Article',
-          field: 'articleName',
-          align: 'center',
+          title: "Article",
+          field: "articleName",
+          align: "center",
         },
         {
-          title: 'Amount',
-          field: 'entryAmount',
-          type: 'numeric',
-          align: 'center',
+          title: "Amount",
+          field: "entryAmount",
+          type: "numeric",
+          align: "center",
           editComponent: (props) => (
             // editComponent: (onChange()) => (
             //   validity.valid||(props='')
@@ -107,20 +115,20 @@ export default class ShoppingList extends Component {
           ),
         },
         {
-          title: 'Unit',
-          field: 'entryUnit',
-          align: 'center',
+          title: "Unit",
+          field: "entryUnit",
+          align: "center",
           lookup: {
-            1: 'KG',
-            2: 'g',
-            3: 'L',
-            4: 'Stk',
-            5: ' Sack',
-            6: 'Karton',
-            7: 'Flasche',
-            8: 'Dose',
-            9: 'Bund',
-            10: 'm',
+            1: "KG",
+            2: "g",
+            3: "L",
+            4: "Stk",
+            5: " Sack",
+            6: "Karton",
+            7: "Flasche",
+            8: "Dose",
+            9: "Bund",
+            10: "m",
           },
         },
       ],
@@ -129,13 +137,13 @@ export default class ShoppingList extends Component {
 
       members: [
         {
-          member: 'Tom',
+          member: "Tom",
         },
         {
-          member: 'Klaus',
+          member: "Klaus",
         },
       ],
-      retailerName: 'Default',
+      retailerName: "Default",
     };
   }
 
@@ -150,11 +158,11 @@ export default class ShoppingList extends Component {
 
   curday = () => {
     let today = new Date();
-    let dd = String(today.getDate()).padStart(2, '0');
-    let mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    let dd = String(today.getDate()).padStart(2, "0");
+    let mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
     let yyyy = today.getFullYear();
 
-    today = yyyy + '-' + mm + '-' + dd;
+    today = yyyy + "-" + mm + "-" + dd;
     return today;
   };
 
@@ -169,7 +177,7 @@ export default class ShoppingList extends Component {
   // }
 
   async fetchEntries() {
-    const res = await fetch('http://desktop-du328lq:8081/api/iKauf/entry');
+    const res = await fetch("http://DESKTOP-S3RCLLP:8081/api/iKauf/entry");
     const resjson = await res.json();
     this.setState({ data: resjson });
   }
@@ -255,7 +263,8 @@ export default class ShoppingList extends Component {
               showTextRowsSelected: false,
               sorting: true,
               rowStyle: (rowData) => ({
-                backgroundColor: rowData.modificationDate != null ? '#039be5' : '#fff',
+                backgroundColor:
+                  rowData.modificationDate != null ? "#039be5" : "#fff",
               }),
             }}
             // onSelectionChange={(row, rowData) => {
