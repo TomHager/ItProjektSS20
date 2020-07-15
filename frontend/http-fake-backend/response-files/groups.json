@@ -1,16 +1,18 @@
 [
-    {
-    "id":1,
-    "name":"Paperclips (Box)"
-}, {
-    "id":2,
-    "name":"Paper (Case)"
-}, {
-    "id":3,
-    "name":"Wates Basket"
-}, {
-    "id":4,
-    "name":"FakeBackend"
-}
-
+  {
+    "id": 1,
+    "name": "Gruppe 1"
+  },
+  {
+    "id": 2,
+    "name": "Gruppe 2"
+  },
+  {
+    "id": 3,
+    "name": "Gruppe 3"
+  },
+  {
+    "id": 4,
+    "name": "Gruppe 43"
+  }
 ]

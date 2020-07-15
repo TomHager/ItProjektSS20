@@ -6,40 +6,46 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
-import PropTypes from "prop-types";
+import EditIcon from "@material-ui/icons/Edit";
+import IconButton from "@material-ui/core/IconButton";
 
 /**
- * Shows the about page with the impressum
+ *
  *
  * @author Lukas Rutkauskas
  */
 
-export class GroupDialog extends Component {
+export class EditGroup extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {};
+    this.state = {
+      open: false,
+    };
   }
 
-  // handleClickOpen = () => {
-  //   this.setState({ open: true });
-  //   console.log(this.open);
-  // };
+  handleClickOpen = () => {
+    this.setState({ open: true });
+    console.log(this.open);
+  };
 
-  // handleClose = () => {
-  //   this.setState({ open: false });
-  //   console.log(this.open);
-  // };
-
-  // handleSubmit = () => {
-
-  // }
+  handleClose = () => {
+    this.setState({ open: false });
+    console.log(this.open);
+  };
 
   render() {
-    const open = this.state;
-
+    const open = this.state.open;
+    console.log(this.props);
     return (
       <div>
+        <IconButton
+          aria-label="Edit"
+          style={{ float: "right" }}
+          onClick={this.handleClickOpen}
+        >
+          <EditIcon />
+        </IconButton>
         <Dialog
           open={open}
           onClose={this.handleClose}
@@ -71,4 +77,4 @@ export class GroupDialog extends Component {
   }
 }
 
-export default GroupDialog;
+export default EditGroup;

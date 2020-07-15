@@ -38,11 +38,11 @@ class App extends React.Component {
       <div style={{ backgroundColor: "#f4f4f4" }}>
         <Router basename={process.env.PUBLIC_URL}>
           <Header />
-          <Route path="/groupList">
+          <Redirect from="/" to="/groupList" />
+          <Route exact path="/groupList">
             <GroupList />
           </Route>
-          <Redirect from="/" to="/shoppingList" />
-          <Route exact path="/shoppingList">
+          <Route path="/shoppingList">
             <ShoppingList />
           </Route>
           <Route path="/about">
