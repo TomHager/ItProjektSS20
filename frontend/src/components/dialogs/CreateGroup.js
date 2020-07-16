@@ -53,7 +53,7 @@ export class CreateGroup extends Component {
 
   delUser = (id) => {
     this.setState({
-      users: [...this.state.users.filter((user) => user.id != id)],
+      users: [...this.state.users.filter((user) => user.id !== id)],
     });
   };
 

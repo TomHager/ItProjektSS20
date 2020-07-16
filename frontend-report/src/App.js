@@ -1,9 +1,11 @@
-import React from 'react';
-import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
+import React from "react";
+import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
 // import { Container, ThemeProvider, CssBaseline } from '@material-ui/core';
-import Header from './components/layout/Header';
-import About from './components/pages/About';
-import ReportNavigation from './components/pages/ReportNavigation';
+import Header from "./components/layout/Header";
+import About from "./components/pages/About";
+import ReportNavigation from "./components/pages/ReportNavigation";
+import ReportDataTable from "./components/pages/ReportDataTable";
+import { Grid } from "@material-ui/core";
 
 // import Theme from './Theme';
 // import SignIn from './components/pages/SignIn';
@@ -19,7 +21,7 @@ import ReportNavigation from './components/pages/ReportNavigation';
  * @see [react-router-dom](https://reacttraining.com/react-router/web/guides/quick-start)
  *
  * @author Tom Hager
- * @author Christoph Kunz
+ * @author Lukas Rutkauskas
  */
 
 class App extends React.Component {
@@ -34,12 +36,19 @@ class App extends React.Component {
   /** Renders the whole app */
   render() {
     return (
-      <div style={{ backgroundColor: '#f4f4f4' }}>
+      <div style={{ backgroundColor: "#f4f4f4" }}>
         <Router basename={process.env.PUBLIC_URL}>
           <Header />
           <Redirect from="/" to="/report" />
           <Route exact path="/report">
-            <ReportNavigation />
+            <Grid container direction="row">
+              <Grid item>
+                <ReportNavigation />
+              </Grid>
+              <Grid>
+                <ReportDataTable />
+              </Grid>
+            </Grid>
           </Route>
           <Route path="/about">
             <About />

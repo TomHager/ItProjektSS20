@@ -1,22 +1,30 @@
 [
-    {
-    "id":1,
-    "unit":1,
-    "amount":3,
-    "name":"Apfel",
+  {
+    "id": 1,
+    "unit": "Kg",
+    "amount": 3,
+    "name": "Apfel",
     "modificationDate": "2020-05-24"
-}, {
-    "id":2,
-    "unit":3,
-    "amount":1,
-    "name":"Birne",
+  },
+  {
+    "id": 2,
+    "unit": "Kg",
+    "amount": 1,
+    "name": "Birne",
     "modificationDate": null
-}, {
-    "id":3,
-    "unit":2,
-    "amount":4,
-    "name":"Banane",
+  },
+  {
+    "id": 3,
+    "unit": "Kg",
+    "amount": 4,
+    "name": "Banane",
     "modificationDate": null
-}
-
+  },
+  {
+    "id": 4,
+    "unit": "Kg",
+    "amount": 2,
+    "name": "Banane",
+    "modificationDate": null
+  }
 ]
