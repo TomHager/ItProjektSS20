@@ -59,10 +59,7 @@ class ShoppingListAdministration(object):
         with UserMapper() as mapper:
             return mapper.find_by_email(email)
 
-    def get_user_by_external_id(self, id):
-        """Den Benutzer mit der gegebenen Google ID auslesen."""
-        with UserMapper() as mapper:
-            return mapper.find_by_google_user_id(id)
+
 
     def get_all_users(self):
         """Alle Benutzer auslesen."""

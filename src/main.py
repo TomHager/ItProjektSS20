@@ -213,22 +213,6 @@ class UserByEmailOperations(Resource):
         return cust
 
 
-@ikauf.route('/group-by-user/int:id>')
-@ikauf.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
-@ikauf.param('userId', 'Das User Objekt')
-class GroupByUserOperations(Resource):
-    @ikauf.marshal_with(user)
-    @secured
-    def get(self, user):
-        """ Auslesen von Gruppen-Objekten, die durch den User bestimmt werden.
-
-        Die auszulesenden Objekte werden durch ```user``` in dem URI bestimmt.
-        """
-        adm = ShoppingListAdministration()
-        cust = adm.get_group_by_user(user)
-        return cust
-
-
 @ikauf.route('/user')
 @ikauf.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class UserListOperations(Resource):
@@ -933,6 +917,20 @@ class GroupMembershipListOperations(Resource):
         else:
             return 'Group unknown', 500
 
+@ikauf.route('/groups-by-membership/int:id>')
+@ikauf.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+@ikauf.param('userId', 'Das User Objekt')
+class GroupsByMembershipOperations(Resource):
+    @ikauf.marshal_with(user)
+    @secured
+    def get(self, user):
+        """ Auslesen von Gruppen-Objekten, die durch den User bestimmt werden.
+
+        Die auszulesenden Objekte werden durch ```user``` in dem URI bestimmt.
+        """
+        adm = ShoppingListAdministration()
+        cust = adm.get_group_by_user(user)
+        return cust
 
 """
 Klassen und Operationen für Favorite
