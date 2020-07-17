@@ -11,7 +11,7 @@ import IconButton from "@material-ui/core/IconButton";
 
 /**
  *
- *
+ * @author Erik Lebedkin
  * @author Lukas Rutkauskas
  */
 
