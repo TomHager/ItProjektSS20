@@ -2,7 +2,7 @@ import React from "react";
 import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
 // import { Container, ThemeProvider, CssBaseline } from '@material-ui/core';
 import Header from "./components/layout/Header";
-import About from "./components/pages/About";
+import Retailer from "./components/pages/Retailer";
 import GroupList from "./components/pages/GroupList";
 import ShoppingList from "./components/pages/ShoppingList";
 
@@ -46,7 +46,7 @@ class App extends React.Component {
             <ShoppingList />
           </Route>
           <Route path="/about">
-            <About />
+            <Retailer />
           </Route>
         </Router>
       </div>

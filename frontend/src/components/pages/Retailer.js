@@ -10,57 +10,71 @@ import {
   IconButton,
 } from "@material-ui/core";
 // import ShoppingAPI from "../../api/ShoppingAPI";
-import EditGroup from "../dialogs/EditGroup";
-import ManageGroup from "../dialogs/ManageGroup";
-import CreateGroup from "../dialogs/CreateGroup";
-import LeaveGroupAlert from "../dialogs/LeaveGroupAlert";
+import DeleteRetailerAlert from "../dialogs/DeleteRetailerAlert";
+import AddIcon from "@material-ui/icons/Add";
+import AddRetailer from "../subcomponents/AddRetailer";
+
 
 /**
  *
  *
- * @author Tom Hager
- * @author Lukas Rutkauskas
+ * @author Robin Fink
  */
 
-export default class GroupList extends Component {
+export default class RetailerList extends Component {
   constructor(props) {
     super(props);
 
     // Init an empty state
     this.state = {
-      groupRows: [],
-      groupIndex: -1,
+      retailerRows: [],
+      retailerIndex: -1,
+      retailers:[]
     };
   }
 
-  //Group Functions
-  async fetchGroups() {
-    const res = await fetch("http://DESKTOP-NM4VM89:8081/api/iKauf/groups");
+  //Retailer Functions
+  async fetchRetailer() {
+    const res = await fetch("http://DESKTOP-NM4VM89:8081/api/iKauf/retailer");
     const resjson = await res.json();
-    this.setState({ groupRows: resjson });
+    this.setState({ retailerRows: resjson });
     console.log(resjson);
   }
 
-  // groupClickHandler(group) {
-  //   this.setState({ groupIndex: group.id });
-  //   console.log(`Selected: ${group.name} with index of ${group.id}`);
-  // }
+ 
 
   //calls all Callbacks for Repor Selection
   componentDidMount = () => {
-    this.fetchGroups();
+    this.fetchRetailer();
     console.log("All Callbacks initialised");
   };
 
+  delRetailer = (id) => {
+    this.setState({
+      retailers: [...this.state.retailers.filter((retailer) => retailer.id !== id)],
+    });
+  };
+
+  addRetailer = (name) => {
+    const newRetailer = {
+      id: 4,
+      name
+    };
+    this.setState({ retailers: [...this.state.retailers, newRetailer] });
+
+    console.log(this.state.retailers)
+  };
+
   render() {
-    const groupRows = this.state.groupRows;
+    const retailerRows = this.state.retailerRows;
+    const retailers = this.state.retailers;
     return (
       <div align="center">
         <TableContainer
           style={{ width: Math.round(window.innerWidth * 0.3), margin: "3em" }}
           component={Paper}
         >
-          {/* Group Table */}
+          {/* Retailer Table */}
           <Table
             size="small"
             aria-label="spanning table"
@@ -69,18 +83,16 @@ export default class GroupList extends Component {
             <TableHead>
               <TableRow>
                 <TableCell>
-                  <b>Your Groups:</b>
+                  <b>Retailer:</b>
                 </TableCell>
-                <TableCell></TableCell>
-                <TableCell></TableCell>
                 <TableCell>
-                  <CreateGroup />
+                    <AddRetailer addRetailer={this.addRetailer}></AddRetailer>
                 </TableCell>
               </TableRow>
             </TableHead>
 
             <TableBody>
-              {groupRows.map((row) => (
+              {retailers.map((row) => (
                 <TableRow
                   key={row.id}
                   style={{
@@ -91,13 +103,7 @@ export default class GroupList extends Component {
                 >
                   <TableCell>{row.name}</TableCell>
                   <TableCell>
-                    <LeaveGroupAlert />
-                  </TableCell>
-                  <TableCell>
-                    <EditGroup />
-                  </TableCell>
-                  <TableCell>
-                    <ManageGroup />
+                    <DeleteRetailerAlert delRetailer={this.delRetailer} />
                   </TableCell>
                 </TableRow>
               ))}

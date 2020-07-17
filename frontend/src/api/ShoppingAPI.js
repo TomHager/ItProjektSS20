@@ -15,7 +15,7 @@ export default class ShoppingAPI {
   // Singelton instance
   static #api = null;
 
-  #ShoppingServerBaseURL = 'http://desktop-du328lq:8081/api/iKauf/';
+  #ShoppingServerBaseURL = 'http://desktop-NM4VM89:8081/api/iKauf/';
 
   // Entries related
   #getEntriesURL = () => `${this.#ShoppingServerBaseURL}/entries`;

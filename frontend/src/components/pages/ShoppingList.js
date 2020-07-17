@@ -177,7 +177,7 @@ export default class ShoppingList extends Component {
   // }
 
   async fetchEntries() {
-    const res = await fetch("http://DESKTOP-S3RCLLP:8081/api/iKauf/entry");
+    const res = await fetch("http://DESKTOP-NM4VM89:8081/api/iKauf/entry");
     const resjson = await res.json();
     this.setState({ data: resjson });
   }

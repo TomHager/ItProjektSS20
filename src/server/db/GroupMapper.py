@@ -44,13 +44,19 @@ class GroupMapper(Mapper):
         :param group
         :return das bereits übergebende Objekt, jedoch mit ggfs. korrigierter ID.
         """
-
         cursor = self._cnx.cursor()
         cursor.execute("SELECT MAX(id) AS maxid FROM groups ")
         tuples = cursor.fetchall()
 
         for (maxid) in tuples:
-            group.set_id(maxid[0] + 1)
+            if maxid[0] is not None:
+                """Wenn wir eine maximale ID festellen konnten, zählen wir diese
+                um 1 hoch und weisen diesen Wert als ID dem User-Objekt zu."""
+                group.set_id(maxid[0] + 1)
+            else:
+                """Wenn wir KEINE maximale ID feststellen konnten, dann gehen wir
+                davon aus, dass die Tabelle leer ist und wir mit der ID 1 beginnen können."""
+                group.set_id(1)
 
         command = "INSERT INTO groups (id, name) VALUES (%s,%s)"
         data = (group.get_id(), group.get_name())
@@ -148,8 +154,14 @@ class GroupMapper(Mapper):
 um die grundsätzliche Funktion zu überprüfen.
 
 Anmerkung: Nicht professionell aber hilfreich..."""
-if (__name__ == "__main__"):
+"""if (__name__ == "__main__"):
     with GroupMapper() as mapper:
-        result = mapper.find_all()
+        result = mapper.insert(4, "Test")
         for p in result:
-            print(p)
+            print(p)"""
+
+group = Group()
+group.set_id(3), group.set_name("Zulu")
+if __name__ == "__main__":
+    with GroupMapper() as mapper:
+        result = mapper.update(group)

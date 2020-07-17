@@ -51,7 +51,7 @@ export class EditGroup extends Component {
   // }
 
   async fetchGroups() {
-    const res = await fetch("http://DESKTOP-S3RCLLP:8081/api/iKauf/users");
+    const res = await fetch("http://DESKTOP-NM4VM89:8081/api/iKauf/users");
     const resjson = await res.json();
     this.setState({ memberRows: resjson });
     console.log(this.memberRows);

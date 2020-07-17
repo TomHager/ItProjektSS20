@@ -1,28 +1,28 @@
 [
   {
     "id": 1,
-    "unit": "Kg",
+    "unit": 1,
     "amount": 3,
     "name": "Apfel",
     "modificationDate": "2020-05-24"
   },
   {
     "id": 2,
-    "unit": "Kg",
+    "unit": 1,
     "amount": 1,
     "name": "Birne",
     "modificationDate": null
   },
   {
     "id": 3,
-    "unit": "Kg",
+    "unit": 1,
     "amount": 4,
     "name": "Banane",
     "modificationDate": null
   },
   {
     "id": 4,
-    "unit": "Kg",
+    "unit": 1,
     "amount": 2,
     "name": "Banane",
     "modificationDate": null
