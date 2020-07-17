@@ -2,12 +2,10 @@ import BusinessObject from './BusinessObject';
 
 /**
  * @author Dimitrios Apazidis
- * @author Christoph Kunz
  */
 
 export default class ShoppingListBO extends BusinessObject {
 
-}
   constructor(unit, amount, article) {
     super();
     this.unit = unit;
@@ -42,17 +40,17 @@ export default class ShoppingListBO extends BusinessObject {
 
 
 // Returns an Array of CustomerBOs from a given JSON structure
-  static fromJSON(favorite) {
+  static fromJSON(favorites) {
     let result = [];
 
-    if (Array.isArray(favorite) {
-      favorite.forEach((c) => {
+    if (Array.isArray(favorites) {
+      favorites.forEach((c) => {
         Object.setPrototypeOf(c, FavoriteBO.prototype);
         result.push(c);
       });
     } else {
       // Es handelt sich offenbar um ein singuläres Objekt
-      let c = favorite;
+      let c = favorites;
       Object.setPrototypeOf(c, FavoriteBO.prototype);
       result.push(c);
     }

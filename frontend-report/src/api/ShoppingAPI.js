@@ -7,7 +7,6 @@ import UserBO from './UserBO';
  * The class is implemented as a singleton.
  *
  * @author Tom Hager
- * @author Christoph Kunz
  *
  */
 

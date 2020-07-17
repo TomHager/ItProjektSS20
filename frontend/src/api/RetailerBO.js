@@ -30,17 +30,17 @@ export default class RetailerBO extends BusinessObject {
     */
 
   // Returns an Array of CustomerBOs from a given JSON structure
-  static fromJSON(groups) {
+  static fromJSON(retailers) {
     let result = [];
 
-    if (Array.isArray(groups)) {
-      groups.forEach((c) => {
+    if (Array.isArray(retailers)) {
+      retailers.forEach((c) => {
         Object.setPrototypeOf(c, RetailerBO.prototype);
         result.push(c);
       });
     } else {
       // Es handelt sich offenbar um ein singuläres Objekt
-      let c = groups;
+      let c = retailers;
       Object.setPrototypeOf(c, RetailerBO.prototype);
       result.push(c);
     }

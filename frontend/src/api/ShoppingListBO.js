@@ -2,48 +2,47 @@ import BusinessObject from './BusinessObject';
 
 /**
  * @author Dimitrios Apazidis
- * @author Christoph Kunz
  */
 
 export default class ShoppingListBO extends BusinessObject {
-
-}
-  constructor(name, group_id) {
+  constructor(name, groupId) {
     super();
     this.name = name;
-    this.group_id = group_id;
-
+    this.group_id = groupId;
   }
 
   getName() {
-  return this.name;
-
+    return this.name;
   }
 
   setName(name) {
     this.unit = name;
   }
 
-  get_group_id() {
+  getGroupId() {
     return this.group_id;
   }
 
-  set_group_id(group_id) {
-    this.group_id = group_id;
+  setGroupId(groupId) {
+    this.group_id = groupId;
   }
 
-// Returns an Array of CustomerBOs from a given JSON structure
-  static fromJSON(shoppingList) {
+  // Returns an Array of CustomerBOs from a given JSON structure
+  static fromJSON(shoppingLists) {
     let result = [];
 
-    if (Array.isArray(shoppingList)) {
-      shoppingList.forEach((c) => {
-        Object.setPrototypeOf(c, ShoppingListBO.prototype);
+    if (Array.isArray(shoppingLists)) {
+      shoppingLists.forEach((c) => {
+        Object.setPrototypeOf(c, RetailerGroupBO.prototype);
         result.push(c);
       });
     } else {
       // Es handelt sich offenbar um ein singuläres Objekt
-      let c = shoppingList;
-      Object.setPrototypeOf(c, ShoppingListBO.prototype);
+      let c = shoppingLists;
+      Object.setPrototypeOf(c, RetailerGroupBO.prototype);
       result.push(c);
     }
+
+    return result;
+  }
+}
