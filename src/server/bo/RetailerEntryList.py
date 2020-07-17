@@ -1,10 +1,14 @@
 from server.bo import BusinessObject as bo
+from server.bo import ShoppingList as shoppinglist
+from server.bo import Retailer as retailer
+from server.bo import User as user
+from server.bo import Entry as entry
 
 """ 
 @author Tom Hager
  """
  
-class RetailerEntryList (bo.BusinessObject):
+class RetailerEntryList (bo.BusinessObject, shoppinglist.ShoppingList, retailer.Retailer, user.User, entry.Entry):
 
     def __init__(self):
         super().__init__()

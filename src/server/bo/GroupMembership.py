@@ -1,4 +1,8 @@
-class GroupMembership:
+from server.bo import User as user
+from server.bo import Group as group
+
+
+class GroupMembership(user.User, group.Group):
 
     def __init__(self):
         super().__init__()
