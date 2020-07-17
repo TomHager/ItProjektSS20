@@ -181,21 +181,6 @@ class UserByNameOperations(Resource):
         return cust
 
 
-@ikauf.route('/user-by-external-id/<int:external_id>')
-@ikauf.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
-@ikauf.param('external_id', 'Die Id des User-Objektes')
-class UserByExternalIdOperations(Resource):
-    @ikauf.marshal_with(user)
-    @secured
-    def get(self, external_id):
-        """ Auslesen von User-Objekten, die durch eine externe Id bestimmt werden.
-
-        Die auszulesenden Objekte werden durch ```external_id``` in dem URI bestimmt.
-        """
-        adm = ShoppingListAdministration()
-        cust = adm.get_user_by_external_id(external_id)
-        return cust
-
 
 @ikauf.route('/user-by-email/<string:email>')
 @ikauf.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
@@ -912,10 +897,11 @@ class GroupMembershipListOperations(Resource):
         r = adm.get_member_by_group_membership(id)
 
         if r is not None:
-            x = adm.create_group_membership()
+            x = adm.create_group_membership(member, membership)
             return x, 200
         else:
             return 'Group unknown', 500
+
 
 @ikauf.route('/groups-by-membership/int:id>')
 @ikauf.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
@@ -931,6 +917,7 @@ class GroupsByMembershipOperations(Resource):
         adm = ShoppingListAdministration()
         cust = adm.get_group_by_user(user)
         return cust
+
 
 """
 Klassen und Operationen für Favorite

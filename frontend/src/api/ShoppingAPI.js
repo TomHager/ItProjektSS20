@@ -28,8 +28,9 @@ export default class ShoppingAPI {
   #addEntryURL = () => `${this.#ShoppingServerBaseURL}/entries`;
   #updateEntryURL = (id) => `${this.#ShoppingServerBaseURL}/entries/${id}`;
   #deleteEntryURL = (id) => `${this.#ShoppingServerBaseURL}/entries/${id}`;
-  #searchEntryURL = (articleName) => `${this.#ShoppingServerBaseURL}/entries-by-name/${articleName}`;
-  // #searchEntryURL = (articleName) => `${this.#ShoppingServerBaseURL}/entries-by-name/${articleName}`;
+  #searchEntryByAmount = (amount) => `${this.#ShoppingServerBaseURL}/entries-by-name/${amount}`;
+  #searchEntryByArticleURL = (articleName) => `${this.#ShoppingServerBaseURL}/entry-by-article/${articleName}`;
+  #searchEntryByRetailerEntryList = (retailerEntryList) => `${this.#ShoppingServerBaseURL}/entry-by-retailer-entry-list/${retailerEntryList}`;
 
   // Favorites related
   #getFavoritesURL = () => `${this.#ShoppingServerBaseURL}/favorites`;
@@ -92,10 +93,9 @@ export default class ShoppingAPI {
   #addUserURL = () => `${this.#ShoppingServerBaseURL}/users`;
   #updateUserURL = (id) => `${this.#ShoppingServerBaseURL}/users/${id}`;
   #deleteUserURL = (id) => `${this.#ShoppingServerBaseURL}/users/${id}`;
-  #searchUserURL = (userEmail) => `${this.#ShoppingServerBaseURL}/user-by-email/${userEmail}`;
-  #searchUserURL = (userName) => `${this.#ShoppingServerBaseURL}/user-by-name/${userName}`;
-  //#searchUserURL = (userId) => `${this.#ShoppingServerBaseURL}/user-by-external-id/${userId}`;
-  #searchUserURL = (user) => `${this.#ShoppingServerBaseURL}/group-by-user/${user}`;
+  #searchUserByName = (userEmail) => `${this.#ShoppingServerBaseURL}/user-by-email/${userEmail}`;
+  #searchUserByEmail = (userName) => `${this.#ShoppingServerBaseURL}/user-by-name/${userName}`;
+
 
 
   static getAPI() {
@@ -371,16 +371,6 @@ searchUserByName(userName) {
 
 searchUserByEmail(userEmail) {
      return this.#fetchAdvanced(this.#searchUserByEmailURL(userId)).then((responseJSON) => {
-         let userBO = userBO.fromJSON(responseJSON);
-         // console.info(userBOs);
-         return new Promise(function (resolve) {
-             resolve(userBOs);
-         })
-     })
-}
-
-searchUserByExternalId(userId) {
-     return this.#fetchAdvanced(this.#searchUserByExternalIdURL(userId)).then((responseJSON) => {
          let userBO = userBO.fromJSON(responseJSON);
          // console.info(userBOs);
          return new Promise(function (resolve) {
