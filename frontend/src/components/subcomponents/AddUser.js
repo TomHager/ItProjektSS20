@@ -1,12 +1,12 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
-import PersonAddIcon from "@material-ui/icons/PersonAdd";
-import IconButton from "@material-ui/core/IconButton";
-import { TextField } from "@material-ui/core";
+import React, { Component } from 'react';
+// import PropTypes from "prop-types";
+import PersonAddIcon from '@material-ui/icons/PersonAdd';
+import IconButton from '@material-ui/core/IconButton';
+import { TextField } from '@material-ui/core';
 
 export default class AddUser extends Component {
   state = {
-    user: "",
+    user: '',
   };
 
   onChange = (e) => this.setState({ [e.target.name]: e.target.value });
@@ -14,7 +14,7 @@ export default class AddUser extends Component {
   onSubmit = (e) => {
     e.preventDefault();
     this.props.addUser(this.state.user);
-    this.setState({ user: "" });
+    this.setState({ user: '' });
   };
 
   render() {
@@ -23,7 +23,7 @@ export default class AddUser extends Component {
         <TextField
           type="text"
           name="user"
-          style={{ flex: "10", padding: "5px" }}
+          style={{ flex: '10', padding: '5px' }}
           placeholder="Add user ..."
           value={this.state.user}
           onChange={this.onChange}
