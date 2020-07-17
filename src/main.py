@@ -12,6 +12,7 @@ from server.bo.Entry import Entry
 from server.bo.ShoppingList import ShoppingList
 from server.bo.Favorite import Favorite
 from server.bo.RetailerGroup import RetailerGroup
+from server.bo.GroupMembership import GroupMembership
 
 # selbstgeschriebener Decorator, übernimmt Authentifikation
 
@@ -585,6 +586,7 @@ class RetailerEntryListRelatedByRetailerOperations(Resource):
 Klassen und Operationen für Entry
 """
 
+
 @ikauf.route('/entry')
 @ikauf.response(500, "Falls Server-seitiger Fehler")
 class EntryListOperations(Resource):
@@ -609,6 +611,7 @@ class EntryListOperations(Resource):
             return x, 200
         else:
             return '', 500
+
 
 @ikauf.route('/entry-by-id/<int:entryId>')
 @ikauf.response(500, 'Falls Server-seitiger Fehler')
@@ -677,7 +680,6 @@ class EntryRelatedByAmountOperations(Resource):
         return am
 
 
-
 @ikauf.route('/entry-by-retailer-entry-list/<list:retailer-entry-list>')
 @ikauf.response(500, 'Falls Server-seitiger Fehler')
 @ikauf.param('retailer-entry-list', 'Retailer_Entry_List eines Entry-Objekt')
@@ -692,11 +694,9 @@ class EntryRelatedByRetailerEntryListOperations(Resource):
         return rel
 
 
-
 """
 Klassen und Operationen für ShoppingList
 """
-
 
 
 @ikauf.route('/shopping-list')
@@ -710,6 +710,7 @@ class ShoppingListListOperations(Resource):
         adm = ShoppingListAdministration()
         sl = adm.get_all_shopping_list()
         return sl
+
     def post(self):
         """Anlegen eines neuen ShoppingList-Objekts"""
 
@@ -796,7 +797,6 @@ class ShoppingListRelatedByGroupIdOperations(Resource):
         return sl
 
 
-
 """
 Klassen und Operationen für RetailerGroup
 """
@@ -866,6 +866,75 @@ class RetailerGroupListOperations(Resource):
 
 
 """
+Klassen und Operationen für RetailerGroup
+"""
+
+
+@ikauf.route('/group-membership')
+@ikauf.route(500, 'Falls Server-seitiger Fehler')
+@ikauf.param('id', 'ID des GroupMembership-Objekts')
+class GroupMembershipOperations(Resource):
+    @ikauf.marshal_with(group_member)
+    @secured
+    def get(self, id):
+        """Auslesen eines bestimmten GroupMembership-Objekts"""
+        adm = ShoppingListAdministration()
+        a = adm.get_member_by_group_membership(id)
+        return a
+
+    @secured
+    def delete(self, id):
+        """Löschen eines bestimmten GroupMembership-Objekts"""
+
+        adm = ShoppingListAdministration()
+        a = adm.get_member_by_group_membership(id)
+        adm.delete_member_of_group_membership(a)
+        return '', 200
+
+    @ikauf.marshal_with(group_member)
+    @ikauf.expect(group_member, validate=True)
+    @secured
+    def put(self, id):
+        """Update eines bestimmten GroupMembership-Objekts."""
+
+        adm = ShoppingListAdministration()
+        a = GroupMembership.from_dict(api.payload)
+
+        if a is not None:
+            a.set_id(id)
+            adm.save_group_member_ship(a)
+            return '', 200
+        else:
+            return '', 500
+
+
+@ikauf.route('/group-membership')
+@ikauf.response(500, "Falls Server-seitiger Fehler")
+class GroupMembershipListOperations(Resource):
+    @ikauf.marshal_list_with(group_member)
+    @secured
+    def get(self):
+        """Auslesen aller GroupMembership-Objekte"""
+
+        adm = ShoppingListAdministration()
+        gms = adm.get_all_group_members()
+        return gms
+
+    def post(self):
+        """Anlegen eines neuen GroupMembership-Objekts für einen gegebene Group"""
+
+        adm = ShoppingListAdministration()
+
+        r = adm.get_member_by_group_membership(id)
+
+        if r is not None:
+            x = adm.create_group_membership()
+            return x, 200
+        else:
+            return 'Group unknown', 500
+
+
+"""
 Klassen und Operationen für Favorite
 """
 
@@ -890,7 +959,8 @@ class FavoriteListOperations(Resource):
         proposal = Favorite.from_dict(api.payload)
 
         if proposal is not None:
-            x = adm.create_favorite(proposal.get_favorit()) #todo unfilled konnten problem nicht lösen
+            x = adm.create_favorite(proposal.get_favorit(), proposal.get_amount(), proposal.get_unit(),
+                                    proposal.get_article()) # todo unfilled konnten problem nicht lösen
             return x, 200
         else:
             return '', 500
@@ -933,7 +1003,6 @@ class FavoriteOperations(Resource):
             return '', 200
         else:
             return '', 500
-
 
 
 """
