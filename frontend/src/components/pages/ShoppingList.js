@@ -21,6 +21,7 @@ import {
 import React, { Component } from 'react';
 import MaterialTable from 'material-table';
 import ShoppingAPI from '../../api/ShoppingAPI';
+import { addEntry } from '../../actions/shoppingList';
 // import EntryBO from '../../api/EntryBO';
 
 /**
@@ -139,26 +140,16 @@ export default class ShoppingList extends Component {
     };
     const onChange = (e) =>
       this.setState({ ...this.state, [e.target.name]: e.target.value });
+    const onSubmit = async (e) => {
+      e.preventDefault();
+      // if (...) {
+      // } else {
+      addEntry(this.state.data);
+      // }
+    };
   }
 
-  setModDate = (date) => {
-    if (date == null) {
-      date = this.curday();
-    } else {
-      date = null;
-    }
-    return date;
-  };
-
-  curday = () => {
-    let today = new Date();
-    let dd = String(today.getDate()).padStart(2, '0');
-    let mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-    let yyyy = today.getFullYear();
-
-    today = yyyy + '-' + mm + '-' + dd;
-    return today;
-  };
+  setModDate = (date) => (date == null ? (date = Date.now()) : (date = null));
 
   // changeModificationDate(modDate) {
   //   if (modDate == null) {
@@ -221,7 +212,7 @@ export default class ShoppingList extends Component {
   // }
 
   render() {
-    const state = this.state;
+    const { state } = this.state;
     return (
       <React.Fragment>
         <Container maxWidth="md">
