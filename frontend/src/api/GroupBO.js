@@ -2,7 +2,6 @@ import BusinessObject from './BusinessObject';
 
 /**
  * @author Tom Hager
- * @author Christoph Kunz
  */
 
 export default class GroupBO extends BusinessObject {

@@ -35,7 +35,7 @@ export default class GroupList extends Component {
 
   //Group Functions
   async fetchGroups() {
-    const res = await fetch('http://DESKTOP-S3RCLLP:8081/api/iKauf/groups');
+    const res = await fetch('http://DESKTOP-DU328LQ:8081/api/iKauf/groups');
     const resjson = await res.json();
     this.setState({ groupRows: resjson });
     console.log(resjson);

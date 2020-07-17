@@ -17,7 +17,6 @@ const useStyles = makeStyles((theme) => ({
  * Shows the about page with the impressum
  *
  * @author Tom Hager
- * @author Christoph Kunz
  */
 
 function About() {

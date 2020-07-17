@@ -3,7 +3,6 @@ from server.db.Mapper import Mapper
 
 """ 
 @author Tom Hager
-@author Peter Thies
  """
  
 class UserMapper(Mapper):

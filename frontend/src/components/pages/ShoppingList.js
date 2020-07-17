@@ -85,12 +85,12 @@ export default class ShoppingList extends Component {
         },
         {
           title: 'Article',
-          field: 'articleName',
+          field: 'name',
           align: 'center',
         },
         {
           title: 'Amount',
-          field: 'entryAmount',
+          field: 'amount',
           type: 'numeric',
           align: 'center',
           editComponent: (props) => (
@@ -99,7 +99,7 @@ export default class ShoppingList extends Component {
             // )
             // onChange = (props) => (validity.valid||(props=''))
             <input
-              name="entryAmount"
+              name="amount"
               type="number"
               value={this.state.data.entryAmount}
               min="0"
@@ -109,7 +109,7 @@ export default class ShoppingList extends Component {
         },
         {
           title: 'Unit',
-          field: 'entryUnit',
+          field: 'unit',
           align: 'center',
           lookup: {
             1: 'KG',
@@ -151,24 +151,16 @@ export default class ShoppingList extends Component {
 
   setModDate = (date) => (date == null ? (date = Date.now()) : (date = null));
 
-  // changeModificationDate(modDate) {
-  //   if (modDate == null) {
-  //     modDate = this.curday();
-  //     return modDate;
-  //   } else {
-  //     modDate = null;
-  //     return modDate;
-  //   }
-  // }
-
   async fetchEntries() {
-    const res = await fetch('http://DESKTOP-S3RCLLP:8081/api/iKauf/entry');
+    const res = await fetch('http://DESKTOP-DU328LQ:8081/api/iKauf/entries');
     const resjson = await res.json();
     this.setState({ data: resjson });
+    await console.log('fetch complete');
   }
 
   componentDidMount() {
     this.fetchEntries();
+    console.log('MOUNT');
   }
 
   /** Updates the entry */
@@ -212,7 +204,7 @@ export default class ShoppingList extends Component {
   // }
 
   render() {
-    const { state } = this.state;
+    const state = this.state;
     return (
       <React.Fragment>
         <Container maxWidth="md">

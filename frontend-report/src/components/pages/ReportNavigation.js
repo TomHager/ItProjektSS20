@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 import {
   Table,
   TableBody,
@@ -8,7 +8,7 @@ import {
   TableRow,
   Paper,
   Button,
-} from "@material-ui/core";
+} from '@material-ui/core';
 // import ShoppingAPI from "../../api/ShoppingAPI";
 
 /**
@@ -28,12 +28,15 @@ export default class ReportNavigation extends Component {
       retailerRows: [],
       retailerIndex: -1,
       retailerActive: false,
+      timeFrom: '',
+      timeTo: '',
     };
   }
+  onChange = (e) => this.setState({ ...this.state, [e.target.name]: e.target.value });
 
   //Group Functions
   async fetchGroups() {
-    const res = await fetch("http://DESKTOP-S3RCLLP:8081/api/iKauf/groups");
+    const res = await fetch('http://DESKTOP-DU328LQ:8081/api/iKauf/groups');
     const resjson = await res.json();
     this.setState({ groupRows: resjson });
     console.log(resjson);
@@ -46,15 +49,14 @@ export default class ReportNavigation extends Component {
 
   // Retailer Functions
   async fetchRetailers() {
-    const res = await fetch("http://DESKTOP-S3RCLLP:8081/api/iKauf/entries");
+    const res = await fetch('http://DESKTOP-DU328LQ:8081/api/iKauf/entries');
     const resjson = await res.json();
     this.setState({ retailerRows: resjson });
     console.log(resjson);
   }
 
   retailerToggleHandler() {
-    this.state.retailerIndex = -1;
-    this.setState({ retailerActive: !this.state.retailerActive });
+    this.setState({ retailerIndex: -1, retailerActive: !this.state.retailerActive });
   }
   retailerClickHandler(retailer) {
     if (this.state.retailerActive) {
@@ -67,12 +69,11 @@ export default class ReportNavigation extends Component {
   componentDidMount = () => {
     this.fetchGroups();
     this.fetchRetailers();
-    console.log("All Callbacks initialised");
+    console.log('All Callbacks initialised');
   };
 
   render() {
-    const groupRows = this.state.groupRows;
-    const retailerRows = this.state.retailerRows;
+    const { groupRows, retailerRows, timeFrom, timeTo } = this.state;
     return (
       <TableContainer
         style={{ width: Math.round(window.innerWidth * 0.3) }}
@@ -97,8 +98,7 @@ export default class ReportNavigation extends Component {
               <TableRow
                 key={row.id}
                 style={{
-                  backgroundColor:
-                    row.id === this.state.groupIndex ? "#0090FF" : "white",
+                  backgroundColor: row.id === this.state.groupIndex ? '#0090FF' : 'white',
                 }}
                 onClick={this.groupClickHandler.bind(this, row)}
               >
@@ -114,7 +114,7 @@ export default class ReportNavigation extends Component {
           aria-label="spanning table"
           state="Disable"
           style={{
-            backgroundColor: this.state.retailerActive ? "white" : "grey",
+            backgroundColor: this.state.retailerActive ? 'white' : 'grey',
           }}
         >
           <TableHead>
@@ -124,7 +124,7 @@ export default class ReportNavigation extends Component {
               </TableCell>
               <TableCell>
                 <Button
-                  style={{ backgroundColor: "lightblue" }}
+                  style={{ backgroundColor: 'lightblue' }}
                   onClick={this.retailerToggleHandler.bind(this)}
                 >
                   Disable Filter
@@ -140,16 +140,45 @@ export default class ReportNavigation extends Component {
                 style={{
                   backgroundColor:
                     row.id === this.state.retailerIndex
-                      ? "#0090FF"
-                      : "white" | this.state.retailerActive
-                      ? "white"
-                      : "grey",
+                      ? '#0090FF'
+                      : 'white' | this.state.retailerActive
+                      ? 'white'
+                      : 'grey',
                 }}
                 onClick={this.retailerClickHandler.bind(this, row)}
               >
                 <TableCell colSpan={2}>{row.name}</TableCell>
               </TableRow>
             ))}
+          </TableBody>
+        </Table>
+
+        {/* Time Select */}
+        <Table>
+          <TableHead>
+            <TableCell>Select Time Range </TableCell>
+            <TableCell>
+              <Button
+                style={{ backgroundColor: 'lightblue' }}
+                onClick={this.retailerToggleHandler.bind(this)}
+                innerHTML={'Enable Filter'}
+              >
+                {this.value}
+              </Button>
+            </TableCell>
+          </TableHead>
+          <TableBody>
+            <TableCell>
+              From:
+              <input
+                type="date"
+                name="timeFrom"
+                value={timeFrom}
+                onChange={this.onChange}
+              />
+                To:
+              <input type="date" name="timeTo" value={timeTo} onChange={this.onChange} />
+            </TableCell>
           </TableBody>
         </Table>
       </TableContainer>

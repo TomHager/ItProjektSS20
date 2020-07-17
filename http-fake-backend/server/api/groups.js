@@ -7,7 +7,6 @@
  * Just place in ./server/api folder.
  *
  * @author Tom Hager
- * @author Christoph Kunz
  *
  */
 
