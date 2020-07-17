@@ -6,6 +6,5 @@
     "shop": "npm start --prefix frontend",
     "report": "npm start --prefix frontend-report",
     "fake-b": "npm start --prefix http-fake-backend"
-    "dev": "concurrently \"npm run http-fake-backend\" \"npm run shop\""
   }
 }
