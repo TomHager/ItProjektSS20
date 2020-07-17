@@ -442,7 +442,7 @@ class ShoppingListAdministration(object):
             mapper.update(group_member_ship)
 
     def delete_member_of_group_membership(self, group_membership):
-        """gegebenen retailer der Gruppe löschen."""
+        """gegebenen Member der Gruppe löschen."""
         with RetailerGroupMapper() as mapper:
             member_group = self.get_member_by_group_membership(group_membership)
 
