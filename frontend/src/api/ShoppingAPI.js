@@ -1,5 +1,11 @@
 import EntryBO from './EntryBO';
+import FavoriteBO from './FavoriteBO';
 import GroupBO from './GroupBO';
+import GroupMembershipBO from './GroupMembershipBO';
+import RetailerBO from './RetailerBO';
+import RetailerEntryListBO from './RetailerEntryListBO';
+import RetailerGroupBO from './RetailerGroupBO';
+import ShoppingListBO from './ShoppingListBO';
 import UserBO from './UserBO';
 
 /**
@@ -7,8 +13,6 @@ import UserBO from './UserBO';
  * The class is implemented as a singleton.
  *
  * @author Tom Hager
- * @author Christoph Kunz
- *
  */
 
 export default class ShoppingAPI {
@@ -25,12 +29,60 @@ export default class ShoppingAPI {
   #deleteEntryURL = (id) => `${this.#ShoppingServerBaseURL}/entries/${id}`;
   // #searchEntryURL = (articleName) => `${this.#ShoppingServerBaseURL}/entries-by-name/${articleName}`;
 
+  // Favorites related
+  #getFavoritesURL = () => `${this.#ShoppingServerBaseURL}/favorites`;
+  #getFavoriteURL = (id) => `${this.#ShoppingServerBaseURL}/favorites/${id}`;
+  #addFavoriteURL = () => `${this.#ShoppingServerBaseURL}/favorites`;
+  #updateFavoriteURL = (id) => `${this.#ShoppingServerBaseURL}/favorites/${id}`;
+  #deleteFavoriteURL = (id) => `${this.#ShoppingServerBaseURL}/favorites/${id}`;
+
   // Groups related
   #getGroupsURL = () => `${this.#ShoppingServerBaseURL}/groups`;
   #getGroupURL = (id) => `${this.#ShoppingServerBaseURL}/groups/${id}`;
   #addGroupURL = () => `${this.#ShoppingServerBaseURL}/groups`;
   #updateGroupURL = (id) => `${this.#ShoppingServerBaseURL}/groups/${id}`;
   #deleteGroupURL = (id) => `${this.#ShoppingServerBaseURL}/groups/${id}`;
+
+  // GroupMemberships related
+  #getGroupMembershipsURL = () => `${this.#ShoppingServerBaseURL}/groupMemberships`;
+  #getGroupMembershipURL = (id) =>
+    `${this.#ShoppingServerBaseURL}/groupMemberships/${id}`;
+  #addGroupMembershipURL = () => `${this.#ShoppingServerBaseURL}/groupMemberships`;
+  #updateGroupMembershipURL = (id) =>
+    `${this.#ShoppingServerBaseURL}/groupMemberships/${id}`;
+  #deleteGroupMembershipURL = (id) =>
+    `${this.#ShoppingServerBaseURL}/groupMemberships/${id}`;
+
+  // Retailers related
+  #getRetailersURL = () => `${this.#ShoppingServerBaseURL}/retailers`;
+  #getRetailerURL = (id) => `${this.#ShoppingServerBaseURL}/retailers/${id}`;
+  #addRetailerURL = () => `${this.#ShoppingServerBaseURL}/retailers`;
+  #updateRetailerURL = (id) => `${this.#ShoppingServerBaseURL}/retailers/${id}`;
+  #deleteRetailerURL = (id) => `${this.#ShoppingServerBaseURL}/retailers/${id}`;
+
+  // RetailerEntryLists related
+  #getRetailerEntryListsURL = () => `${this.#ShoppingServerBaseURL}/retailerEntryLists`;
+  #getRetailerEntryListURL = (id) =>
+    `${this.#ShoppingServerBaseURL}/retailerEntryLists/${id}`;
+  #addRetailerEntryListURL = () => `${this.#ShoppingServerBaseURL}/retailerEntryLists`;
+  #updateRetailerEntryListURL = (id) =>
+    `${this.#ShoppingServerBaseURL}/retailerEntryLists/${id}`;
+  #deleteRetailerEntryListURL = (id) =>
+    `${this.#ShoppingServerBaseURL}/retailerEntryLists/${id}`;
+
+  // RetailerGroups related
+  #getRetailerGroupsURL = () => `${this.#ShoppingServerBaseURL}/retailerGroups`;
+  #getRetailerGroupURL = (id) => `${this.#ShoppingServerBaseURL}/retailerGroups/${id}`;
+  #addRetailerGroupURL = () => `${this.#ShoppingServerBaseURL}/retailerGroups`;
+  #updateRetailerGroupURL = (id) => `${this.#ShoppingServerBaseURL}/retailerGroups/${id}`;
+  #deleteRetailerGroupURL = (id) => `${this.#ShoppingServerBaseURL}/retailerGroups/${id}`;
+
+  // ShoppingLists related
+  #getShoppingListsURL = () => `${this.#ShoppingServerBaseURL}/shoppingLists`;
+  #getShoppingListURL = (id) => `${this.#ShoppingServerBaseURL}/shoppingLists/${id}`;
+  #addShoppingListURL = () => `${this.#ShoppingServerBaseURL}/shoppingLists`;
+  #updateShoppingListURL = (id) => `${this.#ShoppingServerBaseURL}/shoppingLists/${id}`;
+  #deleteShoppingListURL = (id) => `${this.#ShoppingServerBaseURL}/shoppingLists/${id}`;
 
   // User related
   #getUsersURL = () => `${this.#ShoppingServerBaseURL}/users`;
@@ -55,6 +107,7 @@ export default class ShoppingAPI {
       return res.json();
     });
 
+  // Entry Methoden
   getEntries() {
     return this.#fetchAdvanced(this.#getEntriesURL()).then((responseJSON) => {
       let entryBOs = EntryBO.fromJSON(responseJSON);
@@ -125,6 +178,7 @@ export default class ShoppingAPI {
     });
   }
 
+  // Group Methoden
   getGroups() {
     return this.#fetchAdvanced(this.#getGroupsURL()).then((responseJSON) => {
       let groupBOs = GroupBO.fromJSON(responseJSON);
@@ -195,6 +249,7 @@ export default class ShoppingAPI {
     });
   }
 
+  // User Methoden
   getUsers() {
     return this.#fetchAdvanced(this.#getUsersURL()).then((responseJSON) => {
       let userBOs = UserBO.fromJSON(responseJSON);
