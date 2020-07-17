@@ -1,10 +1,10 @@
-import React from "react";
-import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
+import React from 'react';
+import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
 // import { Container, ThemeProvider, CssBaseline } from '@material-ui/core';
-import Header from "./components/layout/Header";
-import About from "./components/pages/About";
-import GroupList from "./components/pages/GroupList";
-import ShoppingList from "./components/pages/ShoppingList";
+import Header from './components/layout/Header';
+import About from './components/pages/About';
+import GroupList from './components/pages/GroupList';
+import ShoppingList from './components/pages/ShoppingList';
 
 // import Theme from './Theme';
 // import SignIn from './components/pages/SignIn';
@@ -20,7 +20,6 @@ import ShoppingList from "./components/pages/ShoppingList";
  * @see [react-router-dom](https://reacttraining.com/react-router/web/guides/quick-start)
  *
  * @author Tom Hager
- * @author Christoph Kunz
  */
 
 class App extends React.Component {
@@ -35,7 +34,7 @@ class App extends React.Component {
   /** Renders the whole app */
   render() {
     return (
-      <div style={{ backgroundColor: "#f4f4f4" }}>
+      <div style={{ backgroundColor: '#f4f4f4' }}>
         <Router basename={process.env.PUBLIC_URL}>
           <Header />
           <Redirect from="/" to="/groupList" />

@@ -1,6 +1,5 @@
 /**
  * @author Tom Hager
- * @author Christoph Kunz
  */
 
 export default class BusinessObject {
