@@ -238,6 +238,7 @@ searchEntryByAmount(amount) {
     });
   }
 
+
   getGroup(groupId) {
     return this.#fetchAdvanced(this.#getGroupURL(groupId)).then((responseJSON) => {
       // We always get an array of GroupBO.fromJSON, but only need one object
@@ -248,6 +249,7 @@ searchEntryByAmount(amount) {
       });
     });
   }
+
 
   addGroup(groupBO) {
     return this.#fetchAdvanced(this.#addGroupURL(), {
@@ -267,6 +269,7 @@ searchEntryByAmount(amount) {
     });
   }
 
+
   updateGroup(groupBO) {
     return this.#fetchAdvanced(this.#updateGroupURL(groupBO.getID()), {
       method: 'PUT',
@@ -285,6 +288,7 @@ searchEntryByAmount(amount) {
     });
   }
 
+
   deleteGroup(groupId) {
     return this.#fetchAdvanced(this.#deleteGroupURL(groupId), {
       method: 'DELETE',
@@ -297,6 +301,7 @@ searchEntryByAmount(amount) {
       });
     });
   }
+
 
   searchGroupByName(groupName) {
     return this.#fetchAdvanced(this.#searchGroupByNameURL(groupName)).then((responseJSON) => {
@@ -349,6 +354,7 @@ searchEntryByAmount(amount) {
     });
   }
 
+
   updateUser(userBO) {
     return this.#fetchAdvanced(this.#updateUserURL(userBO.getID()), {
       method: 'PUT',
@@ -366,6 +372,7 @@ searchEntryByAmount(amount) {
       });
     });
   }
+
 
   deleteUser(userId) {
     return this.#fetchAdvanced(this.#deleteUserURL(userId), {
@@ -391,6 +398,7 @@ searchUserByName(userName) {
      })
 }
 
+
 searchUserByEmail(userEmail) {
      return this.#fetchAdvanced(this.#searchUserByEmailURL(userEmail)).then((responseJSON) => {
          let userBOs = userBOs.fromJSON(responseJSON);
@@ -415,6 +423,7 @@ searchUserByEmail(userEmail) {
     });
   }
 
+
   getShoppingList(shoppingListId) {
     return this.#fetchAdvanced(this.#getShoppingListURL(shoppingListId)).then((responseJSON) => {
       // We always get an array of ShoppingListBOs.fromJSON, but only need one object
@@ -425,6 +434,7 @@ searchUserByEmail(userEmail) {
       });
     });
   }
+
 
   addShoppingList(shoppingListBO) {
     return this.#fetchAdvanced(this.#addShoppingListURL(), {
@@ -444,6 +454,7 @@ searchUserByEmail(userEmail) {
     });
   }
 
+
   updateShoppingList(shoppingListBO) {
     return this.#fetchAdvanced(this.#updateShoppingListURL(shoppingListBO.getID()), {
       method: 'PUT',
@@ -462,6 +473,7 @@ searchUserByEmail(userEmail) {
     });
   }
 
+
   deleteShoppingList(shoppingListId) {
     return this.#fetchAdvanced(this.#deleteShoppingListURL(shoppingListId), {
       method: 'DELETE',
@@ -475,6 +487,7 @@ searchUserByEmail(userEmail) {
     });
   }
 
+
   searchShoppingListByName(shoppingListName) {
     return this.#fetchAdvanced(this.#searchShoppingListByNameURL(shoppingListName)).then((responseJSON) => {
         let shoppingListBOs = shoppingListBOs.fromJSON(responseJSON);
@@ -484,6 +497,7 @@ searchUserByEmail(userEmail) {
         })
     })
 }
+
 
   searchShoppingListByGroupId(groupId) {
   return this.#fetchAdvanced(this.#searchShoppingListByNameURL(groupId)).then((responseJSON) => {
@@ -509,6 +523,7 @@ searchUserByEmail(userEmail) {
     });
   }
 
+
   getRetailer(retailerId) {
     return this.#fetchAdvanced(this.#getRetailerURL(retailerId)).then((responseJSON) => {
       // We always get an array of RetailerBOs.fromJSON, but only need one object
@@ -519,6 +534,7 @@ searchUserByEmail(userEmail) {
       });
     });
   }
+
 
   addRetailer(retailerBO) {
     return this.#fetchAdvanced(this.#addRetailerURL(), {
@@ -568,6 +584,7 @@ searchUserByEmail(userEmail) {
       });
     });
   }
+
 
   searchRetailerByName(retailerName) {
     return this.#fetchAdvanced(this.#searchRetailerByNameURL(retailerName)).then((responseJSON) => {

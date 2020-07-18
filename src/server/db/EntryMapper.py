@@ -27,10 +27,9 @@ class EntryMapper(Mapper):
 
         tuples = cursor.fetchall()
 
-        for (id, bought, unit, amount, article, modification_date) in tuples:
+        for (id, unit, amount, article, modification_date) in tuples:
             entry = Entry()
             entry.set_id(id)
-            entry.set_bought(bought)
             entry.set_unit(unit)
             entry.set_amount(amount)
             entry.set_article(article)
