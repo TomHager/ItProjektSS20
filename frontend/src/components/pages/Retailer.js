@@ -14,7 +14,6 @@ import DeleteRetailerAlert from "../dialogs/DeleteRetailerAlert";
 import AddIcon from "@material-ui/icons/Add";
 import AddRetailer from "../subcomponents/AddRetailer";
 
-
 /**
  *
  *
@@ -29,7 +28,7 @@ export default class RetailerList extends Component {
     this.state = {
       retailerRows: [],
       retailerIndex: -1,
-      retailers:[]
+      retailers: [],
     };
   }
 
@@ -41,8 +40,6 @@ export default class RetailerList extends Component {
     console.log(resjson);
   }
 
- 
-
   //calls all Callbacks for Repor Selection
   componentDidMount = () => {
     this.fetchRetailer();
@@ -51,18 +48,20 @@ export default class RetailerList extends Component {
 
   delRetailer = (id) => {
     this.setState({
-      retailers: [...this.state.retailers.filter((retailer) => retailer.id !== id)],
+      retailers: [
+        ...this.state.retailers.filter((retailer) => retailer.id !== id),
+      ],
     });
   };
 
   addRetailer = (name) => {
     const newRetailer = {
       id: 4,
-      name
+      name,
     };
     this.setState({ retailers: [...this.state.retailers, newRetailer] });
 
-    console.log(this.state.retailers)
+    console.log(this.state.retailers);
   };
 
   render() {
@@ -86,7 +85,7 @@ export default class RetailerList extends Component {
                   <b>Retailer:</b>
                 </TableCell>
                 <TableCell>
-                    <AddRetailer addRetailer={this.addRetailer}></AddRetailer>
+                  <AddRetailer addRetailer={this.addRetailer}></AddRetailer>
                 </TableCell>
               </TableRow>
             </TableHead>

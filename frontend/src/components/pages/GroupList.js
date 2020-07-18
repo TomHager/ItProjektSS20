@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 import {
   Table,
   TableBody,
@@ -8,12 +8,12 @@ import {
   TableRow,
   Paper,
   // IconButton,
-} from '@material-ui/core';
+} from "@material-ui/core";
 // import ShoppingAPI from "../../api/ShoppingAPI";
-import EditGroup from '../dialogs/EditGroup';
-import ManageGroup from '../dialogs/ManageGroup';
-import CreateGroup from '../dialogs/CreateGroup';
-import LeaveGroupAlert from '../dialogs/LeaveGroupAlert';
+import EditGroup from "../dialogs/EditGroup";
+import ManageGroup from "../dialogs/ManageGroup";
+import CreateGroup from "../dialogs/CreateGroup";
+import LeaveGroupAlert from "../dialogs/LeaveGroupAlert";
 
 /**
  *
@@ -35,7 +35,7 @@ export default class GroupList extends Component {
 
   //Group Functions
   async fetchGroups() {
-    const res = await fetch('http://DESKTOP-DU328LQ:8081/api/iKauf/groups');
+    const res = await fetch("http://DESKTOP-S3RCLLP:8081/api/iKauf/groups");
     const resjson = await res.json();
     this.setState({ groupRows: resjson });
     console.log(resjson);
@@ -49,7 +49,7 @@ export default class GroupList extends Component {
   //calls all Callbacks for Repor Selection
   componentDidMount = () => {
     this.fetchGroups();
-    console.log('All Callbacks initialised');
+    console.log("All Callbacks initialised");
   };
 
   render() {
@@ -57,7 +57,7 @@ export default class GroupList extends Component {
     return (
       <div align="center">
         <TableContainer
-          style={{ width: Math.round(window.innerWidth * 0.3), margin: '3em' }}
+          style={{ width: Math.round(window.innerWidth * 0.3), margin: "3em" }}
           component={Paper}
         >
           {/* Group Table */}
@@ -85,7 +85,7 @@ export default class GroupList extends Component {
                   key={row.id}
                   style={{
                     backgroundColor:
-                      row.id === this.state.groupIndex ? '#0090FF' : 'white',
+                      row.id === this.state.groupIndex ? "#0090FF" : "white",
                   }}
                   // onClick={this.groupClickHandler.bind(this, row)}
                 >

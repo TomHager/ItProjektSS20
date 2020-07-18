@@ -13,6 +13,7 @@ export default class DeleteRetailerAlert extends Component {
 
     this.state = {
       open: false,
+      id: 4,
     };
   }
 
@@ -24,7 +25,7 @@ export default class DeleteRetailerAlert extends Component {
   handleCloseYes = () => {
     this.setState({ open: false });
     console.log(this.open);
-    // this.props.delRetailer;
+    // this.props.delRetailer(this.id);
   };
 
   handleCloseNo = () => {
