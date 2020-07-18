@@ -20,7 +20,8 @@ import IconButton from "@material-ui/core/IconButton";
 import AddUser from "../subcomponents/AddUser";
 import DeleteIcon from "@material-ui/icons/Delete";
 import GroupBO from "../../api/GroupBO"
-import GroupMembershipBO from "/../../api/GroupMembershipBO"
+import GroupMembershipBO from "../../api/GroupMembershipBO"
+import ShoppingAPI from "../../api/ShoppingAPI"
 
 /**
  *

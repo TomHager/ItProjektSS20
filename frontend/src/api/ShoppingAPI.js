@@ -1,11 +1,11 @@
 import EntryBO from './EntryBO';
-// import FavoriteBO from './FavoriteBO';
+import FavoriteBO from './FavoriteBO';
 import GroupBO from './GroupBO';
-// import GroupMembershipBO from './GroupMembershipBO';
-// import RetailerBO from './RetailerBO';
-// import RetailerEntryListBO from './RetailerEntryListBO';
-// import RetailerGroupBO from './RetailerGroupBO';
-// import ShoppingListBO from './ShoppingListBO';
+import GroupMembershipBO from './GroupMembershipBO';
+import RetailerBO from './RetailerBO';
+import RetailerEntryListBO from './RetailerEntryListBO';
+import RetailerGroupBO from './RetailerGroupBO';
+import ShoppingListBO from './ShoppingListBO';
 import UserBO from './UserBO';
 
 /**
@@ -28,9 +28,9 @@ export default class ShoppingAPI {
   #addEntryURL = () => `${this.#ShoppingServerBaseURL}/entries`;
   #updateEntryURL = (id) => `${this.#ShoppingServerBaseURL}/entries/${id}`;
   #deleteEntryURL = (id) => `${this.#ShoppingServerBaseURL}/entries/${id}`;
-  #searchEntryByAmount = (amount) => `${this.#ShoppingServerBaseURL}/entries-by-name/${amount}`;
+  #searchEntryByAmountURL = (amount) => `${this.#ShoppingServerBaseURL}/entries-by-name/${amount}`;
   #searchEntryByArticleURL = (articleName) => `${this.#ShoppingServerBaseURL}/entry-by-article/${articleName}`;
-  #searchEntryByRetailerEntryList = (retailerEntryList) => `${this.#ShoppingServerBaseURL}/entry-by-retailer-entry-list/${retailerEntryList}`;
+  #searchEntryByRetailerEntryListURL = (retailerEntryList) => `${this.#ShoppingServerBaseURL}/entry-by-retailer-entry-list/${retailerEntryList}`;
 
   // Favorites related
   #getFavoritesURL = () => `${this.#ShoppingServerBaseURL}/favorites`;
@@ -93,8 +93,8 @@ export default class ShoppingAPI {
   #addUserURL = () => `${this.#ShoppingServerBaseURL}/users`;
   #updateUserURL = (id) => `${this.#ShoppingServerBaseURL}/users/${id}`;
   #deleteUserURL = (id) => `${this.#ShoppingServerBaseURL}/users/${id}`;
-  #searchUserByName = (userEmail) => `${this.#ShoppingServerBaseURL}/user-by-email/${userEmail}`;
-  #searchUserByEmail = (userName) => `${this.#ShoppingServerBaseURL}/user-by-name/${userName}`;
+  #searchUserByNameURL = (userEmail) => `${this.#ShoppingServerBaseURL}/user-by-email/${userEmail}`;
+  #searchUserByEmailURL = (userName) => `${this.#ShoppingServerBaseURL}/user-by-name/${userName}`;
 
 
 
@@ -186,7 +186,7 @@ deleteEntry(entryId) {
 
 searchEntryByArticle(articleName) {
      return this.#fetchAdvanced(this.#searchEntryByArticleURL(articleName)).then((responseJSON) => {
-         let entryBOBO = entryBOBO.fromJSON(responseJSON);
+         let entryBOs = entryBOs.fromJSON(responseJSON);
          // console.info(entryBOs);
          return new Promise(function (resolve) {
              resolve(entryBOs);
@@ -196,7 +196,7 @@ searchEntryByArticle(articleName) {
 
 searchEntryByRetailerEntryList(retailerEntryList) {
      return this.#fetchAdvanced(this.#searchEntryByRetailerEntryListURL(retailerEntryList)).then((responseJSON) => {
-         let entryBOBO = entryBOBO.fromJSON(responseJSON);
+         let entryBOs = entryBOs.fromJSON(responseJSON);
          // console.info(entryBOs);
          return new Promise(function (resolve) {
              resolve(entryBOs);
@@ -206,7 +206,7 @@ searchEntryByRetailerEntryList(retailerEntryList) {
 
 searchEntryByAmount(amount) {
      return this.#fetchAdvanced(this.#searchEntryByAmountURL(amount)).then((responseJSON) => {
-         let entryBOBO = entryBOBO.fromJSON(responseJSON);
+         let entryBOs = entryBOs.fromJSON(responseJSON);
          // console.info(entryBOs);
          return new Promise(function (resolve) {
              resolve(entryBOs);
@@ -357,11 +357,11 @@ searchEntryByAmount(amount) {
       });
     });
   }
-}
+
 
 searchUserByName(userName) {
      return this.#fetchAdvanced(this.#searchUserByNameURL(userName)).then((responseJSON) => {
-         let userBO = userBO.fromJSON(responseJSON);
+         let userBOs = userBOs.fromJSON(responseJSON);
          // console.info(userBOs);
          return new Promise(function (resolve) {
              resolve(userBOs);
@@ -370,8 +370,8 @@ searchUserByName(userName) {
 }
 
 searchUserByEmail(userEmail) {
-     return this.#fetchAdvanced(this.#searchUserByEmailURL(userId)).then((responseJSON) => {
-         let userBO = userBO.fromJSON(responseJSON);
+     return this.#fetchAdvanced(this.#searchUserByEmailURL(userEmail)).then((responseJSON) => {
+         let userBOs = userBOs.fromJSON(responseJSON);
          // console.info(userBOs);
          return new Promise(function (resolve) {
              resolve(userBOs);
@@ -452,7 +452,7 @@ searchUserByEmail(userEmail) {
       });
     });
   }
-}
+
 
 // Retailer Methoden
 
@@ -478,7 +478,7 @@ searchUserByEmail(userEmail) {
     });
   }
 
-  addRetailer(RetailerBO) {
+  addRetailer(retailerBO) {
     return this.#fetchAdvanced(this.#addRetailerURL(), {
       method: 'POST',
       headers: {
@@ -526,7 +526,7 @@ searchUserByEmail(userEmail) {
       });
     });
   }
-}
+
 
 
 // Favorite Methoden
@@ -601,82 +601,82 @@ searchUserByEmail(userEmail) {
       });
     });
   }
-}
 
 
-// GroupMemberShip Methoden
+
+// GroupMembership Methoden
 
 
-  getGroupMemberShips() {
-    return this.#fetchAdvanced(this.#getGroupMemberShipsURL()).then((responseJSON) => {
-      let groupMemberShipBOs = GroupMemberShipBO.fromJSON(responseJSON);
-      // console.info(groupMemberShipBOs);
+  getGroupMemberships() {
+    return this.#fetchAdvanced(this.#getGroupMembershipsURL()).then((responseJSON) => {
+      let groupMembershipBOs = GroupMembershipBO.fromJSON(responseJSON);
+      // console.info(groupMembershipBOs);
       return new Promise(function (resolve) {
-        resolve(groupMemberShipBOs);
+        resolve(groupMembershipBOs);
       });
     });
   }
 
-  getGroupMemberShip(groupMemberShipId) {
-    return this.#fetchAdvanced(this.#getGroupMemberShipURL(groupMemberShipId)).then((responseJSON) => {
-      // We always get an array of GroupMemberShipBOs.fromJSON, but only need one object
-      let responseGroupMemberShipBO = GroupMemberShipBO.fromJSON(responseJSON)[0];
-      // console.info(responseGroupMemberShip  BO);
+  getGroupMembership(groupMembershipId) {
+    return this.#fetchAdvanced(this.#getGroupMembershipURL(groupMembershipId)).then((responseJSON) => {
+      // We always get an array of GroupMembershipBOs.fromJSON, but only need one object
+      let responseGroupMembershipBO = GroupMembershipBO.fromJSON(responseJSON)[0];
+      // console.info(responseGroupMembership  BO);
       return new Promise(function (resolve) {
-        resolve(responseGroupMemberShipBO);
+        resolve(responseGroupMembershipBO);
       });
     });
   }
 
-  addGroupMemberShip(GroupMemberShipBO) {
-    return this.#fetchAdvanced(this.#addGroupMemberShipURL(), {
+  addGroupMembership(groupMembershipBO) {
+    return this.#fetchAdvanced(this.#addGroupMembershipURL(), {
       method: 'POST',
       headers: {
         Accept: 'application/json   , text/plain',
         'Content-type': 'application/json',
       },
-      body: JSON.stringify(groupMemberShipBO),
+      body: JSON.stringify(groupMembershipBO),
     }).then((responseJSON) => {
-      // We always get an array of GroupMemberShipBO.fromJSON, but only need one object
-      let responseGroupMemberShipBO = GroupMemberShipBO.fromJSON(responseJSON)[0];
-      // console.info(groupMemberShipBOs);
+      // We always get an array of GroupMembershipBO.fromJSON, but only need one object
+      let responseGroupMembershipBO = GroupMembershipBO.fromJSON(responseJSON)[0];
+      // console.info(groupMembershipBOs);
       return new Promise(function (resolve) {
-        resolve(responseGroupMemberShipBO);
+        resolve(responseGroupMembershipBO);
       });
     });
   }
 
-  updateGroupMemberShip(groupMemberShipBO) {
-    return this.#fetchAdvanced(this.#updateGroupMemberShipURL(groupMemberShipBO.getID()), {
+  updateGroupMembership(groupMembershipBO) {
+    return this.#fetchAdvanced(this.#updateGroupMembershipURL(groupMembershipBO.getID()), {
       method: 'PUT',
       headers: {
         Accept: 'application/json, text/plain',
         'Content-type': 'application/json',
       },
-      body: JSON.stringify(groupMemberShipBO),
+      body: JSON.stringify(groupMembershipBO),
     }).then((responseJSON) => {
-      // We always get an array of GroupMemberShipBOs.fromJSON
-      let responseGroupMemberShipBO = GroupMemberShipBO.fromJSON(responseJSON)[0];
-      // console.info(groupMemberShipBOs);
+      // We always get an array of GroupMembershipBOs.fromJSON
+      let responseGroupMembershipBO = GroupMembershipBO.fromJSON(responseJSON)[0];
+      // console.info(groupMembershipBOs);
       return new Promise(function (resolve) {
-        resolve(responseGroupMemberShipBO);
+        resolve(responseGroupMembershipBO);
       });
     });
   }
 
-  deleteGroupMemberShip(groupMemberShipId) {
-    return this.#fetchAdvanced(this.#deleteGroupMemberShipURL(groupMemberShipId), {
+  deleteGroupMembership(groupMembershipId) {
+    return this.#fetchAdvanced(this.#deleteGroupMembershipURL(groupMembershipId), {
       method: 'DELETE',
     }).then((responseJSON) => {
-      // We always get an array of GroupMemberShipBO.fromJSON
-      let responseGroupMemberShipBO = GroupMemberShipBO.fromJSON(responseJSON)[0];
-      // console.info(groupMemberShipBOs);
+      // We always get an array of GroupMembershipBO.fromJSON
+      let responseGroupMembershipBO = GroupMembershipBO.fromJSON(responseJSON)[0];
+      // console.info(groupMembershipBOs);
       return new Promise(function (resolve) {
-        resolve(responseGroupMemberShipBO);
+        resolve(responseGroupMembershipBO);
       });
     });
   }
-}
+
 
 
 // RetailerGroup Methoden
@@ -684,7 +684,7 @@ searchUserByEmail(userEmail) {
 
   getRetailerGroups() {
     return this.#fetchAdvanced(this.#getRetailerGroupsURL()).then((responseJSON) => {
-      let RetailerGroupBOs = RetailerGroupBO.fromJSON(responseJSON);
+      let retailerGroupBOs = RetailerGroupBO.fromJSON(responseJSON);
       // console.info(retailerGroupBOs);
       return new Promise(function (resolve) {
         resolve(retailerGroupBOs);
@@ -740,7 +740,7 @@ searchUserByEmail(userEmail) {
   }
 
   deleteRetailerGroup(retailerGroupId) {
-    return this.#fetchAdvanced(this.#deleteRetailerGroupURL(RetailerGroupId), {
+    return this.#fetchAdvanced(this.#deleteRetailerGroupURL(retailerGroupId), {
       method: 'DELETE',
     }).then((responseJSON) => {
       // We always get an array of RetailerGroupBO.fromJSON
@@ -751,7 +751,7 @@ searchUserByEmail(userEmail) {
       });
     });
   }
-}
+
 
 
 // RetailerEntryList Methoden

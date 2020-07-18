@@ -24,7 +24,7 @@ export default class DeleteRetailerAlert extends Component {
   handleCloseYes = () => {
     this.setState({ open: false });
     console.log(this.open);
-    this.props.delRetailer;
+    this.props.delRetailer();
   };
 
   handleCloseNo = () => {
