@@ -7,6 +7,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DeleteIcon from "@material-ui/icons/Delete";
+
 export default class DeleteRetailerAlert extends Component {
   constructor(props) {
     super(props);

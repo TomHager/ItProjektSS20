@@ -60,7 +60,7 @@ export default class RetailerList extends Component {
     };
     this.setState({ retailers: [...this.state.retailers, newRetailer] });
 
-    console.log(this.state.retailers)
+    console.log(`add Retailer ${this.state.retailers}`)
   };
 
   render() {
