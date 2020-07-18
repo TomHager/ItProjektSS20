@@ -33,13 +33,13 @@ export default class ShoppingListBO extends BusinessObject {
 
     if (Array.isArray(shoppingLists)) {
       shoppingLists.forEach((c) => {
-        Object.setPrototypeOf(c, RetailerGroupBO.prototype);
+        Object.setPrototypeOf(c, ShoppingListBO.prototype);
         result.push(c);
       });
     } else {
       // Es handelt sich offenbar um ein singuläres Objekt
       let c = shoppingLists;
-      Object.setPrototypeOf(c, RetailerGroupBO.prototype);
+      Object.setPrototypeOf(c, ShoppingListBO.prototype);
       result.push(c);
     }
 

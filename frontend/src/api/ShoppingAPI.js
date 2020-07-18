@@ -1,11 +1,11 @@
 import EntryBO from "./EntryBO";
-// import FavoriteBO from './FavoriteBO';
+import FavoriteBO from "./FavoriteBO";
 import GroupBO from "./GroupBO";
-// import GroupMembershipBO from './GroupMembershipBO';
-// import RetailerBO from './RetailerBO';
-// import RetailerEntryListBO from './RetailerEntryListBO';
-// import RetailerGroupBO from './RetailerGroupBO';
-// import ShoppingListBO from './ShoppingListBO';
+import GroupMembershipBO from "./GroupMembershipBO";
+import RetailerBO from "./RetailerBO";
+import RetailerEntryListBO from "./RetailerEntryListBO";
+import RetailerGroupBO from "./RetailerGroupBO";
+import ShoppingListBO from "./ShoppingListBO";
 import UserBO from "./UserBO";
 
 /**
@@ -20,7 +20,7 @@ export default class ShoppingAPI {
   // Singelton instance
   static #api = null;
 
-  #ShoppingServerBaseURL = "http://desktop-NM4VM89:8081/api/iKauf/";
+  #ShoppingServerBaseURL = "/iKauf";
 
   // Entries related
   #getEntriesURL = () => `${this.#ShoppingServerBaseURL}/entries`;
@@ -28,11 +28,11 @@ export default class ShoppingAPI {
   #addEntryURL = () => `${this.#ShoppingServerBaseURL}/entries`;
   #updateEntryURL = (id) => `${this.#ShoppingServerBaseURL}/entries/${id}`;
   #deleteEntryURL = (id) => `${this.#ShoppingServerBaseURL}/entries/${id}`;
-  #searchEntryByAmount = (amount) =>
+  #searchEntryByAmountURL = (amount) =>
     `${this.#ShoppingServerBaseURL}/entries-by-name/${amount}`;
   #searchEntryByArticleURL = (articleName) =>
     `${this.#ShoppingServerBaseURL}/entry-by-article/${articleName}`;
-  #searchEntryByRetailerEntryList = (retailerEntryList) =>
+  #searchEntryByRetailerEntryListURL = (retailerEntryList) =>
     `${
       this.#ShoppingServerBaseURL
     }/entry-by-retailer-entry-list/${retailerEntryList}`;
@@ -50,6 +50,8 @@ export default class ShoppingAPI {
   #addGroupURL = () => `${this.#ShoppingServerBaseURL}/groups`;
   #updateGroupURL = (id) => `${this.#ShoppingServerBaseURL}/groups/${id}`;
   #deleteGroupURL = (id) => `${this.#ShoppingServerBaseURL}/groups/${id}`;
+  #searchGroupByNameURL = (groupName) =>
+    `${this.#ShoppingServerBaseURL}/retailer-by-name/${groupName}`;
 
   // GroupMemberships related
   #getGroupMembershipsURL = () =>
@@ -62,6 +64,8 @@ export default class ShoppingAPI {
     `${this.#ShoppingServerBaseURL}/groupMemberships/${id}`;
   #deleteGroupMembershipURL = (id) =>
     `${this.#ShoppingServerBaseURL}/groupMemberships/${id}`;
+  #searchGroupsByMemberURL = (userId) =>
+    `${this.#ShoppingServerBaseURL}/groups-by-membership/${userId}`;
 
   // Retailers related
   #getRetailersURL = () => `${this.#ShoppingServerBaseURL}/retailers`;
@@ -69,6 +73,12 @@ export default class ShoppingAPI {
   #addRetailerURL = () => `${this.#ShoppingServerBaseURL}/retailers`;
   #updateRetailerURL = (id) => `${this.#ShoppingServerBaseURL}/retailers/${id}`;
   #deleteRetailerURL = (id) => `${this.#ShoppingServerBaseURL}/retailers/${id}`;
+  #searchRetailerByRetailerEntryListURL = (retailerEntryList) =>
+    `${
+      this.#ShoppingServerBaseURL
+    }/retailer-by-retailer-entry-list/${retailerEntryList}`;
+  #searchRetailerByNameURL = (retailerName) =>
+    `${this.#ShoppingServerBaseURL}/retailer-by-name/${retailerName}`;
 
   // RetailerEntryLists related
   #getRetailerEntryListsURL = () =>
@@ -81,6 +91,8 @@ export default class ShoppingAPI {
     `${this.#ShoppingServerBaseURL}/retailerEntryLists/${id}`;
   #deleteRetailerEntryListURL = (id) =>
     `${this.#ShoppingServerBaseURL}/retailerEntryLists/${id}`;
+  #searchRetailerEntryListByGroupNameURL = (groupId) =>
+    `${this.#ShoppingServerBaseURL}/retailer-entry-list-by-group/${groupId}`;
 
   // RetailerGroups related
   #getRetailerGroupsURL = () => `${this.#ShoppingServerBaseURL}/retailerGroups`;
@@ -91,6 +103,8 @@ export default class ShoppingAPI {
     `${this.#ShoppingServerBaseURL}/retailerGroups/${id}`;
   #deleteRetailerGroupURL = (id) =>
     `${this.#ShoppingServerBaseURL}/retailerGroups/${id}`;
+  #searchRetailerMemberByGroupURL = (groupId) =>
+    `${this.#ShoppingServerBaseURL}/retailer-member-by-group/${groupId}`;
 
   // ShoppingLists related
   #getShoppingListsURL = () => `${this.#ShoppingServerBaseURL}/shoppingLists`;
@@ -101,6 +115,10 @@ export default class ShoppingAPI {
     `${this.#ShoppingServerBaseURL}/shoppingLists/${id}`;
   #deleteShoppingListURL = (id) =>
     `${this.#ShoppingServerBaseURL}/shoppingLists/${id}`;
+  #searchShoppingListByGroupIdURL = (groupId) =>
+    `${this.#ShoppingServerBaseURL}/shoppinglist-by-group-id/${groupId}`;
+  #searchShoppingListByNameURL = (shoppinglistName) =>
+    `${this.#ShoppingServerBaseURL}/shoppinglist-by-name/${shoppinglistName}`;
 
   // User related
   #getUsersURL = () => `${this.#ShoppingServerBaseURL}/users`;
@@ -108,9 +126,9 @@ export default class ShoppingAPI {
   #addUserURL = () => `${this.#ShoppingServerBaseURL}/users`;
   #updateUserURL = (id) => `${this.#ShoppingServerBaseURL}/users/${id}`;
   #deleteUserURL = (id) => `${this.#ShoppingServerBaseURL}/users/${id}`;
-  #searchUserByName = (userEmail) =>
+  #searchUserByNameURL = (userEmail) =>
     `${this.#ShoppingServerBaseURL}/user-by-email/${userEmail}`;
-  #searchUserByEmail = (userName) =>
+  #searchUserByEmailURL = (userName) =>
     `${this.#ShoppingServerBaseURL}/user-by-name/${userName}`;
 
   static getAPI() {
@@ -130,10 +148,12 @@ export default class ShoppingAPI {
 
   // Entry Methoden
   getEntries() {
+    console.log("FETCH API");
     return this.#fetchAdvanced(this.#getEntriesURL()).then((responseJSON) => {
       let entryBOs = EntryBO.fromJSON(responseJSON);
       // console.info(entryBOs);
       return new Promise(function (resolve) {
+        console.log("Failed");
         resolve(entryBOs);
       });
     });
@@ -204,36 +224,38 @@ export default class ShoppingAPI {
   searchEntryByArticle(articleName) {
     return this.#fetchAdvanced(this.#searchEntryByArticleURL(articleName)).then(
       (responseJSON) => {
-        let entryBOBO = entryBOBO.fromJSON(responseJSON);
+        let entryBOs = EntryBO.fromJSON(responseJSON);
         // console.info(entryBOs);
         return new Promise(function (resolve) {
-          resolve(entryBOBO);
+          resolve(entryBOs);
         });
       }
     );
   }
 
-  // searchEntryByRetailerEntryList(retailerEntryList) {
-  //      return this.#fetchAdvanced(this.#searchEntryByRetailerEntryListURL(retailerEntryList)).then((responseJSON) => {
-  //          let entryBOBO = entryBOBO.fromJSON(responseJSON);
-  //          // console.info(entryBOs);
-  //          return new Promise(function (resolve) {
-  //              resolve(entryBOs);
-  //          })
-  //      })
-  // }
+  searchEntryByRetailerEntryList(retailerEntryList) {
+    return this.#fetchAdvanced(
+      this.#searchEntryByRetailerEntryListURL(retailerEntryList)
+    ).then((responseJSON) => {
+      let entryBOs = EntryBO.fromJSON(responseJSON);
+      // console.info(entryBOs);
+      return new Promise(function (resolve) {
+        resolve(entryBOs);
+      });
+    });
+  }
 
-  // searchEntryByAmount(amount) {
-  //   return this.#fetchAdvanced(this.#searchEntryByAmountURL(amount)).then(
-  //     (responseJSON) => {
-  //       let entryBOBO = entryBOBO.fromJSON(responseJSON);
-  //       // console.info(entryBOs);
-  //       return new Promise(function (resolve) {
-  //         resolve(entryBOs);
-  //       });
-  //     }
-  //   );
-  // }
+  searchEntryByAmount(amount) {
+    return this.#fetchAdvanced(this.#searchEntryByAmountURL(amount)).then(
+      (responseJSON) => {
+        let entryBOs = EntryBO.fromJSON(responseJSON);
+        // console.info(entryBOs);
+        return new Promise(function (resolve) {
+          resolve(entryBOs);
+        });
+      }
+    );
+  }
 
   // Group Methoden
 
@@ -309,6 +331,18 @@ export default class ShoppingAPI {
     });
   }
 
+  searchGroupByName(groupName) {
+    return this.#fetchAdvanced(this.#searchGroupByNameURL(groupName)).then(
+      (responseJSON) => {
+        let groupBOs = GroupBO.fromJSON(responseJSON);
+        // console.info(groupBOs);
+        return new Promise(function (resolve) {
+          resolve(groupBOs);
+        });
+      }
+    );
+  }
+
   // User Methoden
   getUsers() {
     return this.#fetchAdvanced(this.#getUsersURL()).then((responseJSON) => {
@@ -381,462 +415,598 @@ export default class ShoppingAPI {
       });
     });
   }
+
+  searchUserByName(userName) {
+    return this.#fetchAdvanced(this.#searchUserByNameURL(userName)).then(
+      (responseJSON) => {
+        let userBOs = UserBO.fromJSON(responseJSON);
+        // console.info(userBOs);
+        return new Promise(function (resolve) {
+          resolve(userBOs);
+        });
+      }
+    );
+  }
+
+  searchUserByEmail(userEmail) {
+    return this.#fetchAdvanced(this.#searchUserByEmailURL(userEmail)).then(
+      (responseJSON) => {
+        let userBOs = UserBO.fromJSON(responseJSON);
+        // console.info(userBOs);
+        return new Promise(function (resolve) {
+          resolve(userBOs);
+        });
+      }
+    );
+  }
+
+  // ShoppingList Methoden
+
+  getShoppingLists() {
+    return this.#fetchAdvanced(this.#getShoppingListsURL()).then(
+      (responseJSON) => {
+        let shoppingListBOs = ShoppingListBO.fromJSON(responseJSON);
+        // console.info(shoppingListBOs);
+        return new Promise(function (resolve) {
+          resolve(shoppingListBOs);
+        });
+      }
+    );
+  }
+
+  getShoppingList(shoppingListId) {
+    return this.#fetchAdvanced(this.#getShoppingListURL(shoppingListId)).then(
+      (responseJSON) => {
+        // We always get an array of ShoppingListBOs.fromJSON, but only need one object
+        let responseShoppingListBO = ShoppingListBO.fromJSON(responseJSON)[0];
+        // console.info(responseShoppingListBO);
+        return new Promise(function (resolve) {
+          resolve(responseShoppingListBO);
+        });
+      }
+    );
+  }
+
+  addShoppingList(shoppingListBO) {
+    return this.#fetchAdvanced(this.#addShoppingListURL(), {
+      method: "POST",
+      headers: {
+        Accept: "application/json, text/plain",
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify(shoppingListBO),
+    }).then((responseJSON) => {
+      // We always get an array of ShoppingListBO.fromJSON, but only need one object
+      let responseShoppingListBO = ShoppingListBO.fromJSON(responseJSON)[0];
+      // console.info(shoppingListBOs);
+      return new Promise(function (resolve) {
+        resolve(responseShoppingListBO);
+      });
+    });
+  }
+
+  updateShoppingList(shoppingListBO) {
+    return this.#fetchAdvanced(
+      this.#updateShoppingListURL(shoppingListBO.getID()),
+      {
+        method: "PUT",
+        headers: {
+          Accept: "application/json, text/plain",
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify(shoppingListBO),
+      }
+    ).then((responseJSON) => {
+      // We always get an array of ShoppingListBOs.fromJSON
+      let responseShoppingListBO = ShoppingListBO.fromJSON(responseJSON)[0];
+      // console.info(shoppingListBOs);
+      return new Promise(function (resolve) {
+        resolve(responseShoppingListBO);
+      });
+    });
+  }
+
+  deleteShoppingList(shoppingListId) {
+    return this.#fetchAdvanced(this.#deleteShoppingListURL(shoppingListId), {
+      method: "DELETE",
+    }).then((responseJSON) => {
+      // We always get an array of ShoppingListBO.fromJSON
+      let responseShoppingListBO = ShoppingListBO.fromJSON(responseJSON)[0];
+      // console.info(shoppingListBOs);
+      return new Promise(function (resolve) {
+        resolve(responseShoppingListBO);
+      });
+    });
+  }
+
+  searchShoppingListByName(shoppingListName) {
+    return this.#fetchAdvanced(
+      this.#searchShoppingListByNameURL(shoppingListName)
+    ).then((responseJSON) => {
+      let shoppingListBOs = ShoppingListBO.fromJSON(responseJSON);
+      // console.info(shoppinglistBOs);
+      return new Promise(function (resolve) {
+        resolve(shoppingListBOs);
+      });
+    });
+  }
+
+  searchShoppingListByGroupId(groupId) {
+    return this.#fetchAdvanced(this.#searchShoppingListByNameURL(groupId)).then(
+      (responseJSON) => {
+        let shoppingListBOs = ShoppingListBO.fromJSON(responseJSON);
+        // console.info(shoppinglistBOs);
+        return new Promise(function (resolve) {
+          resolve(shoppingListBOs);
+        });
+      }
+    );
+  }
+
+  // Retailer Methoden
+
+  getRetailers() {
+    return this.#fetchAdvanced(this.#getRetailersURL()).then((responseJSON) => {
+      let retailerBOs = RetailerBO.fromJSON(responseJSON);
+      // console.info(retailerBOs);
+      return new Promise(function (resolve) {
+        resolve(retailerBOs);
+      });
+    });
+  }
+
+  getRetailer(retailerId) {
+    return this.#fetchAdvanced(this.#getRetailerURL(retailerId)).then(
+      (responseJSON) => {
+        // We always get an array of RetailerBOs.fromJSON, but only need one object
+        let responseRetailerBO = RetailerBO.fromJSON(responseJSON)[0];
+        // console.info(responseRetailer  BO);
+        return new Promise(function (resolve) {
+          resolve(responseRetailerBO);
+        });
+      }
+    );
+  }
+
+  addRetailer(retailerBO) {
+    return this.#fetchAdvanced(this.#addRetailerURL(), {
+      method: "POST",
+      headers: {
+        Accept: "application/json, text/plain",
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify(retailerBO),
+    }).then((responseJSON) => {
+      // We always get an array of RetailerBO.fromJSON, but only need one object
+      let responseRetailerBO = RetailerBO.fromJSON(responseJSON)[0];
+      // console.info(retailerBOs);
+      return new Promise(function (resolve) {
+        resolve(responseRetailerBO);
+      });
+    });
+  }
+
+  updateRetailer(retailerBO) {
+    return this.#fetchAdvanced(this.#updateRetailerURL(retailerBO.getID()), {
+      method: "PUT",
+      headers: {
+        Accept: "application/json, text/plain",
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify(RetailerBO),
+    }).then((responseJSON) => {
+      // We always get an array of RetailerBOs.fromJSON
+      let responseRetailerBO = RetailerBO.fromJSON(responseJSON)[0];
+      // console.info(retailerBOs);
+      return new Promise(function (resolve) {
+        resolve(responseRetailerBO);
+      });
+    });
+  }
+
+  deleteRetailer(retailerId) {
+    return this.#fetchAdvanced(this.#deleteRetailerURL(retailerId), {
+      method: "DELETE",
+    }).then((responseJSON) => {
+      // We always get an array of RetailerBO.fromJSON
+      let responseRetailerBO = RetailerBO.fromJSON(responseJSON)[0];
+      // console.info(retailerBOs);
+      return new Promise(function (resolve) {
+        resolve(responseRetailerBO);
+      });
+    });
+  }
+
+  searchRetailerByName(retailerName) {
+    return this.#fetchAdvanced(
+      this.#searchRetailerByNameURL(retailerName)
+    ).then((responseJSON) => {
+      let retailerBOs = RetailerBO.fromJSON(responseJSON);
+      // console.info(retailerBOs);
+      return new Promise(function (resolve) {
+        resolve(retailerBOs);
+      });
+    });
+  }
+
+  searchRetailerByRetailerEntryList(retailerEntryList) {
+    return this.#fetchAdvanced(
+      this.#searchRetailerByRetailerEntryListURL(retailerEntryList)
+    ).then((responseJSON) => {
+      let retailerBOs = RetailerBO.fromJSON(responseJSON);
+      // console.info(retailerBOs);
+      return new Promise(function (resolve) {
+        resolve(retailerBOs);
+      });
+    });
+  }
+
+  // Favorite Methoden
+
+  getFavorites() {
+    return this.#fetchAdvanced(this.#getFavoritesURL()).then((responseJSON) => {
+      let favoriteBOs = FavoriteBO.fromJSON(responseJSON);
+      // console.info(favoriteBOs);
+      return new Promise(function (resolve) {
+        resolve(favoriteBOs);
+      });
+    });
+  }
+
+  getFavorite(favoriteId) {
+    return this.#fetchAdvanced(this.#getFavoriteURL(favoriteId)).then(
+      (responseJSON) => {
+        // We always get an array of FavoriteBOs.fromJSON, but only need one object
+        let responseFavoriteBO = FavoriteBO.fromJSON(responseJSON)[0];
+        // console.info(responseFavoriteBO);
+        return new Promise(function (resolve) {
+          resolve(responseFavoriteBO);
+        });
+      }
+    );
+  }
+
+  addFavorite(favoriteBO) {
+    return this.#fetchAdvanced(this.#addFavoriteURL(), {
+      method: "POST",
+      headers: {
+        Accept: "application/json, text/plain",
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify(favoriteBO),
+    }).then((responseJSON) => {
+      // We always get an array of FavoriteBO.fromJSON, but only need one object
+      let responseFavoriteBO = FavoriteBO.fromJSON(responseJSON)[0];
+      // console.info(favoriteBOs);
+      return new Promise(function (resolve) {
+        resolve(responseFavoriteBO);
+      });
+    });
+  }
+
+  updateFavorite(favoriteBO) {
+    return this.#fetchAdvanced(this.#updateFavoriteURL(favoriteBO.getID()), {
+      method: "PUT",
+      headers: {
+        Accept: "application/json, text/plain",
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify(favoriteBO),
+    }).then((responseJSON) => {
+      // We always get an array of FavoriteBOs.fromJSON
+      let responseFavoriteBO = FavoriteBO.fromJSON(responseJSON)[0];
+      // console.info(favoriteBOs);
+      return new Promise(function (resolve) {
+        resolve(responseFavoriteBO);
+      });
+    });
+  }
+
+  deleteFavorite(favoriteId) {
+    return this.#fetchAdvanced(this.#deleteFavoriteURL(favoriteId), {
+      method: "DELETE",
+    }).then((responseJSON) => {
+      // We always get an array of FavoriteBO.fromJSON
+      let responseFavoriteBO = FavoriteBO.fromJSON(responseJSON)[0];
+      // console.info(favoriteBOs);
+      return new Promise(function (resolve) {
+        resolve(responseFavoriteBO);
+      });
+    });
+  }
+
+  // GroupMembership Methoden
+
+  getGroupMemberships() {
+    return this.#fetchAdvanced(this.#getGroupMembershipsURL()).then(
+      (responseJSON) => {
+        let groupMembershipBOs = GroupMembershipBO.fromJSON(responseJSON);
+        // console.info(groupMembershipBOs);
+        return new Promise(function (resolve) {
+          resolve(groupMembershipBOs);
+        });
+      }
+    );
+  }
+
+  getGroupMembership(groupMembershipId) {
+    return this.#fetchAdvanced(
+      this.#getGroupMembershipURL(groupMembershipId)
+    ).then((responseJSON) => {
+      // We always get an array of GroupMembershipBOs.fromJSON, but only need one object
+      let responseGroupMembershipBO = GroupMembershipBO.fromJSON(
+        responseJSON
+      )[0];
+      // console.info(responseGroupMembership  BO);
+      return new Promise(function (resolve) {
+        resolve(responseGroupMembershipBO);
+      });
+    });
+  }
+
+  addGroupMembership(groupMembershipBO) {
+    return this.#fetchAdvanced(this.#addGroupMembershipURL(), {
+      method: "POST",
+      headers: {
+        Accept: "application/json   , text/plain",
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify(groupMembershipBO),
+    }).then((responseJSON) => {
+      // We always get an array of GroupMembershipBO.fromJSON, but only need one object
+      let responseGroupMembershipBO = GroupMembershipBO.fromJSON(
+        responseJSON
+      )[0];
+      // console.info(groupMembershipBOs);
+      return new Promise(function (resolve) {
+        resolve(responseGroupMembershipBO);
+      });
+    });
+  }
+
+  updateGroupMembership(groupMembershipBO) {
+    return this.#fetchAdvanced(
+      this.#updateGroupMembershipURL(groupMembershipBO.getID()),
+      {
+        method: "PUT",
+        headers: {
+          Accept: "application/json, text/plain",
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify(groupMembershipBO),
+      }
+    ).then((responseJSON) => {
+      // We always get an array of GroupMembershipBOs.fromJSON
+      let responseGroupMembershipBO = GroupMembershipBO.fromJSON(
+        responseJSON
+      )[0];
+      // console.info(groupMembershipBOs);
+      return new Promise(function (resolve) {
+        resolve(responseGroupMembershipBO);
+      });
+    });
+  }
+
+  deleteGroupMembership(groupMembershipId) {
+    return this.#fetchAdvanced(
+      this.#deleteGroupMembershipURL(groupMembershipId),
+      {
+        method: "DELETE",
+      }
+    ).then((responseJSON) => {
+      // We always get an array of GroupMembershipBO.fromJSON
+      let responseGroupMembershipBO = GroupMembershipBO.fromJSON(
+        responseJSON
+      )[0];
+      // console.info(groupMembershipBOs);
+      return new Promise(function (resolve) {
+        resolve(responseGroupMembershipBO);
+      });
+    });
+  }
+
+  searchGroupsByMember(userId) {
+    return this.#fetchAdvanced(this.#searchGroupsByMemberURL(userId)).then(
+      (responseJSON) => {
+        let groupMembershipBOs = GroupMembershipBO.fromJSON(responseJSON);
+        // console.info(groupMembershipBOs);
+        return new Promise(function (resolve) {
+          resolve(groupMembershipBOs);
+        });
+      }
+    );
+  }
+
+  // RetailerGroup Methoden
+
+  getRetailerGroups() {
+    return this.#fetchAdvanced(this.#getRetailerGroupsURL()).then(
+      (responseJSON) => {
+        let retailerGroupBOs = RetailerGroupBO.fromJSON(responseJSON);
+        // console.info(retailerGroupBOs);
+        return new Promise(function (resolve) {
+          resolve(retailerGroupBOs);
+        });
+      }
+    );
+  }
+
+  getRetailerGroup(retailerGroupId) {
+    return this.#fetchAdvanced(this.#getRetailerGroupURL(retailerGroupId)).then(
+      (responseJSON) => {
+        // We always get an array of RetailerGroupBOs.fromJSON, but only need one object
+        let responseRetailerGroupBO = RetailerGroupBO.fromJSON(responseJSON)[0];
+        // console.info(responseRetailerGroup  BO);
+        return new Promise(function (resolve) {
+          resolve(responseRetailerGroupBO);
+        });
+      }
+    );
+  }
+
+  addRetailerGroup(retailerGroupBO) {
+    return this.#fetchAdvanced(this.#addRetailerGroupURL(), {
+      method: "POST",
+      headers: {
+        Accept: "application/json, text/plain",
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify(RetailerGroupBO),
+    }).then((responseJSON) => {
+      // We always get an array of RetailerGroupBO.fromJSON, but only need one object
+      let responseRetailerGroupBO = RetailerGroupBO.fromJSON(responseJSON)[0];
+      // console.info(retailerGroupBOs);
+      return new Promise(function (resolve) {
+        resolve(responseRetailerGroupBO);
+      });
+    });
+  }
+
+  updateRetailerGroup(retailerGroupBO) {
+    return this.#fetchAdvanced(
+      this.#updateRetailerGroupURL(retailerGroupBO.getID()),
+      {
+        method: "PUT",
+        headers: {
+          Accept: "application/json, text/plain",
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify(retailerGroupBO),
+      }
+    ).then((responseJSON) => {
+      // We always get an array of RetailerGroupBOs.fromJSON
+      let responseRetailerGroupBO = RetailerGroupBO.fromJSON(responseJSON)[0];
+      // console.info(retailerGroupBOs);
+      return new Promise(function (resolve) {
+        resolve(responseRetailerGroupBO);
+      });
+    });
+  }
+
+  deleteRetailerGroup(retailerGroupId) {
+    return this.#fetchAdvanced(this.#deleteRetailerGroupURL(retailerGroupId), {
+      method: "DELETE",
+    }).then((responseJSON) => {
+      // We always get an array of RetailerGroupBO.fromJSON
+      let responseRetailerGroupBO = RetailerGroupBO.fromJSON(responseJSON)[0];
+      // console.info(retailerGroupBOs);
+      return new Promise(function (resolve) {
+        resolve(responseRetailerGroupBO);
+      });
+    });
+  }
+
+  searchRetailerMemberByGroup(groupId) {
+    return this.#fetchAdvanced(
+      this.#searchRetailerMemberByGroupURL(groupId)
+    ).then((responseJSON) => {
+      let retailergroupBOs = RetailerGroupBO.fromJSON(responseJSON);
+      // console.info(retailergroupBOs);
+      return new Promise(function (resolve) {
+        resolve(retailergroupBOs);
+      });
+    });
+  }
+
+  // RetailerEntryList Methoden
+
+  getRetailerEntryLists() {
+    return this.#fetchAdvanced(this.#getRetailerEntryListsURL()).then(
+      (responseJSON) => {
+        let retailerEntryListBOs = RetailerEntryListBO.fromJSON(responseJSON);
+        // console.info(retailerEntryListBOs);
+        return new Promise(function (resolve) {
+          resolve(retailerEntryListBOs);
+        });
+      }
+    );
+  }
+
+  getRetailerEntryList(retailerEntryListId) {
+    return this.#fetchAdvanced(
+      this.#getRetailerEntryListURL(retailerEntryListId)
+    ).then((responseJSON) => {
+      // We always get an array of RetailerEntryListBOs.fromJSON, but only need one object
+      let responseRetailerEntryListBO = RetailerEntryListBO.fromJSON(
+        responseJSON
+      )[0];
+      // console.info(responseRetailerEntryList  BO);
+      return new Promise(function (resolve) {
+        resolve(responseRetailerEntryListBO);
+      });
+    });
+  }
+
+  addRetailerEntryList(retailerEntryListBO) {
+    return this.#fetchAdvanced(this.#addRetailerEntryListURL(), {
+      method: "POST",
+      headers: {
+        Accept: "application/json, text/plain",
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify(retailerEntryListBO),
+    }).then((responseJSON) => {
+      // We always get an array of RetailerEntryListBO.fromJSON, but only need one object
+      let responseRetailerEntryListBO = RetailerEntryListBO.fromJSON(
+        responseJSON
+      )[0];
+      // console.info(retailerEntryListBOs);
+      return new Promise(function (resolve) {
+        resolve(responseRetailerEntryListBO);
+      });
+    });
+  }
+
+  updateRetailerEntryList(retailerEntryListBO) {
+    return this.#fetchAdvanced(
+      this.#updateRetailerEntryListURL(retailerEntryListBO.getID()),
+      {
+        method: "PUT",
+        headers: {
+          Accept: "application/json, text/plain",
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify(RetailerEntryListBO),
+      }
+    ).then((responseJSON) => {
+      // We always get an array of RetailerEntryListBOs.fromJSON
+      let responseRetailerEntryListBO = RetailerEntryListBO.fromJSON(
+        responseJSON
+      )[0];
+      // console.info(retailerEntryListBOs);
+      return new Promise(function (resolve) {
+        resolve(responseRetailerEntryListBO);
+      });
+    });
+  }
+
+  deleteRetailerEntryList(retailerEntryListId) {
+    return this.#fetchAdvanced(
+      this.#deleteRetailerEntryListURL(retailerEntryListId),
+      {
+        method: "DELETE",
+      }
+    ).then((responseJSON) => {
+      // We always get an array of RetailerEntryListBO.fromJSON
+      let responseRetailerEntryListBO = RetailerEntryListBO.fromJSON(
+        responseJSON
+      )[0];
+      // console.info(retailerEntryListBOs);
+      return new Promise(function (resolve) {
+        resolve(responseRetailerEntryListBO);
+      });
+    });
+  }
+
+  searchRetailerEntryListByGroup(groupId) {
+    return this.#fetchAdvanced(this.#searchRetailerByNameURL(groupId)).then(
+      (responseJSON) => {
+        let retailerEntryListBOs = RetailerEntryListBO.fromJSON(responseJSON);
+        // console.info(retailerEntryListBOs);
+        return new Promise(function (resolve) {
+          resolve(retailerEntryListBOs);
+        });
+      }
+    );
+  }
 }
-
-// searchUserByName(userName) {
-//      return this.#fetchAdvanced(this.#searchUserByNameURL(userName)).then((responseJSON) => {
-//          let userBO = userBO.fromJSON(responseJSON);
-//          // console.info(userBOs);
-//          return new Promise(function (resolve) {
-//              resolve(userBOs);
-//          })
-//      })
-// }
-
-// searchUserByEmail(userEmail) {
-//      return this.#fetchAdvanced(this.#searchUserByEmailURL(userId)).then((responseJSON) => {
-//          let userBO = userBO.fromJSON(responseJSON);
-//          // console.info(userBOs);
-//          return new Promise(function (resolve) {
-//              resolve(userBOs);
-//          })
-//      })
-// }
-
-// ShoppingList Methoden
-
-// getShoppingLists() {
-//   return this.#fetchAdvanced(this.#getShoppingListsURL()).then((responseJSON) => {
-//     let shoppingListBOs = ShoppingListBO.fromJSON(responseJSON);
-//     // console.info(shoppingListBOs);
-//     return new Promise(function (resolve) {
-//       resolve(shoppingListBOs);
-//     });
-//   });
-// }
-
-// getShoppingList(shoppingListId) {
-//   return this.#fetchAdvanced(this.#getShoppingListURL(shoppingListId)).then((responseJSON) => {
-//     // We always get an array of ShoppingListBOs.fromJSON, but only need one object
-//     let responseShoppingListBO = ShoppingListBO.fromJSON(responseJSON)[0];
-//     // console.info(responseShoppingListBO);
-//     return new Promise(function (resolve) {
-//       resolve(responseShoppingListBO);
-//     });
-//   });
-// }
-
-//   addShoppingList(shoppingListBO) {
-//     return this.#fetchAdvanced(this.#addShoppingListURL(), {
-//       method: 'POST',
-//       headers: {
-//         Accept: 'application/json, text/plain',
-//         'Content-type': 'application/json',
-//       },
-//       body: JSON.stringify(shoppingListBO),
-//     }).then((responseJSON) => {
-//       // We always get an array of ShoppingListBO.fromJSON, but only need one object
-//       let responseShoppingListBO = ShoppingListBO.fromJSON(responseJSON)[0];
-//       // console.info(shoppingListBOs);
-//       return new Promise(function (resolve) {
-//         resolve(responseShoppingListBO);
-//       });
-//     });
-//   }
-
-//   updateShoppingList(shoppingListBO) {
-//     return this.#fetchAdvanced(this.#updateShoppingListURL(shoppingListBO.getID()), {
-//       method: 'PUT',
-//       headers: {
-//         Accept: 'application/json, text/plain',
-//         'Content-type': 'application/json',
-//       },
-//       body: JSON.stringify(shoppingListBO),
-//     }).then((responseJSON) => {
-//       // We always get an array of ShoppingListBOs.fromJSON
-//       let responseShoppingListBO = ShoppingListBO.fromJSON(responseJSON)[0];
-//       // console.info(shoppingListBOs);
-//       return new Promise(function (resolve) {
-//         resolve(responseShoppingListBO);
-//       });
-//     });
-//   }
-
-//   deleteShoppingList(shoppingListId) {
-//     return this.#fetchAdvanced(this.#deleteShoppingListURL(shoppingListId), {
-//       method: 'DELETE',
-//     }).then((responseJSON) => {
-//       // We always get an array of ShoppingListBO.fromJSON
-//       let responseShoppingListBO = ShoppingListBO.fromJSON(responseJSON)[0];
-//       // console.info(shoppingListBOs);
-//       return new Promise(function (resolve) {
-//         resolve(responseShoppingListBO);
-//       });
-//     });
-//   }
-// }
-
-// // Retailer Methoden
-
-//   getRetailers() {
-//     return this.#fetchAdvanced(this.#getRetailersURL()).then((responseJSON) => {
-//       let retailerBOs = RetailerBO.fromJSON(responseJSON);
-//       // console.info(retailerBOs);
-//       return new Promise(function (resolve) {
-//         resolve(retailerBOs);
-//       });
-//     });
-//   }
-
-//   getRetailer(retailerId) {
-//     return this.#fetchAdvanced(this.#getRetailerURL(retailerId)).then((responseJSON) => {
-//       // We always get an array of RetailerBOs.fromJSON, but only need one object
-//       let responseRetailerBO = RetailerBO.fromJSON(responseJSON)[0];
-//       // console.info(responseRetailer  BO);
-//       return new Promise(function (resolve) {
-//         resolve(responseRetailerBO);
-//       });
-//     });
-//   }
-
-//   addRetailer(RetailerBO) {
-//     return this.#fetchAdvanced(this.#addRetailerURL(), {
-//       method: 'POST',
-//       headers: {
-//         Accept: 'application/json, text/plain',
-//         'Content-type': 'application/json',
-//       },
-//       body: JSON.stringify(retailerBO),
-//     }).then((responseJSON) => {
-//       // We always get an array of RetailerBO.fromJSON, but only need one object
-//       let responseRetailerBO = RetailerBO.fromJSON(responseJSON)[0];
-//       // console.info(retailerBOs);
-//       return new Promise(function (resolve) {
-//         resolve(responseRetailerBO);
-//       });
-//     });
-//   }
-
-//   updateRetailer(retailerBO) {
-//     return this.#fetchAdvanced(this.#updateRetailerURL(retailerBO.getID()), {
-//       method: 'PUT',
-//       headers: {
-//         Accept: 'application/json, text/plain',
-//         'Content-type': 'application/json',
-//       },
-//       body: JSON.stringify(RetailerBO),
-//     }).then((responseJSON) => {
-//       // We always get an array of RetailerBOs.fromJSON
-//       let responseRetailerBO = RetailerBO.fromJSON(responseJSON)[0];
-//       // console.info(retailerBOs);
-//       return new Promise(function (resolve) {
-//         resolve(responseRetailerBO);
-//       });
-//     });
-//   }
-
-//   deleteRetailer(retailerId) {
-//     return this.#fetchAdvanced(this.#deleteRetailerURL(retailerId), {
-//       method: 'DELETE',
-//     }).then((responseJSON) => {
-//       // We always get an array of RetailerBO.fromJSON
-//       let responseRetailerBO = RetailerBO.fromJSON(responseJSON)[0];
-//       // console.info(retailerBOs);
-//       return new Promise(function (resolve) {
-//         resolve(responseRetailerBO);
-//       });
-//     });
-//   }
-// }
-
-// // Favorite Methoden
-
-//   getFavorites() {
-//     return this.#fetchAdvanced(this.#getFavoritesURL()).then((responseJSON) => {
-//       let favoriteBOs = FavoriteBO.fromJSON(responseJSON);
-//       // console.info(favoriteBOs);
-//       return new Promise(function (resolve) {
-//         resolve(favoriteBOs);
-//       });
-//     });
-//   }
-
-//   getFavorite(favoriteId) {
-//     return this.#fetchAdvanced(this.#getFavoriteURL(favoriteId)).then((responseJSON) => {
-//       // We always get an array of FavoriteBOs.fromJSON, but only need one object
-//       let responseFavoriteBO = FavoriteBO.fromJSON(responseJSON)[0];
-//       // console.info(responseFavoriteBO);
-//       return new Promise(function (resolve) {
-//         resolve(responseFavoriteBO);
-//       });
-//     });
-//   }
-
-//   addFavorite(favoriteBO) {
-//     return this.#fetchAdvanced(this.#addFavoriteURL(), {
-//       method: 'POST',
-//       headers: {
-//         Accept: 'application/json, text/plain',
-//         'Content-type': 'application/json',
-//       },
-//       body: JSON.stringify(favoriteBO),
-//     }).then((responseJSON) => {
-//       // We always get an array of FavoriteBO.fromJSON, but only need one object
-//       let responseFavoriteBO = FavoriteBO.fromJSON(responseJSON)[0];
-//       // console.info(favoriteBOs);
-//       return new Promise(function (resolve) {
-//         resolve(responseFavoriteBO);
-//       });
-//     });
-//   }
-
-//   updateFavorite(favoriteBO) {
-//     return this.#fetchAdvanced(this.#updateFavoriteURL(favoriteBO.getID()), {
-//       method: 'PUT',
-//       headers: {
-//         Accept: 'application/json, text/plain',
-//         'Content-type': 'application/json',
-//       },
-//       body: JSON.stringify(favoriteBO),
-//     }).then((responseJSON) => {
-//       // We always get an array of FavoriteBOs.fromJSON
-//       let responseFavoriteBO = FavoriteBO.fromJSON(responseJSON)[0];
-//       // console.info(favoriteBOs);
-//       return new Promise(function (resolve) {
-//         resolve(responseFavoriteBO);
-//       });
-//     });
-//   }
-
-//   deleteFavorite(favoriteId) {
-//     return this.#fetchAdvanced(this.#deleteFavoriteURL(favoriteId), {
-//       method: 'DELETE',
-//     }).then((responseJSON) => {
-//       // We always get an array of FavoriteBO.fromJSON
-//       let responseFavoriteBO = FavoriteBO.fromJSON(responseJSON)[0];
-//       // console.info(favoriteBOs);
-//       return new Promise(function (resolve) {
-//         resolve(responseFavoriteBO);
-//       });
-//     });
-//   }
-// }
-
-// // GroupMemberShip Methoden
-
-//   getGroupMemberShips() {
-//     return this.#fetchAdvanced(this.#getGroupMemberShipsURL()).then((responseJSON) => {
-//       let groupMemberShipBOs = GroupMemberShipBO.fromJSON(responseJSON);
-//       // console.info(groupMemberShipBOs);
-//       return new Promise(function (resolve) {
-//         resolve(groupMemberShipBOs);
-//       });
-//     });
-//   }
-
-//   getGroupMemberShip(groupMemberShipId) {
-//     return this.#fetchAdvanced(this.#getGroupMemberShipURL(groupMemberShipId)).then((responseJSON) => {
-//       // We always get an array of GroupMemberShipBOs.fromJSON, but only need one object
-//       let responseGroupMemberShipBO = GroupMemberShipBO.fromJSON(responseJSON)[0];
-//       // console.info(responseGroupMemberShip  BO);
-//       return new Promise(function (resolve) {
-//         resolve(responseGroupMemberShipBO);
-//       });
-//     });
-//   }
-
-//   addGroupMemberShip(GroupMemberShipBO) {
-//     return this.#fetchAdvanced(this.#addGroupMemberShipURL(), {
-//       method: 'POST',
-//       headers: {
-//         Accept: 'application/json   , text/plain',
-//         'Content-type': 'application/json',
-//       },
-//       body: JSON.stringify(groupMemberShipBO),
-//     }).then((responseJSON) => {
-//       // We always get an array of GroupMemberShipBO.fromJSON, but only need one object
-//       let responseGroupMemberShipBO = GroupMemberShipBO.fromJSON(responseJSON)[0];
-//       // console.info(groupMemberShipBOs);
-//       return new Promise(function (resolve) {
-//         resolve(responseGroupMemberShipBO);
-//       });
-//     });
-//   }
-
-//   updateGroupMemberShip(groupMemberShipBO) {
-//     return this.#fetchAdvanced(this.#updateGroupMemberShipURL(groupMemberShipBO.getID()), {
-//       method: 'PUT',
-//       headers: {
-//         Accept: 'application/json, text/plain',
-//         'Content-type': 'application/json',
-//       },
-//       body: JSON.stringify(groupMemberShipBO),
-//     }).then((responseJSON) => {
-//       // We always get an array of GroupMemberShipBOs.fromJSON
-//       let responseGroupMemberShipBO = GroupMemberShipBO.fromJSON(responseJSON)[0];
-//       // console.info(groupMemberShipBOs);
-//       return new Promise(function (resolve) {
-//         resolve(responseGroupMemberShipBO);
-//       });
-//     });
-//   }
-
-//   deleteGroupMemberShip(groupMemberShipId) {
-//     return this.#fetchAdvanced(this.#deleteGroupMemberShipURL(groupMemberShipId), {
-//       method: 'DELETE',
-//     }).then((responseJSON) => {
-//       // We always get an array of GroupMemberShipBO.fromJSON
-//       let responseGroupMemberShipBO = GroupMemberShipBO.fromJSON(responseJSON)[0];
-//       // console.info(groupMemberShipBOs);
-//       return new Promise(function (resolve) {
-//         resolve(responseGroupMemberShipBO);
-//       });
-//     });
-//   }
-// }
-
-// // RetailerGroup Methoden
-
-//   getRetailerGroups() {
-//     return this.#fetchAdvanced(this.#getRetailerGroupsURL()).then((responseJSON) => {
-//       let RetailerGroupBOs = RetailerGroupBO.fromJSON(responseJSON);
-//       // console.info(retailerGroupBOs);
-//       return new Promise(function (resolve) {
-//         resolve(retailerGroupBOs);
-//       });
-//     });
-//   }
-
-//   getRetailerGroup(retailerGroupId) {
-//     return this.#fetchAdvanced(this.#getRetailerGroupURL(retailerGroupId)).then((responseJSON) => {
-//       // We always get an array of RetailerGroupBOs.fromJSON, but only need one object
-//       let responseRetailerGroupBO = RetailerGroupBO.fromJSON(responseJSON)[0];
-//       // console.info(responseRetailerGroup  BO);
-//       return new Promise(function (resolve) {
-//         resolve(responseRetailerGroupBO);
-//       });
-//     });
-//   }
-
-//   addRetailerGroup(retailerGroupBO) {
-//     return this.#fetchAdvanced(this.#addRetailerGroupURL(), {
-//       method: 'POST',
-//       headers: {
-//         Accept: 'application/json, text/plain',
-//         'Content-type': 'application/json',
-//       },
-//       body: JSON.stringify(RetailerGroupBO),
-//     }).then((responseJSON) => {
-//       // We always get an array of RetailerGroupBO.fromJSON, but only need one object
-//       let responseRetailerGroupBO = RetailerGroupBO.fromJSON(responseJSON)[0];
-//       // console.info(retailerGroupBOs);
-//       return new Promise(function (resolve) {
-//         resolve(responseRetailerGroupBO);
-//       });
-//     });
-//   }
-
-//   updateRetailerGroup(retailerGroupBO) {
-//     return this.#fetchAdvanced(this.#updateRetailerGroupURL(retailerGroupBO.getID()), {
-//       method: 'PUT',
-//       headers: {
-//         Accept: 'application/json, text/plain',
-//         'Content-type': 'application/json',
-//       },
-//       body: JSON.stringify(retailerGroupBO),
-//     }).then((responseJSON) => {
-//       // We always get an array of RetailerGroupBOs.fromJSON
-//       let responseRetailerGroupBO = RetailerGroupBO.fromJSON(responseJSON)[0];
-//       // console.info(retailerGroupBOs);
-//       return new Promise(function (resolve) {
-//         resolve(responseRetailerGroupBO);
-//       });
-//     });
-//   }
-
-//   deleteRetailerGroup(retailerGroupId) {
-//     return this.#fetchAdvanced(this.#deleteRetailerGroupURL(RetailerGroupId), {
-//       method: 'DELETE',
-//     }).then((responseJSON) => {
-//       // We always get an array of RetailerGroupBO.fromJSON
-//       let responseRetailerGroupBO = RetailerGroupBO.fromJSON(responseJSON)[0];
-//       // console.info(retailerGroupBOs);
-//       return new Promise(function (resolve) {
-//         resolve(responseRetailerGroupBO);
-//       });
-//     });
-//   }
-// }
-
-// // RetailerEntryList Methoden
-
-//   getRetailerEntryLists() {
-//     return this.#fetchAdvanced(this.#getRetailerEntryListsURL()).then((responseJSON) => {
-//       let retailerEntryListBOs = RetailerEntryListBO.fromJSON(responseJSON);
-//       // console.info(retailerEntryListBOs);
-//       return new Promise(function (resolve) {
-//         resolve(retailerEntryListBOs);
-//       });
-//     });
-//   }
-
-//   getRetailerEntryList(retailerEntryListId) {
-//     return this.#fetchAdvanced(this.#getRetailerEntryListURL(retailerEntryListId)).then((responseJSON) => {
-//       // We always get an array of RetailerEntryListBOs.fromJSON, but only need one object
-//       let responseRetailerEntryListBO = RetailerEntryListBO.fromJSON(responseJSON)[0];
-//       // console.info(responseRetailerEntryList  BO);
-//       return new Promise(function (resolve) {
-//         resolve(responseRetailerEntryListBO);
-//       });
-//     });
-//   }
-
-//   addRetailerEntryList(retailerEntryListBO) {
-//     return this.#fetchAdvanced(this.#addRetailerEntryListURL(), {
-//       method: 'POST',
-//       headers: {
-//         Accept: 'application/json, text/plain',
-//         'Content-type': 'application/json',
-//       },
-//       body: JSON.stringify(retailerEntryListBO),
-//     }).then((responseJSON) => {
-//       // We always get an array of RetailerEntryListBO.fromJSON, but only need one object
-//       let responseRetailerEntryListBO = RetailerEntryListBO.fromJSON(responseJSON)[0];
-//       // console.info(retailerEntryListBOs);
-//       return new Promise(function (resolve) {
-//         resolve(responseRetailerEntryListBO);
-//       });
-//     });
-//   }
-
-//   updateRetailerEntryList(retailerEntryListBO) {
-//     return this.#fetchAdvanced(this.#updateRetailerEntryListURL(retailerEntryListBO.getID()), {
-//       method: 'PUT',
-//       headers: {
-//         Accept: 'application/json, text/plain',
-//         'Content-type': 'application/json',
-//       },
-//       body: JSON.stringify(RetailerEntryListBO),
-//     }).then((responseJSON) => {
-//       // We always get an array of RetailerEntryListBOs.fromJSON
-//       let responseRetailerEntryListBO = RetailerEntryListBO.fromJSON(responseJSON)[0];
-//       // console.info(retailerEntryListBOs);
-//       return new Promise(function (resolve) {
-//         resolve(responseRetailerEntryListBO);
-//       });
-//     });
-//   }
-
-//   deleteRetailerEntryList(retailerEntryListId) {
-//     return this.#fetchAdvanced(this.#deleteRetailerEntryListURL(retailerEntryListId), {
-//       method: 'DELETE',
-//     }).then((responseJSON) => {
-//       // We always get an array of RetailerEntryListBO.fromJSON
-//       let responseRetailerEntryListBO = RetailerEntryListBO.fromJSON(responseJSON)[0];
-//       // console.info(retailerEntryListBOs);
-//       return new Promise(function (resolve) {
-//         resolve(responseRetailerEntryListBO);
-//       });
-//     });
-//   }
-// }

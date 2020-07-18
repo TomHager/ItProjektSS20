@@ -1,4 +1,3 @@
-from datetime import date
 from server.bo.Entry import Entry
 from server.db.Mapper import Mapper
 
@@ -27,10 +26,9 @@ class EntryMapper(Mapper):
 
         tuples = cursor.fetchall()
 
-        for (id, bought, unit, amount, article, modification_date) in tuples:
+        for (id, unit, amount, article, modification_date) in tuples:
             entry = Entry()
             entry.set_id(id)
-            entry.set_bought(bought)
             entry.set_unit(unit)
             entry.set_amount(amount)
             entry.set_article(article)
@@ -60,9 +58,9 @@ class EntryMapper(Mapper):
         for (maxid) in tuples:
             entry.set_id(maxid[0] + 1)
 
-        command = "INSERT INTO entries (id, bought, unit, amount, article, modification_date) " \
-                  "VALUES (%s,%s,%s,%s,%s,%s)"
-        data = (entry.get_id(), entry.get_bought(), entry.get_unit(), entry.get_amount(), entry.get_article(),
+        command = "INSERT INTO entries (id, unit, amount, article, modification_date) " \
+                  "VALUES (%s,%s,%s,%s,%s)"
+        data = (entry.get_id(), entry.get_unit(), entry.get_amount(), entry.get_article(),
                 entry.get_modification_date())
         cursor.execute(command, data)
 
@@ -78,8 +76,8 @@ class EntryMapper(Mapper):
 
         cursor = self._cnx.cursor()
 
-        command = "UPDATE entry " + "SET unit=%s, bought=%s, amount=%s, article=%s WHERE id=%s"
-        data = (entry.get_unit(), entry.get_bought(), entry.get_amount(), entry.get_article,
+        command = "UPDATE entry " + "SET unit=%s, amount=%s, article=%s WHERE id=%s"
+        data = (entry.get_unit(), entry.get_amount(), entry.get_article,
                 entry.get_modification_date())
         cursor.execute(command, data)
 
@@ -117,10 +115,9 @@ class EntryMapper(Mapper):
         tuples = cursor.fetchall()
 
         if tuples[0] is not None:
-            (id, bought, unit, amount, article, modification_date) = tuples[0]
+            (id, unit, amount, article, modification_date) = tuples[0]
             entry = Entry()
             entry.set_id(id)
-            entry.set_bought(bought)
             entry.set_unit(unit)
             entry.set_amount(amount)
             entry.set_article(article)
@@ -146,10 +143,9 @@ class EntryMapper(Mapper):
         cursor.execute(command)
         tuples = cursor.fetchall()
 
-        for (id, bought, unit, amount, article, modification_date) in tuples:
+        for (id, unit, amount, article, modification_date) in tuples:
             entry = Entry()
             entry.set_id(id)
-            entry.set_bought(bought)
             entry.set_unit(unit)
             entry.set_amount(amount)
             entry.set_article(article)
@@ -184,30 +180,6 @@ class EntryMapper(Mapper):
 
         return result
 
-    def find_bought_by_entry(self, entry_id):
-        """Auslesen Einheit anhand des Eintrags
-
-                                        :param entry_id
-                                        :return unit, zum zugehörigen Eintrag.
-                                        """
-
-        result = []
-        cursor = self._cnx.cursor()
-        command = "SELECT bought, article FROM entries WHERE entry={} ORDER BY entry".format(entry_id)
-        cursor.execute(command)
-        tuples = cursor.fetchall()
-
-        for (bought, article) in tuples:
-            entry = Entry()
-            entry.set_bought(bought)
-            entry.set_article(article)
-            result.append(entry)
-
-        self._cnx.commit()
-        cursor.close()
-
-        return result
-
     def find_entry_by_modification_date(self, modification_date):
         """Auslesen Eintrag anhand des Änderungsdatums
 
@@ -222,10 +194,9 @@ class EntryMapper(Mapper):
         cursor.execute(command)
         tuples = cursor.fetchall()
 
-        for (id, bought, unit, amount, article, modification_date) in tuples:
+        for (id, unit, amount, article, modification_date) in tuples:
             entry = Entry()
             entry.set_id(id)
-            entry.set_bought(bought)
             entry.set_unit(unit)
             entry.set_amount(amount)
             entry.set_article(article)

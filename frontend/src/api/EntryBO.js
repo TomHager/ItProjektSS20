@@ -56,7 +56,7 @@ export default class EntryBO extends BusinessObject {
 
     */
 
-  // Returns an Array of CustomerBOs from a given JSON structure
+  // Returns an Array of EntryBOs from a given JSON structure
   static fromJSON(entries) {
     let result = [];
 

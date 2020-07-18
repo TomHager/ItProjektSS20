@@ -78,6 +78,7 @@ entry = api.inherit('Entry', bo, {
   'unit': fields.String(attribute='_unit', discription='Name der Einheit'),
   'amount': fields.Integer(attribute='_amount', discription='Menge eines Artikel'),
   'modification_date': fields.Date(attribute='_modification_date', discription='Änderungsdatum der Entry'),
+  'retailer_entry_list_id': fields.Integer(attrubute='_retailer_entry_list_id', discription='ID der RetailerEntryList')
 })
 
 shopping_list = api.inherit('ShoppingList', bo, {

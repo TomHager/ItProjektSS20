@@ -4,7 +4,7 @@ import BusinessObject from './BusinessObject';
  * @author Dimitrios Apazidis
  */
 
-export default class ShoppingListBO extends BusinessObject {
+export default class FavoriteBO extends BusinessObject {
 
   constructor(unit, amount, article) {
     super();
@@ -39,18 +39,22 @@ export default class ShoppingListBO extends BusinessObject {
   }
 
 
-// Returns an Array of CustomerBOs from a given JSON structure
-  static fromJSON(favorites) {
-    let result = [];
+// Returns an Array of FavoriteBOs from a given JSON structure
+static fromJSON(favorites) {
+  let result = [];
 
-    if (Array.isArray(favorites) {
-      favorites.forEach((c) => {
-        Object.setPrototypeOf(c, FavoriteBO.prototype);
-        result.push(c);
-      });
-    } else {
-      // Es handelt sich offenbar um ein singuläres Objekt
-      let c = favorites;
+  if (Array.isArray(favorites)) {
+    favorites.forEach((c) => {
       Object.setPrototypeOf(c, FavoriteBO.prototype);
       result.push(c);
-    }
+    });
+  } else {
+    // Es handelt sich offenbar um ein singuläres Objekt
+    let c = favorites;
+    Object.setPrototypeOf(c, FavoriteBO.prototype);
+    result.push(c);
+  }
+
+  return result;
+}
+}
