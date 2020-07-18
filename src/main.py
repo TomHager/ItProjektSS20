@@ -308,39 +308,6 @@ class GroupRelatedByNameOperations(Resource):
         return g
 
 
-@ikauf.route('/group-by-user/<int:userId>')
-@ikauf.response(500, 'Falls Server-seitiger Fehler')
-@ikauf.param('userId', 'Id des User-Objekts')
-class GroupRelatedByUserOperations(Resource):
-    @ikauf.marshal_with(user)
-    @secured
-    def get(self, user):
-        """Auslesen eines bestimmten Gruppen-Objekt nach User"""
-
-        adm = ShoppingListAdministration()
-        g = adm.get_group_by_user(user)
-        return g
-
-
-@ikauf.route('/user-by-group/<int:groupId>')
-@ikauf.response(500, 'Falls Server-seitiger Fehler')
-@ikauf.param('groupId', 'Gruppen-Objekt')
-class UserRelatedByGroupOperations(Resource):
-    @ikauf.marshal_with(group)
-    @secured
-    def get(self, id):
-        "Auslesen aller User einer Gruppe"
-
-        adm = ShoppingListAdministration()
-
-        g = adm.get_group_by_id(id)
-        if g is not None:
-            group_list = adm.get_user_by_group(group)
-            return group_list
-        else:
-            return "Gruppe nicht gefunden", 500
-
-
 """
 Klassen und Operationen zu Retailer
 """
@@ -439,20 +406,6 @@ class RetailerRelatedByNameOperations(Resource):
         return r
 
 
-@ikauf.route('/retailer-by-group/<int:groupId>')
-@ikauf.response(500, 'Falls Server-seitiger Fehler')
-@ikauf.param('groupId', 'Gruppen-Objekt des zugehörigen RetailerEntryList-Objekts')
-class RetailerRelatedByGroupOperations(Resource):
-    @ikauf.marshal_with(retailer)
-    @secured
-    def get(self, group):
-        """Auslesen eines bestimmten Retailer-Objekts nach Gruppe"""
-
-        adm = ShoppingListAdministration()
-        r = adm.get_retailer_by_group(group)
-        return r
-
-
 """
 Klassen und operationen für RetailerEntryList
 """
@@ -469,6 +422,20 @@ class RetailerEntryListListOperations(Resource):
         adm = ShoppingListAdministration()
         rel = adm.get_all_retailer_entry_list()
         return rel
+
+
+    def post(self, id):
+        """Anlegen eines RetailerListEntry für eine gegebene Gruppe"""
+
+        adm = ShoppingListAdministration()
+
+        gruppe = adm.get_group_by_id(id)
+
+        if gruppe is not None:
+            result = adm.create_retailer_entry_list_for_group
+            return result
+        else:
+            return "Gruppe unknown", 500
 
 
 @ikauf.route('/retailer-entry-list/<int:retailerEntryListId>')
@@ -510,7 +477,7 @@ class RetailerEntryListOperations(Resource):
             return '', 500
 
 
-@ikauf.route('/retailer_entry_list/<int:groupId>')
+@ikauf.route('/retailer-entry-list-by-group/<int:groupId>')
 @ikauf.response(500, 'Falls Server-seitiger Fehler')
 @ikauf.param('group', 'group des zugehörigen RetailerEntryList-Objekts')
 class RetailerEntryListRelatedByGroupOperations(Resource):
@@ -522,20 +489,7 @@ class RetailerEntryListRelatedByGroupOperations(Resource):
         adm = ShoppingListAdministration()
         r = adm.get_retailer_entry_list_by_group(id)
         return r
-
-    def post(self, id):
-        """Anlegen eines RetainerListEntry für eine gegebene Gruppe"""
-
-        adm = ShoppingListAdministration()
-
-        gruppe = adm.get_group_by_id(id)
-
-        if gruppe is not None:
-            result = adm.create_retailer_entry_list_for_group
-            return result
-        else:
-            return "Gruppe unknown", 500
-
+#todo post wurde in list operations eingefügt
 
 @ikauf.route('/retailer_entry_list/<string:retailer>')
 @ikauf.response(500, 'Falls Server-seitiger Fehler')
@@ -661,6 +615,19 @@ class EntryRelatedByRetailerEntryListOperations(Resource):
         adm = ShoppingListAdministration()
         rel = adm.get_entry_by_retailer_entry_list(retailer_entry_list)
         return rel
+
+@ikauf.route('/entry-by-unit/<string:unit>')
+@ikauf.response(500, 'Falls Server-seitiger Fehler')
+@ikauf.param('unit', 'Unit des zugehörigen Entry-Objekts')
+class EntryRelatedByUnitOperations(Resource):
+    @ikauf.marshal_with(entry)
+    @secured
+    def get(self, unit):
+        """Auslesen eines bestimmten Entry-Objekts nach Amount"""
+
+        adm = ShoppingListAdministration()
+        am = adm.get_unit_by_entry(unit)
+        return am
 
 
 """
@@ -831,11 +798,26 @@ class RetailerGroupListOperations(Resource):
             x = adm.create_retailer(r)
             return x, 200
         else:
-            return 'Group unknown', 500
+            return 'Group unknown',
+
+@ikauf.route('/retailer-member-by-group/<int:groupId>')
+@ikauf.response(500, 'Falls Server-seitiger Fehler')
+@ikauf.param('groupId', 'Gruppen-Objekt des zugehörigen RetailerEntryList-Objekts')
+class RetailerGroupRelatedByGroupOperations(Resource):
+    @ikauf.marshal_with(retailer_group)
+    @secured
+    def get(self, retailer_group):
+        """Auslesen eines bestimmten Retailer-Objekts nach Gruppe"""
+
+        adm = ShoppingListAdministration()
+        r = adm.get_retailer_by_group(retailer_group)
+        return r
+
+
 
 
 """
-Klassen und Operationen für RetailerGroup
+Klassen und Operationen für GroupMembership
 """
 
 
@@ -895,9 +877,10 @@ class GroupMembershipListOperations(Resource):
         adm = ShoppingListAdministration()
 
         r = adm.get_member_by_group_membership(id)
+        x = adm.get_group_membership_by_member(id)
 
         if r is not None:
-            x = adm.create_group_membership(member, membership)
+            x = adm.create_group_membership(r, x)
             return x, 200
         else:
             return 'Group unknown', 500
@@ -907,16 +890,18 @@ class GroupMembershipListOperations(Resource):
 @ikauf.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 @ikauf.param('userId', 'Das User Objekt')
 class GroupsByMembershipOperations(Resource):
-    @ikauf.marshal_with(user)
+    @ikauf.marshal_with(group_member)
     @secured
-    def get(self, user):
+    def get(self, member):
         """ Auslesen von Gruppen-Objekten, die durch den User bestimmt werden.
 
         Die auszulesenden Objekte werden durch ```user``` in dem URI bestimmt.
         """
         adm = ShoppingListAdministration()
-        cust = adm.get_group_by_user(user)
+        cust = adm.get_group_by_user(member)
         return cust
+
+
 
 
 """
