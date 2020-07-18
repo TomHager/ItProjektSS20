@@ -26,9 +26,16 @@
     </select>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2c1c77a4-6169-48a4-a7a4-a8dc3ff2c5dd" name="Default Changelist" comment="Updated ShoppingAdministration.py&#10;Updated Entry Methods">
+    <list default="true" id="2c1c77a4-6169-48a4-a7a4-a8dc3ff2c5dd" name="Default Changelist" comment="Beschreibungen verbessert in ShoppingAdministration.py&#10;main.py Fehler korrektur&#10;ShoppingAdministration.py Fehler korrektur">
+      <change afterPath="$PROJECT_DIR$/frontend/src/api/FavoriteBO.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/api/ShoppingListBO.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/server/bo/Test" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/api/RetailerGroup.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/api/ShoppingAPI.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/api/ShoppingAPI.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/server/ShoppingAdministration.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/ShoppingAdministration.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/server/bo/ShoppingList.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/bo/ShoppingList.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -177,8 +184,25 @@
       <option name="project" value="LOCAL" />
       <updated>1594149300635</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="fixed retailergroup&#10;add groupmembership">
+      <created>1594584348990</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1594584348991</updated>
+    </task>
+    <task id="LOCAL-00012" summary="main.py Klasse für GroupMembership erstellt&#10;minor bugfixes">
+      <created>1594987787673</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1594987787673</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
+  </component>
+  <component name="UnknownFeatures">
+    <option featureType="com.intellij.fileTypeFactory" implementationName="*.js" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
@@ -191,7 +215,7 @@
                   <entry key="branch">
                     <value>
                       <list>
-                        <option value="origin/dev" />
+                        <option value="dev" />
                       </list>
                     </value>
                   </entry>
@@ -214,9 +238,15 @@
     <MESSAGE value="RetailerGroup.py und RetailerGroup.py geändert!" />
     <MESSAGE value="RetailerEntryList.py geändert!" />
     <MESSAGE value="Updated ShoppingAdministration.py&#10;Updated main.py&#10;kleine (logik)Fehlerbehebung" />
-    <option name="LAST_COMMIT_MESSAGE" value="Updated ShoppingAdministration.py&#10;Updated main.py&#10;kleine (logik)Fehlerbehebung" />
+    <MESSAGE value="fixed retailergroup&#10;add groupmembership" />
+    <MESSAGE value="main.py Klasse für GroupMembership erstellt&#10;minor bugfixes" />
+    <option name="LAST_COMMIT_MESSAGE" value="main.py Klasse für GroupMembership erstellt&#10;minor bugfixes" />
   </component>
   <component name="WindowStateProjectService">
+    <state x="386" y="321" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1594991804807">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="386" y="321" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1594991804807" />
     <state x="311" y="6" key="CommitChangelistDialog2" timestamp="1592907991119">
       <screen x="0" y="0" width="1368" height="872" />
     </state>
@@ -237,16 +267,17 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1898" height="277" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1594387943076" />
-    <state x="186" y="81" key="SettingsEditor" timestamp="1591108101784">
-      <screen x="0" y="0" width="1368" height="872" />
+    <state x="261" y="97" key="SettingsEditor" timestamp="1595002662026">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="186" y="81" key="SettingsEditor/0.0.1368.872/2736.0.2560.1400@0.0.1368.872" timestamp="1591106811525" />
     <state x="186" y="81" key="SettingsEditor/0.0.1368.872@0.0.1368.872" timestamp="1591108101784" />
-    <state x="389" y="202" key="Vcs.Push.Dialog.v2" timestamp="1594149559849">
+    <state x="261" y="97" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1595002662026" />
+    <state x="389" y="202" key="Vcs.Push.Dialog.v2" timestamp="1594584356694">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="277" y="169" key="Vcs.Push.Dialog.v2/0.0.1368.872@0.0.1368.872" timestamp="1592907534126" />
-    <state x="389" y="202" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1594149559849" />
+    <state x="389" y="202" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1594584356694" />
     <state x="691" y="417" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1594133703646">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
