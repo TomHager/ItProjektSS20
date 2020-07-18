@@ -21,7 +21,7 @@ import {
 import React, { Component } from 'react';
 import MaterialTable from 'material-table';
 import ShoppingAPI from '../../api/ShoppingAPI';
-import { addEntry } from '../../actions/shoppingList';
+// import { addEntry } from '../../actions/shoppingList';
 // import EntryBO from '../../api/EntryBO';
 
 /**
@@ -138,30 +138,34 @@ export default class ShoppingList extends Component {
       ],
       retailerName: 'Default',
     };
-    const onChange = (e) =>
-      this.setState({ ...this.state, [e.target.name]: e.target.value });
-    const onSubmit = async (e) => {
-      e.preventDefault();
-      // if (...) {
-      // } else {
-      addEntry(this.state.data);
-      // }
-    };
+    // const onChange = (e) =>
+    //   this.setState({ ...this.state, [e.target.name]: e.target.value });
+    // const onSubmit = async (e) => {
+    //   e.preventDefault();
+    //   // if (...) {
+    //   // } else {
+    //   addEntry(this.state.data);
+    //   // }
+    // };
   }
 
   setModDate = (date) => (date == null ? (date = Date.now()) : (date = null));
 
-  async fetchEntries() {
-    const res = await fetch('http://DESKTOP-DU328LQ:8081/api/iKauf/entries');
-    const resjson = await res.json();
-    this.setState({ data: resjson });
-    await console.log('fetch complete');
-  }
-
+fetchEntries = () => {
+  ShoppingAPI.getAPI().getEntries().then(entryBOs => this.setState({data: entryBOs})).catch(e => this.setState({data: []}))
+  console.log("FetchEntries")
+}
   componentDidMount() {
     this.fetchEntries();
-    console.log('MOUNT');
   }
+
+//   getItems = () => {
+//     ShoppingAPI.getAPI().getAllItems().then(ItemBOs =>
+//             this.setState({
+//                 items: ItemBOs
+//             }))
+// }
+
 
   /** Updates the entry */
   async updateEntry(newData) {

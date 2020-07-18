@@ -20,7 +20,7 @@ export default class ShoppingAPI {
   // Singelton instance
   static #api = null;
 
-  #ShoppingServerBaseURL = 'http://desktop-NM4VM89:8081/api/iKauf/';
+  #ShoppingServerBaseURL = '/iKauf';
 
   // Entries related
   #getEntriesURL = () => `${this.#ShoppingServerBaseURL}/entries`;
@@ -126,10 +126,12 @@ export default class ShoppingAPI {
 
   // Entry Methoden
   getEntries() {
+    console.log("FETCH API");
     return this.#fetchAdvanced(this.#getEntriesURL()).then((responseJSON) => {
       let entryBOs = EntryBO.fromJSON(responseJSON);
       // console.info(entryBOs);
       return new Promise(function (resolve) {
+        console.log("Failed")
         resolve(entryBOs);
       });
     });
@@ -197,7 +199,7 @@ deleteEntry(entryId) {
 
 searchEntryByArticle(articleName) {
      return this.#fetchAdvanced(this.#searchEntryByArticleURL(articleName)).then((responseJSON) => {
-         let entryBOs = entryBOs.fromJSON(responseJSON);
+         let entryBOs = EntryBO.fromJSON(responseJSON);
          // console.info(entryBOs);
          return new Promise(function (resolve) {
              resolve(entryBOs);
@@ -207,7 +209,7 @@ searchEntryByArticle(articleName) {
 
 searchEntryByRetailerEntryList(retailerEntryList) {
      return this.#fetchAdvanced(this.#searchEntryByRetailerEntryListURL(retailerEntryList)).then((responseJSON) => {
-         let entryBOs = entryBOs.fromJSON(responseJSON);
+         let entryBOs = EntryBO.fromJSON(responseJSON);
          // console.info(entryBOs);
          return new Promise(function (resolve) {
              resolve(entryBOs);
@@ -217,7 +219,7 @@ searchEntryByRetailerEntryList(retailerEntryList) {
 
 searchEntryByAmount(amount) {
      return this.#fetchAdvanced(this.#searchEntryByAmountURL(amount)).then((responseJSON) => {
-         let entryBOs = entryBOs.fromJSON(responseJSON);
+         let entryBOs = EntryBO.fromJSON(responseJSON);
          // console.info(entryBOs);
          return new Promise(function (resolve) {
              resolve(entryBOs);
@@ -305,7 +307,7 @@ searchEntryByAmount(amount) {
 
   searchGroupByName(groupName) {
     return this.#fetchAdvanced(this.#searchGroupByNameURL(groupName)).then((responseJSON) => {
-        let groupBOs = groupBOs.fromJSON(responseJSON);
+        let groupBOs = GroupBO.fromJSON(responseJSON);
         // console.info(groupBOs);
         return new Promise(function (resolve) {
             resolve(groupBOs);
@@ -390,7 +392,7 @@ searchEntryByAmount(amount) {
 
 searchUserByName(userName) {
      return this.#fetchAdvanced(this.#searchUserByNameURL(userName)).then((responseJSON) => {
-         let userBOs = userBOs.fromJSON(responseJSON);
+         let userBOs = UserBO.fromJSON(responseJSON);
          // console.info(userBOs);
          return new Promise(function (resolve) {
              resolve(userBOs);
@@ -401,7 +403,7 @@ searchUserByName(userName) {
 
 searchUserByEmail(userEmail) {
      return this.#fetchAdvanced(this.#searchUserByEmailURL(userEmail)).then((responseJSON) => {
-         let userBOs = userBOs.fromJSON(responseJSON);
+         let userBOs = UserBO.fromJSON(responseJSON);
          // console.info(userBOs);
          return new Promise(function (resolve) {
              resolve(userBOs);
@@ -490,7 +492,7 @@ searchUserByEmail(userEmail) {
 
   searchShoppingListByName(shoppingListName) {
     return this.#fetchAdvanced(this.#searchShoppingListByNameURL(shoppingListName)).then((responseJSON) => {
-        let shoppingListBOs = shoppingListBOs.fromJSON(responseJSON);
+        let shoppingListBOs = ShoppingListBO.fromJSON(responseJSON);
         // console.info(shoppinglistBOs);
         return new Promise(function (resolve) {
             resolve(shoppingListBOs);
@@ -501,7 +503,7 @@ searchUserByEmail(userEmail) {
 
   searchShoppingListByGroupId(groupId) {
   return this.#fetchAdvanced(this.#searchShoppingListByNameURL(groupId)).then((responseJSON) => {
-      let shoppingListBOs = shoppingListBOs.fromJSON(responseJSON);
+      let shoppingListBOs = ShoppingListBO.fromJSON(responseJSON);
       // console.info(shoppinglistBOs);
       return new Promise(function (resolve) {
           resolve(shoppingListBOs);
@@ -588,7 +590,7 @@ searchUserByEmail(userEmail) {
 
   searchRetailerByName(retailerName) {
     return this.#fetchAdvanced(this.#searchRetailerByNameURL(retailerName)).then((responseJSON) => {
-        let retailerBOs = retailerBOs.fromJSON(responseJSON);
+        let retailerBOs = RetailerBO.fromJSON(responseJSON);
         // console.info(retailerBOs);
         return new Promise(function (resolve) {
             resolve(retailerBOs);
@@ -601,7 +603,7 @@ searchUserByEmail(userEmail) {
 
   searchRetailerByRetailerEntryList(retailerEntryList) {
     return this.#fetchAdvanced(this.#searchRetailerByRetailerEntryListURL(retailerEntryList)).then((responseJSON) => {
-        let retailerBOs = retailerBOs.fromJSON(responseJSON);
+        let retailerBOs = RetailerBO.fromJSON(responseJSON);
         // console.info(retailerBOs);
         return new Promise(function (resolve) {
             resolve(retailerBOs);
@@ -762,7 +764,7 @@ searchUserByEmail(userEmail) {
   
   searchGroupsByMember(userId) {
     return this.#fetchAdvanced(this.#searchGroupsByMemberURL(userId)).then((responseJSON) => {
-        let groupMembershipBOs = groupMembershipBOs.fromJSON(responseJSON);
+        let groupMembershipBOs = GroupMembershipBO.fromJSON(responseJSON);
         // console.info(groupMembershipBOs);
         return new Promise(function (resolve) {
             resolve(groupMembershipBOs);
@@ -846,7 +848,7 @@ searchUserByEmail(userEmail) {
 
   searchRetailerMemberByGroup(groupId) {
     return this.#fetchAdvanced(this.#searchRetailerMemberByGroupURL(groupId)).then((responseJSON) => {
-        let retailergroupBOs = retailergroupBOs.fromJSON(responseJSON);
+        let retailergroupBOs = RetailerGroupBO.fromJSON(responseJSON);
         // console.info(retailergroupBOs);
         return new Promise(function (resolve) {
             resolve(retailergroupBOs);
@@ -931,29 +933,12 @@ searchUserByEmail(userEmail) {
 
   searchRetailerEntryListByGroup(groupId) {
     return this.#fetchAdvanced(this.#searchRetailerByNameURL(groupId)).then((responseJSON) => {
-      let retailerEntryListBOs = retailerEntryListBOs.fromJSON(responseJSON);
+      let retailerEntryListBOs = RetailerEntryListBO.fromJSON(responseJSON);
       // console.info(retailerEntryListBOs);
       return new Promise(function (resolve) {
           resolve(retailerEntryListBOs);
       })
   })
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  }
 
 }
-
