@@ -65,8 +65,6 @@ export class CreateGroup extends Component {
     this.setState({ users: [...this.state.users, newUser] });
   };
 
-  addUser;
-
   render() {
     const open = this.state.open;
     const users = this.state.users;

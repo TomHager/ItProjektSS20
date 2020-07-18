@@ -16,7 +16,7 @@ import {
  * @author Lukas Rutkauskas
  */
 
-export default class ReportNavigation extends Component {
+export default class ReportDataTable extends Component {
   constructor(props) {
     super(props);
 
