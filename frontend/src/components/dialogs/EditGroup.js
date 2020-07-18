@@ -8,6 +8,7 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import EditIcon from "@material-ui/icons/Edit";
 import IconButton from "@material-ui/core/IconButton";
+import ShoppingAPI from "../../api/ShoppingAPI";
 
 /**
  *
@@ -21,6 +22,8 @@ export class EditGroup extends Component {
 
     this.state = {
       open: false,
+      newName: null,
+      groupBO: null,
     };
   }
 
@@ -31,7 +34,31 @@ export class EditGroup extends Component {
 
   handleClose = () => {
     this.setState({ open: false });
-    console.log(this.open);
+    console.log(this.state.newName);
+  };
+
+  updateGroup = () => {
+    var group = this.state.groupBO;
+    group.setName(this.state.newName);
+    ShoppingAPI.getAPI()
+      .updateGroup(group)
+      .then(
+        function () {
+          ShoppingAPI.getAPI()
+            .getGroupById(group.getID())
+            .then(
+              (GroupBO) =>
+                this.setState({
+                  groupBO: GroupBO,
+                })
+              // this.props.onUserUpdated(),
+            );
+        }.bind(this)
+      );
+  };
+
+  handleGroupNameChange = (event) => {
+    this.setState({ newName: event.target.value });
   };
 
   render() {
@@ -58,7 +85,8 @@ export class EditGroup extends Component {
               margin="dense"
               id="name"
               label="Group name"
-              type="email"
+              type="name"
+              onInput={this.handleGroupNameChange}
               fullWidth
             />
           </DialogContent>
@@ -66,7 +94,7 @@ export class EditGroup extends Component {
             <Button onClick={this.handleClose} color="primary">
               Cancel
             </Button>
-            <Button onClick={this.handleClose} color="primary">
+            <Button onClick={() => this.updateGroup()} color="primary">
               Submit
             </Button>
           </DialogActions>

@@ -19,9 +19,9 @@ import GroupAddIcon from "@material-ui/icons/GroupAdd";
 import IconButton from "@material-ui/core/IconButton";
 import AddUser from "../subcomponents/AddUser";
 import DeleteIcon from "@material-ui/icons/Delete";
-import GroupBO from "../../api/GroupBO"
-import GroupMembershipBO from "../../api/GroupMembershipBO"
-import ShoppingAPI from "../../api/ShoppingAPI"
+import GroupBO from "../../api/GroupBO";
+import GroupMembershipBO from "../../api/GroupMembershipBO";
+import ShoppingAPI from "../../api/ShoppingAPI";
 
 /**
  *
@@ -38,37 +38,39 @@ export class CreateGroup extends Component {
       open: false,
       groupName: "",
       users: [],
-      currentUser : 1
+      currentUser: 1,
     };
   }
 
   handleGroupCreation = () => {
-    const newGroup = new GroupBO()
-    newGroup.setName(this.state.groupName)
-    ShoppingAPI.getAPI().addGroup(newGroup)
-    .then(group => this.handleGroupMembershipCreation(group.getID()))
-  }
+    const newGroup = new GroupBO();
+    newGroup.setName(this.state.groupName);
+    ShoppingAPI.getAPI()
+      .addGroup(newGroup)
+      .then((group) => this.handleGroupMembershipCreation(group.getID()));
+  };
 
   handleGroupMembershipCreation = (groupId) => {
-    const group_list = this.state.users
-    const new_group_membership = new GroupMembershipBO()
+    const group_list = this.state.users;
+    const new_group_membership = new GroupMembershipBO();
 
     //new_group_membership.setGroupMembership(this.state.currentUser)
-    new_group_membership.setGroupMember(this.state.currentUser)
+    new_group_membership.setGroupMember(this.state.currentUser);
 
-    ShoppingAPI.getAPI().addGroupMember(new_group_membership)
+    ShoppingAPI.getAPI().addGroupMember(new_group_membership);
 
     group_list.map((group) =>
-    ShoppingAPI.getAPI().searchUserByName(group)
-    .then(function(user){
-    new_group_membership.setGroupMember(user.getID());
-    ShoppingAPI.getAPI().addGroupMember(new_group_membership)
-    console.log(new_group_membership)
-    .then(this.handleClose)
-    }
-    .bind(this)
-    ))
-  }
+      ShoppingAPI.getAPI()
+        .searchUserByName(group)
+        .then(
+          function (user) {
+            new_group_membership.setGroupMember(user.getID());
+            ShoppingAPI.getAPI().addGroupMember(new_group_membership);
+            console.log(new_group_membership).then(this.handleClose);
+          }.bind(this)
+        )
+    );
+  };
 
   //handleGroupCreation muss noch unten beim Dialogfenster hinzugefügt werden, damit grupe erstellt ewrden kann
   //ich weis leider nicht genau wie der style der seite aussehen soll
@@ -100,8 +102,6 @@ export class CreateGroup extends Component {
     };
     this.setState({ users: [...this.state.users, newUser] });
   };
-
-  addUser;
 
   render() {
     const open = this.state.open;

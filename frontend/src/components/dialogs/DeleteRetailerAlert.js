@@ -14,6 +14,7 @@ export default class DeleteRetailerAlert extends Component {
 
     this.state = {
       open: false,
+      id: 4,
     };
   }
 
@@ -25,7 +26,7 @@ export default class DeleteRetailerAlert extends Component {
   handleCloseYes = () => {
     this.setState({ open: false });
     console.log(this.open);
-    this.props.delRetailer();
+    // this.props.delRetailer(this.id);
   };
 
   handleCloseNo = () => {
@@ -50,7 +51,9 @@ export default class DeleteRetailerAlert extends Component {
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
         >
-          <DialogTitle id="alert-dialog-title">{"Delete the Retailer"}</DialogTitle>
+          <DialogTitle id="alert-dialog-title">
+            {"Delete the Retailer"}
+          </DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
               Do you really want to detete the Retailer?
