@@ -734,7 +734,7 @@ class ShoppingListRelatedByGroupIdOperations(Resource):
 
 
 """
-Klassen und Operationen für RetailerGroup
+Klassen und Operationen für GroupMembership
 """
 
 
