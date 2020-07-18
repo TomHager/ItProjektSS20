@@ -151,17 +151,21 @@ export default class ShoppingList extends Component {
 
   setModDate = (date) => (date == null ? (date = Date.now()) : (date = null));
 
-  async fetchEntries() {
-    const res = await fetch('http://DESKTOP-DU328LQ:8081/api/iKauf/entries');
-    const resjson = await res.json();
-    this.setState({ data: resjson });
-    await console.log('fetch complete');
-  }
-
+fetchEntries = () => {
+  ShoppingAPI.getAPI().getEntries().then(entryBOs => this.setState({data: entryBOs})).catch(e => this.setState({data: []}))
+}
   componentDidMount() {
     this.fetchEntries();
-    console.log('MOUNT');
+    console.log(Date.now());
   }
+
+//   getItems = () => {
+//     ShoppingAPI.getAPI().getAllItems().then(ItemBOs =>
+//             this.setState({
+//                 items: ItemBOs
+//             }))
+// }
+
 
   /** Updates the entry */
   async updateEntry(newData) {
