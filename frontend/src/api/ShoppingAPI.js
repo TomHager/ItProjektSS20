@@ -45,6 +45,7 @@ export default class ShoppingAPI {
   #addGroupURL = () => `${this.#ShoppingServerBaseURL}/groups`;
   #updateGroupURL = (id) => `${this.#ShoppingServerBaseURL}/groups/${id}`;
   #deleteGroupURL = (id) => `${this.#ShoppingServerBaseURL}/groups/${id}`;
+  #searchGroupByNameURL = (groupName) => `${this.#ShoppingServerBaseURL}/retailer-by-name/${groupName}`;
 
   // GroupMemberships related
   #getGroupMembershipsURL = () => `${this.#ShoppingServerBaseURL}/groupMemberships`;
@@ -55,6 +56,9 @@ export default class ShoppingAPI {
     `${this.#ShoppingServerBaseURL}/groupMemberships/${id}`;
   #deleteGroupMembershipURL = (id) =>
     `${this.#ShoppingServerBaseURL}/groupMemberships/${id}`;
+  #searchGroupsByMemberURL = (userId) => `${this.#ShoppingServerBaseURL}/groups-by-membership/${userId}`;
+
+  
 
   // Retailers related
   #getRetailersURL = () => `${this.#ShoppingServerBaseURL}/retailers`;
@@ -62,6 +66,8 @@ export default class ShoppingAPI {
   #addRetailerURL = () => `${this.#ShoppingServerBaseURL}/retailers`;
   #updateRetailerURL = (id) => `${this.#ShoppingServerBaseURL}/retailers/${id}`;
   #deleteRetailerURL = (id) => `${this.#ShoppingServerBaseURL}/retailers/${id}`;
+  #searchRetailerByRetailerEntryListURL = (retailerEntryList) => `${this.#ShoppingServerBaseURL}/retailer-by-retailer-entry-list/${retailerEntryList}`;
+  #searchRetailerByNameURL = (retailerName) => `${this.#ShoppingServerBaseURL}/retailer-by-name/${retailerName}`;
 
   // RetailerEntryLists related
   #getRetailerEntryListsURL = () => `${this.#ShoppingServerBaseURL}/retailerEntryLists`;
@@ -72,6 +78,7 @@ export default class ShoppingAPI {
     `${this.#ShoppingServerBaseURL}/retailerEntryLists/${id}`;
   #deleteRetailerEntryListURL = (id) =>
     `${this.#ShoppingServerBaseURL}/retailerEntryLists/${id}`;
+  #searchRetailerEntryListByGroupNameURL = (groupId) => `${this.#ShoppingServerBaseURL}/retailer-entry-list-by-group/${groupId}`;
 
   // RetailerGroups related
   #getRetailerGroupsURL = () => `${this.#ShoppingServerBaseURL}/retailerGroups`;
@@ -79,6 +86,8 @@ export default class ShoppingAPI {
   #addRetailerGroupURL = () => `${this.#ShoppingServerBaseURL}/retailerGroups`;
   #updateRetailerGroupURL = (id) => `${this.#ShoppingServerBaseURL}/retailerGroups/${id}`;
   #deleteRetailerGroupURL = (id) => `${this.#ShoppingServerBaseURL}/retailerGroups/${id}`;
+  #searchRetailerMemberByGroupURL = (groupId) => `${this.#ShoppingServerBaseURL}/retailer-member-by-group/${groupId}`;
+  
 
   // ShoppingLists related
   #getShoppingListsURL = () => `${this.#ShoppingServerBaseURL}/shoppingLists`;
@@ -86,6 +95,8 @@ export default class ShoppingAPI {
   #addShoppingListURL = () => `${this.#ShoppingServerBaseURL}/shoppingLists`;
   #updateShoppingListURL = (id) => `${this.#ShoppingServerBaseURL}/shoppingLists/${id}`;
   #deleteShoppingListURL = (id) => `${this.#ShoppingServerBaseURL}/shoppingLists/${id}`;
+  #searchShoppingListByGroupIdURL = (groupId) => `${this.#ShoppingServerBaseURL}/shoppinglist-by-group-id/${groupId}`;
+  #searchShoppingListByNameURL = (shoppinglistName) => `${this.#ShoppingServerBaseURL}/shoppinglist-by-name/${shoppinglistName}`;
 
   // User related
   #getUsersURL = () => `${this.#ShoppingServerBaseURL}/users`;
@@ -115,10 +126,12 @@ export default class ShoppingAPI {
 
   // Entry Methoden
   getEntries() {
+    console.log("FETCH API");
     return this.#fetchAdvanced(this.#getEntriesURL()).then((responseJSON) => {
       let entryBOs = EntryBO.fromJSON(responseJSON);
       // console.info(entryBOs);
       return new Promise(function (resolve) {
+        console.log("Failed")
         resolve(entryBOs);
       });
     });
@@ -186,7 +199,7 @@ deleteEntry(entryId) {
 
 searchEntryByArticle(articleName) {
      return this.#fetchAdvanced(this.#searchEntryByArticleURL(articleName)).then((responseJSON) => {
-         let entryBOs = entryBOs.fromJSON(responseJSON);
+         let entryBOs = EntryBO.fromJSON(responseJSON);
          // console.info(entryBOs);
          return new Promise(function (resolve) {
              resolve(entryBOs);
@@ -196,7 +209,7 @@ searchEntryByArticle(articleName) {
 
 searchEntryByRetailerEntryList(retailerEntryList) {
      return this.#fetchAdvanced(this.#searchEntryByRetailerEntryListURL(retailerEntryList)).then((responseJSON) => {
-         let entryBOs = entryBOs.fromJSON(responseJSON);
+         let entryBOs = EntryBO.fromJSON(responseJSON);
          // console.info(entryBOs);
          return new Promise(function (resolve) {
              resolve(entryBOs);
@@ -206,7 +219,7 @@ searchEntryByRetailerEntryList(retailerEntryList) {
 
 searchEntryByAmount(amount) {
      return this.#fetchAdvanced(this.#searchEntryByAmountURL(amount)).then((responseJSON) => {
-         let entryBOs = entryBOs.fromJSON(responseJSON);
+         let entryBOs = EntryBO.fromJSON(responseJSON);
          // console.info(entryBOs);
          return new Promise(function (resolve) {
              resolve(entryBOs);
@@ -287,6 +300,17 @@ searchEntryByAmount(amount) {
     });
   }
 
+  searchGroupByName(groupName) {
+    return this.#fetchAdvanced(this.#searchGroupByNameURL(groupName)).then((responseJSON) => {
+        let groupBOs = GroupBO.fromJSON(responseJSON);
+        // console.info(groupBOs);
+        return new Promise(function (resolve) {
+            resolve(groupBOs);
+        })
+    })
+}
+
+
   // User Methoden
   getUsers() {
     return this.#fetchAdvanced(this.#getUsersURL()).then((responseJSON) => {
@@ -361,7 +385,7 @@ searchEntryByAmount(amount) {
 
 searchUserByName(userName) {
      return this.#fetchAdvanced(this.#searchUserByNameURL(userName)).then((responseJSON) => {
-         let userBOs = userBOs.fromJSON(responseJSON);
+         let userBOs = UserBO.fromJSON(responseJSON);
          // console.info(userBOs);
          return new Promise(function (resolve) {
              resolve(userBOs);
@@ -371,7 +395,7 @@ searchUserByName(userName) {
 
 searchUserByEmail(userEmail) {
      return this.#fetchAdvanced(this.#searchUserByEmailURL(userEmail)).then((responseJSON) => {
-         let userBOs = userBOs.fromJSON(responseJSON);
+         let userBOs = UserBO.fromJSON(responseJSON);
          // console.info(userBOs);
          return new Promise(function (resolve) {
              resolve(userBOs);
@@ -453,6 +477,26 @@ searchUserByEmail(userEmail) {
     });
   }
 
+  searchShoppingListByName(shoppingListName) {
+    return this.#fetchAdvanced(this.#searchShoppingListByNameURL(shoppingListName)).then((responseJSON) => {
+        let shoppingListBOs = ShoppingListBO.fromJSON(responseJSON);
+        // console.info(shoppinglistBOs);
+        return new Promise(function (resolve) {
+            resolve(shoppingListBOs);
+        })
+    })
+}
+
+  searchShoppingListByGroupId(groupId) {
+  return this.#fetchAdvanced(this.#searchShoppingListByNameURL(groupId)).then((responseJSON) => {
+      let shoppingListBOs = ShoppingListBO.fromJSON(responseJSON);
+      // console.info(shoppinglistBOs);
+      return new Promise(function (resolve) {
+          resolve(shoppingListBOs);
+      })
+  })
+}
+
 
 // Retailer Methoden
 
@@ -525,6 +569,29 @@ searchUserByEmail(userEmail) {
         resolve(responseRetailerBO);
       });
     });
+  }
+
+  searchRetailerByName(retailerName) {
+    return this.#fetchAdvanced(this.#searchRetailerByNameURL(retailerName)).then((responseJSON) => {
+        let retailerBOs = RetailerBO.fromJSON(responseJSON);
+        // console.info(retailerBOs);
+        return new Promise(function (resolve) {
+            resolve(retailerBOs);
+        })
+    })
+  }
+  
+
+  
+
+  searchRetailerByRetailerEntryList(retailerEntryList) {
+    return this.#fetchAdvanced(this.#searchRetailerByRetailerEntryListURL(retailerEntryList)).then((responseJSON) => {
+        let retailerBOs = RetailerBO.fromJSON(responseJSON);
+        // console.info(retailerBOs);
+        return new Promise(function (resolve) {
+            resolve(retailerBOs);
+        })
+    })
   }
 
 
@@ -677,6 +744,16 @@ searchUserByEmail(userEmail) {
     });
   }
 
+  
+  searchGroupsByMember(userId) {
+    return this.#fetchAdvanced(this.#searchGroupsByMemberURL(userId)).then((responseJSON) => {
+        let groupMembershipBOs = GroupMembershipBO.fromJSON(responseJSON);
+        // console.info(groupMembershipBOs);
+        return new Promise(function (resolve) {
+            resolve(groupMembershipBOs);
+        })
+    })
+}
 
 
 // RetailerGroup Methoden
@@ -752,6 +829,15 @@ searchUserByEmail(userEmail) {
     });
   }
 
+  searchRetailerMemberByGroup(groupId) {
+    return this.#fetchAdvanced(this.#searchRetailerMemberByGroupURL(groupId)).then((responseJSON) => {
+        let retailergroupBOs = RetailerGroupBO.fromJSON(responseJSON);
+        // console.info(retailergroupBOs);
+        return new Promise(function (resolve) {
+            resolve(retailergroupBOs);
+        })
+    })
+}
 
 
 // RetailerEntryList Methoden
@@ -826,4 +912,16 @@ searchUserByEmail(userEmail) {
       });
     });
   }
+
+
+  searchRetailerEntryListByGroup(groupId) {
+    return this.#fetchAdvanced(this.#searchRetailerByNameURL(groupId)).then((responseJSON) => {
+      let retailerEntryListBOs = RetailerEntryListBO.fromJSON(responseJSON);
+      // console.info(retailerEntryListBOs);
+      return new Promise(function (resolve) {
+          resolve(retailerEntryListBOs);
+      })
+  })
+  }
+
 }

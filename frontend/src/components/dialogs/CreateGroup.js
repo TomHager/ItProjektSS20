@@ -6,7 +6,7 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
-  DialogContentText,
+  // DialogContentText,
   DialogTitle,
   Table,
   TableBody,
@@ -43,7 +43,7 @@ export class CreateGroup extends Component {
   }
 
   handleGroupCreation = () => {
-    const new_group = new GroupBO
+    const new_group = new GroupBO();
     new_group.setName(this.state.groupName)
     ShoppingAPI.getAPI().addGroup(new_group)
     .then(group => this.handleGroupMembershipCreation(group.getID()))
@@ -51,7 +51,7 @@ export class CreateGroup extends Component {
 
   handleGroupMembershipCreation = (groupId) => {
     const group_list = this.state.users
-    const new_group_membership = new GroupMembershipBO
+    const new_group_membership = new GroupMembershipBO()
 
     //new_group_membership.setGroupMembership(this.state.currentUser)
     new_group_membership.setGroupMember(this.state.currentUser)
