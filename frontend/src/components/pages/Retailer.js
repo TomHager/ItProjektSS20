@@ -7,16 +7,14 @@ import {
   TableHead,
   TableRow,
   Paper,
-  IconButton,
+  // IconButton,
 } from "@material-ui/core";
 // import ShoppingAPI from "../../api/ShoppingAPI";
 import DeleteRetailerAlert from "../dialogs/DeleteRetailerAlert";
-import AddIcon from "@material-ui/icons/Add";
 import AddRetailer from "../subcomponents/AddRetailer";
 
 
 /**
- *
  *
  * @author Robin Fink
  */
@@ -66,7 +64,6 @@ export default class RetailerList extends Component {
   };
 
   render() {
-    const retailerRows = this.state.retailerRows;
     const retailers = this.state.retailers;
     return (
       <div align="center">

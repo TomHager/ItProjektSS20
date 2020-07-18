@@ -4,7 +4,7 @@ import BusinessObject from './BusinessObject';
  * @author Tom Hager
  */
 
-export default class GroupBO extends BusinessObject {
+export default class UserBO extends BusinessObject {
   constructor(name, email, externalId) {
     super();
     this.name = name;
@@ -53,13 +53,13 @@ export default class GroupBO extends BusinessObject {
 
     if (Array.isArray(users)) {
       users.forEach((c) => {
-        Object.setPrototypeOf(c, GroupBO.prototype);
+        Object.setPrototypeOf(c, UserBO.prototype);
         result.push(c);
       });
     } else {
       // Es handelt sich offenbar um ein singuläres Objekt
       let c = users;
-      Object.setPrototypeOf(c, GroupBO.prototype);
+      Object.setPrototypeOf(c, UserBO.prototype);
       result.push(c);
     }
 
