@@ -10,7 +10,6 @@ class ShoppingList (bo.BusinessObject):
         super().__init__()
         self.__name = ""
         self.__group_id = ""
-
     def get_name(self):
         return self.__name
 
@@ -22,6 +21,7 @@ class ShoppingList (bo.BusinessObject):
 
     def set_group_id(self, group):
         self.__group_id = group.get_id()
+
 
     def __str__(self):
         """Erzeugen einer einfachen textuellen Darstellung der jeweiligen Instanz."""

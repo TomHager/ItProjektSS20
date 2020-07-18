@@ -1,4 +1,8 @@
-class RetailerGroup:
+from server.bo import Retailer as retailer
+from server.bo import Group as group
+
+
+class RetailerGroup(group.Group, retailer.Retailer):
 
     def __init__(self):
         super().__init__()

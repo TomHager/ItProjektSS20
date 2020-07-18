@@ -1,314 +1,7 @@
-// // import { Container, CssBaseline } from "@material-ui/core";
-// // import Checkbox from "@material-ui/core/Checkbox";
-// // import FormControlLabel from "@material-ui/core/FormControlLabel";
-// // import {
-// //   Favorite,
-// //   FavoriteBorder,
-// //   AddShoppingCartOutlined,
-// //   Search,
-// //   Delete,
-// //   Edit,
-// //   LastPage,
-// //   FirstPage,
-// //   ArrowBackIos,
-// //   ArrowForwardIos,
-// //   Clear,
-// //   Done,
-// //   CheckBox,
-// //   CheckBoxOutlineBlank,
-// //   MoreVert,
-// //   ArrowUpward,
-// // } from "@material-ui/icons";
-// // import React from "react";
-// // import MaterialTable from "material-table";
-
-// // /**
-// //  * Displays a ShoppingList for given Data 
-// //  * 
-// //  * @author Tom Hager
-// //  * 
-// //  */
-
-// // export default function ShoppingList() {
-// //   const [state, setState] = React.useState({
-// //     //passed Columns and Data loaded into state
-// //     columns: [
-// //       {
-// //         align: "center",
-// //         title: "bought",
-// //         field: "bought",
-// //         defaultSort: "asc",
-// //         type: "boolean",
-// //         customSort: (a,b) => a.bought - b.bought,
-// //         // editComponent: props => (
-// //         //   <Checkbox
-// //         //     type="boolean"
-// //         //     value={props.value}
-// //         //     onChange={e => props.onChange(!e.target.value)}
-// //         //   />
-// //         // ),
-// //         render: (data) => (
-// //           <FormControlLabel
-// //             control={
-// //               <Checkbox
-// //                 icon={<CheckBoxOutlineBlank />}
-// //                 checkedIcon={<CheckBox />}
-// //                 checked={data.bought}
-// //                 onChange={(e) => (
-// //                   (data.bought = !data.bought),
-// //                   e,
-// //                   setState((prevState) => {
-// //                     const data = [...prevState.data];
-// //                     return { ...prevState, data };
-// //                   })
-// //                 )}
-// //                 name="boughtCheckBox"
-// //                 color="primary"
-// //               />
-// //             }
-// //           />
-// //         ),
-// //       },
-// //       { title: "Article", field: "articleName", align: "center", sorting: false },
-// //       {
-// //         title: "Amount",
-// //         field: "entryAmount",
-// //         type: "numeric",
-// //         align: "center",
-// //         sorting: false,
-// //       },
-// //       {
-// //         title: "Unit",
-// //         field: "entryUnit",
-// //         sorting: false,
-// //         align: "center",
-// //         lookup: {
-// //           1: "KG",
-// //           2: "g",
-// //           3: "L",
-// //           4: "Stk",
-// //           5: " Sack",
-// //           6: "Karton",
-// //           7: "Flasche",
-// //           8: "Dose",
-// //           9: "Bund",
-// //           10: "m",
-// //         }, //
-// //       },
-// //       {
-// //         title: "Favorite     ",
-// //         align: "center",
-// //         field: "favorite",
-// //         type: "boolean",
-// //         sorting: false,
-// //         render: (data) => (
-// //           <FormControlLabel
-// //             control={
-// //               <Checkbox
-// //                 icon={<FavoriteBorder />}
-// //                 checkedIcon={<Favorite />}
-// //                 checked={data.favorite}
-// //                 onChange={(e) => (
-// //                   (data.favorite = !data.favorite),
-// //                   e,
-// //                   setState((prevState) => {
-// //                     const data = [...prevState.data];
-// //                     return { ...prevState, data };
-// //                   })
-// //                 )}
-// //                 name="favoriteButton"
-// //                 color="primary"
-// //               />
-// //             }
-// //           />
-// //         ),
-// //       },
-// //     ],
-
-// //     // TODO: Connect Back-End for Data
-// //     data: [
-// //       {
-// //         id: 1,
-// //         bought: false,
-// //         favorite: false,
-// //         articleName: "Apfel",
-// //         entryAmount: "26",
-// //         entryUnit: "1",
-// //       },
-// //       {
-// //         id: 2,
-// //         bought: true,
-// //         favorite: true,
-// //         articleName: "Birne",
-// //         entryAmount: "3",
-// //         entryUnit: "3",
-// //       },
-// //       {
-// //         id: 1,
-// //         bought: false,
-// //         favorite: false,
-// //         articleName: "Apfel",
-// //         entryAmount: "26",
-// //         entryUnit: "1",
-// //       },
-// //       {
-// //         id: 2,
-// //         bought: true,
-// //         favorite: true,
-// //         articleName: "Birne",
-// //         entryAmount: "3",
-// //         entryUnit: "3",
-// //       },
-// //     ],
-// //   });
-
-// //   // fetchEntry(() => {
-// //   //   const fetchData = async () => {
-// //   //     const result = await fetch(
-// //   //       'http://desktop-j5f6l70:8081/api/iKauf/entry',
-// //   //     );
-
-// //   //     setState(result.state.data);
-// //   //   };
-
-// //   //   fetchData();
-// //   // }, []);
-
-/** Updates the entry */
-// updateEntry = (newData) => {
-//     ShoppingAPI.getAPI().updateEntry(newData);
-//     this.refresh()
-//   }
-    // clone the original cutomer, in case the backend call fails
-    // let updatedEntry = Object.assign(new EntryBO(), oldData);
-    // set the new attributes from our dialog
-    // updatedEntry.setBought(newData.bought);
-    // updatedEntry.setUnit(newData.unit);
-    // updatedEntry.setAmount(newData.amount);
-    // updatedEntry.setArticleId(newData.articleId);
-    // updatedEntry.setArticleName(newData.articleName);
-    // updatedEntry.setArticleStandard(newData.articleStandard);
-    // updatedEntry.setModificationDate(newData.modificationDate);
-    // ShoppingAPI.getAPI().updateEntry(newData).then(entry => {
-    //   this.setState({
-        // updatingInProgress: false,              // disable loading indicator  
-        // updatingError: null                     // no error message
-      //   refresh();
-      // });
-      // // keep the new state as base state
-      // this.baseState.bought = this.state.data.bought;
-      // this.baseState.unit = this.state.data.unit;
-      // this.baseState.amount = this.state.data.amount;
-      // this.baseState.articleName = this.state.data.articleName;
-      // this.baseState.articleStandard = this.state.data.articleStandard;
-      // this.baseState.modificationDate = this.state.data.modificationDate;
-      // this.props.onClose(updatedEntry);      // call the parent with the new entry
-    // }).catch(e =>
-    //   this.setState({
-        // updatingInProgress: false,              // disable loading indicator 
-        // updatingError: e                        // show error message
-      //   refresh()
-      // })
-    // );
-    // set loading to true
-    // this.setState({
-    //   updatingInProgress: true,                 // show loading indicator
-    //   updatingError: null                       // disable error message
-    // });
-  // }
-
-// //   // TODO: select resposible shopper DropDown
-// //   return (
-// //     <React.Fragment>
-// //       <CssBaseline />
-
-// //       <Container maxWidth="sm">
-// //         <MaterialTable 
-// //           size="small"
-// //           title="Rewe"
-// //           columns={state.columns}
-// //           data={state.data}
-// //           icons={{
-// //             Add: AddShoppingCartOutlined,
-// //             Search: Search,
-// //             Delete: Delete,
-// //             Edit: Edit,
-// //             FirstPage: FirstPage,
-// //             LastPage: LastPage,
-// //             PreviousPage: ArrowBackIos,
-// //             NextPage: ArrowForwardIos,
-// //             Clear: Clear,
-// //             ResetSearch: Clear,
-// //             Check: Done,
-// //             ViewColumn: MoreVert,
-// //             SortArrow: ArrowUpward,
-// //           }}
-// //           options={{
-// //             columnsButton: true,
-// //             actionsColumnIndex: -1,
-// //             // selection: true,
-// //             showSelectAllCheckbox: false,
-// //             showTextRowsSelected: false,
-// //             sorting: true,
-// //             rowStyle: (rowData) => ({
-// //               backgroundColor: rowData.bought ? "#039be5" : "#fff",
-// //             }),
-// //           }}
-// //           // onSelectionChange={(row, rowData) => {
-// //           //   setState((prevState) => {
-// //           //     const data = [...prevState.data];
-// //           //     return { ...prevState, data };
-// //           //   });
-// //           // }}
-// //           editable={{
-// //             isEditable: rowData => rowData.bought === false,
-// //             onRowAdd: (newData) =>
-// //               new Promise((resolve) => {
-// //                 setTimeout(() => {
-// //                   resolve();
-// //                   setState((prevState) => {
-// //                     const data = [...prevState.data];
-// //                     data.push(newData);
-// //                     return { ...prevState, data };
-// //                   });
-// //                 }, 600);
-// //               }),
-// //             onRowUpdate: (newData, oldData) =>
-// //               new Promise((resolve) => {
-// //                 setTimeout(() => {
-// //                   resolve();
-// //                   if (oldData) {
-// //                     setState((prevState) => {
-// //                       const data = [...prevState.data];
-// //                       data[data.indexOf(oldData)] = newData;
-// //                       return { ...prevState, data };
-// //                     });
-// //                   }
-// //                 }, 600);
-// //               }),
-// //             onRowDelete: (oldData) =>
-// //               new Promise((resolve) => {
-// //                 setTimeout(() => {
-// //                   resolve();
-// //                   setState((prevState) => {
-// //                     const data = [...prevState.data];
-// //                     data.splice(data.indexOf(oldData), 1);
-// //                     return { ...prevState, data };
-// //                   });
-// //                 }, 600);
-// //               }),
-// //           }}
-// //         />
-// //       </Container>
-// //     </React.Fragment>
-// //   );
-// // }
-// import { Container, CssBaseline } from "@material-ui/core";
-// import Checkbox from "@material-ui/core/Checkbox";
-// import FormControlLabel from "@material-ui/core/FormControlLabel";
+// import { Container, CssBaseline, IconButton } from '@material-ui/core';
+// import Checkbox from '@material-ui/core/Checkbox';
+// import FormControlLabel from '@material-ui/core/FormControlLabel';
 // import {
-//   Favorite,
-//   FavoriteBorder,
 //   AddShoppingCartOutlined,
 //   Search,
 //   Delete,
@@ -323,186 +16,192 @@
 //   CheckBoxOutlineBlank,
 //   MoreVert,
 //   ArrowUpward,
-// } from "@material-ui/icons";
-// import React, { Component } from "react";
-// import MaterialTable from "material-table";
+//   Refresh,
+// } from '@material-ui/icons';
+// import React, { useState } from 'react';
+// // import PropTypes from 'prop-types';
+// import MaterialTable from 'material-table';
+// import ShoppingAPI from '../../api/ShoppingAPI';
+// // import EntryBO from '../../api/EntryBO';
 
 // /**
-//  * Displays a ShoppingList for given Data 
-//  * 
-//  * @author Tom Hagerw
-//  * 
+//  * Displays a ShoppingList for given Data
+//  *
+//  * @author Tom Hager
 //  */
 
-// export default class ShoppingList extends Component {
-//   constructor(props) {
-//     super(props);
+// const ShoppingList = ({}) => {
+//   // constructor(props) {
+//   //   super(props);
 
-//     // Init an empty state
-//     this.state = {
-//         //passed Columns and Data loaded into state
-//           columns: [
-//             {
-//               align: "center",
-//               title: "bought",
-//               field: "bought",
-//               defaultSort: "asc",
-//               type: "boolean",
-//               customSort: (a,b) => a.bought - b.bought,
-//               // editComponent: props => (
-//               //   <Checkbox
-//               //     type="boolean"
-//               //     value={props.value}
-//               //     onChange={e => props.onChange(!e.target.value)}
-//               //   />
-//               // ),
-//               render: (data) => (
-//                 <FormControlLabel
-//                   control={
-//                     <Checkbox
-//                       icon={<CheckBoxOutlineBlank />}
-//                       checkedIcon={<CheckBox />}
-//                       checked={data.bought}
-//                       onChange={(e) => (
-//                         (data.bought = !data.bought),
-//                         e,
-//                         setState((prevState) => {
-//                           const data = [...prevState.data];
-//                           return { ...prevState, data };
-//                         })
-//                       )}
-//                       name="boughtCheckBox"
-//                       color="primary"
-//                     />
-//                   }
-//                 />
-//               ),
-//             },
-//             { title: "Article", field: "articleName", align: "center", sorting: false },
-//             {
-//               title: "Amount",
-//               field: "entryAmount",
-//               type: "numeric",
-//               align: "center",
-//               sorting: false,
-//             },
-//             {
-//               title: "Unit",
-//               field: "entryUnit",
-//               sorting: false,
-//               align: "center",
-//               lookup: {
-//                 1: "KG",
-//                 2: "g",
-//                 3: "L",
-//                 4: "Stk",
-//                 5: " Sack",
-//                 6: "Karton",
-//                 7: "Flasche",
-//                 8: "Dose",
-//                 9: "Bund",
-//                 10: "m",
-//               }, //
-//             },
-//             {
-//               title: "Favorite     ",
-//               align: "center",
-//               field: "favorite",
-//               type: "boolean",
-//               sorting: false,
-//               render: (data) => (
-//                 <FormControlLabel
-//                   control={
-//                     <Checkbox
-//                       icon={<FavoriteBorder />}
-//                       checkedIcon={<Favorite />}
-//                       checked={data.favorite}
-//                       onChange={(e) => (
-//                         (data.favorite = !data.favorite),
-//                         e,
-//                         setState((prevState) => {
-//                           const data = [...prevState.data];
-//                           return { ...prevState, data };
-//                         })
-//                       )}
-//                       name="favoriteButton"
-//                       color="primary"
-//                     />
-//                   }
-//                 />
-//               ),
-//             },
-//           ],
-      
-//           // TODO: Connect Back-End for Data
-//           data: [
-//             // {
-//             //   id: 1,
-//             //   bought: false,
-//             //   favorite: false,
-//             //   articleName: "Apfel",
-//             //   entryAmount: "26",
-//             //   entryUnit: "1",
-//             // },
-//             // {
-//             //   id: 2,
-//             //   bought: true,
-//             //   favorite: true,
-//             //   articleName: "Birne",
-//             //   entryAmount: "3",
-//             //   entryUnit: "3",
-//             // },
-//             // {
-//             //   id: 1,
-//             //   bought: false,
-//             //   favorite: false,
-//             //   articleName: "Apfel",
-//             //   entryAmount: "26",
-//             //   entryUnit: "1",
-//             // },
-//             // {
-//             //   id: 2,
-//             //   bought: true,
-//             //   favorite: true,
-//             //   articleName: "Birne",
-//             //   entryAmount: "3",
-//             //   entryUnit: "3",
-//             // },
-//           ],
-//     };
-//     // setState((prevState) => {
-//     //   const data = [...prevState.data];
-//     //   data.push(newData);
-//     //   return { ...prevState, data };
-//     // })
+//   // Init an empty state
+//   // this.state = {
+//   //passed Columns and Data loaded into state
+//   const [state, setState] = useState({
+//     columns: [
+//       {
+//         align: 'center',
+//         title: 'bought',
+//         field: 'modificationDate',
+//         defaultSort: 'asc',
+//         type: 'date',
+//         editComponent: (props) => (
+//           <Checkbox
+//             type="boolean"
+//             icon={
+//               <CheckBoxOutlineBlank
+//                 checkedIcon={<CheckBox />}
+//                 onChange={(e) =>
+//                   (this.state.data.modificationDate = setModDate(
+//                     this.state.data.modificationDate
+//                   ))
+//                 }
+//               />
+//             }
+//           />
+//           // console.log(this.state.data.modificationDate)
+//         ),
+//         render: (data) => (
+//           <FormControlLabel
+//             control={
+//               <Checkbox
+//                 icon={<CheckBoxOutlineBlank />}
+//                 checkedIcon={<CheckBox />}
+//                 checked={data.modificationDate != null}
+//                 onChange={(e) => (
+//                   (data.modificationDate = setModDate(data.modificationDate)),
+//                   // (this.updateEntry(data)),
+//                   console.log(data.modificationDate),
+//                   this.setState((prevState) => {
+//                     const data = [...prevState.data];
+//                     return { ...prevState, data };
+//                   })
+//                 )}
+//                 name="boughtCheckBox"
+//                 color="primary"
+//               />
+//             }
+//           />
+//         ),
+//       },
+//       {
+//         title: 'Article',
+//         field: 'articleName',
+//         align: 'center',
+//       },
+//       {
+//         title: 'Amount',
+//         field: 'entryAmount',
+//         type: 'numeric',
+//         align: 'center',
+//         editComponent: (props) => (
+//           // editComponent: (onChange()) => (
+//           //   validity.valid||(props='')
+//           // )
+//           // onChange = (props) => (validity.valid||(props=''))
+//           <input
+//             name="entryAmount"
+//             type="number"
+//             value={this.state.data.entryAmount}
+//             min="0"
+//             oninput="validity.valid||(value='');"
+//           />
+//         ),
+//       },
+//       {
+//         title: 'Unit',
+//         field: 'entryUnit',
+//         align: 'center',
+//         lookup: {
+//           1: 'KG',
+//           2: 'g',
+//           3: 'L',
+//           4: 'Stk',
+//           5: ' Sack',
+//           6: 'Karton',
+//           7: 'Flasche',
+//           8: 'Dose',
+//           9: 'Bund',
+//           10: 'm',
+//         },
+//       },
+//     ],
 
-//   }
-  
-//   async fetchEntries() {
-//     const res = await fetch(
-//       'http://desktop-j5f6l70:8081/api/iKauf/entry',
-//       );
-//       const resjson = fetch.json();
-//     console.log(resjson);
-//     this.setState({ data: data });
+//     data: [],
+
+//     members: [
+//       {
+//         member: 'Tom',
+//       },
+//       {
+//         member: 'Klaus',
+//       },
+//     ],
+//     retailerName: 'Default',
+//   });
+//   // }
+//   const { data } = state;
+//   const onChange = (e) => setState({ ...state, [e.target.name]: e.target.value });
+
+//   const setModDate = (date) => (date !== null ? null : Date.now());
+
+//   const fetchEntries = async (e) => {
+//     const res = await fetch('http://DESKTOP-S3RCLLP:8081/api/iKauf/entry');
+//     const resjson = await res.json();
+//     this.setState({ data: resjson });
+//   };
+
+//   function componentDidMount() {
+//     fetchEntries();
 //   }
 
-//   componentDidMount() {
+//   /** Updates the entry */
+//   const updateEntry = async (newData) => {
+//     ShoppingAPI.getAPI().updateEntry(newData);
 //     this.fetchEntries();
-//   }
+//   };
 
+//   // memberButton = () => {
+//   //   this.MakeItem = function(X) {
+//   //     return <MenuItem >{X}</MenuItem >;
+//   //   }
+//   //   return(
+//   //     <Select
+//   //       value={this.state.members}
+//   //     >
+//   //       {this.state.members.map(this.MakeItem)};
+//   //     </Select>
+//   //   )
+//   //   let members = this.state.members;
+//   //   let options = members.map((data) =>
+//   //       <option
+//   //           key={data.member}
+//   //           value={data.member}
+//   //       >
+//   //           {data.member}
+//   //       </option>
+//   //   );
+//   //   return (
 
+//   //     <select name="memberList" onChange={this.onChange}>
+//   //         <option>Select Responsible</option>
+//   //         {options}
+//   //    </select>
+//   //   )
+//   // }
 
-//   render(){
-//     const state = this.state
-//     return (
+//   // render() {
+//   // const state = this.state;
+//   return (
 //     <React.Fragment>
-//       <CssBaseline />
-
-//       <Container maxWidth="sm">
-//         <MaterialTable 
-//           size="small"
-//           title="Rewe"
+//       <Container maxWidth="md">
+//         <CssBaseline />
+//         <IconButton onClick={(e) => this.fetchEntries()}>
+//           <Refresh />
+//         </IconButton>
+//         {/* {this.memberButton()} */}
+//         <MaterialTable
+//           title={state.retailerName}
 //           columns={state.columns}
 //           data={state.data}
 //           icons={{
@@ -528,7 +227,7 @@
 //             showTextRowsSelected: false,
 //             sorting: true,
 //             rowStyle: (rowData) => ({
-//               backgroundColor: rowData.bought ? "#039be5" : "#fff",
+//               backgroundColor: rowData.modificationDate != null ? '#039be5' : '#fff',
 //             }),
 //           }}
 //           // onSelectionChange={(row, rowData) => {
@@ -538,12 +237,12 @@
 //           //   });
 //           // }}
 //           editable={{
-//             isEditable: rowData => rowData.bought === false,
+//             isEditable: (rowData) => rowData.modificationDate == null,
 //             onRowAdd: (newData) =>
 //               new Promise((resolve) => {
 //                 setTimeout(() => {
 //                   resolve();
-//                   setState((prevState) => {
+//                   this.setState((prevState) => {
 //                     const data = [...prevState.data];
 //                     data.push(newData);
 //                     return { ...prevState, data };
@@ -551,11 +250,13 @@
 //                 }, 600);
 //               }),
 //             onRowUpdate: (newData, oldData) =>
+//               // new Promise((this.updateEntry(oldData))
+//               // new Promise(this.fetchEntries()),
 //               new Promise((resolve) => {
 //                 setTimeout(() => {
 //                   resolve();
 //                   if (oldData) {
-//                     setState((prevState) => {
+//                     this.setState((prevState) => {
 //                       const data = [...prevState.data];
 //                       data[data.indexOf(oldData)] = newData;
 //                       return { ...prevState, data };
@@ -567,7 +268,7 @@
 //               new Promise((resolve) => {
 //                 setTimeout(() => {
 //                   resolve();
-//                   setState((prevState) => {
+//                   this.setState((prevState) => {
 //                     const data = [...prevState.data];
 //                     data.splice(data.indexOf(oldData), 1);
 //                     return { ...prevState, data };
@@ -579,5 +280,13 @@
 //       </Container>
 //     </React.Fragment>
 //   );
-// }
-// }
+// };
+
+// // ShoppingList.propTypes = {
+// //   data: PropTypes.array,
+// // };
+// // const mapStateToProps = (state) => ({
+// //   entries: state.data,
+// // });
+
+// export default ShoppingList;

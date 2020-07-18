@@ -9,7 +9,6 @@ import { Link as RouterLink } from 'react-router-dom';
  * @see See Material-UIs [Paper](https://material-ui.com/components/paper/)
  *
  * @author Tom Hager
- * @author Christoph Kunz
  */
 
 class Header extends Component {

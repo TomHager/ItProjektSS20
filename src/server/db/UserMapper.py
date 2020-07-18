@@ -3,7 +3,6 @@ from server.db.Mapper import Mapper
 
 """ 
 @author Tom Hager
-@author Peter Thies
  """
  
 class UserMapper(Mapper):
@@ -189,7 +188,7 @@ class UserMapper(Mapper):
         """
         cursor = self._cnx.cursor()
 
-        command = "UPDATE users " + "SET name=%s, email=%s WHERE external_id=%s"
+        command = "UPDATE users " + "SET name=%s, email=%s, external_id=%s WHERE id=%s"
         data = (user.get_name(), user.get_email(), user.get_external_id())
         cursor.execute(command, data)
 
@@ -209,9 +208,8 @@ class UserMapper(Mapper):
         self._cnx.commit()
         cursor.close()
 
-
+user = User()
+user.set_id(5), user.set_name("Alex"), user.set_email("alex@alex.alex"), user.set_external_id(8)
 if __name__ == "__main__":
     with UserMapper() as mapper:
-        result = mapper.find_all()
-        for user in result:
-            print(user)
+        result = mapper.update(user)

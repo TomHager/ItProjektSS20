@@ -2,7 +2,6 @@ from abc import ABC, abstractmethod
 
 """ 
 @author Tom Hager
-@author Peter Thies
  """
  
 class BusinessObject(ABC):

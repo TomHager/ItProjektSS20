@@ -19,6 +19,9 @@ import GroupAddIcon from "@material-ui/icons/GroupAdd";
 import IconButton from "@material-ui/core/IconButton";
 import AddUser from "../subcomponents/AddUser";
 import DeleteIcon from "@material-ui/icons/Delete";
+import GroupBO from "../../api/GroupBO";
+import GroupMembershipBO from "../../api/GroupMembershipBO";
+import ShoppingAPI from "../../api/ShoppingAPI";
 
 /**
  *
@@ -33,9 +36,45 @@ export class CreateGroup extends Component {
     // Init an empty state
     this.state = {
       open: false,
+      groupName: "",
       users: [],
+      currentUser: 1,
     };
   }
+
+  handleGroupCreation = () => {
+    const new_group = new GroupBO();
+    new_group.setName(this.state.groupName);
+    ShoppingAPI.getAPI()
+      .addGroup(new_group)
+      .then((group) => this.handleGroupMembershipCreation(group.getID()));
+  };
+
+  handleGroupMembershipCreation = (groupId) => {
+    const group_list = this.state.users;
+    const new_group_membership = new GroupMembershipBO();
+
+    //new_group_membership.setGroupMembership(this.state.currentUser)
+    new_group_membership.setGroupMember(this.state.currentUser);
+
+    ShoppingAPI.getAPI().addGroupMember(new_group_membership);
+
+    group_list.map((user) =>
+      ShoppingAPI.getAPI()
+        .getUserByGroup(user)
+        .then(
+          function (user) {
+            new_group_membership.setGroupMember(user.getID());
+            ShoppingAPI.getAPI()
+              .addGroupMember(new_group_membership)
+              .then(this.handleClose);
+          }.bind(this)
+        )
+    );
+  };
+
+  //handleGroupCreation muss noch unten beim Dialogfenster hinzugefügt werden, damit grupe erstellt ewrden kann
+  //ich weis leider nicht genau wie der style der seite aussehen soll
 
   handleClickOpen = () => {
     this.setState({ open: true });

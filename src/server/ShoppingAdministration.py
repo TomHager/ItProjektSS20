@@ -59,10 +59,7 @@ class ShoppingListAdministration(object):
         with UserMapper() as mapper:
             return mapper.find_by_email(email)
 
-    def get_user_by_external_id(self, id):
-        """Den Benutzer mit der gegebenen Google ID auslesen."""
-        with UserMapper() as mapper:
-            return mapper.find_by_google_user_id(id)
+
 
     def get_all_users(self):
         """Alle Benutzer auslesen."""
@@ -442,7 +439,7 @@ class ShoppingListAdministration(object):
             mapper.update(group_member_ship)
 
     def delete_member_of_group_membership(self, group_membership):
-        """gegebenen retailer der Gruppe löschen."""
+        """gegebenen Member der Gruppe löschen."""
         with RetailerGroupMapper() as mapper:
             member_group = self.get_member_by_group_membership(group_membership)
 

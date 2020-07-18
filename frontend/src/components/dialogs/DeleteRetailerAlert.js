@@ -1,21 +1,13 @@
 import React, { Component } from "react";
+import IconButton from "@material-ui/core/IconButton";
 import Button from "@material-ui/core/Button";
-import TextField from "@material-ui/core/TextField";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
-import EditIcon from "@material-ui/icons/Edit";
-import IconButton from "@material-ui/core/IconButton";
-
-/**
- *
- * @author Erik Lebedkin
- * @author Lukas Rutkauskas
- */
-
-export class EditGroup extends Component {
+import DeleteIcon from "@material-ui/icons/Delete";
+export default class DeleteRetailerAlert extends Component {
   constructor(props) {
     super(props);
 
@@ -29,7 +21,13 @@ export class EditGroup extends Component {
     console.log(this.open);
   };
 
-  handleClose = () => {
+  handleCloseYes = () => {
+    this.setState({ open: false });
+    console.log(this.open);
+    // this.props.delRetailer;
+  };
+
+  handleCloseNo = () => {
     this.setState({ open: false });
     console.log(this.open);
   };
@@ -43,31 +41,28 @@ export class EditGroup extends Component {
           style={{ float: "right" }}
           onClick={this.handleClickOpen}
         >
-          <EditIcon />
+          <DeleteIcon />
         </IconButton>
         <Dialog
           open={open}
           onClose={this.handleClose}
-          aria-labelledby="form-dialog-title"
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
         >
-          <DialogTitle id="form-dialog-title">Edit Group</DialogTitle>
+          <DialogTitle id="alert-dialog-title">
+            {"Delete the Retailer"}
+          </DialogTitle>
           <DialogContent>
-            <DialogContentText>Please enter a new group name</DialogContentText>
-            <TextField
-              autoFocus
-              margin="dense"
-              id="name"
-              label="Group name"
-              type="email"
-              fullWidth
-            />
+            <DialogContentText id="alert-dialog-description">
+              Do you really want to detete the Retailer?
+            </DialogContentText>
           </DialogContent>
           <DialogActions>
-            <Button onClick={this.handleClose} color="primary">
-              Cancel
+            <Button onClick={this.handleCloseYes} color="primary">
+              Yes
             </Button>
-            <Button onClick={this.handleClose} color="primary">
-              Submit
+            <Button onClick={this.handleCloseNo} color="primary" autoFocus>
+              No
             </Button>
           </DialogActions>
         </Dialog>
@@ -75,5 +70,3 @@ export class EditGroup extends Component {
     );
   }
 }
-
-export default EditGroup;

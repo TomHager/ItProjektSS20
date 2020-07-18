@@ -2,7 +2,6 @@ from server.bo import BusinessObject as bo
 
 """ 
 @author Tom Hager
-@author Peter Thies
  """
  
 class User (bo.BusinessObject):

@@ -1,14 +1,14 @@
 [
   {
     "id": 1,
-    "unit": 2,
+    "unit": 3,
     "amount": 3,
     "name": "Apfel",
-    "modificationDate": "2020-05-24"
+    "modificationDate": "abc"
   },
   {
     "id": 2,
-    "unit": 2,
+    "unit": 4,
     "amount": 1,
     "name": "Birne",
     "modificationDate": null
@@ -22,7 +22,7 @@
   },
   {
     "id": 4,
-    "unit": 2,
+    "unit": 1,
     "amount": 2,
     "name": "Banane",
     "modificationDate": null

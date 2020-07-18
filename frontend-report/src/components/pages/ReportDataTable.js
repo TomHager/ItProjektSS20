@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 import {
   Table,
   TableBody,
@@ -7,8 +7,8 @@ import {
   TableHead,
   TableRow,
   Paper,
-  Button,
-} from "@material-ui/core";
+  // Button,
+} from '@material-ui/core';
 
 /**
  * Displays the data table for the report generator
@@ -28,7 +28,7 @@ export default class ReportDataTable extends Component {
   }
 
   async fetchEntries() {
-    const res = await fetch("http://DESKTOP-S3RCLLP:8081/api/iKauf/entries");
+    const res = await fetch('http://DESKTOP-DU328LQ:8081/api/iKauf/entries');
     const resjson = await res.json();
     this.setState({ entryRows: resjson });
     this.calculateSumOfAmount.bind(this);
@@ -67,7 +67,7 @@ export default class ReportDataTable extends Component {
       <TableContainer
         style={{
           width: Math.round(window.innerWidth * 0.68),
-          marginLeft: "2em",
+          marginLeft: '2em',
         }}
         component={Paper}
       >
@@ -92,8 +92,7 @@ export default class ReportDataTable extends Component {
               <TableRow
                 key={row.id}
                 style={{
-                  backgroundColor:
-                    row.id === this.state.groupIndex ? "#0090FF" : "white",
+                  backgroundColor: row.id === this.state.groupIndex ? '#0090FF' : 'white',
                 }}
               >
                 <TableCell>{row.name}</TableCell>
