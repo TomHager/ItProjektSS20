@@ -4,7 +4,9 @@ import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
 import Header from "./components/layout/Header";
 import Retailer from "./components/pages/Retailer";
 import GroupList from "./components/pages/GroupList";
+import Favorite from "./components/pages/Favorite";
 import ShoppingList from "./components/pages/ShoppingList";
+// import { Favorite } from "@material-ui/icons";
 
 // import Theme from './Theme';
 // import SignIn from './components/pages/SignIn';
@@ -20,7 +22,6 @@ import ShoppingList from "./components/pages/ShoppingList";
  * @see [react-router-dom](https://reacttraining.com/react-router/web/guides/quick-start)
  *
  * @author Tom Hager
- * @author Christoph Kunz
  */
 
 class App extends React.Component {
@@ -44,6 +45,9 @@ class App extends React.Component {
           </Route>
           <Route path="/shoppingList">
             <ShoppingList />
+          </Route>
+          <Route path="/profile">
+            <Favorite />
           </Route>
           <Route path="/about">
             <Retailer />

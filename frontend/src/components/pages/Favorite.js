@@ -1,27 +1,24 @@
-import { Container, CssBaseline, IconButton } from '@material-ui/core';
-import Checkbox from '@material-ui/core/Checkbox';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
 import {
-  AddShoppingCartOutlined,
-  Search,
+  Refresh,
+  AddBox,
   Delete,
   Edit,
-  LastPage,
-  FirstPage,
-  ArrowBackIos,
-  ArrowForwardIos,
-  Clear,
-  Done,
-  CheckBox,
-  CheckBoxOutlineBlank,
-  MoreVert,
-  ArrowUpward,
-  Refresh,
 } from '@material-ui/icons';
 import React, { Component } from 'react';
-import MaterialTable from 'material-table';
 import ShoppingAPI from '../../api/ShoppingAPI';
 import { addEntry } from '../../actions/shoppingList';
+import { 
+  Container, 
+  CssBaseline, 
+  IconButton, 
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  Input,
+  NativeSelect as Select,
+} from '@material-ui/core';
 // import EntryBO from '../../api/EntryBO';
 
 /**
@@ -87,8 +84,33 @@ export default class Favorite extends Component {
         },
       ],
 
-      data: [],
+      data: [
+        {
+          id: 1,
+          retailer: "Rewe",
+          article: "Apfel",
+          amount: 4,
+          unit: "Kg",
+        }, {
+          id: 2,
+          retailer: "Rewe",
+          article: "Birne",
+          amount: 3,
+          unit: "Kg",
+        }
+      ],
+      unit: [
+        {
+          name: "Kg",
+      }, {
+        name: "g",
+      }, {
+        name: "pcs",
+      }, {
+        name: "pack"
+      }
 
+    ],
       members: [
         {
           member: 'Tom',
@@ -97,7 +119,21 @@ export default class Favorite extends Component {
           member: 'Klaus',
         },
       ],
-      retailerName: 'Default',
+      retailer: [
+        {
+          id: 1,
+          name: "Edeka",
+        }, {
+          id: 2,
+          name: "Rewe",
+        }, {
+          id: 3,
+          name: "Kaufland"
+        }, {
+          id: 4,
+          name: "Test"
+        }
+      ],
     };
     const onChange = (e) =>
       this.setState({ ...this.state, [e.target.name]: e.target.value });
@@ -165,7 +201,8 @@ export default class Favorite extends Component {
   // }
 
   render() {
-    const state = this.state;
+    const {retailer, unit, data} = this.state;
+    console.log("FAV")
     return (
       <React.Fragment>
         <Container maxWidth="md">
@@ -173,84 +210,61 @@ export default class Favorite extends Component {
           <IconButton onClick={(e) => this.fetchEntries()}>
             <Refresh />
           </IconButton>
-          {/* {this.memberButton()} */}
-          <MaterialTable
-            title={state.retailerName}
-            columns={state.columns}
-            data={state.data}
-            icons={{
-              Add: AddShoppingCartOutlined,
-              Search: Search,
-              Delete: Delete,
-              Edit: Edit,
-              FirstPage: FirstPage,
-              LastPage: LastPage,
-              PreviousPage: ArrowBackIos,
-              NextPage: ArrowForwardIos,
-              Clear: Clear,
-              ResetSearch: Clear,
-              Check: Done,
-              ViewColumn: MoreVert,
-              SortArrow: ArrowUpward,
-            }}
-            options={{
-              columnsButton: true,
-              actionsColumnIndex: -1,
-              // selection: true,
-              showSelectAllCheckbox: false,
-              showTextRowsSelected: false,
-              sorting: true,
-              rowStyle: (rowData) => ({
-                backgroundColor: rowData.modificationDate != null ? '#039be5' : '#fff',
-              }),
-            }}
-            // onSelectionChange={(row, rowData) => {
-            //   setState((prevState) => {
-            //     const data = [...prevState.data];
-            //     return { ...prevState, data };
-            //   });
-            // }}
-            editable={{
-              isEditable: (rowData) => rowData.modificationDate == null,
-              onRowAdd: (newData) =>
-                new Promise((resolve) => {
-                  setTimeout(() => {
-                    resolve();
-                    this.setState((prevState) => {
-                      const data = [...prevState.data];
-                      data.push(newData);
-                      return { ...prevState, data };
-                    });
-                  }, 600);
-                }),
-              onRowUpdate: (newData, oldData) =>
-                // new Promise((this.updateEntry(oldData))
-                // new Promise(this.fetchEntries()),
-                new Promise((resolve) => {
-                  setTimeout(() => {
-                    resolve();
-                    if (oldData) {
-                      this.setState((prevState) => {
-                        const data = [...prevState.data];
-                        data[data.indexOf(oldData)] = newData;
-                        return { ...prevState, data };
-                      });
-                    }
-                  }, 600);
-                }),
-              onRowDelete: (oldData) =>
-                new Promise((resolve) => {
-                  setTimeout(() => {
-                    resolve();
-                    this.setState((prevState) => {
-                      const data = [...prevState.data];
-                      data.splice(data.indexOf(oldData), 1);
-                      return { ...prevState, data };
-                    });
-                  }, 600);
-                }),
-            }}
-          />
+
+          <Table size="small">
+
+            <TableHead>
+              <TableRow>
+                <TableCell><h4>Retailer</h4></TableCell>
+                <TableCell><h4>Article</h4></TableCell>
+                <TableCell><h4>Amount</h4></TableCell>
+                <TableCell><h4>Unit</h4></TableCell>
+                <TableCell><h4>Action</h4></TableCell>
+              </TableRow>
+            </TableHead>
+
+            <TableBody>
+              <TableRow>
+              <TableCell>
+                <Select id="retailer" retailer ={this.state.retailer}>
+              {retailer.map((option) => (
+                  <option key={option.id}>{option.name}</option>
+                  ))}
+                </Select>
+                </TableCell>
+                <TableCell>
+                  <Input type="text" name="article" id="article" placeholder="enter article"></Input>
+                </TableCell>
+                <TableCell>
+                  <Input type="text" name="amount" id="amount" placeholder="enter unit"></Input>
+                </TableCell>
+                <TableCell>
+                <Select id="unit" unit ={this.state.unit}>
+              {unit.map((option) => (
+                  <option key={option.name}>{option.name}</option>
+                  ))}
+                </Select>
+                </TableCell>
+                <TableCell>
+                  <IconButton>
+                  <AddBox />
+                </IconButton>
+                </TableCell>
+              </TableRow>
+
+              {data.map((row) => (
+              <TableRow key={row.id}>
+                <TableCell>{row.retailer}</TableCell>
+              <TableCell>{row.article}</TableCell>
+              <TableCell>{row.amount}</TableCell>
+              <TableCell>{row.unit}</TableCell>
+              <TableCell><IconButton><Edit></Edit></IconButton><IconButton><Delete></Delete></IconButton></TableCell>
+              </TableRow>
+                  ))}
+            </TableBody>
+
+          </Table>
+
         </Container>
       </React.Fragment>
     );
