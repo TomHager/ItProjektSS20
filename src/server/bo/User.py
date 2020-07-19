@@ -3,7 +3,8 @@ from server.bo import BusinessObject as bo
 """ 
 @author Tom Hager
  """
- 
+
+
 class User (bo.BusinessObject):
 
     def __init__(self):

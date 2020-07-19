@@ -3,6 +3,7 @@ from server.bo import BusinessObject as bo
 """ 
 @author Tom Hager
  """
+
  
 class Group (bo.BusinessObject):
 

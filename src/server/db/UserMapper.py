@@ -18,7 +18,7 @@ class UserMapper(Mapper):
         """
         result = []
         cursor = self._cnx.cursor()
-        cursor.execute("SELECT * from users")
+        cursor.execute("SELECT * FROM users")
         tuples = cursor.fetchall()
 
         for (id, name, email, external_id) in tuples:
@@ -95,16 +95,15 @@ class UserMapper(Mapper):
         return result
 
     def find_by_email(self, email):
-        """Auslesen aller Benutzer anhand der zugeordneten E-Mail-Adresse.
+        """Auslesen aller Benutzer anhand des Benutzernamens.
 
-        :param email E-Mail-Adresse der zugehörigen Benutzer.
+        :param name Name der zugehörigen Benutzer.
         :return Eine Sammlung mit User-Objekten, die sämtliche Benutzer
-            mit der gewünschten E-Mail-Adresse enthält.
+            mit dem gewünschten Namen enthält.
         """
-        result = None
-
+        result = []
         cursor = self._cnx.cursor()
-        command = "SELECT * FROM users WHERE email={}".format(email)
+        command = "SELECT * FROM users WHERE email LIKE '{}' ORDER BY email".format(email)
         cursor.execute(command)
         tuples = cursor.fetchall()
 

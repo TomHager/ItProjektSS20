@@ -117,7 +117,7 @@ class GroupMapper(Mapper):
             group.set_id(id)
             group.set_name(name)
 
-        result = group
+            result = group
 
         self._cnx.commit()
         cursor.close()
@@ -134,7 +134,7 @@ class GroupMapper(Mapper):
 
         result = []
         cursor = self._cnx.cursor()
-        command = "SELECT * FROM groups WHERE name={} ORDER BY name".format(name)
+        command = "SELECT * FROM groups WHERE name Like '{}' ORDER BY name".format(name)
         cursor.execute(command)
         tuples = cursor.fetchall()
 

@@ -32,7 +32,7 @@ class Favorite(bo.BusinessObject):
 
     def __str__(self):
         """Erzeugen einer einfachen textuellen Darstellung der jeweiligen Instanz."""
-        return "Favorite: {}, {}, {}, {}".format(self.get_id(), self._unit, self._amount,self._article)
+        return "Favorite: {}, {}, {}, {}".format(self.get_id(), self._unit, self._amount, self._article)
 
     @staticmethod
     def from_dict(dictionary=dict()):
