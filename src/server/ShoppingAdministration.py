@@ -59,8 +59,6 @@ class ShoppingListAdministration(object):
         with UserMapper() as mapper:
             return mapper.find_by_email(email)
 
-
-
     def get_all_users(self):
         """Alle Benutzer auslesen."""
         with UserMapper() as mapper:
@@ -92,12 +90,12 @@ class ShoppingListAdministration(object):
     def get_group_by_name(self, group_name):
         """Alle Groups mit übergebenem Gruppennamen auslesen."""
         with GroupMapper() as mapper:
-            return mapper.find_by_group_name(group_name)
+            return mapper.find_group_by_group_name(group_name)
 
     def get_group_by_id(self, id):
         """Group mit der gegebenen ID auslesen."""
         with GroupMapper() as mapper:
-            return mapper.find_by_id(id)
+            return mapper.find_by_key(id)
 
     def get_group_by_user(self, user):
         """Group mit der gegebenen User auslesen."""
@@ -112,7 +110,7 @@ class ShoppingListAdministration(object):
     def get_groups_of_user(self, user):
         """Alle Groups des gegebenen Usser auslesen."""
         with GroupMapper() as mapper:
-            return mapper.find_by_owner_id(user.get_id())  # Vorsicht: nicht geprüft! #todo nochmal anschauen groupmembership
+            return mapper.find_by_key(user.get_id())  # Vorsicht: nicht geprüft! #todo nochmal anschauen groupmembership
 
     def get_all_groups(self):
         """Alle Gruppen Objekte auslesen."""
@@ -127,12 +125,6 @@ class ShoppingListAdministration(object):
     def delete_group(self, group):
         """gegebene Group löschen."""
         with GroupMapper() as mapper:
-            groups = self.get_groups_of_user(group)
-
-            if not (groups is None):
-                for g in groups:
-                    self.delete_group(g)
-
             mapper.delete(group)
 
     """
@@ -151,7 +143,7 @@ class ShoppingListAdministration(object):
     def get_retailer_by_name(self, retailer_name):
         """Alle Retailer mit übergebenem retailer-namen auslesen."""
         with RetailerMapper() as mapper:
-            return mapper.find_by_retailer_name(retailer_name)
+            return mapper.find_retailer_by_retailer_name(retailer_name)
 
     def get_all_retailer(self):
         """Alle Retailer auslesen."""
@@ -170,14 +162,8 @@ class ShoppingListAdministration(object):
 
     def delete_retailer(self, retailer):
         """gegebenen Retailer löschen."""
-        with RetailerMapper as mapper:
-            retailers = self.get_retailer_by_id(retailer)
-
-            if not (retailers is None):
-                for r in retailers:
-                    self.delete_retailer(r)
-
-            mapper.delete(retailers)
+        with RetailerMapper() as mapper:
+            mapper.delete(retailer)
 
     def get_retailer_by_id(self, id):
         """Retailer nach der Id finden"""

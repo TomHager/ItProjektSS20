@@ -72,8 +72,6 @@ export class CreateGroup extends Component {
     );
   };
 
-  //handleGroupCreation muss noch unten beim Dialogfenster hinzugefügt werden, damit grupe erstellt ewrden kann
-  //ich weis leider nicht genau wie der style der seite aussehen soll
 
   handleClickOpen = () => {
     this.setState({ open: true });

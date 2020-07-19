@@ -8,7 +8,7 @@ from server.bo import Entry as entry
 @author Tom Hager
  """
  
-class RetailerEntryList (bo.BusinessObject, shoppinglist.ShoppingList, retailer.Retailer, user.User, entry.Entry):
+class RetailerEntryList (shoppinglist.ShoppingList, retailer.Retailer, user.User, entry.Entry):
 
     def __init__(self):
         super().__init__()
