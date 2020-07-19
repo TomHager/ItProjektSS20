@@ -8,17 +8,17 @@ class Retailer (bo.BusinessObject):
 
     def __init__(self):
         super().__init__()
-        self.__name = ""
+        self._name = ""
 
     def get_name(self):
-        return self.__name
+        return self._name
 
     def set_name(self, value):
-        self.__name = value
+        self._name = value
 
     def __str__(self):
         """Erzeugen einer einfachen textuellen Darstellung der jeweiligen Instanz."""
-        return "Retailer: {}, {}".format(self.get_id(), self.__name)
+        return "Retailer: {}, {}".format(self.get_id(), self._name)
 
     @staticmethod
     def from_dict(dictionary=dict()):

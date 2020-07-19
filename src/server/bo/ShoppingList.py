@@ -8,24 +8,24 @@ class ShoppingList (bo.BusinessObject):
 
     def __init__(self):
         super().__init__()
-        self.__name = ""
-        self.__group_id = ""
+        self._name = ""
+        self._group_id = ""
     def get_name(self):
-        return self.__name
+        return self._name
 
     def set_name(self, value):
-        self.__name = value
+        self._name = value
 
     def get_group_id(self):
-        return self.__group_id
+        return self._group_id
 
     def set_group_id(self, group):
-        self.__group_id = group.get_id()
+        self._group_id = group.get_id()
 
 
     def __str__(self):
         """Erzeugen einer einfachen textuellen Darstellung der jeweiligen Instanz."""
-        return "ShoppingList: {}, {}, {}".format(self.get_id(), self.__name, self.get_group_id())
+        return "ShoppingList: {}, {}, {}".format(self.get_id(), self._name, self.get_group_id())
 
     @staticmethod
     def from_dict(dictionary=dict()):
