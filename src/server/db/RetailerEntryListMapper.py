@@ -7,6 +7,7 @@ class RetailerEntryListMapper(Mapper):
     def __init__(self):
         super().__init__()
 
+
     def find_all(self):
         """Auslesen aller Benutzer unseres Systems.
 
@@ -15,14 +16,11 @@ class RetailerEntryListMapper(Mapper):
         """
         result = []
         cursor = self._cnx.cursor()
-        cursor.execute("SELECT * FROM retailerentrylists")
+        cursor.execute("SELECT * from retailerentrylists")
         tuples = cursor.fetchall()
 
         for (user_id, retailer_id, shopping_list_id, entry_id) in tuples:
             retailer_entry_list = RetailerEntryList()
-            retailer_entry_list.set_id(id)
-            retailer_entry_list.set_user_id(user_id)
-            retailer_entry_list.set_retailer_id(retailer_id)
             retailer_entry_list.set_shopping_list_id(shopping_list_id)
             retailer_entry_list.set_entry_id(entry_id)
             retailer_entry_list.set_user_id(user_id)
@@ -105,20 +103,19 @@ class RetailerEntryListMapper(Mapper):
 
         :param key Primärschlüsselattribut (->DB)
         :return User-Objekt, das dem übergebenen Schlüssel entspricht, None bei
-            nicht vorhandenem DB-Tupel.
-        """
+            nicht vorhandenem DB-Tupel."""
+        
 
         result = None
 
         cursor = self._cnx.cursor()
-        command = "SELECT * FROM retailerentrylists WHERE entry_id like '{}' ORDER BY entry_id".format(key)
+        command = "SELECT * FROM retailerentrylists WHERE entry_id={}".format(key)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
         try:
             (user_id, retailer_id, shoppinglist_id, entry_id) = tuples[0]
             retailer_entry_list = RetailerEntryList()
-            retailer_entry_list.set_id(id)
             retailer_entry_list.set_user_id(user_id)
             retailer_entry_list.set_retailer_id(retailer_id)
             retailer_entry_list.set_shopping_list_id(shoppinglist_id)
@@ -127,6 +124,7 @@ class RetailerEntryListMapper(Mapper):
         except IndexError:
             """Der IndexError wird oben beim Zugriff auf tuples[0] auftreten, wenn der vorherige SELECT-Aufruf
             keine Tupel liefert, sondern tuples = cursor.fetchall() eine leere Sequenz zurück gibt."""
+
             result = None
 
         self._cnx.commit()
@@ -134,7 +132,8 @@ class RetailerEntryListMapper(Mapper):
 
         return result
 
-    def find_user_by_retailer_entry_list(self, retailer_entry_list_id):
+
+    def find_user_by_retailer_entry_list(self, entry_id):
         """Auslesen aller Benutzer anhand des Benutzernamens.
 
         :param retailer_entry_list_id Name der zugehörigen Benutzer.
@@ -143,8 +142,8 @@ class RetailerEntryListMapper(Mapper):
         """
         result = []
         cursor = self._cnx.cursor()
-        command = "SELECT user_id FROM retailerentrylists WHERE retailer_entry_list_id LIKE '{}' " \
-                  "ORDER BY retailer_entry_list_id".format(retailer_entry_list_id)
+        command = "SELECT user_id FROM retailerentrylists WHERE entry_id LIKE '{}' " \
+                  "ORDER BY entry_id".format(entry_id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
@@ -158,7 +157,7 @@ class RetailerEntryListMapper(Mapper):
 
         return result
 
-    def find_retailer_by_entry(self, retailer_entry_list_id):
+    def find_retailer_by_retailer_entry_list(self, entry_id):
         """Auslesen aller Benutzer anhand der zugeordneten E-Mail-Adresse.
 
         :param retailer_entry_list_id E-Mail-Adresse der zugehörigen Benutzer.
@@ -167,8 +166,8 @@ class RetailerEntryListMapper(Mapper):
         """
         result = []
         cursor = self._cnx.cursor()
-        command = "SELECT retailer_id FROM retailerentrylists WHERE retailer_entry_list_id LIKE '{}' " \
-                  "ORDER BY retailer_entry_list_id".format(retailer_entry_list_id)
+        command = "SELECT retailer_id FROM retailerentrylists WHERE entry_id LIKE '{}' " \
+                  "ORDER BY entry_id".format(entry_id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
