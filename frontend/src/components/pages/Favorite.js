@@ -91,7 +91,7 @@ export default class Favorite extends Component {
       // Edit favorite entry
       editRetailer: 'Edeka',
       editArticle: '',
-      editAmount: '',
+      editAmount: 1,
       editUnit: 'Kg',
 
       oldData: {},
@@ -130,7 +130,7 @@ export default class Favorite extends Component {
   // Add favorite entry
   startAddFavorite = () => {
     const { article, amount } = this.state;
-    article !== '' && amount !== ''
+    article !== '' && (amount !== '' || parseInt(amount) < 0)
       ? this.addFavorite()
       : console.log('Please fill in all details');
   };
@@ -144,6 +144,10 @@ export default class Favorite extends Component {
       data.unshift(fav);
       return { ...prevState, data };
     });
+    document.getElementById('addRetailer').value = 'Edeka';
+    document.getElementById('addArticle').value = '';
+    document.getElementById('addAmount').value = 1;
+    document.getElementById('addUnit').value = 'Kg';
   };
 
   // Updates selected entry
@@ -156,7 +160,7 @@ export default class Favorite extends Component {
       amount: editAmount,
       unit: editUnit,
     };
-    editArticle !== '' && editAmount !== ''
+    editArticle !== '' && (editAmount !== '' || editAmount < 0)
       ? this.updateFavorite(favorite)
       : console.log('Please fill in all details');
   };
@@ -215,8 +219,9 @@ export default class Favorite extends Component {
               <TableRow>
                 <TableCell>
                   <Select
-                    id="retailers"
+                    id="addRetailer"
                     retailers={retailers}
+                    defaultValue="Edeka"
                     onChange={(e) => this.setState({ retailer: e.target.value })}
                   >
                     {retailers.map((option) => (
@@ -228,8 +233,9 @@ export default class Favorite extends Component {
                   <Input
                     type="text"
                     name="article"
-                    id="article"
+                    id="addArticle"
                     placeholder="enter article"
+                    defaultValue=""
                     required
                     onChange={(e) => this.setState({ article: e.target.value })}
                   ></Input>
@@ -238,7 +244,7 @@ export default class Favorite extends Component {
                   <Input
                     type="number"
                     name="amount"
-                    id="amount"
+                    id="addAmount"
                     placeholder="enter unit"
                     defaultValue="1"
                     required
@@ -247,8 +253,9 @@ export default class Favorite extends Component {
                 </TableCell>
                 <TableCell>
                   <Select
-                    id="units"
+                    id="addUnit"
                     units={units}
+                    defaultValue="Kg"
                     onChange={(e) => this.setState({ unit: e.target.value })}
                   >
                     {units.map((option) => (
