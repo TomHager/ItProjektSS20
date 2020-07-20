@@ -83,16 +83,16 @@ export default class Favorite extends Component {
       rowIndex: -1,
 
       // Add favorite entry
-      retailer: 'Edeka',
+      retailer: '',
       article: '',
       amount: 1,
-      unit: 'Kg',
+      unit: '',
 
       // Edit favorite entry
-      editRetailer: 'Edeka',
+      editRetailer: '',
       editArticle: '',
       editAmount: 1,
-      editUnit: 'Kg',
+      editUnit: '',
 
       oldData: {},
     };
@@ -109,7 +109,14 @@ export default class Favorite extends Component {
   // Start Callbacks
   componentDidMount() {
     // this.fetchFavorites();
-    console.log('MOUNT Fav');
+    const { retailers, units } = this.state;
+    this.setState({
+      retailer: retailers[0].name,
+      editRetailer: retailers[0].name,
+      unit: units[0].name,
+      editUnit: units[0].name,
+    });
+    console.log(retailers[0].name.name);
   }
 
   // All ClickHanlder for Table
@@ -136,7 +143,7 @@ export default class Favorite extends Component {
   };
 
   addFavorite = () => {
-    const { retailer, article, amount, unit } = this.state;
+    const { retailer, article, amount, unit, retailers, units } = this.state;
     const fav = { id: 3, retailer, article, amount, unit };
     console.log(this.state.addedInput);
     this.setState((prevState) => {
@@ -144,11 +151,16 @@ export default class Favorite extends Component {
       data.unshift(fav);
       return { ...prevState, data };
     });
-    document.getElementById('addRetailer').value = 'Edeka';
+    document.getElementById('addRetailer').value = retailers[0].name;
     document.getElementById('addArticle').value = '';
     document.getElementById('addAmount').value = 1;
-    document.getElementById('addUnit').value = 'Kg';
-    this.setState({ retailer: 'Edeka', article: '', amount: 1, unit: 'Kg' });
+    document.getElementById('addUnit').value = units[0].name;
+    this.setState({
+      retailer: retailers[0].name,
+      article: '',
+      amount: 1,
+      unit: units[0].name,
+    });
   };
 
   // Updates selected entry
@@ -222,7 +234,7 @@ export default class Favorite extends Component {
                   <Select
                     id="addRetailer"
                     retailers={retailers}
-                    defaultValue="Edeka"
+                    defaultValue={retailers[0].name}
                     onChange={(e) => this.setState({ retailer: e.target.value })}
                   >
                     {retailers.map((option) => (
@@ -256,7 +268,7 @@ export default class Favorite extends Component {
                   <Select
                     id="addUnit"
                     units={units}
-                    defaultValue="Kg"
+                    defaultValue={units[0].name}
                     onChange={(e) => this.setState({ unit: e.target.value })}
                   >
                     {units.map((option) => (
