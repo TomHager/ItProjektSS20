@@ -17,7 +17,7 @@ import {
 // import EntryBO from '../../api/EntryBO';
 
 /**
- * Displays a ShoppingList for given Data
+ * Displays favorites for given group
  *
  * @author Tom Hager
  */
@@ -95,18 +95,7 @@ export default class Favorite extends Component {
       editUnit: 'Kg',
 
       oldData: {},
-      // fields: {},
-      // error: {},
     };
-    // const onChange = (e) =>
-    //   this.setState({ ...this.state, [e.target.name]: e.target.value });
-    // const onSubmit = async (e) => {
-    //   e.preventDefault();
-    //   // if (...) {
-    //   // } else {
-    //   addEntry(this.state.data);
-    //   // }
-    // };
   }
 
   // Fetching all favorites for a group
@@ -129,9 +118,13 @@ export default class Favorite extends Component {
     this.state.rowIndex === data.id
       ? this.setState({ rowIndex: -1 })
       : this.setState({ rowIndex: data.id });
-    this.state.oldData === data
-      ? this.setState({ oldData: {} })
-      : this.setState({ oldData: data });
+    this.setState({ oldData: data });
+    this.setState({
+      editRetailer: data.retailer,
+      editArticle: data.article,
+      editAmount: data.amount,
+      editUnit: data.unit,
+    });
   };
 
   // Add favorite entry
@@ -144,7 +137,7 @@ export default class Favorite extends Component {
 
   addFavorite = () => {
     const { retailer, article, amount, unit } = this.state;
-    const fav = { id: this.state.data.length, retailer, article, amount, unit };
+    const fav = { id: 3, retailer, article, amount, unit };
     console.log(this.state.addedInput);
     this.setState((prevState) => {
       const data = [...prevState.data];
@@ -154,7 +147,23 @@ export default class Favorite extends Component {
   };
 
   // Updates selected entry
+  saveFavorite = (id) => {
+    const { editRetailer, editArticle, editAmount, editUnit } = this.state;
+    const favorite = {
+      id,
+      retailer: editRetailer,
+      article: editArticle,
+      amount: editAmount,
+      unit: editUnit,
+    };
+    editArticle !== '' && editAmount !== ''
+      ? this.updateFavorite(favorite)
+      : console.log('Please fill in all details');
+  };
+
   updateFavorite = (favorite) => {
+    console.log(favorite);
+    console.log(this.state.oldData);
     this.setState((prevState) => {
       const data = [...prevState.data];
       data[data.indexOf(this.state.oldData)] = favorite;
@@ -165,20 +174,9 @@ export default class Favorite extends Component {
 
   // Delete selected entry
   delFavorite = (favId) => {
+    console.log(favId);
     this.fetchFavorites();
   };
-
-  // handleValidation() {
-  //   let fields = this.state.fields;
-  //   let errors = {};
-  //   let formIsValid = true;
-  // }
-
-  // handleChange(field, e) {
-  //   let fields = this.state.fields;
-  //   fields[field] = e.target.value;
-  //   this.setState({ fields });
-  // }
 
   render() {
     const { retailers, units, data, rowIndex } = this.state;
@@ -271,7 +269,11 @@ export default class Favorite extends Component {
                   {/* Retailer */}
                   <TableCell id={`${row.id} retailer`}>
                     {rowIndex === row.id ? (
-                      <Select id="editRetailer" defaultValue={row.retailer}>
+                      <Select
+                        id="editRetailer"
+                        defaultValue={row.retailer}
+                        onChange={(e) => this.setState({ editRetailer: e.target.value })}
+                      >
                         {retailers.map((option) => (
                           <option key={option.id}>{option.name}</option>
                         ))}
@@ -291,6 +293,7 @@ export default class Favorite extends Component {
                         placeholder="enter article"
                         defaultValue={row.article}
                         required
+                        onChange={(e) => this.setState({ editArticle: e.target.value })}
                       ></Input>
                     ) : (
                       row.article
@@ -305,9 +308,9 @@ export default class Favorite extends Component {
                         name="editAmount"
                         id="editAmount"
                         placeholder="enter amount"
-                        helperText="no negative number"
                         defaultValue={row.amount}
                         required
+                        onChange={(e) => this.setState({ editAmount: e.target.value })}
                       ></Input>
                     ) : (
                       row.amount
@@ -317,7 +320,11 @@ export default class Favorite extends Component {
                   {/* Unit */}
                   <TableCell id={`${row.id} unit`}>
                     {rowIndex === row.id ? (
-                      <Select id="editUnit" defaultValue={row.unit}>
+                      <Select
+                        id="editUnit"
+                        defaultValue={row.unit}
+                        onChange={(e) => this.setState({ editUnit: e.target.value })}
+                      >
                         {units.map((option) => (
                           <option key={option.name}>{option.name}</option>
                         ))}
@@ -331,7 +338,7 @@ export default class Favorite extends Component {
                   <TableCell id={`${row.id} id`}>
                     <IconButton id={`${row.id} btn1`}>
                       {rowIndex === row.id ? (
-                        <Save onClick={this.updateFavorite.bind(this, row)} />
+                        <Save onClick={this.saveFavorite.bind(this, row.id)} />
                       ) : (
                         <Edit onClick={this.toggleSelectedRow.bind(this, row)} />
                       )}
