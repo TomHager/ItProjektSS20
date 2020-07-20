@@ -5,6 +5,7 @@ import Header from "./components/layout/Header";
 import Retailer from "./components/pages/Retailer";
 import GroupList from "./components/pages/GroupList";
 import ShoppingList from "./components/pages/ShoppingList";
+import Testing from "./components/pages/Testing";
 
 // import Theme from './Theme';
 // import SignIn from './components/pages/SignIn';
@@ -47,6 +48,9 @@ class App extends React.Component {
           </Route>
           <Route path="/about">
             <Retailer />
+          </Route>
+          <Route path="/testing">
+            <Testing />
           </Route>
         </Router>
       </div>

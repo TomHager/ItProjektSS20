@@ -112,5 +112,18 @@ module.exports = SetupEndpoint({
                 },
             ],
         },
+        {
+            params: "/retailers",
+            requests: [
+                {
+                    method: "GET",
+                    response: "/response-files/retailers.json",
+                },
+                {
+                    method: ["POST"],
+                    response: "/response-files/retailers.json",
+                },
+            ],
+        },
     ],
 });
