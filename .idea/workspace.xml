@@ -15,6 +15,19 @@
         <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
         <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
       </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:dependabot" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:dependabot" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:npm_and_yarn" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
     </expand>
     <select>
       <path>
@@ -26,10 +39,20 @@
     </select>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2c1c77a4-6169-48a4-a7a4-a8dc3ff2c5dd" name="Default Changelist" comment="Beschreibungen verbessert in ShoppingAdministration.py&#10;main.py Fehler korrektur&#10;ShoppingAdministration.py Fehler korrektur">
+    <list default="true" id="2c1c77a4-6169-48a4-a7a4-a8dc3ff2c5dd" name="Default Changelist" comment="API: RetailerGroup.js und GroupMembership.js erstellt&#10;CreateGroup.js bearbeitet HandlerFunction bezug auf GroupMembership.js">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/components/dialogs/CreateGroup.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/dialogs/CreateGroup.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main-copy.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/main-copy.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/server/ShoppingAdministration.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/ShoppingAdministration.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/server/bo/Favorite.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/bo/Favorite.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/server/bo/Group.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/bo/Group.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/server/bo/Retailer.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/bo/Retailer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/server/bo/RetailerEntryList.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/bo/RetailerEntryList.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/server/bo/User.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/bo/User.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/server/db/GroupMapper.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/db/GroupMapper.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/server/db/RetailerMapper.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/db/RetailerMapper.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/server/db/UserMapper.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/db/UserMapper.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -267,22 +290,22 @@
       <screen x="0" y="0" width="1368" height="872" />
     </state>
     <state x="311" y="6" key="CommitChangelistDialog2/0.0.1368.872@0.0.1368.872" timestamp="1592907991119" />
-    <state width="1898" height="277" key="GridCell.Tab.0.bottom" timestamp="1594387943076">
+    <state width="916" height="274" key="GridCell.Tab.0.bottom" timestamp="1595175370666">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1898" height="277" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1594387943076" />
-    <state width="1898" height="277" key="GridCell.Tab.0.center" timestamp="1594387943076">
+    <state width="916" height="274" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1595175370666" />
+    <state width="916" height="274" key="GridCell.Tab.0.center" timestamp="1595175370666">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1898" height="277" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1594387943076" />
-    <state width="1898" height="277" key="GridCell.Tab.0.left" timestamp="1594387943076">
+    <state width="916" height="274" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1595175370666" />
+    <state width="916" height="274" key="GridCell.Tab.0.left" timestamp="1595175370666">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1898" height="277" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1594387943076" />
-    <state width="1898" height="277" key="GridCell.Tab.0.right" timestamp="1594387943076">
+    <state width="916" height="274" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1595175370666" />
+    <state width="916" height="274" key="GridCell.Tab.0.right" timestamp="1595175370666">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1898" height="277" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1594387943076" />
+    <state width="916" height="274" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1595175370666" />
     <state x="147" y="74" key="MergeDialog" timestamp="1595081036130">
       <screen x="0" y="0" width="1536" height="920" />
     </state>
@@ -308,11 +331,15 @@
     </state>
     <state x="492" y="350" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1368.872@0.0.1368.872" timestamp="1591103046248" />
     <state x="691" y="417" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1040@0.0.1920.1040" timestamp="1594133703646" />
-    <state x="599" y="205" key="git4idea.branch.GitSmartOperationDialog" timestamp="1595082924229">
-      <screen x="0" y="0" width="1536" height="920" />
+    <state x="749" y="232" key="git4idea.branch.GitSmartOperationDialog" timestamp="1595163924336">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="599" y="205" key="git4idea.branch.GitSmartOperationDialog/0.0.1536.920@0.0.1536.920" timestamp="1595082924229" />
-    <state x="749" y="232" key="git4idea.branch.GitSmartOperationDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1594582860642" />
+    <state x="749" y="232" key="git4idea.branch.GitSmartOperationDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1595163924336" />
+    <state x="143" y="229" width="672" height="678" key="search.everywhere.popup" timestamp="1595160748656">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="143" y="229" width="672" height="678" key="search.everywhere.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1595160748656" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
