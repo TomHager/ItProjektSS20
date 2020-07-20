@@ -6,20 +6,20 @@ class RetailerGroup(group.Group, retailer.Retailer):
 
     def __init__(self):
         super().__init__()
-        self.__retailer_member = None
-        self.__retailer_group = None
+        self._retailer_member = None
+        self._retailer_group = None
 
     def get_retailer_member(self):
-        return self.__retailer_member
+        return self._retailer_member
 
     def set_retailer_member(self, retailer):
-        self.__retailer_member = retailer.get_id()
+        self._retailer_member = retailer.get_id()
 
     def get_retailer_group(self):
-        return self.__retailer_group
+        return self._retailer_group
 
     def set_retailer_group(self, group):
-        self.__retailer_group = group.get_id()
+        self._retailer_group = group.get_id()
 
     def __str__(self):
         """Erzeugen einer einfachen textuellen Darstellung der jeweiligen Instanz."""

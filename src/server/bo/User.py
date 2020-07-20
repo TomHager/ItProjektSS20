@@ -3,42 +3,43 @@ from server.bo import BusinessObject as bo
 """ 
 @author Tom Hager
  """
- 
+
+
 class User (bo.BusinessObject):
 
     def __init__(self):
         super().__init__()
-        self.__name = ""  # Der Name des Benutzers.
-        self.__email = ""  # Die E-Mail-Adresse des Benutzers.
-        self.__external_id = ""  # Die extern verwaltete User ID.
+        self._name = ""  # Der Name des Benutzers.
+        self._email = ""  # Die E-Mail-Adresse des Benutzers.
+        self._external_id = ""  # Die extern verwaltete User ID.
 
     def get_name(self):
         """Auslesen des Benutzernamens."""
-        return self.__name
+        return self._name
 
     def set_name(self, value):
         """Setzen des Benutzernamens."""
-        self.__name = value
+        self._name = value
 
     def get_email(self):
         """Auslesen der E-Mail-Adresse."""
-        return self.__email
+        return self._email
 
     def set_email(self, value):
         """Setzen der E-Mail-Adresse."""
-        self.__email = value
+        self._email = value
 
     def get_external_id(self):
         """Auslesen der externen User ID (z.B. Google ID)."""
-        return self.__external_id
+        return self._external_id
 
     def set_external_id(self, value):
         """Setzen der externen User ID (z.B. Google ID)."""
-        self.__external_id = value
+        self._external_id = value
 
     def __str__(self):
         """Erzeugen einer einfachen textuellen Darstellung der jeweiligen Instanz."""
-        return "User: {}, {}, {}, {}".format(self.get_id(), self.__name, self.__email, self.__external_id)
+        return "User: {}, {}, {}, {}".format(self.get_id(), self._name, self._email, self._external_id)
 
     @staticmethod
     def from_dict(dictionary=dict()):

@@ -97,7 +97,7 @@ class RetailerMapper (Mapper):
             nicht vorhandenem DB-Tupel.
         """
 
-        result = None
+        result = []
 
         cursor = self._cnx.cursor()
         command = "SELECT * FROM retailers WHERE id={}".format(key)
@@ -134,7 +134,7 @@ class RetailerMapper (Mapper):
         tuples = cursor.fetchall()
 
         for (id, name) in tuples:
-            retailer = retailer()
+            retailer = Retailer()
             retailer.set_id(id)
             retailer.set_name(name)
             result.append(retailer)
