@@ -20,12 +20,12 @@ class ShoppingList (bo.BusinessObject):
         return self._group_id
 
     def set_group_id(self, group):
-        self._group_id = group.get_id()
+        self._group_id = group
 
 
     def __str__(self):
         """Erzeugen einer einfachen textuellen Darstellung der jeweiligen Instanz."""
-        return "ShoppingList: {}, {}, {}".format(self.get_id(), self._name, self.get_group_id())
+        return "ShoppingList: {}, {}, {}".format(self.get_id(), self._name, self._group_id)
 
     @staticmethod
     def from_dict(dictionary=dict()):

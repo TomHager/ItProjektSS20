@@ -85,11 +85,10 @@ class EntryMapper(Mapper):
         cursor.close()
 
     def delete(self, entry):
-        """Löschen der Daten eines Eintrag-Objekts aus der Datenbank.
+        """Löschen der Daten eines Retailer-Objekts aus der Datenbank.
 
-                        :param entry das aus der DB zu löschende "Objekt"
-                        """
-
+        :param retailer das aus der DB zu löschende "Objekt"
+        """
         cursor = self._cnx.cursor()
 
         command = "DELETE FROM entries WHERE id={}".format(entry.get_id())

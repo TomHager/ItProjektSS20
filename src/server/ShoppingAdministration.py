@@ -19,7 +19,7 @@ from .db.GroupMembershipMapper import GroupMembershipMapper
 from .db.FavoriteMapper import FavoriteMapper
 
 
-class ShoppingListAdministration(object):
+class ShoppingAdministration(object):
 
     # Todo nochmal durchgehen welche attribute wichtig sind für die methoden, vllt fehlt was
 
@@ -33,12 +33,12 @@ class ShoppingListAdministration(object):
     # todo set_id bei jedem BO schaune ob es mit einer for-schleife und counter generiert und
     # immer weiter zähelen soll
 
-    def create_user(self, name, email, google_user_id):
+    def create_user(self, name, email, external_id):
         """Einen Benutzer anlegen"""
         user = User()
         user.set_name(name)
         user.set_email(email)
-        user.set_external_id(google_user_id)
+        user.set_external_id(external_id)
         user.set_id(1)
 
         with UserMapper() as mapper:
@@ -73,6 +73,7 @@ class ShoppingListAdministration(object):
         """Den gegebenen Benutzer aus unserem System löschen."""
         with UserMapper() as mapper:
             mapper.delete(user)
+
 
     """
     Group-spezifische Methoden
@@ -247,18 +248,12 @@ class ShoppingListAdministration(object):
     def get_shopping_list_by_id(self, id):
         """ShoppingList mit der gegebenen ID auslesen."""
         with ShoppingListMapper() as mapper:
-            return mapper.find_by_id(id)
+            return mapper.find_by_key(id)
 
     def delete_shopping_list_by_id(self, shoppinglist):
         """gegebene ShoppingList löschen."""
         with ShoppingListMapper() as mapper:
-            shoppinglist = self.get_shopping_list_by_id(shoppinglist)
-
-        if not (shoppinglist is None):
-            for s in shoppinglist:
-                mapper.delete(s)
-
-        mapper.delete(shoppinglist)
+            mapper.delete(shoppinglist)
 
     def get_shopping_list_by_name(self, shopping_list_name):  # todo nicht fertig bzw iwas fehlt
         """ShoppingList mit übergebenem shopping-list-name auslesen."""
@@ -297,10 +292,6 @@ class ShoppingListAdministration(object):
         """gegebenen Entry löschen."""
         with EntryMapper() as mapper:
             entry = self.get_entry_by_id(entry_id)
-
-        if not (entry is None):
-            for e in entry:
-                mapper.delete(e)
 
         mapper.delete(entry)
 
@@ -447,12 +438,12 @@ class ShoppingListAdministration(object):
 
     def get_all_favorits(self):
         """Alle Favorite Objekte auslesen."""
-        with FavoriteMapper as mapper:
+        with FavoriteMapper() as mapper:
             return mapper.find_all()
 
     def get_favorite_by_id(self, favorite_id):
         """Favorite Objekt mit übergebener favorit-id auslesen."""
-        with FavoriteMapper as mapper:
+        with FavoriteMapper() as mapper:
             return mapper.find_by_key(favorite_id)
 
     def delete_favorite_by_id(self, favorite_id):
@@ -460,10 +451,6 @@ class ShoppingListAdministration(object):
 
         with FavoriteMapper() as mapper:
             favorite = self.get_favorite_by_id(favorite_id)
-
-            if not (favorite is None):
-                for e in favorite:
-                    mapper.delete(e)
 
             mapper.delete(favorite)
 

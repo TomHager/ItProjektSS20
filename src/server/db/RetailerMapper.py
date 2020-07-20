@@ -75,6 +75,7 @@ class RetailerMapper (Mapper):
         self._cnx.commit()
         cursor.close()
 
+
     def delete(self, retailer):
         """Löschen der Daten eines Retailer-Objekts aus der Datenbank.
 
@@ -97,28 +98,26 @@ class RetailerMapper (Mapper):
             nicht vorhandenem DB-Tupel.
         """
 
-        result = []
+        result = None
 
         cursor = self._cnx.cursor()
         command = "SELECT * FROM retailers WHERE id={}".format(key)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
-        try:
+        if tuples[0] is not None:
             (id, name) = tuples[0]
             retailer = Retailer()
             retailer.set_id(id)
             retailer.set_name(name)
-            result.append(retailer)
-        except IndexError:
-            """Der IndexError wird oben beim Zugriff auf tuples[0] auftreten, wenn der vorherige SELECT-Aufruf
-            keine Tupel liefert, sondern tuples = cursor.fetchall() eine leere Sequenz zurück gibt."""
-            result = None
+
+            result = retailer
 
         self._cnx.commit()
         cursor.close()
 
         return result
+
 
     def find_retailer_by_retailer_name(self, name):
         """Auslesen aller Händler anhand des Händlernamens.
