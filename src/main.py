@@ -8,6 +8,7 @@ from server.ShoppingAdministration import ShoppingListAdministration
 from server.bo.Group import Group
 from server.bo.User import User
 from server.bo.Retailer import Retailer
+from server.bo.RetailerEntryList import RetailerEntryList
 
 
 # selbstgeschriebener Decorator, übernimmt Authentifikation
@@ -57,26 +58,82 @@ retailer = api.inherit('retailer', bo, {
     'group_id': fields.Integer(attribute='_id', description='ID einer Gruppe')
 })
 
+retailer_entry_list = api.inherit('RetailerEntryList', {
+  'retailer': fields.String(attribute='_retailer', description='Name eines Verkäufers'),
+  'user': fields.String(attribut='_user', description='Name eines Benutzers'),
+  'shopping_list_id': fields.Integer(attribute='_shopping_list_id', description='ID einer Shopping List'),
+  'entry_id': fields.Integer(attribute='_entry_id', description='ID eines Eintrags')
+})
 
-"""
-Klassen und Operationen für User
-"""
+entry = api.inherit('Entry', bo, {
+  'article': fields.String(attribute='_article', discription='Name eines Artikel'),
+  'unit': fields.String(attribute='_unit', discription='Name der Einheit'),
+  'amount': fields.Integer(attribute='_amount', discription='Menge eines Artikel'),
+  'modification_date': fields.Date(attribute='_modification_date', discription='Änderungsdatum der Entry'),
+  'retailer_entry_list_id': fields.Integer(attrubute='_retailer_entry_list_id', discription='ID der RetailerEntryList')
+})
 
 
-
-
-@ikauf.route('/retailer-by-name/<string:name>')
-@ikauf.response(500, 'Falls Server-seitiger Fehler')
-@ikauf.param('name', 'Name eines Retailer-Objekts')
-class RetailerRelatedByNameOperations(Resource):
-    @ikauf.marshal_with(retailer)
-    def get(self, name):
-        """Auslesen eines bestimmten Retailer-Objekt nach Name"""
+@ikauf.route('/retailer-entry-list')
+@ikauf.response(500, "Falls Server-seitiger Fehler")
+class RetailerEntryListListOperations(Resource):
+    @ikauf.marshal_list_with(retailer_entry_list)
+    def get(self):
+        """Auslesen aller RetailerEntryList-Objekte"""
 
         adm = ShoppingListAdministration()
-        r = adm.get_retailer_by_name(name)
-        return r
+        rel = adm.get_all_retailer_entry_list()
+        return rel
 
+
+    def post(self, id):
+        """Anlegen eines RetailerListEntry für eine gegebene Gruppe"""
+
+        adm = ShoppingListAdministration()
+
+        gruppe = adm.get_group_by_id(id)
+
+        if gruppe is not None:
+            result = adm.create_retailer_entry_list_for_group(gruppe)
+            return result
+        else:
+            return "RetailerEntryList unknown", 500
+
+@ikauf.route('/retailer-entry-list/<int:id>')
+@ikauf.response(500, 'Falls Server-seitiger Fehler')
+@ikauf.param('id', 'Id des RetailerEntryList-Objekts')
+class RetailerEntryListOperations(Resource):
+    @ikauf.marshal_with(retailer_entry_list)
+    def get(self, id):
+        """Auslesen eines bestimmten RetailerEntryList-Objekts"""
+
+        adm = ShoppingListAdministration()
+        rel = adm.get_retailer_entry_list_by_id(id)
+        return rel
+
+
+    def delete(self, id):
+        """Löschen eines bestimmten RetailerEntryList-Objekts"""
+
+        adm = ShoppingListAdministration()
+        rel = adm.get_retailer_entry_list_by_id(id)
+        adm.delete_retailer_entry_list(rel)
+        return '', 200
+
+    @ikauf.marshal_with(retailer_entry_list)
+    @ikauf.expect(retailer_entry_list, validate=True)
+    def put(self, id):
+        """Update eines bestimmten RetailerEntryList-Objekts."""
+
+        adm = ShoppingListAdministration()
+        rel = RetailerEntryList.from_dict(api.payload)
+
+        if rel is not None:
+            rel.set_id(id)
+            adm.save_retailer_entry_list(rel)
+            return '', 200
+        else:
+            return '', 500
 
 """
 Start der main.py um zu testen ob es funktioniert (in der lokalen Entwicklerumgebung).

@@ -15,12 +15,11 @@ class RetailerEntryListMapper(Mapper):
         """
         result = []
         cursor = self._cnx.cursor()
-        cursor.execute("SELECT * from retailerentrylists")
+        cursor.execute("SELECT * FROM retailerentrylists")
         tuples = cursor.fetchall()
 
-        for (id, user_id, retailer_id, shopping_list_id, entry_id) in tuples:
+        for (user_id, retailer_id, shopping_list_id, entry_id) in tuples:
             retailer_entry_list = RetailerEntryList()
-            retailer_entry_list.set_id(id)
             retailer_entry_list.set_user_id(user_id)
             retailer_entry_list.set_retailer_id(retailer_id)
             retailer_entry_list.set_shopping_list_id(shopping_list_id)
@@ -107,12 +106,12 @@ class RetailerEntryListMapper(Mapper):
         result = None
 
         cursor = self._cnx.cursor()
-        command = "SELECT * FROM retailerentrylists WHERE id={}".format(key)
+        command = "SELECT * FROM retailerentrylists WHERE entry_id like '{}' ORDER BY entry_id".format(key)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
         try:
-            (id, user_id, retailer_id, shoppinglist_id, entry_id) = tuples[0]
+            (user_id, retailer_id, shoppinglist_id, entry_id) = tuples[0]
             retailer_entry_list = RetailerEntryList()
             retailer_entry_list.set_id(id)
             retailer_entry_list.set_user_id(user_id)
@@ -154,7 +153,7 @@ class RetailerEntryListMapper(Mapper):
 
         return result
 
-    def find_retailer_by_retailer_entry_list(self, retailer_entry_list_id):
+    def find_retailer_by_entry(self, retailer_entry_list_id):
         """Auslesen aller Benutzer anhand der zugeordneten E-Mail-Adresse.
 
         :param retailer_entry_list_id E-Mail-Adresse der zugehörigen Benutzer.

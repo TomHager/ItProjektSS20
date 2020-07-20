@@ -139,7 +139,7 @@ class EntryMapper(Mapper):
 
         result = []
         cursor = self._cnx.cursor()
-        command = "SELECT * FROM entries WHERE article={} ORDER BY article".format(article)
+        command = "SELECT * FROM entries WHERE article Like '{}' ORDER BY article".format(article)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
@@ -150,6 +150,7 @@ class EntryMapper(Mapper):
             entry.set_amount(amount)
             entry.set_article(article)
             entry.set_modification_date(modification_date)
+            result.append(entry)
 
         self._cnx.commit()
         cursor.close()

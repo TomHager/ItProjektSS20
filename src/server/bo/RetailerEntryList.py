@@ -1,4 +1,3 @@
-from server.bo import BusinessObject as bo
 from server.bo import ShoppingList as shoppinglist
 from server.bo import Retailer as retailer
 from server.bo import User as user
@@ -7,7 +6,8 @@ from server.bo import Entry as entry
 """ 
 @author Tom Hager
  """
- 
+
+
 class RetailerEntryList (shoppinglist.ShoppingList, retailer.Retailer, user.User, entry.Entry):
 
     def __init__(self):
@@ -43,14 +43,13 @@ class RetailerEntryList (shoppinglist.ShoppingList, retailer.Retailer, user.User
 
     def __str__(self):
         """Erzeugen einer einfachen textuellen Darstellung der jeweiligen Instanz."""
-        return "RetailerEntryList: {}, {}, {}, {}, {}".format(self.get_id(), self._shopping_list_id,
-                                                              self._retailer_id, self._user_id, self._entry_id)
+        return "RetailerEntryList: {}, {}, {}, {}".format(self._shopping_list_id,
+                                                        self._retailer_id, self._user_id, self._entry_id)
 
     @staticmethod
     def from_dict(dictionary=dict()):
         """Umwandeln eines Python dict() in eine RetailerEntryList()."""
         obj = RetailerEntryList()
-        obj.set_id(dictionary["id"])  # eigentlich Teil von BusinessObject !
         obj.set_shopping_list_id(dictionary["shopping_list_id"])
         obj.set_retailer_id(dictionary["retailer_id"])
         obj.set_user_id(dictionary["user_id"])

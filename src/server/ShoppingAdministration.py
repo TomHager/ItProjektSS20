@@ -150,10 +150,10 @@ class ShoppingListAdministration(object):
         with RetailerMapper() as mapper:
             return mapper.find_all()
 
-    def get_retailer_by_retailer_entry_list(self, retailer_entry_list):
+    def get_retailer_by_entry(self, retailer_entry_list):
         """Alle Retailer aus der Retailer Entry List auslesen."""
-        with RetailerMapper() as mapper:
-            return mapper.find_retailer_by_retailer_entry_list(retailer_entry_list)
+        with RetailerEntryListMapper() as mapper:
+            return mapper.find_retailer_by_entry(retailer_entry_list)
 
     def save_retailer(self, retailer):
         """gegebene Group speichern."""
@@ -194,7 +194,7 @@ class ShoppingListAdministration(object):
     def get_retailer_entry_list_by_id(self, id):
         """RetailerEntryList mit der gegebenen ID auslesen."""
         with RetailerEntryListMapper() as mapper:
-            return mapper.find_by_id(id)
+            return mapper.find_by_key(id)
 
     def get_retailer_entry_list_by_group(self, group):
         """RetailerEntryList mit der gegebenen Group auslesen."""
@@ -296,13 +296,7 @@ class ShoppingListAdministration(object):
     def delete_entry_by_id(self, entry_id):
         """gegebenen Entry löschen."""
         with EntryMapper() as mapper:
-            entry = self.get_entry_by_id(entry_id)
-
-        if not (entry is None):
-            for e in entry:
-                mapper.delete(e)
-
-        mapper.delete(entry)
+            mapper.delete(entry_id)
 
     # todo put methode fehlt
 
@@ -316,19 +310,14 @@ class ShoppingListAdministration(object):
         with EntryMapper() as mapper:
             return mapper.find_entry_id_by_article(article_id)
 
-    def get_amount_by_entry(self, entry):
+    def get_unit_amount_by_entry(self, entry):
         """gegebenen Entry löschen."""
         with EntryMapper() as mapper:
-            return mapper.find_amount_by_entry(entry)
-
-    def get_unit_by_entry(self, entry):
-        """Unit mit übergebenem Entry auslesen."""
-        with EntryMapper() as mapper:
-            return mapper.find_unit_by_entry(entry)
+            return mapper.find_unit_amount_by_entry(entry)
 
     def get_entry_by_retailer_entry_list(self, retailer_entry_list):
         """Entry mit übergebenem RetailerEntryList auslesen."""
-        with EntryMapper() as mapper:
+        with RetailerEntryListMapper() as mapper:
             return mapper.find_entry_by_retailer_entry_list(retailer_entry_list)
 
     def save_entry(self, entry):

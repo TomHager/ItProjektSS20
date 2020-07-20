@@ -70,7 +70,8 @@ retailer = api.inherit('retailer', bo, {
 retailer_entry_list = api.inherit('RetailerEntryList', bo, {
   'retailer': fields.String(attribute='_retailer', description='Name eines Verkäufers'),
   'user': fields.String(attribut='_user', description='Name eines Benutzers'),
-  'shopping_list_id': fields.Integer(attribute='_shopping_list_id', description='ID einer Shopping List')
+  'shopping_list_id': fields.Integer(attribute='_shopping_list_id', description='ID einer Shopping List'),
+  'entry_id': fields.Integer(attribute='_entry_id', description='ID eines Eintrags')
 })
 
 entry = api.inherit('Entry', bo, {
@@ -253,6 +254,7 @@ class GroupListOperations(Resource):
         else:
             return '', 500
 
+
 @ikauf.route('/group/<int:id>')
 @ikauf.response(500, 'Falls Server-seitiger Fehler')
 @ikauf.param('id', 'Id des Gruppen-Objekts')
@@ -424,10 +426,10 @@ class RetailerEntryListListOperations(Resource):
         gruppe = adm.get_group_by_id(id)
 
         if gruppe is not None:
-            result = adm.create_retailer_entry_list_for_group
+            result = adm.create_retailer_entry_list_for_group(gruppe)
             return result
         else:
-            return "Gruppe unknown", 500
+            return "RetailerEntryList unknown", 500
 
 
 @ikauf.route('/retailer-entry-list/<int:retailerEntryListId>')
@@ -528,7 +530,7 @@ class EntryListOperations(Resource):
             return '', 500
 
 
-@ikauf.route('/entry-by-id/<int:entryId>')
+@ikauf.route('/entry-by-id/<int:id>')
 @ikauf.response(500, 'Falls Server-seitiger Fehler')
 @ikauf.param('id', 'ID des Entry-Objekts')
 class EntryOperations(Resource):
@@ -580,21 +582,21 @@ class EntryRelatedByArticleOperations(Resource):
         e = adm.get_entry_by_article(article)
         return e
 
-
+#todo vielleicht unnötig
 @ikauf.route('/entry-by-amount/<string:amount>')
 @ikauf.response(500, 'Falls Server-seitiger Fehler')
 @ikauf.param('amount', 'Amount des zugehörigen Entry-Objekts')
-class EntryRelatedByAmountOperations(Resource):
+class EntryRelatedByUnitAmountOperations(Resource):
     @ikauf.marshal_with(entry)
     @secured
     def get(self, amount):
         """Auslesen eines bestimmten Entry-Objekts nach Amount"""
 
         adm = ShoppingListAdministration()
-        am = adm.get_amount_by_entry(amount)
+        am = adm.get_unit_amount_by_entry(amount)
         return am
 
-
+# todo auch unnötig
 @ikauf.route('/entry-by-retailer-entry-list/<list:retailer-entry-list>')
 @ikauf.response(500, 'Falls Server-seitiger Fehler')
 @ikauf.param('retailer-entry-list', 'Retailer_Entry_List eines Entry-Objekt')
@@ -607,19 +609,6 @@ class EntryRelatedByRetailerEntryListOperations(Resource):
         adm = ShoppingListAdministration()
         rel = adm.get_entry_by_retailer_entry_list(retailer_entry_list)
         return rel
-
-@ikauf.route('/entry-by-unit/<string:unit>')
-@ikauf.response(500, 'Falls Server-seitiger Fehler')
-@ikauf.param('unit', 'Unit des zugehörigen Entry-Objekts')
-class EntryRelatedByUnitOperations(Resource):
-    @ikauf.marshal_with(entry)
-    @secured
-    def get(self, unit):
-        """Auslesen eines bestimmten Entry-Objekts nach Amount"""
-
-        adm = ShoppingListAdministration()
-        am = adm.get_unit_by_entry(unit)
-        return am
 
 
 """
