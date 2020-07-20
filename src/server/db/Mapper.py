@@ -6,7 +6,8 @@ from abc import ABC, abstractmethod
 """ 
 @author Tom Hager
  """
- 
+
+
 class Mapper(AbstractContextManager, ABC):
 
     def __init__(self):
@@ -24,7 +25,7 @@ class Mapper(AbstractContextManager, ABC):
 
             self._cnx = connector.connect(user='root', password='root',
                                           host='127.0.0.1',
-                                          database='ided')
+                                          database='itprojektss20')
 
         return self
 

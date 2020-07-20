@@ -29,8 +29,6 @@
       <path>
         <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
         <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
-        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
-        <item name="BRANCH:origin/dev" type="e8cecc67:BranchNodeDescriptor" />
       </path>
     </select>
   </component>
@@ -40,10 +38,10 @@
       <change beforePath="$PROJECT_DIR$/src/main-copy.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/main-copy.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/server/ShoppingAdministration.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/ShoppingAdministration.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/server/bo/RetailerEntryList.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/bo/RetailerEntryList.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/server/bo/RetailerGroup.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/bo/RetailerGroup.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/server/db/EntryMapper.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/db/EntryMapper.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/server/db/RetailerEntryListMapper.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/db/RetailerEntryListMapper.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/server/db/RetailerMapper.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/db/RetailerMapper.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/server/db/Mapper.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/db/Mapper.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/server/db/RetailerGroupMapper.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/db/RetailerGroupMapper.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -79,6 +77,7 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="Git.Branch.Popup.ShowAllRemotes" value="true" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
@@ -235,7 +234,14 @@
       <option name="project" value="LOCAL" />
       <updated>1595178011504</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="testing der Main.py mit dem Backend&#10;Anpassung von diversen Mappern und Bo's">
+      <created>1595268294662</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1595268294662</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -246,19 +252,7 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State>
-              <option name="FILTERS">
-                <map>
-                  <entry key="branch">
-                    <value>
-                      <list>
-                        <option value="origin/dev" />
-                      </list>
-                    </value>
-                  </entry>
-                </map>
-              </option>
-            </State>
+            <State />
           </value>
         </entry>
       </map>
@@ -289,26 +283,31 @@
       <screen x="0" y="0" width="1368" height="872" />
     </state>
     <state x="311" y="6" key="CommitChangelistDialog2/0.0.1368.872@0.0.1368.872" timestamp="1592907991119" />
-    <state width="922" height="266" key="GridCell.Tab.0.bottom" timestamp="1595245226763">
+    <state width="1029" height="265" key="GridCell.Tab.0.bottom" timestamp="1595273817799">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="922" height="266" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1595245226763" />
-    <state width="922" height="266" key="GridCell.Tab.0.center" timestamp="1595245226763">
+    <state width="1029" height="265" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1595273817799" />
+    <state width="1029" height="265" key="GridCell.Tab.0.center" timestamp="1595273817798">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="922" height="266" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1595245226763" />
-    <state width="922" height="266" key="GridCell.Tab.0.left" timestamp="1595245226763">
+    <state width="1029" height="265" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1595273817798" />
+    <state width="1029" height="265" key="GridCell.Tab.0.left" timestamp="1595273817798">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="922" height="266" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1595245226763" />
-    <state width="922" height="266" key="GridCell.Tab.0.right" timestamp="1595245226763">
+    <state width="1029" height="265" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1595273817798" />
+    <state width="1029" height="265" key="GridCell.Tab.0.right" timestamp="1595273817799">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="922" height="266" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1595245226763" />
-    <state x="147" y="74" key="MergeDialog" timestamp="1595081036130">
-      <screen x="0" y="0" width="1536" height="920" />
+    <state width="1029" height="265" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1595273817799" />
+    <state x="184" y="84" key="MergeDialog" timestamp="1595269161372">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="147" y="74" key="MergeDialog/0.0.1536.920@0.0.1536.920" timestamp="1595081036130" />
+    <state x="184" y="84" key="MergeDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1595269161372" />
+    <state x="367" y="169" width="712" height="485" key="MultipleFileMergeDialog" timestamp="1595269161377">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="367" y="169" width="712" height="485" key="MultipleFileMergeDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1595269161377" />
     <state x="570" y="180" key="RollbackChangesDialog" timestamp="1595082901863">
       <screen x="0" y="0" width="1536" height="920" />
     </state>
@@ -339,20 +338,5 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="143" y="229" width="672" height="678" key="search.everywhere.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1595160748656" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/server/db/RetailerGroupMapper.py</url>
-          <option name="timeStamp" value="3" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/server/ShoppingAdministration.py</url>
-          <line>145</line>
-          <option name="timeStamp" value="14" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>

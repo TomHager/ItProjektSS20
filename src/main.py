@@ -4,15 +4,16 @@ from flask_restx import Resource, Api, fields
 from flask_cors import CORS
 
 # Zugriff auf BusinessObject Klassen und Applikationslogik
-from server.ShoppingAdministration import ShoppingAdministration
+from server.ShoppingAdministration import ShoppingListAdministration
 from server.bo.Entry import Entry
+from server.bo.User import User
 from server.bo.Group import Group
 from server.bo.User import User
 from server.bo.Retailer import Retailer
 from server.bo.Favorite import Favorite
 from server.bo.ShoppingList import ShoppingList
-from server.bo.RetailerEntryList import RetailerEntryList
-
+from server.bo.GroupMembership import GroupMembership
+from server.bo.RetailerGroup import RetailerGroup
 # selbstgeschriebener Decorator, übernimmt Authentifikation
 
 
@@ -51,6 +52,12 @@ bo = api.model('BusinessObject', {
     'id': fields.Integer(attribute='_id', description='Der Unique Identifier eines Business Object')
 })
 
+user = api.inherit('User', bo, {
+    'name': fields.String(attribute='_name', description='Name eines Benutzers'),
+    'email': fields.String(attribute='_email', description='E-Mail-Adresse eines Benutzers'),
+    'external_user_id': fields.String(attribute='_external_user_id', description='Google User ID eines Benutzers')
+})
+
 group = api.inherit('Group', bo, {
     'group_name': fields.String(attribute='_name', description='Name einer Gruppe'),
 })
@@ -84,99 +91,71 @@ retailer_entry_list = api.inherit('RetailerEntryList', bo, {
   'entry_id': fields.String(attribut='_entry_id', description='Entry'),
 })
 
+retailer_group = api.inherit('RetailerGroup', {
+    'retailer_member': fields.Integer(attribute='_retailer_member', description='Retailer ID'),
+    'retailer_group': fields.Integer(attribute='_retailer_group',
+                                     description='Retailer Gruppe'),
+})
 
-@ikauf.route('/retailer-entry-list')
-@ikauf.response(500, "Falls Server-seitiger Fehler")
-class RetailerEntryListListOperations(Resource):
-    @ikauf.marshal_list_with(retailer_entry_list)
 
+@ikauf.route('/retailer-by-group')
+@ikauf.route(500, 'Falls Server-seitiger Fehler')
+@ikauf.param('id', 'ID des RetailerGroup-Objekts')
+class RetailerGroupOperations(Resource):
+    @ikauf.marshal_with(retailer_group)
     def get(self):
-        """Auslesen aller RetailerEntryList-Objekte"""
-
-        adm = ShoppingAdministration()
-        rel = adm.get_all_retailer_entry_list()
-        return rel
-
-
-    def post(self, id):
-        """Anlegen eines RetailerListEntry für eine gegebene Gruppe"""
-
-        adm = ShoppingAdministration()
-
-        gruppe = adm.get_group_by_id(id)
-
-        if gruppe is not None:
-            result = adm.create_retailer_entry_list_for_group
-            return result
-        else:
-            return "Gruppe unknown", 500
-
-
-@ikauf.route('/retailer-entry-list/<int:retailerEntryListId>')
-@ikauf.response(500, 'Falls Server-seitiger Fehler')
-@ikauf.param('id', 'Id des RetailerEntryList-Objekts')
-class RetailerEntryListOperations(Resource):
-    @ikauf.marshal_with(retailer_entry_list)
-
-    def get(self, id):
-        """Auslesen eines bestimmten RetailerEntryList-Objekts"""
-
-        adm = ShoppingAdministration()
-        rel = adm.get_retailer_entry_list_by_id(id)
-        return rel
-
+        adm = ShoppingListAdministration()
+        a = adm.get_all_retailer_members()
+        return a
 
     def delete(self, id):
-        """Löschen eines bestimmten RetailerEntryList-Objekts"""
+        """Löschen eines bestimmten RetailerGroup-Objekts"""
 
-        adm = ShoppingAdministration()
-        rel = adm.get_retailer_entry_list_by_id(id)
-        adm.delete_retailer_entry_list(rel)
+        adm = ShoppingListAdministration()
+        a = adm.get_retailer_by_group(id)
+        adm.delete_retailer_by_group(a)
         return '', 200
 
-    @ikauf.marshal_with(retailer_entry_list)
-    @ikauf.expect(retailer_entry_list, validate=True)
-
+    @ikauf.marshal_with(retailer_group)
+    @ikauf.expect(retailer_group, validate=True)
     def put(self, id):
-        """Update eines bestimmten RetailerEntryList-Objekts."""
+        """Update eines bestimmten RetailerGroup-Objekts."""
 
-        adm = ShoppingAdministration()
-        rel = RetailerEntryList.from_dict(api.payload)
+        adm = ShoppingListAdministration()
+        a = RetailerGroup.from_dict(api.payload)
 
-        if rel is not None:
-            rel.set_id(id)
-            adm.save_retailer_entry_list(rel)
+        if a is not None:
+            a.set_id(id)
+            adm.save_retailer_group(a)
             return '', 200
         else:
             return '', 500
 
 
-@ikauf.route('/retailer-entry-list-by-group/<int:groupId>')
-@ikauf.response(500, 'Falls Server-seitiger Fehler')
-@ikauf.param('group', 'group des zugehörigen RetailerEntryList-Objekts')
-class RetailerEntryListRelatedByGroupOperations(Resource):
-    @ikauf.marshal_with(retailer_entry_list)
+@ikauf.route('/retailer-by-group')
+@ikauf.response(500, "Falls Server-seitiger Fehler")
+class RetailerGroupListOperations(Resource):
+    @ikauf.marshal_list_with(retailer_group)
+    def get(self):
+        """Auslesen aller RetailerGroup-Objekte"""
 
-    def get(self, id):
-        """Auslesen eines bestimmten RetailerEntryList-Objekts nach Gruppe"""
-
-        adm = ShoppingAdministration()
-        r = adm.get_retailer_entry_list_by_group(id)
+        adm = ShoppingListAdministration()
+        r = adm.get_all_retailer_members()
         return r
-#todo post wurde in list operations eingefügt
 
-@ikauf.route('/retailer_entry_list/<string:retailer>')
-@ikauf.response(500, 'Falls Server-seitiger Fehler')
-@ikauf.param('retailer', 'retailer eines RetailerEntryList-Objekts')
-class RetailerEntryListRelatedByRetailerOperations(Resource):
-    @ikauf.marshal_with(retailer_entry_list)
+    def post(self):
+        """Anlegen eines neuen Retailer-Objekts für einen gegebene Group"""
 
-    def get(self, retailer):
-        """Auslesen eines bestimmten RetailerEntryList-Objekt nach Retailer"""
+        adm = ShoppingListAdministration()
 
-        adm = ShoppingAdministration()
-        rel = adm.get_retailer_entry_list_by_retailer(retailer)
-        return rel
+        r = adm.get_retailer_by_group(id) #todo stimmt id?
+
+        if r is not None:
+            x = adm.create_retailer(r)
+            return x, 200
+        else:
+            return 'Group unknown',
+
 
 
 """
