@@ -1,4 +1,7 @@
 from server.bo import BusinessObject as bo
+from server.bo import ShoppingList as shoppinglist
+from server.bo import Retailer as retailer
+from server.bo import User as user
 
 """ 
 @author Tom Hager
@@ -12,6 +15,9 @@ class Entry(bo.BusinessObject):
         self._amount = ""
         self._article = ""
         self._modification_date = ""
+        self.shopping_list_id = ""
+        self.user_id = ""
+        self.retailer_id = ""
 
     def get_unit(self):
         return self._unit
@@ -37,6 +43,24 @@ class Entry(bo.BusinessObject):
     def set_modification_date(self, value):
         self._modification_date = value
 
+    def get_shopping_list_id(self):
+        return self._shopping_list_id
+
+    def set_shopping_list_id(self, shopping_list_id):
+        self._shopping_list_id = shopping_list_id
+
+    def get_retailer_id(self):
+        return self._retailer_id
+
+    def set_retailer_id(self, retailer_id):
+        self._retailer_id = retailer
+
+    def get_user_id(self):
+        return self._user_id
+
+    def set_user_id(self, user_id):
+        self._user_id = user_id
+
     def __str__(self):
         """Erzeugen einer einfachen textuellen Darstellung der jeweiligen Instanz."""
         return "Entry: {}, {}, {}, {}, {}".format(self.get_id(), self._unit, self._amount,
@@ -51,5 +75,8 @@ class Entry(bo.BusinessObject):
         obj.set_amount(dictionary["amount"])
         obj.set_article(dictionary["article"])
         obj.set_modification_date(dictionary["modification_date"])
+        obj.set_shopping_list_id(dictionary["shopping_list_id"])
+        obj.set_user_id(dictionary["user_id"])
+        obj.set_retailer_id(dictionary["retailer_id"])
 
         return obj

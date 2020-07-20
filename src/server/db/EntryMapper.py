@@ -26,13 +26,16 @@ class EntryMapper(Mapper):
 
         tuples = cursor.fetchall()
 
-        for (id, unit, amount, article, modification_date) in tuples:
+        for (id, unit, amount, article, modification_date, user_id, retailer_id, shopping_list_id) in tuples:
             entry = Entry()
             entry.set_id(id)
             entry.set_unit(unit)
             entry.set_amount(amount)
             entry.set_article(article)
             entry.set_modification_date(modification_date)
+            entry.set_user_id(user_id)
+            entry.set_retailer_id(retailer_id)
+            entry.set_shopping_list_id(shopping_list_id)
 
             result.append(entry)
 
@@ -85,11 +88,10 @@ class EntryMapper(Mapper):
         cursor.close()
 
     def delete(self, entry):
-        """Löschen der Daten eines Eintrag-Objekts aus der Datenbank.
+        """Löschen der Daten eines Retailer-Objekts aus der Datenbank.
 
-                        :param entry das aus der DB zu löschende "Objekt"
-                        """
-
+        :param retailer das aus der DB zu löschende "Objekt"
+        """
         cursor = self._cnx.cursor()
 
         command = "DELETE FROM entries WHERE id={}".format(entry.get_id())
@@ -115,13 +117,16 @@ class EntryMapper(Mapper):
         tuples = cursor.fetchall()
 
         if tuples[0] is not None:
-            (id, unit, amount, article, modification_date) = tuples[0]
+            (id, unit, amount, article, modification_date, user_id, retailer_id, shopping_list_id) = tuples[0]
             entry = Entry()
             entry.set_id(id)
             entry.set_unit(unit)
             entry.set_amount(amount)
             entry.set_article(article)
             entry.set_modification_date(modification_date)
+            entry.set_user_id(user_id)
+            entry.set_retailer_id(retailer_id)
+            entry.set_shopping_list_id(shopping_list_id)
 
             result = entry
 
@@ -130,7 +135,7 @@ class EntryMapper(Mapper):
 
         return result
 
-    def find_entry_id_by_article(self, article):
+    def find_entry_by_article(self, article):
         """Auslesen aller Eintrags-ID anhand des Artikels
 
                         :param article
@@ -139,17 +144,21 @@ class EntryMapper(Mapper):
 
         result = []
         cursor = self._cnx.cursor()
-        command = "SELECT * FROM entries WHERE article={} ORDER BY article".format(article)
+        command = "SELECT * FROM entries WHERE article Like '{}' ORDER BY article".format(article)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
-        for (id, unit, amount, article, modification_date) in tuples:
+        for (id, unit, amount, article, modification_date, user_id, retailer_id, shopping_list_id) in tuples:
             entry = Entry()
             entry.set_id(id)
             entry.set_unit(unit)
             entry.set_amount(amount)
             entry.set_article(article)
             entry.set_modification_date(modification_date)
+            entry.set_user_id(user_id)
+            entry.set_retailer_id(retailer_id)
+            entry.set_shopping_list_id(shopping_list_id)
+            result.append(entry)
 
         self._cnx.commit()
         cursor.close()
@@ -194,13 +203,125 @@ class EntryMapper(Mapper):
         cursor.execute(command)
         tuples = cursor.fetchall()
 
-        for (id, unit, amount, article, modification_date) in tuples:
+        for (id, unit, amount, article, modification_date, user_id, retailer_id, shopping_list_id) in tuples:
             entry = Entry()
             entry.set_id(id)
             entry.set_unit(unit)
             entry.set_amount(amount)
             entry.set_article(article)
             entry.set_modification_date(modification_date)
+            entry.set_user_id(user_id)
+            entry.set_retailer_id(retailer_id)
+            entry.set_shopping_list_id(shopping_list_id)
+            result.append(entry)
+
+        self._cnx.commit()
+        cursor.close()
+
+        return result
+
+    def find_user_by_entry(self, id):
+        """Auslesen aller Benutzer anhand des Benutzernamens.
+
+        :param entry Name der zugehörigen Benutzer.
+        :return Eine Sammlung mit User-Objekten, die sämtliche Benutzer
+            mit dem gewünschten Namen enthält.
+        """
+        result = []
+        cursor = self._cnx.cursor()
+        command = "SELECT user_id FROM entries WHERE id LIKE '{}' " \
+                  "ORDER BY id".format(id)
+        cursor.execute(command)
+        tuples = cursor.fetchall()
+
+        for (user_id) in tuples:
+            entry = Entry()
+            entry.set_user_id(user_id)
+            result.append(entry)
+
+        self._cnx.commit()
+        cursor.close()
+
+        return result
+
+    def find_retailer_by_entry(self, id):
+        """Auslesen aller Benutzer anhand der zugeordneten E-Mail-Adresse.
+
+        :param entry E-Mail-Adresse der zugehörigen Benutzer.
+        :return Eine Sammlung mit User-Objekten, die sämtliche Benutzer
+            mit der gewünschten E-Mail-Adresse enthält.
+        """
+        result = []
+        cursor = self._cnx.cursor()
+        command = "SELECT retailer_id FROM entries WHERE id LIKE '{}' " \
+                  "ORDER BY id".format(id)
+        cursor.execute(command)
+        tuples = cursor.fetchall()
+
+        for (retailer_id) in tuples:
+            entry = Entry()
+            entry.set_retailer_id(retailer_id)
+            result.append(entry)
+
+        self._cnx.commit()
+        cursor.close()
+
+        return result
+
+    def find_entry_by_shopping_list(self, shopping_list_id):
+        """Auslesen aller Benutzer anhand der zugeordneten E-Mail-Adresse.
+
+        :param shopping_list_id E-Mail-Adresse der zugehörigen Benutzer.
+        :return Eine Sammlung mit User-Objekten, die sämtliche Benutzer
+            mit der gewünschten E-Mail-Adresse enthält.
+        """
+        result = []
+        cursor = self._cnx.cursor()
+        command = "SELECT * FROM entries " \
+                  "WHERE shopping_list_id LIKE '{}' ORDER BY shopping_list_id".format(shopping_list_id)
+        cursor.execute(command)
+        tuples = cursor.fetchall()
+
+        for (id, unit, amount, article, modification_date, user_id, retailer_id, shopping_list_id) in tuples:
+            entry = Entry()
+            entry.set_id(id)
+            entry.set_unit(unit)
+            entry.set_amount(amount)
+            entry.set_article(article)
+            entry.set_modification_date(modification_date)
+            entry.set_user_id(user_id)
+            entry.set_retailer_id(retailer_id)
+            entry.set_shopping_list_id(shopping_list_id)
+            result.append(entry)
+
+        self._cnx.commit()
+        cursor.close()
+
+        return result
+
+    def find_entry_by_user(self, user_id):
+        """Auslesen aller Benutzer anhand der zugeordneten E-Mail-Adresse.
+
+        :param user_id E-Mail-Adresse der zugehörigen Benutzer.
+        :return Eine Sammlung mit User-Objekten, die sämtliche Benutzer
+            mit der gewünschten E-Mail-Adresse enthält.
+        """
+        result = []
+        cursor = self._cnx.cursor()
+        command = "SELECT * FROM entries WHERE user_id LIKE '{}' ORDER BY user_id".format(user_id)
+        cursor.execute(command)
+        tuples = cursor.fetchall()
+
+        for (id, unit, amount, article, modification_date, user_id, retailer_id, shopping_list_id) in tuples:
+            entry = Entry()
+            entry.set_id(id)
+            entry.set_unit(unit)
+            entry.set_amount(amount)
+            entry.set_article(article)
+            entry.set_modification_date(modification_date)
+            entry.set_user_id(user_id)
+            entry.set_retailer_id(retailer_id)
+            entry.set_shopping_list_id(shopping_list_id)
             result.append(entry)
 
         self._cnx.commit()

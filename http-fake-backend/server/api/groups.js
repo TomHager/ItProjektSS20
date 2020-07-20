@@ -58,6 +58,10 @@ module.exports = SetupEndpoint({
                     method: ["POST"],
                     response: "/response-files/group.json",
                 },
+                {
+                    method: ["PUT"],
+                    response: "/response-files/groups.json",
+                },
             ],
         },
         {

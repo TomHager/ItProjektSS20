@@ -14,6 +14,8 @@ export default class LeaveGroupAlert extends Component {
 
     this.state = {
       open: false,
+      userId: null,
+      membership: [],
     };
   }
 
@@ -26,6 +28,19 @@ export default class LeaveGroupAlert extends Component {
     this.setState({ open: false });
     console.log(this.open);
   };
+
+  //Get current User Methode? Google Id in Cookie abspeichern, und dann darauf zugreifen
+
+  async fetchMembershipByUserId() {
+    const res = await fetch(
+      `http://DESKTOP-S3RCLLP:8081/api/iKauf/memberships${this.state.userId}`
+    );
+    const resjson = await res.json();
+    this.setState({ membership: resjson });
+    console.log(resjson);
+  }
+
+  delMembership = () => {};
 
   render() {
     const open = this.state.open;
@@ -51,7 +66,7 @@ export default class LeaveGroupAlert extends Component {
             </DialogContentText>
           </DialogContent>
           <DialogActions>
-            <Button onClick={this.handleClose} color="primary">
+            <Button onClick={this.delMembership} color="primary">
               Yes
             </Button>
             <Button onClick={this.handleClose} color="primary" autoFocus>

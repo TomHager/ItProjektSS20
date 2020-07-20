@@ -97,7 +97,7 @@ class RetailerMapper (Mapper):
             nicht vorhandenem DB-Tupel.
         """
 
-        result = []
+        result = None
 
         cursor = self._cnx.cursor()
         command = "SELECT * FROM retailers WHERE id={}".format(key)
@@ -109,7 +109,9 @@ class RetailerMapper (Mapper):
             retailer = Retailer()
             retailer.set_id(id)
             retailer.set_name(name)
-            result.append(retailer)
+
+            result = retailer
+
         except IndexError:
             """Der IndexError wird oben beim Zugriff auf tuples[0] auftreten, wenn der vorherige SELECT-Aufruf
             keine Tupel liefert, sondern tuples = cursor.fetchall() eine leere Sequenz zurück gibt."""

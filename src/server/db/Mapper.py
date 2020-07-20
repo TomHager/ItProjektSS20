@@ -6,7 +6,8 @@ from abc import ABC, abstractmethod
 """ 
 @author Tom Hager
  """
- 
+
+
 class Mapper(AbstractContextManager, ABC):
 
     def __init__(self):

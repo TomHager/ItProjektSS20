@@ -29,6 +29,7 @@ class FavoriteMapper(Mapper):
             favorite.set_unit(unit)
             favorite.set_amount(amount)
             favorite.set_article(article)
+
             result.append(favorite)
 
         self._cnx.commit()
@@ -90,13 +91,13 @@ class FavoriteMapper(Mapper):
         cursor.close()
 
     def find_by_key(self, key):
-        """Suchen eines Artikels mit vorgegebener ID. Da diese eindeutig ist,
-                wird genau ein Objekt zurückgegeben.
+        """Suchen eines Eintrags mit vorgegebener ID. Da diese eindeutig ist,
+                        wird genau ein Objekt zurückgegeben.
 
-                :param key Primärschlüsselattribut (->DB)
-                :return Artikel-Objekt, das dem übergebenen Schlüssel entspricht, None bei
-                    nicht vorhandenem DB-Tupel.
-                """
+                        :param key Primärschlüsselattribut (->DB)
+                        :return Eintrag-Objekt, das dem übergebenen Schlüssel entspricht, None bei
+                            nicht vorhandenem DB-Tupel.
+                        """
 
         result = None
 
@@ -105,23 +106,23 @@ class FavoriteMapper(Mapper):
         cursor.execute(command)
         tuples = cursor.fetchall()
 
-        try:
+        if tuples[0] is not None:
             (id, unit, amount, article) = tuples[0]
             favorite = Favorite()
             favorite.set_id(id)
             favorite.set_unit(unit)
             favorite.set_amount(amount)
             favorite.set_article(article)
+
+
             result = favorite
-        except IndexError:
-            """Der IndexError wird oben beim Zugriff auf tuples[0] auftreten, wenn der vorherige SELECT-Aufruf
-            keine Tupel liefert, sondern tuples = cursor.fetchall() eine leere Sequenz zurück gibt."""
-            result = None
 
         self._cnx.commit()
         cursor.close()
 
         return result
+
+
 
 
 """Zu Testzwecken können wir diese Datei bei Bedarf auch ausführen, 

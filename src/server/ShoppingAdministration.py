@@ -33,12 +33,12 @@ class ShoppingListAdministration(object):
     # todo set_id bei jedem BO schaune ob es mit einer for-schleife und counter generiert und
     # immer weiter zähelen soll
 
-    def create_user(self, name, email, google_user_id):
+    def create_user(self, name, email, external_id):
         """Einen Benutzer anlegen"""
         user = User()
         user.set_name(name)
         user.set_email(email)
-        user.set_external_id(google_user_id)
+        user.set_external_id(external_id)
         user.set_id(1)
 
         with UserMapper() as mapper:
@@ -171,64 +171,6 @@ class ShoppingListAdministration(object):
             return mapper.find_by_key(id)
 
     """
-    RetailerEntryList-spezifische Methoden
-    """
-
-    def create_retailer_entry_list_for_group(self, group):
-        """Für einen gegebe Gruppe ein neue RetailerEntryList anlegen"""
-        with RetailerEntryListMapper() as mapper:
-            if group is not None:
-                rel = RetailerEntryList()
-                rel.set_id(1)
-                rel.set_shopping_list_id(group.get_id())
-
-                return mapper.insert(rel)
-            else:
-                return None
-
-    def get_retailer_entry_list_by_name(self, retailer_entry_list_name):
-        """Alle RetailerEntryList Objekte mit übergebenem RetailerEntryList-namen auslesen."""
-        with RetailerEntryListMapper() as mapper:
-            return mapper.find_by_retailer_entry_list_name(retailer_entry_list_name)
-
-    def get_retailer_entry_list_by_id(self, id):
-        """RetailerEntryList mit der gegebenen ID auslesen."""
-        with RetailerEntryListMapper() as mapper:
-            return mapper.find_by_id(id)
-
-    def get_retailer_entry_list_by_group(self, group):
-        """RetailerEntryList mit der gegebenen Group auslesen."""
-        with RetailerMapper() as mapper:
-            return mapper.find_by_group(group)
-
-    def get_all_retailer_entry_list(self):
-        """Alle RetailerEntryList Objekte auslesen."""
-        with RetailerEntryListMapper() as mapper:
-            return mapper.find_all()
-
-    def get_retailer_entry_list_by_retailer(self, retailer_entry_list):
-        """Alle RetailerEntryList Objekte nach Retailer auslesen."""
-        with RetailerEntryListMapper() as mapper:
-            return mapper.find_retailer_by_retailer_entry_list(retailer_entry_list)
-
-    def save_retailer_entry_list(self, retailer):
-        """gegebene RetailerEntryList Speichern."""
-        with RetailerEntryListMapper() as mapper:
-            mapper.update(retailer)
-
-    # passt das hier mit .get_retailer_of_user ? Mapper schauen und mit anderen verständigen
-    def delete_retailer_entry_list(self, retailer_entry_list):
-        """gegebene RetailerEntryList löschen."""
-        with RetailerEntryListMapper() as mapper:
-            retailers = self.get_retailer_entry_list_by_group(retailer_entry_list)
-
-            if not (retailers is None):
-                for r in retailers:
-                    self.delete_retailer(r)
-
-            mapper.delete(retailers)
-
-    """
     ShoppingList-spezifische Methoden
     """
 
@@ -247,18 +189,12 @@ class ShoppingListAdministration(object):
     def get_shopping_list_by_id(self, id):
         """ShoppingList mit der gegebenen ID auslesen."""
         with ShoppingListMapper() as mapper:
-            return mapper.find_by_id(id)
+            return mapper.find_by_key(id)
 
     def delete_shopping_list_by_id(self, shoppinglist):
         """gegebene ShoppingList löschen."""
         with ShoppingListMapper() as mapper:
-            shoppinglist = self.get_shopping_list_by_id(shoppinglist)
-
-        if not (shoppinglist is None):
-            for s in shoppinglist:
-                mapper.delete(s)
-
-        mapper.delete(shoppinglist)
+            mapper.delete(shoppinglist)
 
     def get_shopping_list_by_name(self, shopping_list_name):  # todo nicht fertig bzw iwas fehlt
         """ShoppingList mit übergebenem shopping-list-name auslesen."""
@@ -296,13 +232,7 @@ class ShoppingListAdministration(object):
     def delete_entry_by_id(self, entry_id):
         """gegebenen Entry löschen."""
         with EntryMapper() as mapper:
-            entry = self.get_entry_by_id(entry_id)
-
-        if not (entry is None):
-            for e in entry:
-                mapper.delete(e)
-
-        mapper.delete(entry)
+            mapper.delete(entry_id)
 
     # todo put methode fehlt
 
@@ -314,21 +244,16 @@ class ShoppingListAdministration(object):
     def get_entry_by_article(self, article_id):  # todo alle entrys oder nur einer?
         """Auslesen aller Entry Objekte anhand des Artikel-ID´s"""
         with EntryMapper() as mapper:
-            return mapper.find_entry_id_by_article(article_id)
+            return mapper.find_entry_by_article(article_id)
 
-    def get_amount_by_entry(self, entry):
+    def get_unit_amount_by_entry(self, entry):
         """gegebenen Entry löschen."""
         with EntryMapper() as mapper:
-            return mapper.find_amount_by_entry(entry)
-
-    def get_unit_by_entry(self, entry):
-        """Unit mit übergebenem Entry auslesen."""
-        with EntryMapper() as mapper:
-            return mapper.find_unit_by_entry(entry)
+            return mapper.find_unit_amount_by_entry(entry)
 
     def get_entry_by_retailer_entry_list(self, retailer_entry_list):
         """Entry mit übergebenem RetailerEntryList auslesen."""
-        with EntryMapper() as mapper:
+        with RetailerEntryListMapper() as mapper:
             return mapper.find_entry_by_retailer_entry_list(retailer_entry_list)
 
     def save_entry(self, entry):
@@ -447,27 +372,79 @@ class ShoppingListAdministration(object):
 
     def get_all_favorits(self):
         """Alle Favorite Objekte auslesen."""
-        with FavoriteMapper as mapper:
+        with FavoriteMapper() as mapper:
             return mapper.find_all()
 
     def get_favorite_by_id(self, favorite_id):
         """Favorite Objekt mit übergebener favorit-id auslesen."""
-        with FavoriteMapper as mapper:
+        with FavoriteMapper() as mapper:
             return mapper.find_by_key(favorite_id)
 
     def delete_favorite_by_id(self, favorite_id):
         """gegebenes Favorite Objekt löschen."""
 
         with FavoriteMapper() as mapper:
-            favorite = self.get_favorite_by_id(favorite_id)
-
-            if not (favorite is None):
-                for e in favorite:
-                    mapper.delete(e)
-
-            mapper.delete(favorite)
+            mapper.delete(favorite_id)
 
     def save_favorite(self, favorite):
         """Update eines Favorite Objektes."""
         with FavoriteMapper() as mapper:
             mapper.update(favorite)
+
+    """
+    RetailerEntryList-spezifische Methoden
+    """
+
+    def create_retailer_entry_list_for_group(self, group):
+        """Für einen gegebe Gruppe ein neue RetailerEntryList anlegen"""
+        with RetailerEntryListMapper() as mapper:
+            if group is not None:
+                rel = RetailerEntryList()
+                rel.set_id(1)
+                rel.set_shopping_list_id(group.get_id())
+
+                return mapper.insert(rel)
+            else:
+                return None
+
+    def get_retailer_entry_list_by_name(self, retailer_entry_list_name):
+        """Alle RetailerEntryList Objekte mit übergebenem RetailerEntryList-namen auslesen."""
+        with RetailerEntryListMapper() as mapper:
+            return mapper.find_by_retailer_entry_list_name(retailer_entry_list_name)
+
+    def get_retailer_entry_list_by_id(self, id):
+        """RetailerEntryList mit der gegebenen ID auslesen."""
+        with RetailerEntryListMapper() as mapper:
+            return mapper.find_by_key(id)
+
+    def get_retailer_entry_list_by_group(self, group):
+        """RetailerEntryList mit der gegebenen Group auslesen."""
+        with RetailerMapper() as mapper:
+            return mapper.find_by_group(group)
+
+    def get_all_retailer_entry_list(self):
+        """Alle RetailerEntryList Objekte auslesen."""
+        with RetailerEntryListMapper() as mapper:
+            return mapper.find_all()
+
+    def get_retailer_entry_list_by_retailer(self, retailer_entry_list):
+        """Alle RetailerEntryList Objekte nach Retailer auslesen."""
+        with RetailerEntryListMapper() as mapper:
+            return mapper.find_retailer_by_retailer_entry_list(retailer_entry_list)
+
+    def save_retailer_entry_list(self, retailer):
+        """gegebene RetailerEntryList Speichern."""
+        with RetailerEntryListMapper() as mapper:
+            mapper.update(retailer)
+
+    # passt das hier mit .get_retailer_of_user ? Mapper schauen und mit anderen verständigen
+    def delete_retailer_entry_list(self, retailer_entry_list):
+        """gegebene RetailerEntryList löschen."""
+        with RetailerEntryListMapper() as mapper:
+            retailers = self.get_retailer_entry_list_by_group(retailer_entry_list)
+
+            if not (retailers is None):
+                for r in retailers:
+                    self.delete_retailer(r)
+
+            mapper.delete(retailers)

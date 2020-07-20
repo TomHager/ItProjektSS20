@@ -8,27 +8,28 @@ class ShoppingListMapper (Mapper):
         super().__init__()
 
     def find_all(self):
-        """Auslesen aller Shoppinglisten unseres Systems.
+        """Auslesen aller Benutzer unseres Systems.
 
-        :return Eine Sammlung mit Shoppinglist-Objekten, die sämtliche Shoppinglisten
+        :return Eine Sammlung mit User-Objekten, die sämtliche Benutzer
                 des Systems repräsentieren.
         """
         result = []
         cursor = self._cnx.cursor()
-        cursor.execute("SELECT * from shoppinglists")
+        cursor.execute("SELECT * FROM shoppinglists")
         tuples = cursor.fetchall()
 
-        for (id, name, group_id) in tuples:
+        for (id, name, groups_id) in tuples:
             shoppinglist = ShoppingList()
             shoppinglist.set_id(id)
             shoppinglist.set_name(name)
-            shoppinglist.set_group_id(group_id)
+            shoppinglist.set_group_id(groups_id)
             result.append(shoppinglist)
 
         self._cnx.commit()
         cursor.close()
 
         return result
+
 
     def insert(self, shoppinglist):
         """Einfügen eines Shoppinglist-Objekts in die Datenbank.
@@ -101,7 +102,7 @@ class ShoppingListMapper (Mapper):
         result = None
 
         cursor = self._cnx.cursor()
-        command = "SELECT id, name, group_id FROM shoppinglists WHERE id={}".format(key)
+        command = "SELECT id, name, groups_id FROM shoppinglists WHERE id={}".format(key)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
@@ -131,7 +132,7 @@ class ShoppingListMapper (Mapper):
         """
         result = []
         cursor = self._cnx.cursor()
-        command = "SELECT id, name, group_id FROM shoppinglists WHERE name LIKE '{}' ORDER BY name".format(name)
+        command = "SELECT id, name, groups_id FROM shoppinglists WHERE name LIKE '{}' ORDER BY name".format(name)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
@@ -157,7 +158,7 @@ class ShoppingListMapper (Mapper):
         result = []
 
         cursor = self._cnx.cursor()
-        command = "SELECT * FROM shoppinglists WHERE group_id={}".format(group_id)
+        command = "SELECT * FROM shoppinglists WHERE groups_id LIKE '{}' ORDER BY groups_id".format(group_id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
