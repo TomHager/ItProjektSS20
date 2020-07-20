@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Paper, Typography, Input, Button } from '@material-ui/core';
+import { Paper, Typography, TextField, Button } from '@material-ui/core';
 
 /**
  * Shows the register page for first time users
@@ -32,18 +32,23 @@ export default class Register extends Component {
   render() {
     return (
       <Paper elevation={0} align="center">
+        <br />
         <Typography>
           <h3>
             Register for <b>iKauf</b>
           </h3>
         </Typography>
-        <Input
+        <TextField
           type="text"
           id="username"
-          placeholder="enter username"
+          variant="outlined"
+          label="Username"
           onChange={(e) => this.setState({ username: e.target.value })}
-        ></Input>
+        ></TextField>
+        <br />
+        <br />
         <Typography>{this.fetchEmail()}</Typography>
+        <br />
         <Button
           value="Register"
           onClick={this.registerUser.bind(this)}

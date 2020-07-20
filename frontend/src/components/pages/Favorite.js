@@ -148,6 +148,7 @@ export default class Favorite extends Component {
     document.getElementById('addArticle').value = '';
     document.getElementById('addAmount').value = 1;
     document.getElementById('addUnit').value = 'Kg';
+    this.setState({ retailer: 'Edeka', article: '', amount: 1, unit: 'Kg' });
   };
 
   // Updates selected entry
