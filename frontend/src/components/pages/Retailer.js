@@ -12,10 +12,12 @@ import {
 // import ShoppingAPI from "../../api/ShoppingAPI";
 import DeleteRetailerAlert from "../dialogs/DeleteRetailerAlert";
 import AddRetailer from "../subcomponents/AddRetailer";
+import { v4 as uuidv4 } from "uuid";
 
 /**
  *
  * @author Robin Fink
+ * @author Lukas Rutkauskas
  */
 
 export default class RetailerList extends Component {
@@ -27,12 +29,13 @@ export default class RetailerList extends Component {
       retailerRows: [],
       retailerIndex: -1,
       retailers: [],
+      retailerName: "",
     };
   }
 
   //Retailer Functions
   async fetchRetailer() {
-    const res = await fetch("http://DESKTOP-NM4VM89:8081/api/iKauf/retailer");
+    const res = await fetch("http://DESKTOP-S3RCLLP:8081/api/iKauf/retailers");
     const resjson = await res.json();
     this.setState({ retailerRows: resjson });
     console.log(resjson);
@@ -54,7 +57,7 @@ export default class RetailerList extends Component {
 
   addRetailer = (name) => {
     const newRetailer = {
-      id: 4,
+      id: uuidv4(),
       name,
     };
     this.setState({ retailers: [...this.state.retailers, newRetailer] });

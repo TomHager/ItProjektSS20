@@ -59,7 +59,7 @@ class Header extends Component {
                 to={`/shoppingList`}
               />
               <Tab label="Profile" />
-              <Tab label="About" component={RouterLink} to={`/about`} />
+              <Tab label="Retailer" component={RouterLink} to={`/retailer`} />
               <Tab label="Testing" component={RouterLink} to={`/testing`} />
             </Tabs>
             // : null

@@ -13,7 +13,7 @@ export default class Testing extends Component {
     console.log("User name : " + this.state.name);
     console.log("User Email : " + this.state.email);
     const url = "http://desktop-s3rcllp:8081/api/iKauf/users";
-    const data = { id: 5, name: this.state.name, email: this.state.email };
+    const data = { name: this.state.name, email: this.state.email };
     fetch(url, {
       method: "POST", // or "PUT"
       body: JSON.stringify(data), // data can be `string` or {object}!

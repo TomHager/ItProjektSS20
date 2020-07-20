@@ -13,7 +13,6 @@ from server.bo.Retailer import Retailer
 # selbstgeschriebener Decorator, übernimmt Authentifikation
 
 
-
 """
 Instanzieren von Flask. Am Ende dieser Datei erfolgt dann erst der 'Start' von Flask.
 """
@@ -61,8 +60,6 @@ retailer = api.inherit('retailer', bo, {
 """
 Klassen und Operationen für User
 """
-
-
 
 
 @ikauf.route('/retailer-by-name/<string:name>')

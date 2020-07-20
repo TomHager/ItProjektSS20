@@ -49,7 +49,7 @@ class App extends React.Component {
           <Route path="/profile">
             <Favorite />
           </Route>
-          <Route path="/about">
+          <Route path="/retailer">
             <Retailer />
           </Route>
           <Route path="/testing">
