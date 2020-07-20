@@ -1,16 +1,11 @@
-import {
-  Refresh,
-  AddBox,
-  Delete,
-  Edit,
-} from '@material-ui/icons';
+import { Refresh, AddBox, Delete, Edit, Save, Clear } from '@material-ui/icons';
 import React, { Component } from 'react';
-import ShoppingAPI from '../../api/ShoppingAPI';
-import { addEntry } from '../../actions/shoppingList';
-import { 
-  Container, 
-  CssBaseline, 
-  IconButton, 
+// import ShoppingAPI from '../../api/ShoppingAPI';
+// import { addEntry } from '../../actions/shoppingList';
+import {
+  Container,
+  CssBaseline,
+  IconButton,
   Table,
   TableBody,
   TableCell,
@@ -22,7 +17,7 @@ import {
 // import EntryBO from '../../api/EntryBO';
 
 /**
- * Displays a ShoppingList for given Data
+ * Displays favorites for given group
  *
  * @author Tom Hager
  */
@@ -34,237 +29,333 @@ export default class Favorite extends Component {
     // Init an empty state
     this.state = {
       //passed Columns and Data loaded into state
-      columns: [
-        {
-            title: "Retailer",
-            field: "retailer",
-            align: "center",
-            
-        },
-        {
-          title: 'Article',
-          field: 'name',
-          align: 'center',
-        },
-        {
-          title: 'Amount',
-          field: 'amount',
-          type: 'numeric',
-          align: 'center',
-          editComponent: (props) => (
-            // editComponent: (onChange()) => (
-            //   validity.valid||(props='')
-            // )
-            // onChange = (props) => (validity.valid||(props=''))
-            <input
-              name="amount"
-              type="number"
-              value={this.state.data.entryAmount}
-              min="0"
-              oninput="validity.valid||(value='');"
-            />
-          ),
-        },
-        {
-          title: 'Unit',
-          field: 'unit',
-          align: 'center',
-          lookup: {
-            1: 'KG',
-            2: 'g',
-            3: 'L',
-            4: 'Stk',
-            5: ' Sack',
-            6: 'Karton',
-            7: 'Flasche',
-            8: 'Dose',
-            9: 'Bund',
-            10: 'm',
-          },
-        },
-      ],
-
       data: [
         {
           id: 1,
-          retailer: "Rewe",
-          article: "Apfel",
+          retailer: 'Rewe',
+          article: 'Apfel',
           amount: 4,
-          unit: "Kg",
-        }, {
+          unit: 'Kg',
+        },
+        {
           id: 2,
-          retailer: "Rewe",
-          article: "Birne",
+          retailer: 'Rewe',
+          article: 'Birne',
           amount: 3,
-          unit: "Kg",
-        }
-      ],
-      unit: [
-        {
-          name: "Kg",
-      }, {
-        name: "g",
-      }, {
-        name: "pcs",
-      }, {
-        name: "pack"
-      }
-
-    ],
-      members: [
-        {
-          member: 'Tom',
-        },
-        {
-          member: 'Klaus',
+          unit: 'pcs',
         },
       ],
-      retailer: [
+      units: [
+        {
+          name: 'Kg',
+        },
+        {
+          name: 'L',
+        },
+        {
+          name: 'g',
+        },
+        {
+          name: 'pcs',
+        },
+        {
+          name: 'pack',
+        },
+      ],
+      retailers: [
         {
           id: 1,
-          name: "Edeka",
-        }, {
+          name: 'Edeka',
+        },
+        {
           id: 2,
-          name: "Rewe",
-        }, {
+          name: 'Rewe',
+        },
+        {
           id: 3,
-          name: "Kaufland"
-        }, {
+          name: 'Kaufland',
+        },
+        {
           id: 4,
-          name: "Test"
-        }
+          name: 'Test',
+        },
       ],
-    };
-    const onChange = (e) =>
-      this.setState({ ...this.state, [e.target.name]: e.target.value });
-    const onSubmit = async (e) => {
-      e.preventDefault();
-      // if (...) {
-      // } else {
-      addEntry(this.state.data);
-      // }
+      rowIndex: -1,
+
+      // Add favorite entry
+      retailer: 'Edeka',
+      article: '',
+      amount: 1,
+      unit: 'Kg',
+
+      // Edit favorite entry
+      editRetailer: 'Edeka',
+      editArticle: '',
+      editAmount: '',
+      editUnit: 'Kg',
+
+      oldData: {},
     };
   }
 
-  setModDate = (date) => (date == null ? (date = Date.now()) : (date = null));
-
-  async fetchEntries() {
-    const res = await fetch('http://DESKTOP-DU328LQ:8081/api/iKauf/entries');
-    const resjson = await res.json();
-    this.setState({ data: resjson });
-    await console.log('fetch complete');
+  // Fetching all favorites for a group
+  async fetchFavorites() {
+    // const res = await fetch('http://DESKTOP-DU328LQ:8081/api/iKauf/entries');
+    // const resjson = await res.json();
+    // this.setState({ data: resjson });
+    console.log('fetch complete');
   }
 
+  // Start Callbacks
   componentDidMount() {
-    this.fetchEntries();
-    console.log('MOUNT');
+    // this.fetchFavorites();
+    console.log('MOUNT Fav');
   }
 
-  /** Updates the entry */
-  async updateEntry(newData) {
-    ShoppingAPI.getAPI().updateEntry(newData);
-    this.fetchEntries();
-  }
-
-  handleChange = (e) => {
-    let selectedValue = e.target.value;
-    this.state.members.onSelectChange(selectedValue);
-    // console.log(e.taget.value)
+  // All ClickHanlder for Table
+  // Toggle selected Row
+  toggleSelectedRow = (data) => {
+    this.state.rowIndex === data.id
+      ? this.setState({ rowIndex: -1 })
+      : this.setState({ rowIndex: data.id });
+    this.setState({ oldData: data });
+    this.setState({
+      editRetailer: data.retailer,
+      editArticle: data.article,
+      editAmount: data.amount,
+      editUnit: data.unit,
+    });
   };
-  // memberButton = () => {
-  //   this.MakeItem = function(X) {
-  //     return <MenuItem >{X}</MenuItem >;
-  //   }
-  //   return(
-  //     <Select
-  //       value={this.state.members}
-  //     >
-  //       {this.state.members.map(this.MakeItem)};
-  //     </Select>
-  //   )
-  //   let members = this.state.members;
-  //   let options = members.map((data) =>
-  //       <option
-  //           key={data.member}
-  //           value={data.member}
-  //       >
-  //           {data.member}
-  //       </option>
-  //   );
-  //   return (
 
-  //     <select name="memberList" onChange={this.handleChange}>
-  //         <option>Select Responsible</option>
-  //         {options}
-  //    </select>
-  //   )
-  // }
+  // Add favorite entry
+  startAddFavorite = () => {
+    const { article, amount } = this.state;
+    article !== '' && amount !== ''
+      ? this.addFavorite()
+      : console.log('Please fill in all details');
+  };
+
+  addFavorite = () => {
+    const { retailer, article, amount, unit } = this.state;
+    const fav = { id: 3, retailer, article, amount, unit };
+    console.log(this.state.addedInput);
+    this.setState((prevState) => {
+      const data = [...prevState.data];
+      data.unshift(fav);
+      return { ...prevState, data };
+    });
+  };
+
+  // Updates selected entry
+  saveFavorite = (id) => {
+    const { editRetailer, editArticle, editAmount, editUnit } = this.state;
+    const favorite = {
+      id,
+      retailer: editRetailer,
+      article: editArticle,
+      amount: editAmount,
+      unit: editUnit,
+    };
+    editArticle !== '' && editAmount !== ''
+      ? this.updateFavorite(favorite)
+      : console.log('Please fill in all details');
+  };
+
+  updateFavorite = (favorite) => {
+    console.log(favorite);
+    console.log(this.state.oldData);
+    this.setState((prevState) => {
+      const data = [...prevState.data];
+      data[data.indexOf(this.state.oldData)] = favorite;
+      return { ...prevState, data };
+    });
+    this.toggleSelectedRow(favorite);
+  };
+
+  // Delete selected entry
+  delFavorite = (favId) => {
+    console.log(favId);
+    this.fetchFavorites();
+  };
 
   render() {
-    const {retailer, unit, data} = this.state;
-    console.log("FAV")
+    const { retailers, units, data, rowIndex } = this.state;
+    console.log('render');
     return (
       <React.Fragment>
         <Container maxWidth="md">
           <CssBaseline />
-          <IconButton onClick={(e) => this.fetchEntries()}>
+          <IconButton onClick={(e) => this.fetchFavorites()}>
             <Refresh />
           </IconButton>
 
           <Table size="small">
-
             <TableHead>
               <TableRow>
-                <TableCell><h4>Retailer</h4></TableCell>
-                <TableCell><h4>Article</h4></TableCell>
-                <TableCell><h4>Amount</h4></TableCell>
-                <TableCell><h4>Unit</h4></TableCell>
-                <TableCell><h4>Action</h4></TableCell>
+                <TableCell>
+                  <h4>Retailer</h4>
+                </TableCell>
+                <TableCell>
+                  <h4>Article</h4>
+                </TableCell>
+                <TableCell>
+                  <h4>Amount</h4>
+                </TableCell>
+                <TableCell>
+                  <h4>Unit</h4>
+                </TableCell>
+                <TableCell>
+                  <h4>Action</h4>
+                </TableCell>
               </TableRow>
             </TableHead>
 
+            {/* Add new favorite row */}
             <TableBody>
               <TableRow>
-              <TableCell>
-                <Select id="retailer" retailer ={this.state.retailer}>
-              {retailer.map((option) => (
-                  <option key={option.id}>{option.name}</option>
-                  ))}
-                </Select>
+                <TableCell>
+                  <Select
+                    id="retailers"
+                    retailers={retailers}
+                    onChange={(e) => this.setState({ retailer: e.target.value })}
+                  >
+                    {retailers.map((option) => (
+                      <option key={option.id}>{option.name}</option>
+                    ))}
+                  </Select>
                 </TableCell>
                 <TableCell>
-                  <Input type="text" name="article" id="article" placeholder="enter article"></Input>
+                  <Input
+                    type="text"
+                    name="article"
+                    id="article"
+                    placeholder="enter article"
+                    required
+                    onChange={(e) => this.setState({ article: e.target.value })}
+                  ></Input>
                 </TableCell>
                 <TableCell>
-                  <Input type="text" name="amount" id="amount" placeholder="enter unit"></Input>
+                  <Input
+                    type="number"
+                    name="amount"
+                    id="amount"
+                    placeholder="enter unit"
+                    defaultValue="1"
+                    required
+                    onChange={(e) => this.setState({ amount: e.target.value })}
+                  ></Input>
                 </TableCell>
                 <TableCell>
-                <Select id="unit" unit ={this.state.unit}>
-              {unit.map((option) => (
-                  <option key={option.name}>{option.name}</option>
-                  ))}
-                </Select>
+                  <Select
+                    id="units"
+                    units={units}
+                    onChange={(e) => this.setState({ unit: e.target.value })}
+                  >
+                    {units.map((option) => (
+                      <option key={option.name}>{option.name}</option>
+                    ))}
+                  </Select>
                 </TableCell>
                 <TableCell>
                   <IconButton>
-                  <AddBox />
-                </IconButton>
+                    <AddBox onClick={this.startAddFavorite.bind(this)} />
+                  </IconButton>
                 </TableCell>
               </TableRow>
 
+              {/* Show all favorite articles of group */}
               {data.map((row) => (
-              <TableRow key={row.id}>
-                <TableCell>{row.retailer}</TableCell>
-              <TableCell>{row.article}</TableCell>
-              <TableCell>{row.amount}</TableCell>
-              <TableCell>{row.unit}</TableCell>
-              <TableCell><IconButton><Edit></Edit></IconButton><IconButton><Delete></Delete></IconButton></TableCell>
-              </TableRow>
-                  ))}
+                <TableRow key={row.id}>
+                  {/* Retailer */}
+                  <TableCell id={`${row.id} retailer`}>
+                    {rowIndex === row.id ? (
+                      <Select
+                        id="editRetailer"
+                        defaultValue={row.retailer}
+                        onChange={(e) => this.setState({ editRetailer: e.target.value })}
+                      >
+                        {retailers.map((option) => (
+                          <option key={option.id}>{option.name}</option>
+                        ))}
+                      </Select>
+                    ) : (
+                      row.retailer
+                    )}
+                  </TableCell>
+
+                  {/* Article */}
+                  <TableCell id={`${row.id} article`}>
+                    {rowIndex === row.id ? (
+                      <Input
+                        type="text"
+                        name="editArticle"
+                        id="editArticle"
+                        placeholder="enter article"
+                        defaultValue={row.article}
+                        required
+                        onChange={(e) => this.setState({ editArticle: e.target.value })}
+                      ></Input>
+                    ) : (
+                      row.article
+                    )}
+                  </TableCell>
+
+                  {/* Amount */}
+                  <TableCell id={`${row.id} amount`}>
+                    {rowIndex === row.id ? (
+                      <Input
+                        type="number"
+                        name="editAmount"
+                        id="editAmount"
+                        placeholder="enter amount"
+                        defaultValue={row.amount}
+                        required
+                        onChange={(e) => this.setState({ editAmount: e.target.value })}
+                      ></Input>
+                    ) : (
+                      row.amount
+                    )}
+                  </TableCell>
+
+                  {/* Unit */}
+                  <TableCell id={`${row.id} unit`}>
+                    {rowIndex === row.id ? (
+                      <Select
+                        id="editUnit"
+                        defaultValue={row.unit}
+                        onChange={(e) => this.setState({ editUnit: e.target.value })}
+                      >
+                        {units.map((option) => (
+                          <option key={option.name}>{option.name}</option>
+                        ))}
+                      </Select>
+                    ) : (
+                      row.unit
+                    )}
+                  </TableCell>
+
+                  {/* Actions */}
+                  <TableCell id={`${row.id} id`}>
+                    <IconButton id={`${row.id} btn1`}>
+                      {rowIndex === row.id ? (
+                        <Save onClick={this.saveFavorite.bind(this, row.id)} />
+                      ) : (
+                        <Edit onClick={this.toggleSelectedRow.bind(this, row)} />
+                      )}
+                    </IconButton>
+                    <IconButton id={`${row.id} btn2`}>
+                      {rowIndex === row.id ? (
+                        <Clear onClick={this.toggleSelectedRow.bind(this)} />
+                      ) : (
+                        <Delete onClick={this.delFavorite.bind(this, row.id)} />
+                      )}
+                    </IconButton>
+                  </TableCell>
+                </TableRow>
+              ))}
             </TableBody>
-
+            {/* End of favorite articles of group */}
           </Table>
-
         </Container>
       </React.Fragment>
     );

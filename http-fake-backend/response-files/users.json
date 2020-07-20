@@ -1,18 +1,22 @@
 [
   {
     "id": 1,
-    "name": "Klaus"
+    "name": "Klaus",
+    "email": "klaus@gmail.com"
   },
   {
     "id": 2,
-    "name": "Günther"
+    "name": "Günther",
+    "email": "guenther@gmail.com"
   },
   {
     "id": 3,
-    "name": "Boris"
+    "name": "Boris",
+    "email": "boris@gmail.com"
   },
   {
     "id": 4,
-    "name": "Valentin"
+    "name": "Valentin",
+    "email": "valentin@gmail.com"
   }
 ]
