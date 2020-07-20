@@ -1,7 +1,7 @@
 import { Refresh, AddBox, Delete, Edit, Save, Clear } from '@material-ui/icons';
 import React, { Component } from 'react';
-import ShoppingAPI from '../../api/ShoppingAPI';
-import { addEntry } from '../../actions/shoppingList';
+// import ShoppingAPI from '../../api/ShoppingAPI';
+// import { addEntry } from '../../actions/shoppingList';
 import {
   Container,
   CssBaseline,
@@ -45,7 +45,7 @@ export default class Favorite extends Component {
           unit: 'pcs',
         },
       ],
-      unit: [
+      units: [
         {
           name: 'Kg',
         },
@@ -62,15 +62,7 @@ export default class Favorite extends Component {
           name: 'pack',
         },
       ],
-      members: [
-        {
-          member: 'Tom',
-        },
-        {
-          member: 'Klaus',
-        },
-      ],
-      retailer: [
+      retailers: [
         {
           id: 1,
           name: 'Edeka',
@@ -89,55 +81,108 @@ export default class Favorite extends Component {
         },
       ],
       rowIndex: -1,
+
+      // Add favorite entry
+      retailer: 'Edeka',
+      article: '',
+      amount: 1,
+      unit: 'Kg',
+
+      // Edit favorite entry
+      editRetailer: 'Edeka',
+      editArticle: '',
+      editAmount: '',
+      editUnit: 'Kg',
+
+      oldData: {},
+      // fields: {},
+      // error: {},
     };
-    const onChange = (e) =>
-      this.setState({ ...this.state, [e.target.name]: e.target.value });
-    const onSubmit = async (e) => {
-      e.preventDefault();
-      // if (...) {
-      // } else {
-      addEntry(this.state.data);
-      // }
-    };
+    // const onChange = (e) =>
+    //   this.setState({ ...this.state, [e.target.name]: e.target.value });
+    // const onSubmit = async (e) => {
+    //   e.preventDefault();
+    //   // if (...) {
+    //   // } else {
+    //   addEntry(this.state.data);
+    //   // }
+    // };
   }
 
-  setModDate = (date) => (date == null ? (date = Date.now()) : (date = null));
-
+  // Fetching all favorites for a group
   async fetchFavorites() {
-    const res = await fetch('http://DESKTOP-DU328LQ:8081/api/iKauf/entries');
-    const resjson = await res.json();
-    this.setState({ data: resjson });
-    await console.log('fetch complete');
+    // const res = await fetch('http://DESKTOP-DU328LQ:8081/api/iKauf/entries');
+    // const resjson = await res.json();
+    // this.setState({ data: resjson });
+    console.log('fetch complete');
   }
 
+  // Start Callbacks
   componentDidMount() {
-    this.fetchFavorites();
+    // this.fetchFavorites();
     console.log('MOUNT Fav');
   }
 
-  /** Updates the entry */
-  async updateEntry(newData) {
-    ShoppingAPI.getAPI().updateEntry(newData);
-    this.fetchFavorites();
-  }
-
-  handleChange = (e) => {
-    let selectedValue = e.target.value;
-    this.state.members.onSelectChange(selectedValue);
-    // console.log(e.taget.value)
+  // All ClickHanlder for Table
+  // Toggle selected Row
+  toggleSelectedRow = (data) => {
+    this.state.rowIndex === data.id
+      ? this.setState({ rowIndex: -1 })
+      : this.setState({ rowIndex: data.id });
+    this.state.oldData === data
+      ? this.setState({ oldData: {} })
+      : this.setState({ oldData: data });
   };
 
+  // Add favorite entry
+  startAddFavorite = () => {
+    const { article, amount } = this.state;
+    article !== '' && amount !== ''
+      ? this.addFavorite()
+      : console.log('Please fill in all details');
+  };
+
+  addFavorite = () => {
+    const { retailer, article, amount, unit } = this.state;
+    const fav = { id: this.state.data.length, retailer, article, amount, unit };
+    console.log(this.state.addedInput);
+    this.setState((prevState) => {
+      const data = [...prevState.data];
+      data.unshift(fav);
+      return { ...prevState, data };
+    });
+  };
+
+  // Updates selected entry
+  updateFavorite = (favorite) => {
+    this.setState((prevState) => {
+      const data = [...prevState.data];
+      data[data.indexOf(this.state.oldData)] = favorite;
+      return { ...prevState, data };
+    });
+    this.toggleSelectedRow(favorite);
+  };
+
+  // Delete selected entry
   delFavorite = (favId) => {
     this.fetchFavorites();
   };
 
-  editFavorite = (favorite) => {
-    this.setState({ rowIndex: favorite.id });
-  };
+  // handleValidation() {
+  //   let fields = this.state.fields;
+  //   let errors = {};
+  //   let formIsValid = true;
+  // }
+
+  // handleChange(field, e) {
+  //   let fields = this.state.fields;
+  //   fields[field] = e.target.value;
+  //   this.setState({ fields });
+  // }
 
   render() {
-    const { retailer, unit, data, rowIndex } = this.state;
-    console.log('FAV');
+    const { retailers, units, data, rowIndex } = this.state;
+    console.log('render');
     return (
       <React.Fragment>
         <Container maxWidth="md">
@@ -167,12 +212,16 @@ export default class Favorite extends Component {
               </TableRow>
             </TableHead>
 
-            {/* Add new Favorite Row */}
+            {/* Add new favorite row */}
             <TableBody>
               <TableRow>
                 <TableCell>
-                  <Select id="retailer" retailer={retailer}>
-                    {retailer.map((option) => (
+                  <Select
+                    id="retailers"
+                    retailers={retailers}
+                    onChange={(e) => this.setState({ retailer: e.target.value })}
+                  >
+                    {retailers.map((option) => (
                       <option key={option.id}>{option.name}</option>
                     ))}
                   </Select>
@@ -184,6 +233,7 @@ export default class Favorite extends Component {
                     id="article"
                     placeholder="enter article"
                     required
+                    onChange={(e) => this.setState({ article: e.target.value })}
                   ></Input>
                 </TableCell>
                 <TableCell>
@@ -194,18 +244,23 @@ export default class Favorite extends Component {
                     placeholder="enter unit"
                     defaultValue="1"
                     required
+                    onChange={(e) => this.setState({ amount: e.target.value })}
                   ></Input>
                 </TableCell>
                 <TableCell>
-                  <Select id="unit" unit={unit}>
-                    {unit.map((option) => (
+                  <Select
+                    id="units"
+                    units={units}
+                    onChange={(e) => this.setState({ unit: e.target.value })}
+                  >
+                    {units.map((option) => (
                       <option key={option.name}>{option.name}</option>
                     ))}
                   </Select>
                 </TableCell>
                 <TableCell>
                   <IconButton>
-                    <AddBox />
+                    <AddBox onClick={this.startAddFavorite.bind(this)} />
                   </IconButton>
                 </TableCell>
               </TableRow>
@@ -217,7 +272,7 @@ export default class Favorite extends Component {
                   <TableCell id={`${row.id} retailer`}>
                     {rowIndex === row.id ? (
                       <Select id="editRetailer" defaultValue={row.retailer}>
-                        {retailer.map((option) => (
+                        {retailers.map((option) => (
                           <option key={option.id}>{option.name}</option>
                         ))}
                       </Select>
@@ -239,7 +294,7 @@ export default class Favorite extends Component {
                       ></Input>
                     ) : (
                       row.article
-                    )}{' '}
+                    )}
                   </TableCell>
 
                   {/* Amount */}
@@ -262,8 +317,8 @@ export default class Favorite extends Component {
                   {/* Unit */}
                   <TableCell id={`${row.id} unit`}>
                     {rowIndex === row.id ? (
-                      <Select id="unit" defaultValue={row.unit}>
-                        {unit.map((option) => (
+                      <Select id="editUnit" defaultValue={row.unit}>
+                        {units.map((option) => (
                           <option key={option.name}>{option.name}</option>
                         ))}
                       </Select>
@@ -276,14 +331,14 @@ export default class Favorite extends Component {
                   <TableCell id={`${row.id} id`}>
                     <IconButton id={`${row.id} btn1`}>
                       {rowIndex === row.id ? (
-                        <Save onClick={this.editFavorite.bind(this, row)} />
+                        <Save onClick={this.updateFavorite.bind(this, row)} />
                       ) : (
-                        <Edit onClick={this.editFavorite.bind(this, row)} />
+                        <Edit onClick={this.toggleSelectedRow.bind(this, row)} />
                       )}
                     </IconButton>
                     <IconButton id={`${row.id} btn2`}>
                       {rowIndex === row.id ? (
-                        <Clear onClick={this.editFavorite.bind(this, row)} />
+                        <Clear onClick={this.toggleSelectedRow.bind(this)} />
                       ) : (
                         <Delete onClick={this.delFavorite.bind(this, row.id)} />
                       )}
