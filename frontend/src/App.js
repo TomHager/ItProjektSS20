@@ -6,7 +6,7 @@ import Retailer from "./components/pages/Retailer";
 import GroupList from "./components/pages/GroupList";
 import Favorite from "./components/pages/Favorite";
 import ShoppingList from "./components/pages/ShoppingList";
-// import { Favorite } from "@material-ui/icons";
+import Testing from "./components/pages/Testing";
 
 // import Theme from './Theme';
 // import SignIn from './components/pages/SignIn';
@@ -51,6 +51,9 @@ class App extends React.Component {
           </Route>
           <Route path="/about">
             <Retailer />
+          </Route>
+          <Route path="/testing">
+            <Testing />
           </Route>
         </Router>
       </div>
