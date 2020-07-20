@@ -4,7 +4,9 @@ from server.db.Mapper import Mapper
 """ 
 @author Tom Hager
  """
- 
+
+
+
 class UserMapper(Mapper):
 
     def __init__(self):
@@ -69,7 +71,7 @@ class UserMapper(Mapper):
             nicht vorhandenem DB-Tupel.
         """
 
-        result = None
+        result = []
 
         cursor = self._cnx.cursor()
         command = "SELECT * FROM users WHERE id={}".format(key)
@@ -128,7 +130,7 @@ class UserMapper(Mapper):
         :return User-Objekt, das die übergebene Google ID besitzt,
             None bei nicht vorhandenem DB-Tupel.
         """
-        result = None
+        result = []
 
         cursor = self._cnx.cursor()
         command = "SELECT * FROM users WHERE external_id='{}'".format(external_id)
@@ -207,8 +209,3 @@ class UserMapper(Mapper):
         self._cnx.commit()
         cursor.close()
 
-user = User()
-user.set_id(5), user.set_name("Alex"), user.set_email("alex@alex.alex"), user.set_external_id(8)
-if __name__ == "__main__":
-    with UserMapper() as mapper:
-        result = mapper.update(user)

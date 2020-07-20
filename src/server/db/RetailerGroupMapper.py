@@ -112,7 +112,7 @@ class RetailerGroupMapper(Mapper):
             retailer_group.set_retailer_member(retailer_member)
             retailer_group.set_retailer_group(retailer_group)
 
-        result = retailer_group
+            result = retailer_group
 
         self._cnx.commit()
         cursor.close()

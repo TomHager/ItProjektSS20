@@ -1,25 +1,24 @@
 from server.bo import Retailer as retailer
 from server.bo import Group as group
 
-
 class RetailerGroup(group.Group, retailer.Retailer):
 
     def __init__(self):
         super().__init__()
-        self._retailer_member = None
-        self._retailer_group = None
+        self._retailer_member = ""
+        self._retailer_group = ""
 
     def get_retailer_member(self):
         return self._retailer_member
 
     def set_retailer_member(self, retailer):
-        self._retailer_member = retailer.get_id()
+        self._retailer_member = retailer
 
     def get_retailer_group(self):
         return self._retailer_group
 
     def set_retailer_group(self, group):
-        self._retailer_group = group.get_id()
+        self._retailer_group = group
 
     def __str__(self):
         """Erzeugen einer einfachen textuellen Darstellung der jeweiligen Instanz."""
