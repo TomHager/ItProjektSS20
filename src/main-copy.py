@@ -641,8 +641,7 @@ class ShoppingListListOperations(Resource):
         else:
             return '', 500
 
-
-@ikauf.route('/shopping-list-by-id/<int:shoppingListId>')
+@ikauf.route('/shopping-list-by-id/<int:id>')
 @ikauf.response(500, 'Falls Server-seitiger Fehler')
 @ikauf.param('id', 'ID des ShoppingList-Objekts')
 class ShoppingListOperations(Resource):
@@ -700,9 +699,9 @@ class ShoppingListRelatedByNameOperations(Resource):
         return sl
 
 
-@ikauf.route('/shopping-list-by-group-id/<int: groupId>')
+@ikauf.route('/shopping-list-by-group-id/<int:id>')
 @ikauf.response(500, 'Falls Server-seitiger Fehler')
-@ikauf.param('groupId', 'Group ID des zugehörigen ShoppingList-Objekts')
+@ikauf.param('id', 'Group ID des zugehörigen ShoppingList-Objekts')
 class ShoppingListRelatedByGroupIdOperations(Resource):
     @ikauf.marshal_with(shopping_list)
     @secured

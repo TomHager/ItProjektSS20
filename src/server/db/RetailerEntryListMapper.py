@@ -20,10 +20,15 @@ class RetailerEntryListMapper(Mapper):
 
         for (user_id, retailer_id, shopping_list_id, entry_id) in tuples:
             retailer_entry_list = RetailerEntryList()
+            retailer_entry_list.set_id(id)
             retailer_entry_list.set_user_id(user_id)
             retailer_entry_list.set_retailer_id(retailer_id)
             retailer_entry_list.set_shopping_list_id(shopping_list_id)
             retailer_entry_list.set_entry_id(entry_id)
+            retailer_entry_list.set_user_id(user_id)
+            retailer_entry_list.set_retailer_id(retailer_id)
+
+
             result.append(retailer_entry_list)
 
         self._cnx.commit()
