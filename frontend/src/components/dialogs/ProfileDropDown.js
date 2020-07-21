@@ -21,7 +21,7 @@ import firebase from "firebase/app";
  * @see See Googles [firebase authentication](https://firebase.google.com/docs/web/setup)
  * @see See Googles [firebase API reference](https://firebase.google.com/docs/reference/js)
  *
- * @author [Christoph Kunz](https://github.com/christophkunz)
+ * @author Lukas Rutkauskas
  */
 class ProfileDropDown extends Component {
   // a refernce to the avatar button

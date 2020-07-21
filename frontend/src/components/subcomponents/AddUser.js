@@ -1,8 +1,8 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 // import PropTypes from "prop-types";
-import PersonAddIcon from "@material-ui/icons/PersonAdd";
-import IconButton from "@material-ui/core/IconButton";
-import { TextField } from "@material-ui/core";
+import PersonAddIcon from '@material-ui/icons/PersonAdd';
+import IconButton from '@material-ui/core/IconButton';
+import { TextField } from '@material-ui/core';
 
 /**
  *
@@ -12,7 +12,7 @@ import { TextField } from "@material-ui/core";
 
 export default class AddUser extends Component {
   state = {
-    userMail: "",
+    userMail: '',
     user: [],
     group: [],
   };
@@ -31,7 +31,6 @@ export default class AddUser extends Component {
     );
     const resjson = await res.json();
     this.setState({ user: resjson });
-    console.log(resjson);
   }
 
   async fetchGroupByName() {
@@ -46,20 +45,20 @@ export default class AddUser extends Component {
   addUserToGroup = (event) => {
     event.preventDefault();
     this.props.addUser(this.state.userMail);
-    console.log("Added to group : " + this.state.userMail);
-    const url = "http://desktop-s3rcllp:8081/api/iKauf/users";
+    console.log('Added to group : ' + this.state.userMail);
+    const url = 'http://desktop-s3rcllp:8081/api/iKauf/users';
     const data = {
       id: this.state.userId,
       group_membership: this.state.groupMembershipId,
     };
     fetch(url, {
-      method: "POST", // or "POST"
+      method: 'POST', // or "POST"
       body: JSON.stringify(data), // data can be `string` or {object}!
-      headers: { "Content-Type": "application/json" },
+      headers: { 'Content-Type': 'application/json' },
     })
       .then((res) => res.json())
-      .catch((error) => console.error("Error:", error))
-      .then((response) => console.log("Success:", response));
+      .catch((error) => console.error('Error:', error))
+      .then((response) => console.log('Success:', response));
   };
 
   render() {
@@ -68,7 +67,7 @@ export default class AddUser extends Component {
         <TextField
           type="text"
           name="user"
-          style={{ flex: "10", padding: "5px" }}
+          style={{ flex: '10', padding: '5px' }}
           placeholder="Add user ..."
           value={this.state.user}
           onChange={this.onChange}
