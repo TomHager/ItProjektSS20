@@ -142,7 +142,7 @@ export default class App extends React.Component {
               <>
                 <Redirect from="/" to="/groupList" />
                 <Route exact path="/groupList">
-                  <GroupList />
+                  <GroupList user={this.state.currentUser} />
                 </Route>
                 <Route path="/shoppingList">
                   <ShoppingList />

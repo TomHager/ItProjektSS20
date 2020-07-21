@@ -9,6 +9,7 @@ import ProfileDropDown from "../dialogs/ProfileDropDown";
  * @see See Material-UIs [Paper](https://material-ui.com/components/paper/)
  *
  * @author Tom Hager
+ * @author Lukas Rutkauskas
  */
 
 class Header extends Component {
@@ -43,8 +44,7 @@ class Header extends Component {
           <Typography variant="h4" component="h2" align="center">
             <u>Overview</u>
           </Typography>
-          {
-            //   user ?
+          {user ? (
             <Tabs
               indicatorColor="primary"
               textColor="primary"
@@ -62,8 +62,7 @@ class Header extends Component {
               <Tab label="About" component={RouterLink} to={`/about`} />
               <Tab label="Testing" component={RouterLink} to={`/testing`} />
             </Tabs>
-            // : null
-          }
+          ) : null}
         </Paper>
       </div>
     );

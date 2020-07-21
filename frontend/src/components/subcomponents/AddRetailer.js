@@ -1,8 +1,8 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 // import PropTypes from "prop-types";
-import AddIcon from "@material-ui/icons/Add";
-import IconButton from "@material-ui/core/IconButton";
-import { TextField } from "@material-ui/core";
+import AddIcon from '@material-ui/icons/Add';
+import IconButton from '@material-ui/core/IconButton';
+import { TextField } from '@material-ui/core';
 
 /**
  *
@@ -12,8 +12,8 @@ import { TextField } from "@material-ui/core";
 
 export default class AddRetailer extends Component {
   state = {
-    retailer: "",
-    retailerName: "",
+    retailer: '',
+    retailerName: '',
   };
 
   onChange = (e) => this.setState({ [e.target.name]: e.target.value });
@@ -26,17 +26,17 @@ export default class AddRetailer extends Component {
   handleCreateRetailer = (event) => {
     event.preventDefault();
     this.props.addRetailer(this.state.retailer);
-    console.log("Created Group : " + this.state.retailer);
-    const url = "http://desktop-s3rcllp:8081/api/iKauf/retailers";
+    console.log('Created Group : ' + this.state.retailer);
+    const url = 'http://desktop-s3rcllp:8081/api/iKauf/retailers';
     const data = { name: this.state.retailer };
     fetch(url, {
-      method: "POST", // or "POST"
+      method: 'POST', // or "POST"
       body: JSON.stringify(data), // data can be `string` or {object}!
-      headers: { "Content-Type": "application/json" },
+      headers: { 'Content-Type': 'application/json' },
     })
       .then((res) => res.json())
-      .catch((error) => console.error("Error:", error))
-      .then((response) => console.log("Success:", response));
+      .catch((error) => console.error('Error:', error))
+      .then((response) => console.log('Success:', response));
   };
 
   handleRetailerNameOnChange = (event) => {
@@ -49,7 +49,7 @@ export default class AddRetailer extends Component {
         <TextField
           type="text"
           name="retailer"
-          style={{ flex: "10", padding: "5px" }}
+          style={{ flex: '10', padding: '5px' }}
           placeholder="Enter Retailername ..."
           value={this.state.retailer}
           onChange={this.onChange}
