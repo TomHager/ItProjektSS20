@@ -10,7 +10,6 @@ from .bo.GroupMembership import GroupMembership
 
 from .db.EntryMapper import EntryMapper
 from .db.GroupMapper import GroupMapper
-from .db.RetailerEntryListMapper import RetailerEntryListMapper
 from .db.RetailerMapper import RetailerMapper
 from .db.ShoppingListMapper import ShoppingListMapper
 from .db.UserMapper import UserMapper
@@ -58,6 +57,11 @@ class ShoppingListAdministration(object):
         """Alle Benutzer mit gegebener E-Mail-Adresse auslesen."""
         with UserMapper() as mapper:
             return mapper.find_by_email(email)
+
+    def get_user_by_external_id(self, external_id):
+        """Alle Benutzer mit gegebener E-Mail-Adresse auslesen."""
+        with UserMapper() as mapper:
+            return mapper.find_by_external_id(external_id)
 
     def get_all_users(self):
         """Alle Benutzer auslesen."""
