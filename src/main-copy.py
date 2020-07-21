@@ -516,6 +516,19 @@ class EntryRelatedByShoppingListOperations(Resource):
         e = adm.get_entry_by_shopping_list(shopping_list_id)
         return e
 
+@ikauf.route('/entry-by-bought/<tinyint:bought>')
+@ikauf.response(500, 'Falls Server-seitiger Fehler')
+@ikauf.param('bought', 'ShoppingList des zugehörigen Entry-Objekts')
+class EntryRelatedByBoughtOperations(Resource):
+    @ikauf.marshal_with(entry)
+    @secured
+    def get(self, bought):
+        """Auslesen eines bestimmten Entry-Objekts nach Article"""
+
+        adm = ShoppingListAdministration()
+        e = adm.get_entry_by_bought(bought)
+        return e
+
 @ikauf.route('/entry-by-modification-date/<date:date>')
 @ikauf.response(500, 'Falls Server-seitiger Fehler')
 @ikauf.param('date', 'ModificationDate des zugehörigen Entry-Objekts')

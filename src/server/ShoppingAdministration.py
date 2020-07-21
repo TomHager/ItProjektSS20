@@ -1,13 +1,11 @@
 from .bo.Entry import Entry
 from .bo.Group import Group
 from .bo.Retailer import Retailer
-from .bo.RetailerEntryList import RetailerEntryList
 from .bo.ShoppingList import ShoppingList
 from .bo.User import User
 from .bo.Favorite import Favorite
 from .bo.RetailerGroup import RetailerGroup
 from .bo.GroupMembership import GroupMembership
-
 from .db.EntryMapper import EntryMapper
 from .db.GroupMapper import GroupMapper
 from .db.RetailerMapper import RetailerMapper
@@ -279,6 +277,11 @@ class ShoppingListAdministration(object):
         """Update eines Entry Objektes"""  # todo Richtig beschrieben?
         with EntryMapper() as mapper:
             mapper.update(entry)
+
+    def get_entry_by_bought(self, bought):
+        """Entry mit übergebenem Retailer auslesen."""
+        with EntryMapper() as mapper:
+            return mapper.find_entry_by_bought(bought)
 
     """
     RetailerGroup-spezifische Methoden
