@@ -93,63 +93,117 @@ retailer_group = api.inherit('RetailerGroup', {
 })
 
 
-@ikauf.route('/retailer-by-group')
-@ikauf.route(500, 'Falls Server-seitiger Fehler')
-@ikauf.param('id', 'ID des RetailerGroup-Objekts')
-class RetailerGroupOperations(Resource):
-    @ikauf.marshal_with(retailer_group)
-    def get(self):
-        adm = ShoppingListAdministration()
-        a = adm.get_all_retailer_members()
-        return a
+"""
+Klassen und Operationen für User
+"""
 
+
+@ikauf.route('/user/<int:id>')
+@ikauf.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+@ikauf.param('id', 'Die ID des User-Objekts')
+class UserOperations(Resource):
+    @ikauf.marshal_with(user)
+    @secured
+    def get(self, id):
+        """Auslesen eines bestimmten User-Objekts.
+
+        Das auszulesende Objekt wird durch die ```id``` in dem URI bestimmt.
+        """
+        adm = ShoppingListAdministration()
+        cust = adm.get_user_by_id(id)
+        return cust
+
+    @secured
     def delete(self, id):
-        """Löschen eines bestimmten RetailerGroup-Objekts"""
+        """Löschen eines bestimmten User-Objekts.
 
+        Das zu löschende Objekt wird durch die ```id``` in dem URI bestimmt.
+        """
         adm = ShoppingListAdministration()
-        a = adm.get_retailer_by_group(id)
-        adm.delete_retailer_by_group(a)
+        cust = adm.get_user_by_id(id)
+        adm.delete_user(cust)
         return '', 200
 
-    @ikauf.marshal_with(retailer_group)
-    @ikauf.expect(retailer_group, validate=True)
+    @ikauf.marshal_with(user)
+    @ikauf.expect(user, validate=True)
+    @secured
     def put(self, id):
-        """Update eines bestimmten RetailerGroup-Objekts."""
+        """Update eines bestimmten User-Objekts.
 
+        **ACHTUNG:** Relevante id ist die id, die mittels URI bereitgestellt und somit als Methodenparameter
+        verwendet wird. Dieser Parameter überschreibt das ID-Attribut des im Payload der Anfrage übermittelten
+        Customer-Objekts.
+        """
         adm = ShoppingListAdministration()
-        a = RetailerGroup.from_dict(api.payload)
+        c = user.from_dict(api.payload)
 
-        if a is not None:
-            a.set_id(id)
-            adm.save_retailer_group(a)
+        if c is not None:
+            """Hierdurch wird die id des zu überschreibenden (vgl. Update) Customer-Objekts gesetzt.
+            Siehe Hinweise oben.
+            """
+            c.set_id(id)
+            adm.save_user(c)
             return '', 200
         else:
             return '', 500
 
 
-@ikauf.route('/retailer-by-group')
-@ikauf.response(500, "Falls Server-seitiger Fehler")
-class RetailerGroupListOperations(Resource):
-    @ikauf.marshal_list_with(retailer_group)
+@ikauf.route('/user-by-name/<string:name>')
+@ikauf.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+@ikauf.param('name', 'Der Name des Kunden')
+class UserByNameOperations(Resource):
+    @ikauf.marshal_with(user)
+    @secured
+    def get(self, name):
+        """ Auslesen von User-Objekten, die durch den Namen bestimmt werden.
+
+        Die auszulesenden Objekte werden durch ```name``` in dem URI bestimmt.
+        """
+        adm = ShoppingListAdministration()
+        cust = adm.get_user_by_name(name)
+        return cust
+
+
+@ikauf.route('/user-by-email/<string:email>')
+@ikauf.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+@ikauf.param('email', 'Die Email des User')
+class UserByEmailOperations(Resource):
+    @ikauf.marshal_with(user)
+    @secured
+    def get(self, email):
+        """ Auslesen von User-Objekten, die durch die E-Mail bestimmt werden.
+
+        Die auszulesenden Objekte werden durch ```email``` in dem URI bestimmt.
+        """
+        adm = ShoppingListAdministration()
+        cust = adm.get_user_by_email(email)
+        return cust
+
+
+@ikauf.route('/user')
+@ikauf.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+class UserListOperations(Resource):
+    @ikauf.marshal_list_with(user)
+    @secured
     def get(self):
-        """Auslesen aller RetailerGroup-Objekte"""
+        """Auslesen aller User-Objekte"""
 
         adm = ShoppingListAdministration()
-        r = adm.get_all_retailer_members()
-        return r
+        user = adm.get_all_users()
+        return user
 
     def post(self):
-        """Anlegen eines neuen Retailer-Objekts für einen gegebene Group"""
+        """Anlegen eines neuen User-Objekts"""
 
         adm = ShoppingListAdministration()
 
-        r = adm.get_retailer_by_group(id)  # todo stimmt id?
+        proposal = user.from_dict(api.payload)
 
-        if r is not None:
-            x = adm.create_retailer(r)
+        if proposal is not None:
+            x = adm.create_user(proposal.get_name(), proposal.get_email(), proposal.get_external_id())
             return x, 200
         else:
-            return 'Group unknown',
+            return '', 500
 
 
 """
