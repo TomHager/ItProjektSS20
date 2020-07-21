@@ -4,7 +4,7 @@ from flask_restx import Resource, Api, fields
 from flask_cors import CORS
 
 # Zugriff auf BusinessObject Klassen und Applikationslogik
-from server.ShoppingAdministration import ShoppingAdministration
+from server.ShoppingAdministration import ShoppingListAdministration
 from server.bo.Entry import Entry
 from server.bo.User import User
 from server.bo.Group import Group
@@ -69,10 +69,13 @@ retailer = api.inherit('retailer', bo, {
 })
 
 entry = api.inherit('Entry', bo, {
-  'article': fields.String(attribute='_article', discription='Name eines Artikel'),
-  'unit': fields.String(attribute='_unit', discription='Name der Einheit'),
-  'amount': fields.Integer(attribute='_amount', discription='Menge eines Artikel'),
-  'modification_date': fields.Date(attribute='_modification_date', discription='Änderungsdatum der Entry'),
+    'article': fields.String(attribute='_article', discription='Name eines Artikel'),
+    'unit': fields.String(attribute='_unit', discription='Name der Einheit'),
+    'amount': fields.Integer(attribute='_amount', discription='Menge eines Artikel'),
+    'modification_date': fields.Date(attribute='_modification_date', discription='Änderungsdatum der Entry'),
+    'user_id': fields.String(attribut='_user_id', description='Name eines Benutzers'),
+    'retailer_id': fields.String(attribute='_retailer_id', description='Name eines Verkäufers'),
+    'shopping_list_id': fields.Integer(attribute='_shopping_list_id', description='ID einer Shopping List'),
 })
 
 favorite = api.inherit('Favorite', bo, {
@@ -82,15 +85,8 @@ favorite = api.inherit('Favorite', bo, {
 })
 
 shopping_list = api.inherit('ShoppingList', bo, {
-  '_name': fields.String(attribute='_name', discription='Name einer Shoppingliste'),
-  'groups_id': fields.Integer(attribute='_groups_id', discription='ID einer Gruppe')
-})
-
-retailer_entry_list = api.inherit('RetailerEntryList', bo, {
-  'retailer_id': fields.String(attribute='_retailer_id', description='Name eines Verkäufers'),
-  'user_id': fields.String(attribut='_user_id', description='Name eines Benutzers'),
-  'shopping_list_id': fields.Integer(attribute='_shopping_list_id', description='ID einer Shopping List'),
-  'entry_id': fields.String(attribut='_entry_id', description='Entry'),
+    '_name': fields.String(attribute='_name', discription='Name einer Shoppingliste'),
+    'groups_id': fields.Integer(attribute='_groups_id', discription='ID einer Gruppe')
 })
 
 retailer_group = api.inherit('RetailerGroup', {

@@ -1,4 +1,4 @@
-import { Refresh, AddBox, Delete, Edit, Save, Clear } from '@material-ui/icons';
+import { Refresh, AddBox, Delete, Edit, Check, Clear } from '@material-ui/icons';
 import React, { Component } from 'react';
 // import ShoppingAPI from '../../api/ShoppingAPI';
 // import { addEntry } from '../../actions/shoppingList';
@@ -46,55 +46,41 @@ export default class Favorite extends Component {
         },
       ],
       units: [
-        {
-          name: 'Kg',
-        },
-        {
-          name: 'L',
-        },
-        {
-          name: 'g',
-        },
-        {
-          name: 'pcs',
-        },
-        {
-          name: 'pack',
-        },
+        { name: 'Kg' },
+        { name: 'L' },
+        { name: 'g' },
+        { name: 'pcs' },
+        { name: 'pack' },
       ],
       retailers: [
-        {
-          id: 1,
-          name: 'Edeka',
-        },
-        {
-          id: 2,
-          name: 'Rewe',
-        },
-        {
-          id: 3,
-          name: 'Kaufland',
-        },
-        {
-          id: 4,
-          name: 'Test',
-        },
+        { id: 1, name: 'Edeka' },
+        { id: 2, name: 'Rewe' },
+        { id: 3, name: 'Kaufland' },
+        { id: 4, name: 'Test' },
       ],
       rowIndex: -1,
 
       // Add favorite entry
-      retailer: 'Edeka',
+      retailer: '',
       article: '',
       amount: 1,
-      unit: 'Kg',
+      unit: '',
 
       // Edit favorite entry
-      editRetailer: 'Edeka',
+      editRetailer: '',
       editArticle: '',
-      editAmount: '',
-      editUnit: 'Kg',
+      editAmount: 1,
+      editUnit: '',
 
       oldData: {},
+
+      // Error for add
+      errorAArticle: false,
+      errorAAmount: false,
+
+      // Error for Edit
+      errorEArticle: false,
+      errorEAmount: false,
     };
   }
 
@@ -109,7 +95,14 @@ export default class Favorite extends Component {
   // Start Callbacks
   componentDidMount() {
     // this.fetchFavorites();
-    console.log('MOUNT Fav');
+    const { retailers, units } = this.state;
+    this.setState({
+      retailer: retailers[0].name,
+      editRetailer: retailers[0].name,
+      unit: units[0].name,
+      editUnit: units[0].name,
+    });
+    console.log(retailers[0].name.name);
   }
 
   // All ClickHanlder for Table
@@ -119,35 +112,69 @@ export default class Favorite extends Component {
       ? this.setState({ rowIndex: -1 })
       : this.setState({ rowIndex: data.id });
     this.setState({ oldData: data });
+    // Allways sets state of these elements
     this.setState({
       editRetailer: data.retailer,
       editArticle: data.article,
       editAmount: data.amount,
       editUnit: data.unit,
+      errorEArticle: false,
+      errorEAmount: false,
     });
   };
 
+  // Display correct error input field
+  setAddError = (article, amount) => {
+    article.trim() !== ''
+      ? this.setState({ errorAArticle: false })
+      : this.setState({ errorAArticle: true });
+    amount !== '' && amount > 0
+      ? this.setState({ errorAAmount: false })
+      : this.setState({ errorAAmount: true });
+  };
+
+  setEditError = (article, amount) => {
+    article.trim() !== ''
+      ? this.setState({ errorEArticle: false })
+      : this.setState({ errorEArticle: true });
+    amount !== '' && amount > 0
+      ? this.setState({ errorEAmount: false })
+      : this.setState({ errorEAmount: true });
+  };
+
   // Add favorite entry
-  startAddFavorite = () => {
+  validateAddFavorite = () => {
     const { article, amount } = this.state;
-    article !== '' && amount !== ''
+    console.log(amount);
+    article.trim() !== '' && amount !== '' && amount > 0
       ? this.addFavorite()
-      : console.log('Please fill in all details');
+      : this.setAddError(article, amount);
   };
 
   addFavorite = () => {
-    const { retailer, article, amount, unit } = this.state;
+    const { retailer, article, amount, unit, retailers, units } = this.state;
     const fav = { id: 3, retailer, article, amount, unit };
+    this.setAddError(article, amount);
     console.log(this.state.addedInput);
     this.setState((prevState) => {
       const data = [...prevState.data];
       data.unshift(fav);
       return { ...prevState, data };
     });
+    document.getElementById('addRetailer').value = retailers[0].name;
+    document.getElementById('addArticle').value = '';
+    document.getElementById('addAmount').value = 1;
+    document.getElementById('addUnit').value = units[0].name;
+    this.setState({
+      retailer: retailers[0].name,
+      article: '',
+      amount: 1,
+      unit: units[0].name,
+    });
   };
 
   // Updates selected entry
-  saveFavorite = (id) => {
+  validateUpdateFavorite = (id) => {
     const { editRetailer, editArticle, editAmount, editUnit } = this.state;
     const favorite = {
       id,
@@ -156,12 +183,13 @@ export default class Favorite extends Component {
       amount: editAmount,
       unit: editUnit,
     };
-    editArticle !== '' && editAmount !== ''
+    editArticle.trim() !== '' && editAmount !== '' && editAmount > 0
       ? this.updateFavorite(favorite)
-      : console.log('Please fill in all details');
+      : this.setEditError(editArticle, editAmount);
   };
 
   updateFavorite = (favorite) => {
+    this.setEditError(favorite.article, favorite.amount);
     console.log(favorite);
     console.log(this.state.oldData);
     this.setState((prevState) => {
@@ -179,15 +207,25 @@ export default class Favorite extends Component {
   };
 
   render() {
-    const { retailers, units, data, rowIndex } = this.state;
+    const {
+      retailers,
+      units,
+      data,
+      rowIndex,
+      errorAArticle,
+      errorAAmount,
+      errorEArticle,
+      errorEAmount,
+    } = this.state;
     console.log('render');
     return (
       <React.Fragment>
         <Container maxWidth="md">
           <CssBaseline />
-          <IconButton onClick={(e) => this.fetchFavorites()}>
+          {/* Refresh table content */}
+          {/* <IconButton onClick={(e) => this.fetchFavorites()}>
             <Refresh />
-          </IconButton>
+          </IconButton> */}
 
           <Table size="small">
             <TableHead>
@@ -215,8 +253,9 @@ export default class Favorite extends Component {
               <TableRow>
                 <TableCell>
                   <Select
-                    id="retailers"
+                    id="addRetailer"
                     retailers={retailers}
+                    defaultValue={retailers[0].name}
                     onChange={(e) => this.setState({ retailer: e.target.value })}
                   >
                     {retailers.map((option) => (
@@ -228,27 +267,29 @@ export default class Favorite extends Component {
                   <Input
                     type="text"
                     name="article"
-                    id="article"
+                    id="addArticle"
                     placeholder="enter article"
-                    required
+                    defaultValue=""
                     onChange={(e) => this.setState({ article: e.target.value })}
+                    error={errorAArticle}
                   ></Input>
                 </TableCell>
                 <TableCell>
                   <Input
                     type="number"
                     name="amount"
-                    id="amount"
+                    id="addAmount"
                     placeholder="enter unit"
                     defaultValue="1"
-                    required
                     onChange={(e) => this.setState({ amount: e.target.value })}
+                    error={errorAAmount}
                   ></Input>
                 </TableCell>
                 <TableCell>
                   <Select
-                    id="units"
+                    id="addUnit"
                     units={units}
+                    defaultValue={units[0].name}
                     onChange={(e) => this.setState({ unit: e.target.value })}
                   >
                     {units.map((option) => (
@@ -258,7 +299,7 @@ export default class Favorite extends Component {
                 </TableCell>
                 <TableCell>
                   <IconButton>
-                    <AddBox onClick={this.startAddFavorite.bind(this)} />
+                    <AddBox onClick={this.validateAddFavorite.bind(this)} />
                   </IconButton>
                 </TableCell>
               </TableRow>
@@ -292,8 +333,8 @@ export default class Favorite extends Component {
                         id="editArticle"
                         placeholder="enter article"
                         defaultValue={row.article}
-                        required
                         onChange={(e) => this.setState({ editArticle: e.target.value })}
+                        error={errorEArticle}
                       ></Input>
                     ) : (
                       row.article
@@ -309,8 +350,8 @@ export default class Favorite extends Component {
                         id="editAmount"
                         placeholder="enter amount"
                         defaultValue={row.amount}
-                        required
                         onChange={(e) => this.setState({ editAmount: e.target.value })}
+                        error={errorEAmount}
                       ></Input>
                     ) : (
                       row.amount
@@ -338,7 +379,7 @@ export default class Favorite extends Component {
                   <TableCell id={`${row.id} id`}>
                     <IconButton id={`${row.id} btn1`}>
                       {rowIndex === row.id ? (
-                        <Save onClick={this.saveFavorite.bind(this, row.id)} />
+                        <Check onClick={this.validateUpdateFavorite.bind(this, row.id)} />
                       ) : (
                         <Edit onClick={this.toggleSelectedRow.bind(this, row)} />
                       )}

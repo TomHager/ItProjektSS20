@@ -80,7 +80,9 @@ entry = api.inherit('Entry', bo, {
   'unit': fields.String(attribute='_unit', discription='Name der Einheit'),
   'amount': fields.Integer(attribute='_amount', discription='Menge eines Artikel'),
   'modification_date': fields.Date(attribute='_modification_date', discription='Änderungsdatum der Entry'),
-  'retailer_entry_list_id': fields.Integer(attrubute='_retailer_entry_list_id', discription='ID der RetailerEntryList')
+  'user_id': fields.String(attribut='_user_id', description='Name eines Benutzers'),
+  'retailer_id': fields.String(attribute='_retailer_id', description='Name eines Verkäufers'),
+  'shopping_list_id': fields.Integer(attribute='_shopping_list_id', description='ID einer Shopping List'),
 })
 
 shopping_list = api.inherit('ShoppingList', bo, {
@@ -392,15 +394,15 @@ class RetailerOperations(Resource):
 
 @ikauf.route('/retailer-by-retailer-entry-list/<string:retailerEntryList>')
 @ikauf.response(500, 'Falls Server-seitiger Fehler')
-@ikauf.param('retailerEntryList', 'RetailerEntry des zugehörigen Retailer-Objekts')
-class RetailerByRetailerEntryListOperations(Resource):
+@ikauf.param('Entry', 'Entry des zugehörigen Retailer-Objekts')
+class RetailerByEntryOperations(Resource):
     @ikauf.marshal_with(retailer)
     @secured
-    def get(self, retailer_entry_list):
+    def get(self, entry):
         """"Auslesen eines bestimmten Retailer-Objekts nach RetailerEntry"""
 
         adm = ShoppingAdministration()
-        r = adm.get_retailer_by_retailer_entry_list(retailer_entry_list)
+        r = adm.get_retailer_by_entry(entry)
         return r
 
 
@@ -498,6 +500,58 @@ class EntryRelatedByArticleOperations(Resource):
 
         adm = ShoppingAdministration()
         e = adm.get_entry_by_article(article)
+        return e
+
+@ikauf.route('/entry-by-retailer/<int:id>')
+@ikauf.response(500, 'Falls Server-seitiger Fehler')
+@ikauf.param('id', 'Retailer des zugehörigen Entry-Objekts')
+class EntryRelatedByRetailerOperations(Resource):
+    @ikauf.marshal_with(entry)
+    @secured
+    def get(self, retailer_id):
+        """Auslesen eines bestimmten Entry-Objekts nach Retailer"""
+
+        adm = ShoppingAdministration()
+        e = adm.get_entry_by_retailer(retailer_id)
+        return e
+
+@ikauf.route('/entry-by-user/<int:id>')
+@ikauf.response(500, 'Falls Server-seitiger Fehler')
+@ikauf.param('id', 'User des zugehörigen Entry-Objekte')
+class EntryRelatedByUserOperations(Resource):
+    @ikauf.marshal_with(entry)
+    @secured
+    def get(self, user_id):
+        """Auslesen eines bestimmten Entry-Objekts nach User"""
+
+        adm = ShoppingAdministration()
+        e = adm.get_entry_by_user(user_id)
+        return e
+
+@ikauf.route('/entry-by-shoppin-list/<int:id>')
+@ikauf.response(500, 'Falls Server-seitiger Fehler')
+@ikauf.param('id', 'ShoppingList des zugehörigen Entry-Objekts')
+class EntryRelatedByShoppingListOperations(Resource):
+    @ikauf.marshal_with(entry)
+    @secured
+    def get(self, shopping_list_id):
+        """Auslesen eines bestimmten Entry-Objekts nach Article"""
+
+        adm = ShoppingAdministration()
+        e = adm.get_entry_by_shopping_list(shopping_list_id)
+        return e
+
+@ikauf.route('/entry-by-modification-date/<date:date>')
+@ikauf.response(500, 'Falls Server-seitiger Fehler')
+@ikauf.param('date', 'ModificationDate des zugehörigen Entry-Objekts')
+class EntryRelatedByModificationDateOperations(Resource):
+    @ikauf.marshal_with(entry)
+    @secured
+    def get(self, modification_date):
+        """Auslesen eines bestimmten Entry-Objekts nach Article"""
+
+        adm = ShoppingAdministration()
+        e = adm.get_entry_by_modification_date(modification_date)
         return e
 
 
@@ -651,6 +705,13 @@ class RetailerGroupOperations(Resource):
 class RetailerGroupListOperations(Resource):
     @ikauf.marshal_list_with(retailer_group)
     @secured
+    def get(self):
+        """Auslesen aller RetailerGroup-Objekte"""
+
+        adm = ShoppingAdministration()
+        r = adm.get_all_retailer_members()
+        return r
+
     def post(self):
         """Anlegen eines neuen Retailer-Objekts für einen gegebene Group"""
 
@@ -677,8 +738,6 @@ class RetailerGroupRelatedByGroupOperations(Resource):
         adm = ShoppingAdministration()
         r = adm.get_retailer_by_group(retailer_group)
         return r
-
-
 
 
 """

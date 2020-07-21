@@ -268,6 +268,37 @@ class EntryMapper(Mapper):
 
         return result
 
+    def find_entry_by_retailer(self, retailer_id):
+        """Auslesen aller Benutzer anhand der zugeordneten E-Mail-Adresse.
+
+        :param entry E-Mail-Adresse der zugehörigen Benutzer.
+        :return Eine Sammlung mit User-Objekten, die sämtliche Benutzer
+            mit der gewünschten E-Mail-Adresse enthält.
+        """
+        result = []
+        cursor = self._cnx.cursor()
+        command = "SELECT id FROM entries WHERE retailer_id LIKE '{}' " \
+                  "ORDER BY retailer_id".format(retailer_id)
+        cursor.execute(command)
+        tuples = cursor.fetchall()
+
+        for (id, unit, amount, article, modification_date, user_id, retailer_id, shopping_list_id) in tuples:
+            entry = Entry()
+            entry.set_id(id)
+            entry.set_unit(unit)
+            entry.set_amount(amount)
+            entry.set_article(article)
+            entry.set_modification_date(modification_date)
+            entry.set_user_id(user_id)
+            entry.set_retailer_id(retailer_id)
+            entry.set_shopping_list_id(shopping_list_id)
+            result.append(entry)
+
+        self._cnx.commit()
+        cursor.close()
+
+        return result
+
     def find_entry_by_shopping_list(self, shopping_list_id):
         """Auslesen aller Benutzer anhand der zugeordneten E-Mail-Adresse.
 

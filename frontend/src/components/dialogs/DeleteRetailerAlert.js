@@ -1,12 +1,12 @@
-import React, { Component } from "react";
-import IconButton from "@material-ui/core/IconButton";
-import Button from "@material-ui/core/Button";
-import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import DeleteIcon from "@material-ui/icons/Delete";
+import React, { Component } from 'react';
+import IconButton from '@material-ui/core/IconButton';
+import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 export default class DeleteRetailerAlert extends Component {
   constructor(props) {
@@ -14,7 +14,6 @@ export default class DeleteRetailerAlert extends Component {
 
     this.state = {
       open: false,
-      id: 4,
     };
   }
 
@@ -25,13 +24,12 @@ export default class DeleteRetailerAlert extends Component {
 
   handleCloseYes = () => {
     this.setState({ open: false });
-    console.log(this.open);
-    // this.props.delRetailer(this.id);
+    this.props.delRetailer(this.props.id);
   };
 
   handleCloseNo = () => {
     this.setState({ open: false });
-    console.log(this.open);
+    console.log(this.state.open);
   };
 
   render() {
@@ -40,7 +38,7 @@ export default class DeleteRetailerAlert extends Component {
       <div>
         <IconButton
           aria-label="Edit"
-          style={{ float: "right" }}
+          style={{ float: 'right' }}
           onClick={this.handleClickOpen}
         >
           <DeleteIcon />
@@ -51,9 +49,7 @@ export default class DeleteRetailerAlert extends Component {
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
         >
-          <DialogTitle id="alert-dialog-title">
-            {"Delete the Retailer"}
-          </DialogTitle>
+          <DialogTitle id="alert-dialog-title">{'Delete the Retailer'}</DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
               Do you really want to detete the Retailer?

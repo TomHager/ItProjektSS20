@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import Button from '@material-ui/core/Button';
+import React, { Component } from "react";
+import Button from "@material-ui/core/Button";
 import {
   Table,
   TableBody,
@@ -10,14 +10,14 @@ import {
   Paper,
   IconButton,
   // Typography,
-} from '@material-ui/core';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
+} from "@material-ui/core";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
 // import DialogContentText from "@material-ui/core/DialogContentText";
-import DialogTitle from '@material-ui/core/DialogTitle';
-import PersonIcon from '@material-ui/icons/Person';
-import DeleteIcon from '@material-ui/icons/Delete';
+import DialogTitle from "@material-ui/core/DialogTitle";
+import PersonIcon from "@material-ui/icons/Person";
+import DeleteIcon from "@material-ui/icons/Delete";
 
 /**
  *
@@ -38,12 +38,10 @@ export class EditGroup extends Component {
 
   handleClickOpen = () => {
     this.setState({ open: true });
-    console.log(this.open);
   };
 
   handleClose = () => {
     this.setState({ open: false });
-    console.log(this.open);
   };
 
   // handleSubmit = () => {
@@ -51,7 +49,7 @@ export class EditGroup extends Component {
   // }
 
   async fetchGroups() {
-    const res = await fetch('http://DESKTOP-S3RCLLP:8081/api/iKauf/users');
+    const res = await fetch("http://DESKTOP-S3RCLLP:8081/api/iKauf/users");
     const resjson = await res.json();
     this.setState({ memberRows: resjson });
     console.log(this.memberRows);
@@ -59,7 +57,7 @@ export class EditGroup extends Component {
 
   componentDidMount = () => {
     this.fetchGroups();
-    console.log('All Callbacks initialised');
+    console.log("All Callbacks initialised");
   };
 
   delUser = (id) => {
@@ -76,7 +74,7 @@ export class EditGroup extends Component {
       <div>
         <IconButton
           aria-label="Edit"
-          style={{ float: 'right' }}
+          style={{ float: "right" }}
           onClick={this.handleClickOpen}
         >
           <PersonIcon />
@@ -113,7 +111,9 @@ export class EditGroup extends Component {
                       key={row.id}
                       style={{
                         backgroundColor:
-                          row.id === this.state.memberIndex ? '#0090FF' : 'white',
+                          row.id === this.state.memberIndex
+                            ? "#0090FF"
+                            : "white",
                       }}
                       // onClick={this.groupClickHandler.bind(this, row)}
                     >
@@ -121,7 +121,7 @@ export class EditGroup extends Component {
                       <TableCell>
                         <IconButton
                           aria-label="Edit"
-                          style={{ float: 'right' }}
+                          style={{ float: "right" }}
                           onClick={this.delUser.bind(this, row.id)}
                         >
                           <DeleteIcon />

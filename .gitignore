@@ -1,5 +1,7 @@
 /.idea
+/.vscode
 /venv
+/node_modules
 
 # dependencies
 frontend/node_modules
@@ -25,3 +27,9 @@ frontend/yarn-error.log*
 
 # fake-backend
 http-fake-backend/node_modules
+
+# backend
+src/server/__pycache__
+src/server/bo/__pycache__
+src/server/db/__pycache__
+

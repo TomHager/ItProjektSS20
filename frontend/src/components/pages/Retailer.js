@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 import {
   Table,
   TableBody,
@@ -8,14 +8,16 @@ import {
   TableRow,
   Paper,
   // IconButton,
-} from "@material-ui/core";
+} from '@material-ui/core';
 // import ShoppingAPI from "../../api/ShoppingAPI";
-import DeleteRetailerAlert from "../dialogs/DeleteRetailerAlert";
-import AddRetailer from "../subcomponents/AddRetailer";
+import DeleteRetailerAlert from '../dialogs/DeleteRetailerAlert';
+import AddRetailer from '../subcomponents/AddRetailer';
+import { v4 as uuidv4 } from 'uuid';
 
 /**
  *
  * @author Robin Fink
+ * @author Lukas Rutkauskas
  */
 
 export default class RetailerList extends Component {
@@ -25,14 +27,14 @@ export default class RetailerList extends Component {
     // Init an empty state
     this.state = {
       retailerRows: [],
-      retailerIndex: -1,
       retailers: [],
+      retailerName: '',
     };
   }
 
   //Retailer Functions
   async fetchRetailer() {
-    const res = await fetch("http://DESKTOP-NM4VM89:8081/api/iKauf/retailer");
+    const res = await fetch('http://DESKTOP-S3RCLLP:8081/api/iKauf/retailers');
     const resjson = await res.json();
     this.setState({ retailerRows: resjson });
     console.log(resjson);
@@ -41,20 +43,19 @@ export default class RetailerList extends Component {
   //calls all Callbacks for Repor Selection
   componentDidMount = () => {
     this.fetchRetailer();
-    console.log("All Callbacks initialised");
+    console.log('All Callbacks initialised');
   };
 
   delRetailer = (id) => {
+    console.log(id);
     this.setState({
-      retailers: [
-        ...this.state.retailers.filter((retailer) => retailer.id !== id),
-      ],
+      retailers: [...this.state.retailers.filter((retailer) => retailer.id !== id)],
     });
   };
 
   addRetailer = (name) => {
     const newRetailer = {
-      id: 4,
+      id: uuidv4(),
       name,
     };
     this.setState({ retailers: [...this.state.retailers, newRetailer] });
@@ -67,7 +68,7 @@ export default class RetailerList extends Component {
     return (
       <div align="center">
         <TableContainer
-          style={{ width: Math.round(window.innerWidth * 0.3), margin: "3em" }}
+          style={{ width: Math.round(window.innerWidth * 0.3), margin: '3em' }}
           component={Paper}
         >
           {/* Retailer Table */}
@@ -93,13 +94,13 @@ export default class RetailerList extends Component {
                   key={row.id}
                   style={{
                     backgroundColor:
-                      row.id === this.state.groupIndex ? "#0090FF" : "white",
+                      row.id === this.state.groupIndex ? '#0090FF' : 'white',
                   }}
                   // onClick={this.groupClickHandler.bind(this, row)}
                 >
                   <TableCell>{row.name}</TableCell>
                   <TableCell>
-                    <DeleteRetailerAlert delRetailer={this.delRetailer} />
+                    <DeleteRetailerAlert delRetailer={this.delRetailer} id={row.id} />
                   </TableCell>
                 </TableRow>
               ))}

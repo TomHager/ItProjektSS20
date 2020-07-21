@@ -8,7 +8,7 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import EditIcon from "@material-ui/icons/Edit";
 import IconButton from "@material-ui/core/IconButton";
-import ShoppingAPI from "../../api/ShoppingAPI";
+// import ShoppingAPI from "../../api/ShoppingAPI";
 
 /**
  *
@@ -22,39 +22,51 @@ export class EditGroup extends Component {
 
     this.state = {
       open: false,
-      newName: null,
-      groupBO: null,
+      newName: "",
     };
   }
 
   handleClickOpen = () => {
     this.setState({ open: true });
-    console.log(this.open);
   };
 
   handleClose = () => {
     this.setState({ open: false });
-    console.log(this.state.newName);
   };
 
-  updateGroup = () => {
-    var group = this.state.groupBO;
-    group.setName(this.state.newName);
-    ShoppingAPI.getAPI()
-      .updateGroup(group)
-      .then(
-        function () {
-          ShoppingAPI.getAPI()
-            .getGroupById(group.getID())
-            .then(
-              (GroupBO) =>
-                this.setState({
-                  groupBO: GroupBO,
-                })
-              // this.props.onUserUpdated(),
-            );
-        }.bind(this)
-      );
+  // updateGroup = () => {
+  //   var group = this.state.groupBO;
+  //   group.setName(this.state.newName);
+  //   ShoppingAPI.getAPI()
+  //     .updateGroup(group)
+  //     .then(
+  //       function () {
+  //         ShoppingAPI.getAPI()
+  //           .getGroupById(group.getID())
+  //           .then(
+  //             (GroupBO) =>
+  //               this.setState({
+  //                 groupBO: GroupBO,
+  //               })
+  //           );
+  //       }.bind(this)
+  //     );
+  // };
+
+  handleUpdate = (event) => {
+    event.preventDefault();
+    console.log("New group name : " + this.state.newName);
+    const url = "http://desktop-s3rcllp:8081/api/iKauf/groups";
+    const data = { name: this.state.newName };
+    fetch(url, {
+      method: "PUT", // or "POST"
+      body: JSON.stringify(data), // data can be `string` or {object}!
+      headers: { "Content-Type": "application/json" },
+    })
+      .then((res) => res.json())
+      .catch((error) => console.error("Error:", error))
+      .then((response) => console.log("Success:", response));
+    console.log(this.state.newName);
   };
 
   handleGroupNameChange = (event) => {
@@ -85,8 +97,8 @@ export class EditGroup extends Component {
               margin="dense"
               id="name"
               label="Group name"
-              type="name"
-              onInput={this.handleGroupNameChange}
+              type="text"
+              onChange={this.handleGroupNameChange}
               fullWidth
             />
           </DialogContent>
@@ -94,7 +106,7 @@ export class EditGroup extends Component {
             <Button onClick={this.handleClose} color="primary">
               Cancel
             </Button>
-            <Button onClick={() => this.updateGroup()} color="primary">
+            <Button onClick={this.handleUpdate.bind(this)} color="primary">
               Submit
             </Button>
           </DialogActions>
