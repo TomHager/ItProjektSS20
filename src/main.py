@@ -18,8 +18,8 @@ from server.bo.RetailerGroup import RetailerGroup
 # selbstgeschriebener Decorator, übernimmt Authentifikation
 from SecurityDecorater import secured
 
-
-
+#Datetime importieren
+import datetime
 """
 Instanzieren von Flask. Am Ende dieser Datei erfolgt dann erst der 'Start' von Flask.
 """
@@ -72,7 +72,7 @@ entry = api.inherit('Entry', bo, {
     'article': fields.String(attribute='_article', discription='Name eines Artikel'),
     'unit': fields.String(attribute='_unit', discription='Name der Einheit'),
     'amount': fields.Integer(attribute='_amount', discription='Menge eines Artikel'),
-    'modification_date': fields.Date(attribute='_modification_date', discription='Änderungsdatum der Entry'),
+    'modification_date': fields.DateTime(attribute='_modification_date', discription='Änderungsdatum der Entry'),
     'user_id': fields.Integer(attribut='_user_id', description='Name eines Benutzers'),
     'retailer_id': fields.Integer(attribute='_retailer_id', description='Name eines Verkäufers'),
     'shopping_list_id': fields.Integer(attribute='_shopping_list_id', description='ID einer Shopping List'),
@@ -96,117 +96,49 @@ retailer_group = api.inherit('RetailerGroup', {
 })
 
 
-@ikauf.route('/entry')
+
+@ikauf.route('/retailer-by-group')
 @ikauf.response(500, "Falls Server-seitiger Fehler")
-class EntryListOperations(Resource):
-    @ikauf.marshal_list_with(entry)
-    def get(self):
-        """Auslesen aller Entry-Objekte"""
-
-        adm = ShoppingAdministration()
-        e = adm.get_all_entrys()
-        return e
-
+class RetailerGroupListOperations(Resource):
+    @ikauf.marshal_list_with(retailer_group)
     def post(self):
-        """Anlegen eines neuen Entry-Objekts"""
+        """Anlegen eines neuen Retailer-Objekts für einen gegebene Group"""
 
         adm = ShoppingAdministration()
 
-        proposal = Entry.from_dict(api.payload)
+        r = adm.get_retailer_by_group(id)
 
-        if proposal is not None:
-            x = adm.create_entry(proposal.get_entry_name()) #todo überlgen ob : prosposal.get_entry_list() sinn macht
+        if r is not None:
+            x = adm.create_retailer(r)
             return x, 200
         else:
-            return '', 500
+            return 'Group unknown',
 
 
-@ikauf.route('/entry-by-id/<int:id>')
+@ikauf.route('/retailer-member-by-group/<int:retailer_group>')
 @ikauf.response(500, 'Falls Server-seitiger Fehler')
-@ikauf.param('id', 'ID des Entry-Objekts')
-class EntryOperations(Resource):
-    @ikauf.marshal_with(entry)
-    def get(self, id):
-        """Auslesen eines bestimmten Entry-Objekts"""
+@ikauf.param('retailer_group', 'Gruppen-Objekt des zugehörigen RetailerEntryList-Objekts')
+class RetailerGroupRelatedByGroupOperations(Resource):
+    @ikauf.marshal_with(retailer_group)
+    def get(self, retailer_group):
+        """Auslesen eines bestimmten Retailer-Objekts nach Gruppe"""
 
         adm = ShoppingAdministration()
-        e = adm.get_entry_by_id(id)
-        return e
-
-    def delete(self, id):
-        """Läschen eines bestimmten Entry-Objekts"""
-
-        adm = ShoppingAdministration()
-        e = adm.get_entry_by_id(id)
-        adm.delete_entry_by_id(e)
-        return '', 200
-
-    @ikauf.marshal_with(entry)
-    @ikauf.expect(entry, validate=True)
-    def put(self, id):
-        """Update eines bestimmten Entry-Objekts."""
-
-        adm = ShoppingAdministration()
-        e = Entry.from_dict(api.payload)
-
-        if e is not None:
-            e.set_id(id)
-            adm.save_entry(e)
-            return '', 200
-        else:
-            return '', 500
+        r = adm.get_retailer_by_group(retailer_group)
+        return r
 
 
-@ikauf.route('/entry-by-article/<string:article>')
+@ikauf.route('/retailer-member-by-group/<int:retailer_member>')
 @ikauf.response(500, 'Falls Server-seitiger Fehler')
-@ikauf.param('article', 'Artikel des zugehörigen Entry-Objekts')
-class EntryRelatedByArticleOperations(Resource):
-    @ikauf.marshal_with(entry)
-    def get(self, article):
-        """Auslesen eines bestimmten Entry-Objekts nach Article"""
+@ikauf.param('retailer_member', 'Gruppen-Objekt des zugehörigen RetailerEntryList-Objekts')
+class RetailerGroupRelatedByRetailerOperations(Resource):
+    @ikauf.marshal_with(retailer_group)
+    def get(self, retailer_member):
+        """Auslesen eines bestimmten Retailer Member-Objekts nach Retailer"""
 
         adm = ShoppingAdministration()
-        e = adm.get_entry_by_article(article)
-        return e
-
-
-@ikauf.route('/entry-by-retailer/<int:id>')
-@ikauf.response(500, 'Falls Server-seitiger Fehler')
-@ikauf.param('id', 'Retailer des zugehörigen Entry-Objekts')
-class EntryRelatedByRetailerOperations(Resource):
-    @ikauf.marshal_with(entry)
-    def get(self, retailer_id):
-        """Auslesen eines bestimmten Entry-Objekts nach Retailer"""
-
-        adm = ShoppingAdministration()
-        e = adm.get_entry_by_retailer(retailer_id)
-        return e
-
-
-@ikauf.route('/entry-by-user/<int:id>')
-@ikauf.response(500, 'Falls Server-seitiger Fehler')
-@ikauf.param('id', 'User des zugehörigen Entry-Objekte')
-class EntryRelatedByUserOperations(Resource):
-    @ikauf.marshal_with(entry)
-    def get(self, user_id):
-        """Auslesen eines bestimmten Entry-Objekts nach User"""
-
-        adm = ShoppingAdministration()
-        e = adm.get_entry_by_user(user_id)
-        return e
-
-
-@ikauf.route('/entry-by-shoppin-list/<int:id>')
-@ikauf.response(500, 'Falls Server-seitiger Fehler')
-@ikauf.param('id', 'ShoppingList des zugehörigen Entry-Objekts')
-class EntryRelatedByShoppingListOperations(Resource):
-    @ikauf.marshal_with(entry)
-    def get(self, shopping_list_id):
-        """Auslesen eines bestimmten Entry-Objekts nach Article"""
-
-        adm = ShoppingAdministration()
-        e = adm.get_entry_by_shopping_list(shopping_list_id)
-        return e
+        r = adm.get_retailer_group_by_retailer(retailer_member)
+        return r
 
 
 """

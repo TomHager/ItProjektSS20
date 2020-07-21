@@ -79,7 +79,7 @@ entry = api.inherit('Entry', bo, {
   'article': fields.String(attribute='_article', discription='Name eines Artikel'),
   'unit': fields.String(attribute='_unit', discription='Name der Einheit'),
   'amount': fields.Integer(attribute='_amount', discription='Menge eines Artikel'),
-  'modification_date': fields.Date(attribute='_modification_date', discription='Änderungsdatum der Entry'),
+  'modification_date': fields.DateTime(attribute='_modification_date', discription='Änderungsdatum der Entry'),
   'user_id': fields.Integer(attribut='_user_id', description='Name eines Benutzers'),
   'retailer_id': fields.Integer(attribute='_retailer_id', description='Name eines Verkäufers'),
   'shopping_list_id': fields.Integer(attribute='_shopping_list_id', description='ID einer Shopping List'),
@@ -252,7 +252,7 @@ Klassen und Operationen zu Gruppen
 @ikauf.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class GroupListOperations(Resource):
     @ikauf.marshal_list_with(group)
-
+    @secured
     def get(self):
         """Auslesen aller Gruppen-Objekte"""
 
@@ -279,6 +279,7 @@ class GroupListOperations(Resource):
 @ikauf.param('id', 'Id des Gruppen-Objekts')
 class GroupOperations(Resource):
     @ikauf.marshal_with(group)
+    @secured
     def get(self, id):
         """Auslesen eines bestimmten Gruppen-Objekts"""
 
@@ -342,6 +343,7 @@ class RetailerListOperations(Resource):
         r = adm.get_all_retailer()
         return r
 
+    @secured
     def post(self):
         """Anlegen eines neuen Retailer-Objekts für einen gegebene Group"""
 
@@ -369,6 +371,7 @@ class RetailerOperations(Resource):
         r = adm.get_retailer_by_id(id)
         return r
 
+    @secured
     def delete(self, id):
         """Löschen eines bestimmten Retailer-Objekts"""
 
@@ -379,6 +382,7 @@ class RetailerOperations(Resource):
 
     @ikauf.marshal_with(retailer)
     @ikauf.expect(retailer, validate=True)
+    @secured
     def put(self, id):
         """Update eines bestimmten Retailer-Objekts."""
 
@@ -424,6 +428,7 @@ class EntryListOperations(Resource):
         e = adm.get_all_entrys()
         return e
 
+    @secured
     def post(self):
         """Anlegen eines neuen Entry-Objekts"""
 
@@ -491,9 +496,9 @@ class EntryRelatedByArticleOperations(Resource):
         return e
 
 
-@ikauf.route('/entry-by-retailer/<int:id>')
+@ikauf.route('/entry-by-retailer/<int:retailer_id>')
 @ikauf.response(500, 'Falls Server-seitiger Fehler')
-@ikauf.param('id', 'Retailer des zugehörigen Entry-Objekts')
+@ikauf.param('retailer_id', 'Retailer des zugehörigen Entry-Objekts')
 class EntryRelatedByRetailerOperations(Resource):
     @ikauf.marshal_with(entry)
     @secured
@@ -505,24 +510,9 @@ class EntryRelatedByRetailerOperations(Resource):
         return e
 
 
-# todo pfad muss geändert werden, wird es überhaupt benötigt?
-@ikauf.route('/retailer-by-retailer-entry-list/<string:retailerEntryList>')
+@ikauf.route('/entry-by-user/<int:user_id>')
 @ikauf.response(500, 'Falls Server-seitiger Fehler')
-@ikauf.param('Entry', 'Entry des zugehörigen Retailer-Objekts')
-class RetailerByEntryOperations(Resource):
-    @ikauf.marshal_with(retailer)
-    @secured
-    def get(self, entry):
-        """"Auslesen eines bestimmten Retailer-Objekts nach RetailerEntry"""
-
-        adm = ShoppingAdministration()
-        r = adm.get_retailer_by_entry(entry)
-        return r
-
-
-@ikauf.route('/entry-by-user/<int:id>')
-@ikauf.response(500, 'Falls Server-seitiger Fehler')
-@ikauf.param('id', 'User des zugehörigen Entry-Objekte')
+@ikauf.param('user_id', 'User des zugehörigen Entry-Objekte')
 class EntryRelatedByUserOperations(Resource):
     @ikauf.marshal_with(entry)
     @secured
@@ -534,9 +524,9 @@ class EntryRelatedByUserOperations(Resource):
         return e
 
 
-@ikauf.route('/entry-by-shoppin-list/<int:id>')
+@ikauf.route('/entry-by-shoppin-list/<int:shopping_list_id>')
 @ikauf.response(500, 'Falls Server-seitiger Fehler')
-@ikauf.param('id', 'ShoppingList des zugehörigen Entry-Objekts')
+@ikauf.param('shopping_list_id', 'ShoppingList des zugehörigen Entry-Objekts')
 class EntryRelatedByShoppingListOperations(Resource):
     @ikauf.marshal_with(entry)
     @secured
@@ -548,9 +538,9 @@ class EntryRelatedByShoppingListOperations(Resource):
         return e
 
 
-@ikauf.route('/entry-by-modification-date/<date:date>')
+@ikauf.route('/entry-by-modification-date/<datetime:modification_date>')
 @ikauf.response(500, 'Falls Server-seitiger Fehler')
-@ikauf.param('date', 'ModificationDate des zugehörigen Entry-Objekts')
+@ikauf.param('modification_date', 'ModificationDate des zugehörigen Entry-Objekts')
 class EntryRelatedByModificationDateOperations(Resource):
     @ikauf.marshal_with(entry)
     @secured
@@ -579,6 +569,7 @@ class ShoppingListListOperations(Resource):
         sl = adm.get_all_shopping_list()
         return sl
 
+    @secured
     def post(self):
         """Anlegen eines neuen ShoppingList-Objekts"""
 
@@ -587,7 +578,7 @@ class ShoppingListListOperations(Resource):
         prosposal = ShoppingList.from_dict(api.payload)
 
         if prosposal is not None:
-            x = adm.create_shopping_list(prosposal.get_shopping_list_name)
+            x = adm.create_shopping_list(prosposal.get_shopping_list_name, prosposal.get_group_id())
             return x, 200
         else:
             return '', 500
@@ -719,6 +710,7 @@ class RetailerGroupListOperations(Resource):
         r = adm.get_all_retailer_members()
         return r
 
+    @secured
     def post(self):
         """Anlegen eines neuen Retailer-Objekts für einen gegebene Group"""
 
@@ -802,6 +794,7 @@ class GroupMembershipListOperations(Resource):
         gms = adm.get_all_group_members()
         return gms
 
+    @secured
     def post(self):
         """Anlegen eines neuen GroupMembership-Objekts für einen gegebene Group"""
 

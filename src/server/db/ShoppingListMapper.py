@@ -30,7 +30,6 @@ class ShoppingListMapper (Mapper):
 
         return result
 
-
     def insert(self, shoppinglist):
         """Einfügen eines Shoppinglist-Objekts in die Datenbank.
 
@@ -54,7 +53,7 @@ class ShoppingListMapper (Mapper):
                 davon aus, dass die Tabelle leer ist und wir mit der ID 1 beginnen können."""
                 shoppinglist.set_id(1)
 
-        command = "INSERT INTO shoppinglists (id, name, group_id) VALUES (%s,%s,%s)"
+        command = "INSERT INTO shoppinglists (id, name, groups_id) VALUES (%s,%s,%s)"
         data = (shoppinglist.get_id(), shoppinglist.get_name(), shoppinglist.get_group_id())
         cursor.execute(command, data)
 
@@ -70,8 +69,8 @@ class ShoppingListMapper (Mapper):
         """
         cursor = self._cnx.cursor()
 
-        command = "UPDATE shoppinglists " + "SET name=%s WHERE id=%s"
-        data = (shoppinglist.get_name(), shoppinglist.get_group_id())
+        command = "UPDATE shoppinglists " + "SET name=%s, groups_id=%s WHERE id=%s"
+        data = (shoppinglist.get_name(), shoppinglist.get_group_id(), shoppinglist.get_id())
         cursor.execute(command, data)
 
         self._cnx.commit()

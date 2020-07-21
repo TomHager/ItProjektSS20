@@ -182,12 +182,15 @@ class ShoppingAdministration(object):
         with ShoppingListMapper() as mapper:
             return mapper.find_all()
 
-    # todo Gehört hier noch entry rein?
-    def create_shopping_list(self, shopping_list_name):
+    def create_shopping_list(self, shopping_list_name, group_id):
         """Eine ShoppingList anlegen."""
         shoppinglist = ShoppingList()
         shoppinglist.set_name(shopping_list_name)
+        shoppinglist.set_group_id(group_id)
         shoppinglist.set_id(1)
+
+        with ShoppingListMapper() as mapper:
+            return mapper.insert(shoppinglist)
 
     def get_shopping_list_by_id(self, id):
         """ShoppingList mit der gegebenen ID auslesen."""
@@ -242,10 +245,10 @@ class ShoppingAdministration(object):
         with EntryMapper() as mapper:
             return mapper.find_by_key(entry_id)
 
-    def get_entry_by_article(self, article_id):  # todo alle entrys oder nur einer?
+    def get_entry_by_article(self, article):  # todo alle entrys oder nur einer?
         """Auslesen aller Entry Objekte anhand des Artikel-ID´s"""
         with EntryMapper() as mapper:
-            return mapper.find_entry_by_article(article_id)
+            return mapper.find_entry_by_article(article)
 
     def get_unit_amount_by_entry(self, entry):
         """gegebenen Entry löschen."""
@@ -286,7 +289,7 @@ class ShoppingAdministration(object):
     RetailerGroup-spezifische Methoden
     """
 
-    def retailer_create_group(self, ret_group, ret_group_member):
+    def create_retailer_group(self, ret_group, ret_group_member):
         """Eine Group anlegen."""
         retailer_group = RetailerGroup()
         retailer_group.set_retailer_group(ret_group)
@@ -298,6 +301,10 @@ class ShoppingAdministration(object):
     def get_retailer_by_group(self, group_id):
         with RetailerGroupMapper() as mapper:
             return mapper.find_retailer_by_group(group_id)
+
+    def get_retailer_group_by_retailer(self, retailer):
+        with RetailerGroupMapper() as mapper:
+            return mapper.find_group_by_retailer(retailer)
 
     def get_all_retailer_members(self):
         with RetailerGroupMapper() as mapper:

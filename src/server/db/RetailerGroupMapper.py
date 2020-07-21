@@ -47,11 +47,6 @@ class RetailerGroupMapper(Mapper):
         """
 
         cursor = self._cnx.cursor()
-        cursor.execute("SELECT MAX(id) AS maxid FROM retailerGroups")
-        tuples = cursor.fetchall()
-
-        for (maxid) in tuples:
-            retailer_group.set_id(maxid[0] + 1)
 
         command = "INSERT INTO retailergroups (retailer_member, retailer_group) VALUES (%s,%s)"
         data = (retailer_group.get_retailer_member(), retailer_group.get_retailer_group())
@@ -129,8 +124,8 @@ class RetailerGroupMapper(Mapper):
 
         result = []
         cursor = self._cnx.cursor()
-        command = "SELECT retailer_member, retailer_group FROM retailergroups " \
-                  "WHERE retailer_member={} ORDER BY retailer_member".format(retailer_member)
+        command = "SELECT * FROM retailergroups WHERE retailer_member={} ORDER BY retailer_member"\
+            .format(retailer_member)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
@@ -144,8 +139,6 @@ class RetailerGroupMapper(Mapper):
         cursor.close()
 
         return result
-
-    #todo fnd_retailer_by_group und find_by_key ist doch doppeklt gemoppelt?!
 
     def find_retailer_by_group(self, retailer_group):
         """Auslesen einer Gruppe anhand des Gruppennames.

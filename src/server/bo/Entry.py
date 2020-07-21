@@ -1,5 +1,5 @@
 from server.bo import BusinessObject as bo
-
+from datetime import datetime
 """ 
 @author Tom Hager
  """
@@ -11,7 +11,7 @@ class Entry(bo.BusinessObject):
         self._unit = ""
         self._amount = ""
         self._article = ""
-        self._modification_date = ""
+        self._modification_date = datetime.now()
         self._shopping_list_id = ""
         self.user_id = ""
         self._retailer_id = ""
@@ -37,8 +37,8 @@ class Entry(bo.BusinessObject):
     def get_modification_date(self):
         return self._modification_date
 
-    def set_modification_date(self, value):
-        self._modification_date = value
+    def set_modification_date(self):
+        self._modification_date = datetime.now()
 
     def get_shopping_list_id(self):
         return self._shopping_list_id
@@ -62,8 +62,8 @@ class Entry(bo.BusinessObject):
         """Erzeugen einer einfachen textuellen Darstellung der jeweiligen Instanz."""
         return "Entry: {}, {}, {}, {}, {}, {}, {}, {} ".format(self.get_id(), self._unit, self._amount,
                                                   self._article, self._modification_date,
-                                                  self._retailer_id, self._shopping_list_id,
-                                                  self.user_id)
+                                                  self._shopping_list_id,
+                                                  self.user_id, self._retailer_id)
 
     @staticmethod
     def from_dict(dictionary=dict()):
