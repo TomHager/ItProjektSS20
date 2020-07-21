@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Paper, Typography, Tabs, Tab } from '@material-ui/core';
 import { Link as RouterLink } from 'react-router-dom';
-
+import ProfileDropDown from '../dialogs/ProfileDropDown';
 /**
  * Shows the header with the main navigation Tabs within a Paper.
  *
@@ -36,7 +36,7 @@ class Header extends Component {
     return (
       <div style={{ backgroundColor: '#f4f4f4' }}>
         <Paper variant="outlined">
-          {/* <ProfileDropDown user={user} /> */}
+          <ProfileDropDown user={user} />
           <Typography variant="h3" component="h1" align="center">
             <b>iKauf</b> your futuristic Shopping App
           </Typography>
