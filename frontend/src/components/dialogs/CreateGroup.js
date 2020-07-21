@@ -177,11 +177,11 @@ export class CreateGroup extends Component {
             </TableContainer>
           </DialogContent>
           <DialogActions>
-            {/* <Button onClick={this.handleClose} color="primary"> */}
-            <Button onClick={this.handleGroupCreation} color="primary">
+            <Button onClick={this.handleClickOpen} color="primary">
               Cancel
             </Button>
-            <Button onClick={this.handleClose} color="primary">
+            {/* <Button onClick={this.handleClose} color="primary"> */}
+            <Button onClick={this.handleGroupCreation} color="primary">
               Submit
             </Button>
           </DialogActions>

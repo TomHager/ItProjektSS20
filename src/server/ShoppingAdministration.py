@@ -19,7 +19,7 @@ from .db.GroupMembershipMapper import GroupMembershipMapper
 from .db.FavoriteMapper import FavoriteMapper
 
 
-class ShoppingListAdministration(object):
+class ShoppingAdministration(object):
 
     # Todo nochmal durchgehen welche attribute wichtig sind für die methoden, vllt fehlt was
 
@@ -63,6 +63,11 @@ class ShoppingListAdministration(object):
         """Alle Benutzer auslesen."""
         with UserMapper() as mapper:
             return mapper.find_all()
+
+    def get_user_by_external_id(self, external_id):
+        """Den benutzer mit """
+        with UserMapper() as mapper:
+            return mapper.find_by_external_id(external_id)
 
     def save_user(self, user):
         """Den gegebenen Benutzer speichern."""
