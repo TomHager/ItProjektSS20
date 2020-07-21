@@ -80,13 +80,13 @@ entry = api.inherit('Entry', bo, {
   'unit': fields.String(attribute='_unit', discription='Name der Einheit'),
   'amount': fields.Integer(attribute='_amount', discription='Menge eines Artikel'),
   'modification_date': fields.Date(attribute='_modification_date', discription='Änderungsdatum der Entry'),
-  'user_id': fields.String(attribut='_user_id', description='Name eines Benutzers'),
-  'retailer_id': fields.String(attribute='_retailer_id', description='Name eines Verkäufers'),
+  'user_id': fields.Integer(attribut='_user_id', description='Name eines Benutzers'),
+  'retailer_id': fields.Integer(attribute='_retailer_id', description='Name eines Verkäufers'),
   'shopping_list_id': fields.Integer(attribute='_shopping_list_id', description='ID einer Shopping List'),
 })
 
 shopping_list = api.inherit('ShoppingList', bo, {
-  'shopping_list_name': fields.String(attribute='_shopping_list_name', discription='Name einer Shoppingliste'),
+  'name': fields.String(attribute='_name', discription='Name einer Shoppingliste'),
   'group_id': fields.Integer(attribute='_group_id', discription='ID einer Gruppe')
 })
 
@@ -361,6 +361,7 @@ class RetailerListOperations(Resource):
 @ikauf.param('id', 'Id des Retailer-Objekts')
 class RetailerOperations(Resource):
     @ikauf.marshal_with(retailer)
+    @secured
     def get(self, id):
         """Auslesen eines bestimmten Retailer-Objekts"""
 
@@ -385,25 +386,11 @@ class RetailerOperations(Resource):
         r = Retailer.from_dict(api.payload)
 
         if r is not None:
-            r.set_retailer_id(id)
+            r.set_id(id)
             adm.save_retailer(r)
             return '', 200
         else:
             return '', 500
-
-
-@ikauf.route('/retailer-by-retailer-entry-list/<string:retailerEntryList>')
-@ikauf.response(500, 'Falls Server-seitiger Fehler')
-@ikauf.param('Entry', 'Entry des zugehörigen Retailer-Objekts')
-class RetailerByEntryOperations(Resource):
-    @ikauf.marshal_with(retailer)
-    @secured
-    def get(self, entry):
-        """"Auslesen eines bestimmten Retailer-Objekts nach RetailerEntry"""
-
-        adm = ShoppingAdministration()
-        r = adm.get_retailer_by_entry(entry)
-        return r
 
 
 @ikauf.route('/retailer-by-name/<string:name>')
@@ -411,6 +398,7 @@ class RetailerByEntryOperations(Resource):
 @ikauf.param('name', 'Name eines Retailer-Objekts')
 class RetailerRelatedByNameOperations(Resource):
     @ikauf.marshal_with(retailer)
+    @secured
     def get(self, name):
         """Auslesen eines bestimmten Retailer-Objekt nach Name"""
 
@@ -502,6 +490,7 @@ class EntryRelatedByArticleOperations(Resource):
         e = adm.get_entry_by_article(article)
         return e
 
+
 @ikauf.route('/entry-by-retailer/<int:id>')
 @ikauf.response(500, 'Falls Server-seitiger Fehler')
 @ikauf.param('id', 'Retailer des zugehörigen Entry-Objekts')
@@ -514,6 +503,22 @@ class EntryRelatedByRetailerOperations(Resource):
         adm = ShoppingAdministration()
         e = adm.get_entry_by_retailer(retailer_id)
         return e
+
+
+# todo pfad muss geändert werden, wird es überhaupt benötigt?
+@ikauf.route('/retailer-by-retailer-entry-list/<string:retailerEntryList>')
+@ikauf.response(500, 'Falls Server-seitiger Fehler')
+@ikauf.param('Entry', 'Entry des zugehörigen Retailer-Objekts')
+class RetailerByEntryOperations(Resource):
+    @ikauf.marshal_with(retailer)
+    @secured
+    def get(self, entry):
+        """"Auslesen eines bestimmten Retailer-Objekts nach RetailerEntry"""
+
+        adm = ShoppingAdministration()
+        r = adm.get_retailer_by_entry(entry)
+        return r
+
 
 @ikauf.route('/entry-by-user/<int:id>')
 @ikauf.response(500, 'Falls Server-seitiger Fehler')
@@ -528,6 +533,7 @@ class EntryRelatedByUserOperations(Resource):
         e = adm.get_entry_by_user(user_id)
         return e
 
+
 @ikauf.route('/entry-by-shoppin-list/<int:id>')
 @ikauf.response(500, 'Falls Server-seitiger Fehler')
 @ikauf.param('id', 'ShoppingList des zugehörigen Entry-Objekts')
@@ -540,6 +546,7 @@ class EntryRelatedByShoppingListOperations(Resource):
         adm = ShoppingAdministration()
         e = adm.get_entry_by_shopping_list(shopping_list_id)
         return e
+
 
 @ikauf.route('/entry-by-modification-date/<date:date>')
 @ikauf.response(500, 'Falls Server-seitiger Fehler')
@@ -996,6 +1003,7 @@ class RetailerEntryListRelatedByRetailerOperations(Resource):
         adm = ShoppingAdministration()
         rel = adm.get_retailer_entry_list_by_retailer(retailer)
         return rel
+
 
 """
 Start der main.py um zu testen ob es funktioniert (in der lokalen Entwicklerumgebung).

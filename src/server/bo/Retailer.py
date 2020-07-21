@@ -2,7 +2,7 @@ from server.bo import BusinessObject as bo
 
 """ 
 @author Tom Hager
- """
+"""
 
 
 class Retailer (bo.BusinessObject):
@@ -19,7 +19,7 @@ class Retailer (bo.BusinessObject):
 
     def __str__(self):
         """Erzeugen einer einfachen textuellen Darstellung der jeweiligen Instanz."""
-        return "Retailer: {}, {}".format(self.get_id(), self._name)
+        return "Retailer: {}, {}".format(self.get_id(), self.get_name())
 
     @staticmethod
     def from_dict(dictionary=dict()):

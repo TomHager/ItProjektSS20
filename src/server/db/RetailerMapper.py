@@ -69,7 +69,7 @@ class RetailerMapper (Mapper):
         cursor = self._cnx.cursor()
 
         command = "UPDATE retailers " + "SET name=%s WHERE id=%s"
-        data = (retailer.get_name())
+        data = (retailer.get_name(), retailer.get_id())
         cursor.execute(command, data)
 
         self._cnx.commit()

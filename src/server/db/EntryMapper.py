@@ -277,7 +277,7 @@ class EntryMapper(Mapper):
         """
         result = []
         cursor = self._cnx.cursor()
-        command = "SELECT id FROM entries WHERE retailer_id LIKE '{}' " \
+        command = "SELECT retailer_id FROM entries WHERE retailer_id LIKE '{}' " \
                   "ORDER BY retailer_id".format(retailer_id)
         cursor.execute(command)
         tuples = cursor.fetchall()

@@ -1,7 +1,6 @@
 from .bo.Entry import Entry
 from .bo.Group import Group
 from .bo.Retailer import Retailer
-from .bo.RetailerEntryList import RetailerEntryList
 from .bo.ShoppingList import ShoppingList
 from .bo.User import User
 from .bo.Favorite import Favorite
@@ -67,11 +66,6 @@ class ShoppingAdministration(object):
         """Alle Benutzer auslesen."""
         with UserMapper() as mapper:
             return mapper.find_all()
-
-    def get_user_by_external_id(self, external_id):
-        """Den benutzer mit """
-        with UserMapper() as mapper:
-            return mapper.find_by_external_id(external_id)
 
     def save_user(self, user):
         """Den gegebenen Benutzer speichern."""
@@ -243,8 +237,6 @@ class ShoppingAdministration(object):
         with EntryMapper() as mapper:
             mapper.delete(entry_id)
 
-    # todo put methode fehlt
-
     def get_entry_by_id(self, entry_id):
         """Entry mit der gegebenen ID auslesen."""
         with EntryMapper() as mapper:
@@ -260,10 +252,15 @@ class ShoppingAdministration(object):
         with EntryMapper() as mapper:
             return mapper.find_unit_amount_by_entry(entry)
 
-    def get_entry_by_retailer(self, retailer_id):
+    def get_entry_by_retailer(self, retailer):
         """Entry mit übergebenem Retailer auslesen."""
         with EntryMapper() as mapper:
-            return mapper.find_entry_by_retailer(retailer_id)
+            return mapper.find_entry_by_retailer(retailer)
+
+    def get_retailer_by_entry(self, entry):
+        """Retailer mit übergebenem Entry auslesen."""
+        with EntryMapper() as mapper:
+            return mapper.find_retailer_by_entry(entry)
 
     def get_entry_by_modification_date(self, modification_date):
         """Entry mit übergebenem Modification_Date auslesen."""
