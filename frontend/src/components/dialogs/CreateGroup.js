@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 import {
   TextField,
   Button,
@@ -14,15 +14,15 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-} from "@material-ui/core";
-import GroupAddIcon from "@material-ui/icons/GroupAdd";
-import IconButton from "@material-ui/core/IconButton";
-import AddUser from "../subcomponents/AddUser";
-import DeleteIcon from "@material-ui/icons/Delete";
-// import GroupBO from "../../api/GroupBO";
-// import GroupMembershipBO from "../../api/GroupMembershipBO";
-// import ShoppingAPI from "../../api/ShoppingAPI";
-import { v4 as uuidv4 } from "uuid";
+} from '@material-ui/core';
+import GroupAddIcon from '@material-ui/icons/GroupAdd';
+import IconButton from '@material-ui/core/IconButton';
+import AddUser from '../subcomponents/AddUser';
+import DeleteIcon from '@material-ui/icons/Delete';
+import GroupBO from '../../api/GroupBO';
+import GroupMembershipBO from '../../api/GroupMembershipBO';
+import ShoppingAPI from '../../api/ShoppingAPI';
+import { v4 as uuidv4 } from 'uuid';
 
 /**
  *
@@ -38,7 +38,7 @@ export class CreateGroup extends Component {
     this.state = {
       open: false,
       users: [],
-      groupName: "",
+      groupName: '',
       // currentUser: 1,
     };
   }
@@ -101,17 +101,17 @@ export class CreateGroup extends Component {
 
   handleCreateGroup = (event) => {
     event.preventDefault();
-    console.log("Created Group : " + this.state.groupName);
-    const url = "http://desktop-s3rcllp:8081/api/iKauf/groups";
+    console.log('Created Group : ' + this.state.groupName);
+    const url = 'http://desktop-s3rcllp:8081/api/iKauf/groups';
     const data = { name: this.state.groupName };
     fetch(url, {
-      method: "POST", // or "POST"
+      method: 'POST', // or "POST"
       body: JSON.stringify(data), // data can be `string` or {object}!
-      headers: { "Content-Type": "application/json" },
+      headers: { 'Content-Type': 'application/json' },
     })
       .then((res) => res.json())
-      .catch((error) => console.error("Error:", error))
-      .then((response) => console.log("Success:", response));
+      .catch((error) => console.error('Error:', error))
+      .then((response) => console.log('Success:', response));
   };
 
   render() {
@@ -121,7 +121,7 @@ export class CreateGroup extends Component {
       <div>
         <IconButton
           aria-label="Edit"
-          style={{ float: "right" }}
+          style={{ float: 'right' }}
           onClick={this.handleClickOpen}
         >
           <GroupAddIcon />
@@ -140,8 +140,9 @@ export class CreateGroup extends Component {
               component={Paper}
             >
               <TextField
-                style={{ float: "left", marginLeft: "20px", paddingTop: "2em" }}
+                style={{ float: 'left', marginLeft: '20px', paddingTop: '2em' }}
                 autoFocus
+                margin="dense"
                 id="name"
                 placeholder="Group name"
                 type="email"
@@ -150,7 +151,7 @@ export class CreateGroup extends Component {
               <IconButton
                 aria-label="Edit"
                 onClick={this.handleCreateGroup.bind(this)}
-                style={{ float: "left", marginTop: "1em", marginLeft: "5px" }}
+                style={{ float: 'left', marginTop: '1em', marginLeft: '5px' }}
               >
                 <GroupAddIcon />
               </IconButton>
@@ -162,7 +163,7 @@ export class CreateGroup extends Component {
                 <TableHead>
                   <TableRow>
                     <TableCell>
-                      <b style={{ flex: "10", padding: "5px" }}>Users:</b>
+                      <b style={{ flex: '10', padding: '5px' }}>Users:</b>
                     </TableCell>
                   </TableRow>
                   <TableRow>
@@ -179,8 +180,8 @@ export class CreateGroup extends Component {
                       style={{
                         backgroundColor:
                           row.id === this.state.memberIndex
-                            ? "#0090FF"
-                            : "white",
+                            ? '#0090FF'
+                            : 'white',
                       }}
                       // onClick={this.groupClickHandler.bind(this, row)}
                     >
@@ -188,7 +189,7 @@ export class CreateGroup extends Component {
                       <TableCell>
                         <IconButton
                           aria-label="Edit"
-                          style={{ float: "right" }}
+                          style={{ float: 'right' }}
                           onClick={this.delUser.bind(this, row.id)}
                         >
                           <DeleteIcon />
@@ -201,11 +202,11 @@ export class CreateGroup extends Component {
             </TableContainer>
           </DialogContent>
           <DialogActions>
-            {/* <Button onClick={this.handleClose} color="primary"> */}
-            <Button onClick={this.handleClose} color="primary">
+            <Button onClick={this.handleClickOpen} color="primary">
               Cancel
             </Button>
-            <Button onClick={this.handleClose} color="primary">
+            {/* <Button onClick={this.handleClose} color="primary"> */}
+            <Button onClick={this.handleGroupCreation} color="primary">
               Submit
             </Button>
           </DialogActions>

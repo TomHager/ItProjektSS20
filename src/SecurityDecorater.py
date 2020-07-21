@@ -2,7 +2,7 @@ from flask import request
 from google.auth.transport import requests
 import google.oauth2.id_token
 
-from server.BankAdministration import BankAdministration
+from server.ShoppingAdministration import ShoppingAdministration
 
 
 def secured(function):
@@ -38,13 +38,13 @@ def secured(function):
                     id_token, firebase_request_adapter)
 
                 if claims is not None:
-                    adm = BankAdministration()
+                    adm = ShoppingAdministration()
 
-                    google_user_id = claims.get("user_id")
+                    external_id = claims.get("external_id")
                     email = claims.get("email")
                     name = claims.get("name")
 
-                    user = adm.get_user_by_external_id(google_user_id)
+                    user = adm.get_user_by_external_id(external_id)
                     if user is not None:
                         """Fall: Der Benutzer ist unserem System bereits bekannt.
                         Wir gehen davon aus, dass die google_user_id sich nicht ändert.
@@ -59,7 +59,7 @@ def secured(function):
                         Wir legen daher ein neues User-Objekt an, um dieses ggf. später
                         nutzen zu können.
                         """
-                        user = adm.create_user(name, email, google_user_id)
+                        user = adm.create_user(name, email, external_id)
 
                     print(request.method, request.path, "angefragt durch:", name, email)
 

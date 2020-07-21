@@ -4,9 +4,11 @@ from flask_restx import Resource, Api, fields
 from flask_cors import CORS
 
 # Zugriff auf BusinessObject Klassen und Applikationslogik
-from server.ShoppingAdministration import ShoppingListAdministration
+from server.ShoppingAdministration import ShoppingAdministration
+from server.bo.User import User
 from server.bo.Group import Group
 from server.bo.Retailer import Retailer
+from server.bo.RetailerEntryList import RetailerEntryList
 from server.bo.Entry import Entry
 from server.bo.ShoppingList import ShoppingList
 from server.bo.Favorite import Favorite
@@ -54,11 +56,11 @@ bo = api.model('BusinessObject', {
 user = api.inherit('User', bo, {
     'name': fields.String(attribute='_name', description='Name eines Benutzers'),
     'email': fields.String(attribute='_email', description='E-Mail-Adresse eines Benutzers'),
-    'external_user_id': fields.String(attribute='_external_user_id', description='Google User ID eines Benutzers')
+    'external_id': fields.String(attribute='_external_id', description='Google User ID eines Benutzers')
 })
 
 group = api.inherit('Group', bo, {
-    'group_name': fields.String(attribute='_name', description='Name einer Gruppe'),
+    'name': fields.String(attribute='_name', description='Name einer Gruppe'),
 })
 
 retailer = api.inherit('retailer', bo, {
@@ -66,18 +68,25 @@ retailer = api.inherit('retailer', bo, {
     'group_id': fields.Integer(attribute='_id', description='ID einer Gruppe')
 })
 
+retailer_entry_list = api.inherit('RetailerEntryList', bo, {
+  'retailer': fields.String(attribute='_retailer', description='Name eines Verkäufers'),
+  'user': fields.String(attribut='_user', description='Name eines Benutzers'),
+  'shopping_list_id': fields.Integer(attribute='_shopping_list_id', description='ID einer Shopping List'),
+  'entry_id': fields.Integer(attribute='_entry_id', description='ID eines Eintrags')
+})
+
 entry = api.inherit('Entry', bo, {
   'article': fields.String(attribute='_article', discription='Name eines Artikel'),
   'unit': fields.String(attribute='_unit', discription='Name der Einheit'),
   'amount': fields.Integer(attribute='_amount', discription='Menge eines Artikel'),
   'modification_date': fields.Date(attribute='_modification_date', discription='Änderungsdatum der Entry'),
-  'user_id': fields.String(attribut='_user_id', description='Name eines Benutzers'),
-  'retailer_id': fields.String(attribute='_retailer_id', description='Name eines Verkäufers'),
+  'user_id': fields.Integer(attribut='_user_id', description='Name eines Benutzers'),
+  'retailer_id': fields.Integer(attribute='_retailer_id', description='Name eines Verkäufers'),
   'shopping_list_id': fields.Integer(attribute='_shopping_list_id', description='ID einer Shopping List'),
 })
 
 shopping_list = api.inherit('ShoppingList', bo, {
-  'shopping_list_name': fields.String(attribute='_shopping_list_name', discription='Name einer Shoppingliste'),
+  'name': fields.String(attribute='_name', discription='Name einer Shoppingliste'),
   'group_id': fields.Integer(attribute='_group_id', discription='ID einer Gruppe')
 })
 
@@ -110,6 +119,32 @@ Klassen und Operationen für User
 """
 
 
+@ikauf.route('/user')
+@ikauf.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+class UserListOperations(Resource):
+    @ikauf.marshal_list_with(user)
+    @secured
+    def get(self):
+        """Auslesen aller User-Objekte"""
+
+        adm = ShoppingAdministration()
+        user = adm.get_all_users()
+        return user
+
+    def post(self):
+        """Anlegen eines neuen User-Objekts"""
+
+        adm = ShoppingAdministration()
+
+        proposal = User.from_dict(api.payload)
+
+        if proposal is not None:
+            x = adm.create_user(proposal.get_name(), proposal.get_email(), proposal.get_external_id())
+            return x, 200
+        else:
+            return '', 500
+
+
 @ikauf.route('/user/<int:id>')
 @ikauf.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 @ikauf.param('id', 'Die ID des User-Objekts')
@@ -121,7 +156,7 @@ class UserOperations(Resource):
 
         Das auszulesende Objekt wird durch die ```id``` in dem URI bestimmt.
         """
-        adm = ShoppingListAdministration()
+        adm = ShoppingAdministration()
         cust = adm.get_user_by_id(id)
         return cust
 
@@ -131,7 +166,7 @@ class UserOperations(Resource):
 
         Das zu löschende Objekt wird durch die ```id``` in dem URI bestimmt.
         """
-        adm = ShoppingListAdministration()
+        adm = ShoppingAdministration()
         cust = adm.get_user_by_id(id)
         adm.delete_user(cust)
         return '', 200
@@ -146,8 +181,8 @@ class UserOperations(Resource):
         verwendet wird. Dieser Parameter überschreibt das ID-Attribut des im Payload der Anfrage übermittelten
         Customer-Objekts.
         """
-        adm = ShoppingListAdministration()
-        c = user.from_dict(api.payload)
+        adm = ShoppingAdministration()
+        c = User.from_dict(api.payload)
 
         if c is not None:
             """Hierdurch wird die id des zu überschreibenden (vgl. Update) Customer-Objekts gesetzt.
@@ -171,7 +206,7 @@ class UserByNameOperations(Resource):
 
         Die auszulesenden Objekte werden durch ```name``` in dem URI bestimmt.
         """
-        adm = ShoppingListAdministration()
+        adm = ShoppingAdministration()
         cust = adm.get_user_by_name(name)
         return cust
 
@@ -187,35 +222,25 @@ class UserByEmailOperations(Resource):
 
         Die auszulesenden Objekte werden durch ```email``` in dem URI bestimmt.
         """
-        adm = ShoppingListAdministration()
+        adm = ShoppingAdministration()
         cust = adm.get_user_by_email(email)
         return cust
 
 
-@ikauf.route('/user')
+@ikauf.route('/user-by-external_id/<string:id>')
 @ikauf.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
-class UserListOperations(Resource):
-    @ikauf.marshal_list_with(user)
+@ikauf.param('id', 'Die External ID des User')
+class UserByExternalIdOperations(Resource):
+    @ikauf.marshal_with(user)
     @secured
-    def get(self):
-        """Auslesen aller User-Objekte"""
+    def get(self, id):
+        """ Auslesen von User-Objekten, die durch die E-Mail bestimmt werden.
 
-        adm = ShoppingListAdministration()
-        user = adm.get_all_users()
-        return user
-
-    def post(self):
-        """Anlegen eines neuen User-Objekts"""
-
-        adm = ShoppingListAdministration()
-
-        proposal = user.from_dict(api.payload)
-
-        if proposal is not None:
-            x = adm.create_user(proposal.get_name(), proposal.get_email(), proposal.get_external_id())
-            return x, 200
-        else:
-            return '', 500
+        Die auszulesenden Objekte werden durch ```email``` in dem URI bestimmt.
+        """
+        adm = ShoppingAdministration()
+        cust = adm.get_user_by_external_id(id)
+        return cust
 
 
 """
@@ -231,16 +256,16 @@ class GroupListOperations(Resource):
     def get(self):
         """Auslesen aller Gruppen-Objekte"""
 
-        adm = ShoppingListAdministration()
+        adm = ShoppingAdministration()
         group = adm.get_all_groups()
         return group
 
     def post(self):
         """Anlegen eines neuen Gruppen-Objekts"""
 
-        adm = ShoppingListAdministration()
+        adm = ShoppingAdministration()
 
-        proposal = group.from_dict(api.payload)
+        proposal = Group.from_dict(api.payload)
 
         if proposal is not None:
             x = adm.create_group(proposal.get_name())
@@ -257,14 +282,14 @@ class GroupOperations(Resource):
     def get(self, id):
         """Auslesen eines bestimmten Gruppen-Objekts"""
 
-        adm = ShoppingListAdministration()
+        adm = ShoppingAdministration()
         g = adm.get_group_by_id(id)
         return g
 
     def delete(self, id):
         """Löschen eines bestimmten Gruppen-Objekts"""
 
-        adm = ShoppingListAdministration()
+        adm = ShoppingAdministration()
         g = adm.get_group_by_id(id)
         adm.delete_group(g)
         return '', 200
@@ -274,8 +299,8 @@ class GroupOperations(Resource):
     def put(self, id):
         """Update eines bestimmten Gruppen-Objekts."""
 
-        adm = ShoppingListAdministration()
-        g = group.from_dict(api.payload)
+        adm = ShoppingAdministration()
+        g = Group.from_dict(api.payload)
 
         if g is not None:
             g.set_id(id)
@@ -295,7 +320,7 @@ class GroupRelatedByNameOperations(Resource):
 
         Die auszulesenden Objekte werden durch ```name``` in dem URI bestimmt.
         """
-        adm = ShoppingListAdministration()
+        adm = ShoppingAdministration()
         cust = adm.get_group_by_name(name)
         return cust
 
@@ -313,14 +338,14 @@ class RetailerListOperations(Resource):
     def get(self):
         """Auslesen aller Retailer-Objekte"""
 
-        adm = ShoppingListAdministration()
+        adm = ShoppingAdministration()
         r = adm.get_all_retailer()
         return r
 
     def post(self):
         """Anlegen eines neuen Retailer-Objekts für einen gegebene Group"""
 
-        adm = ShoppingListAdministration()
+        adm = ShoppingAdministration()
 
         r = adm.get_retailer_by_group(id)
 
@@ -336,17 +361,18 @@ class RetailerListOperations(Resource):
 @ikauf.param('id', 'Id des Retailer-Objekts')
 class RetailerOperations(Resource):
     @ikauf.marshal_with(retailer)
+    @secured
     def get(self, id):
         """Auslesen eines bestimmten Retailer-Objekts"""
 
-        adm = ShoppingListAdministration()
+        adm = ShoppingAdministration()
         r = adm.get_retailer_by_id(id)
         return r
 
     def delete(self, id):
         """Löschen eines bestimmten Retailer-Objekts"""
 
-        adm = ShoppingListAdministration()
+        adm = ShoppingAdministration()
         r = adm.get_retailer_by_id(id)
         adm.delete_retailer(r)
         return '', 200
@@ -356,29 +382,15 @@ class RetailerOperations(Resource):
     def put(self, id):
         """Update eines bestimmten Retailer-Objekts."""
 
-        adm = ShoppingListAdministration()
+        adm = ShoppingAdministration()
         r = Retailer.from_dict(api.payload)
 
         if r is not None:
-            r.set_retailer_id(id)
+            r.set_id(id)
             adm.save_retailer(r)
             return '', 200
         else:
             return '', 500
-
-
-@ikauf.route('/retailer-by-entry/<string:Entry>')
-@ikauf.response(500, 'Falls Server-seitiger Fehler')
-@ikauf.param('Entry', 'Entry des zugehörigen Retailer-Objekts')
-class RetailerByEntryOperations(Resource):
-    @ikauf.marshal_with(retailer)
-    @secured
-    def get(self, entry):
-        """"Auslesen eines bestimmten Retailer-Objekts nach RetailerEntry"""
-
-        adm = ShoppingListAdministration()
-        r = adm.get_retailer_by_entry(entry)
-        return r
 
 
 @ikauf.route('/retailer-by-name/<string:name>')
@@ -386,10 +398,11 @@ class RetailerByEntryOperations(Resource):
 @ikauf.param('name', 'Name eines Retailer-Objekts')
 class RetailerRelatedByNameOperations(Resource):
     @ikauf.marshal_with(retailer)
+    @secured
     def get(self, name):
         """Auslesen eines bestimmten Retailer-Objekt nach Name"""
 
-        adm = ShoppingListAdministration()
+        adm = ShoppingAdministration()
         r = adm.get_retailer_by_name(name)
         return r
 
@@ -407,14 +420,14 @@ class EntryListOperations(Resource):
     def get(self):
         """Auslesen aller Entry-Objekte"""
 
-        adm = ShoppingListAdministration()
+        adm = ShoppingAdministration()
         e = adm.get_all_entrys()
         return e
 
     def post(self):
         """Anlegen eines neuen Entry-Objekts"""
 
-        adm = ShoppingListAdministration()
+        adm = ShoppingAdministration()
 
         proposal = Entry.from_dict(api.payload)
 
@@ -434,7 +447,7 @@ class EntryOperations(Resource):
     def get(self, id):
         """Auslesen eines bestimmten Entry-Objekts"""
 
-        adm = ShoppingListAdministration()
+        adm = ShoppingAdministration()
         e = adm.get_entry_by_id(id)
         return e
 
@@ -442,7 +455,7 @@ class EntryOperations(Resource):
     def delete(self, id):
         """Läschen eines bestimmten Entry-Objekts"""
 
-        adm = ShoppingListAdministration()
+        adm = ShoppingAdministration()
         e = adm.get_entry_by_id(id)
         adm.delete_entry_by_id(e)
         return '', 200
@@ -453,8 +466,8 @@ class EntryOperations(Resource):
     def put(self, id):
         """Update eines bestimmten Entry-Objekts."""
 
-        adm = ShoppingListAdministration()
-        e = entry.from_dict(api.payload)
+        adm = ShoppingAdministration()
+        e = Entry.from_dict(api.payload)
 
         if e is not None:
             e.set_id(id)
@@ -473,9 +486,10 @@ class EntryRelatedByArticleOperations(Resource):
     def get(self, article):
         """Auslesen eines bestimmten Entry-Objekts nach Article"""
 
-        adm = ShoppingListAdministration()
+        adm = ShoppingAdministration()
         e = adm.get_entry_by_article(article)
         return e
+
 
 @ikauf.route('/entry-by-retailer/<int:id>')
 @ikauf.response(500, 'Falls Server-seitiger Fehler')
@@ -486,9 +500,25 @@ class EntryRelatedByRetailerOperations(Resource):
     def get(self, retailer_id):
         """Auslesen eines bestimmten Entry-Objekts nach Retailer"""
 
-        adm = ShoppingListAdministration()
+        adm = ShoppingAdministration()
         e = adm.get_entry_by_retailer(retailer_id)
         return e
+
+
+# todo pfad muss geändert werden, wird es überhaupt benötigt?
+@ikauf.route('/retailer-by-retailer-entry-list/<string:retailerEntryList>')
+@ikauf.response(500, 'Falls Server-seitiger Fehler')
+@ikauf.param('Entry', 'Entry des zugehörigen Retailer-Objekts')
+class RetailerByEntryOperations(Resource):
+    @ikauf.marshal_with(retailer)
+    @secured
+    def get(self, entry):
+        """"Auslesen eines bestimmten Retailer-Objekts nach RetailerEntry"""
+
+        adm = ShoppingAdministration()
+        r = adm.get_retailer_by_entry(entry)
+        return r
+
 
 @ikauf.route('/entry-by-user/<int:id>')
 @ikauf.response(500, 'Falls Server-seitiger Fehler')
@@ -499,9 +529,10 @@ class EntryRelatedByUserOperations(Resource):
     def get(self, user_id):
         """Auslesen eines bestimmten Entry-Objekts nach User"""
 
-        adm = ShoppingListAdministration()
+        adm = ShoppingAdministration()
         e = adm.get_entry_by_user(user_id)
         return e
+
 
 @ikauf.route('/entry-by-shoppin-list/<int:id>')
 @ikauf.response(500, 'Falls Server-seitiger Fehler')
@@ -512,9 +543,10 @@ class EntryRelatedByShoppingListOperations(Resource):
     def get(self, shopping_list_id):
         """Auslesen eines bestimmten Entry-Objekts nach Article"""
 
-        adm = ShoppingListAdministration()
+        adm = ShoppingAdministration()
         e = adm.get_entry_by_shopping_list(shopping_list_id)
         return e
+
 
 @ikauf.route('/entry-by-modification-date/<date:date>')
 @ikauf.response(500, 'Falls Server-seitiger Fehler')
@@ -525,7 +557,7 @@ class EntryRelatedByModificationDateOperations(Resource):
     def get(self, modification_date):
         """Auslesen eines bestimmten Entry-Objekts nach Article"""
 
-        adm = ShoppingListAdministration()
+        adm = ShoppingAdministration()
         e = adm.get_entry_by_modification_date(modification_date)
         return e
 
@@ -543,14 +575,14 @@ class ShoppingListListOperations(Resource):
     def get(self):
         """Auslesen aller ShoppingList-Objekte"""
 
-        adm = ShoppingListAdministration()
+        adm = ShoppingAdministration()
         sl = adm.get_all_shopping_list()
         return sl
 
     def post(self):
         """Anlegen eines neuen ShoppingList-Objekts"""
 
-        adm = ShoppingListAdministration()
+        adm = ShoppingAdministration()
 
         prosposal = ShoppingList.from_dict(api.payload)
 
@@ -570,7 +602,7 @@ class ShoppingListOperations(Resource):
     def get(self, id):
         """Auslesen eines bestimmten ShoppingList-Objekts"""
 
-        adm = ShoppingListAdministration()
+        adm = ShoppingAdministration()
         sl = adm.get_shopping_list_by_id(id)
         return sl
 
@@ -578,7 +610,7 @@ class ShoppingListOperations(Resource):
     def delete(self, id):
         """Löschen eines bestimmten ShoppingList-Objekts"""
 
-        adm = ShoppingListAdministration()
+        adm = ShoppingAdministration()
         sl = adm.get_shopping_list_by_id(id)
         adm.delete_shopping_list_by_id(sl)
         return '', 200
@@ -589,8 +621,8 @@ class ShoppingListOperations(Resource):
     def put(self, id):
         """Update eines bestimmten ShoppingList-Objekts."""
 
-        adm = ShoppingListAdministration()
-        sl = shopping_list.from_dict(api.payload)
+        adm = ShoppingAdministration()
+        sl = ShoppingList.from_dict(api.payload)
 
         if sl is not None:
             sl.set_id(id)
@@ -614,7 +646,7 @@ class ShoppingListRelatedByNameOperations(Resource):
     def get(self, name):
         """Auslesen eines bestimmten ShoppingList-Objekts nach Name"""
 
-        adm = ShoppingListAdministration()
+        adm = ShoppingAdministration()
         sl = adm.get_shopping_list_by_name(name)
         return sl
 
@@ -628,7 +660,7 @@ class ShoppingListRelatedByGroupIdOperations(Resource):
     def get(self, id):
         """Auslesen eines bestimmten ShoppingList-Objekts nach Group ID"""
 
-        adm = ShoppingListAdministration()
+        adm = ShoppingAdministration()
         sl = adm.get_shopping_list_by_group_id(id)
         return sl
 
@@ -638,22 +670,22 @@ Klassen und Operationen für GroupMembership
 """
 
 
-@ikauf.route('/retailer-by-group')
+@ikauf.route('/retailer-by-group/<int:retailer_group')
 @ikauf.route(500, 'Falls Server-seitiger Fehler')
-@ikauf.param('id', 'ID des RetailerGroup-Objekts')
+@ikauf.param('retailer_group', 'ID des RetailerGroup-Objekts')
 class RetailerGroupOperations(Resource):
     @ikauf.marshal_with(retailer_group)
     @secured
-    def get(self):
-        adm = ShoppingListAdministration()
-        a = adm.get_all_retailer_members()
+    def get(self,id):
+        adm = ShoppingAdministration()
+        a = adm.get_retailer_by_id(id)
         return a
 
     @secured
     def delete(self, id):
         """Löschen eines bestimmten RetailerGroup-Objekts"""
 
-        adm = ShoppingListAdministration()
+        adm = ShoppingAdministration()
         a = adm.get_retailer_by_group(id)
         adm.delete_retailer_by_group(a)
         return '', 200
@@ -664,7 +696,7 @@ class RetailerGroupOperations(Resource):
     def put(self, id):
         """Update eines bestimmten RetailerGroup-Objekts."""
 
-        adm = ShoppingListAdministration()
+        adm = ShoppingAdministration()
         a = RetailerGroup.from_dict(api.payload)
 
         if a is not None:
@@ -683,14 +715,14 @@ class RetailerGroupListOperations(Resource):
     def get(self):
         """Auslesen aller RetailerGroup-Objekte"""
 
-        adm = ShoppingListAdministration()
+        adm = ShoppingAdministration()
         r = adm.get_all_retailer_members()
         return r
 
     def post(self):
         """Anlegen eines neuen Retailer-Objekts für einen gegebene Group"""
 
-        adm = ShoppingListAdministration()
+        adm = ShoppingAdministration()
 
         r = adm.get_retailer_by_group(id) #todo stimmt id?
 
@@ -699,6 +731,7 @@ class RetailerGroupListOperations(Resource):
             return x, 200
         else:
             return 'Group unknown',
+
 
 @ikauf.route('/retailer-member-by-group/<int:groupId>')
 @ikauf.response(500, 'Falls Server-seitiger Fehler')
@@ -709,11 +742,9 @@ class RetailerGroupRelatedByGroupOperations(Resource):
     def get(self, retailer_group):
         """Auslesen eines bestimmten Retailer-Objekts nach Gruppe"""
 
-        adm = ShoppingListAdministration()
+        adm = ShoppingAdministration()
         r = adm.get_retailer_by_group(retailer_group)
         return r
-
-
 
 
 """
@@ -729,7 +760,7 @@ class GroupMembershipOperations(Resource):
     @secured
     def get(self, id):
         """Auslesen eines bestimmten GroupMembership-Objekts"""
-        adm = ShoppingListAdministration()
+        adm = ShoppingAdministration()
         a = adm.get_member_by_group_membership(id)
         return a
 
@@ -737,7 +768,7 @@ class GroupMembershipOperations(Resource):
     def delete(self, id):
         """Löschen eines bestimmten GroupMembership-Objekts"""
 
-        adm = ShoppingListAdministration()
+        adm = ShoppingAdministration()
         a = adm.get_member_by_group_membership(id)
         adm.delete_member_of_group_membership(a)
         return '', 200
@@ -748,7 +779,7 @@ class GroupMembershipOperations(Resource):
     def put(self, id):
         """Update eines bestimmten GroupMembership-Objekts."""
 
-        adm = ShoppingListAdministration()
+        adm = ShoppingAdministration()
         a = GroupMembership.from_dict(api.payload)
 
         if a is not None:
@@ -767,14 +798,14 @@ class GroupMembershipListOperations(Resource):
     def get(self):
         """Auslesen aller GroupMembership-Objekte"""
 
-        adm = ShoppingListAdministration()
+        adm = ShoppingAdministration()
         gms = adm.get_all_group_members()
         return gms
 
     def post(self):
         """Anlegen eines neuen GroupMembership-Objekts für einen gegebene Group"""
 
-        adm = ShoppingListAdministration()
+        adm = ShoppingAdministration()
 
         r = adm.get_member_by_group_membership(id)
         x = adm.get_group_membership_by_member(id)
@@ -797,7 +828,7 @@ class GroupsByMembershipOperations(Resource):
 
         Die auszulesenden Objekte werden durch ```user``` in dem URI bestimmt.
         """
-        adm = ShoppingListAdministration()
+        adm = ShoppingAdministration()
         cust = adm.get_group_by_user(member)
         return cust
 
@@ -817,14 +848,14 @@ class FavoriteListOperations(Resource):
     def get(self):
         """Auslesen aller Favorite-Objekte"""
 
-        adm = ShoppingListAdministration()
+        adm = ShoppingAdministration()
         a = adm.get_all_favorits()
         return a
 
     def post(self):
         """Anlegen eines neuen Favorite-Objekts"""
 
-        adm = ShoppingListAdministration()
+        adm = ShoppingAdministration()
 
         proposal = Favorite.from_dict(api.payload)
 
@@ -845,7 +876,7 @@ class FavoriteOperations(Resource):
     def get(self, id):
         """Auslesen eines bestimmten Favorite-Objekts"""
 
-        adm = ShoppingListAdministration()
+        adm = ShoppingAdministration()
         a = adm.get_favorite_by_id(id)
         return a
 
@@ -853,7 +884,7 @@ class FavoriteOperations(Resource):
     def delete(self, id):
         """Löschen eines bestimmten Favorite-Objekts"""
 
-        adm = ShoppingListAdministration()
+        adm = ShoppingAdministration()
         a = adm.get_favorite_by_id(id)
         adm.delete_favorite_by_id(a)
         return '', 200
@@ -864,8 +895,8 @@ class FavoriteOperations(Resource):
     def put(self, id):
         """Update eines bestimmten Favorite-Objekts."""
 
-        adm = ShoppingListAdministration()
-        a = favorite.from_dict(api.payload)
+        adm = ShoppingAdministration()
+        a = Favorite.from_dict(api.payload)
 
         if a is not None:
             a.set_id(id)
@@ -874,6 +905,106 @@ class FavoriteOperations(Resource):
         else:
             return '', 500
 
+
+"""
+Klassen und operationen für RetailerEntryList
+"""
+
+
+@ikauf.route('/retailer-entry-list')
+@ikauf.response(500, "Falls Server-seitiger Fehler")
+class RetailerEntryListListOperations(Resource):
+    @ikauf.marshal_list_with(retailer_entry_list)
+    @secured
+    def get(self):
+        """Auslesen aller RetailerEntryList-Objekte"""
+
+        adm = ShoppingAdministration()
+        rel = adm.get_all_retailer_entry_list()
+        return rel
+
+
+    def post(self, id):
+        """Anlegen eines RetailerListEntry für eine gegebene Gruppe"""
+
+        adm = ShoppingAdministration()
+
+        gruppe = adm.get_group_by_id(id)
+
+        if gruppe is not None:
+            result = adm.create_retailer_entry_list_for_group(gruppe)
+            return result
+        else:
+            return "RetailerEntryList unknown", 500
+
+
+@ikauf.route('/retailer-entry-list/<int:retailerEntryListId>')
+@ikauf.response(500, 'Falls Server-seitiger Fehler')
+@ikauf.param('id', 'Id des RetailerEntryList-Objekts')
+class RetailerEntryListOperations(Resource):
+    @ikauf.marshal_with(retailer_entry_list)
+    @secured
+    def get(self, id):
+        """Auslesen eines bestimmten RetailerEntryList-Objekts"""
+
+        adm = ShoppingAdministration()
+        rel = adm.get_retailer_entry_list_by_id(id)
+        return rel
+
+    @secured
+    def delete(self, id):
+        """Löschen eines bestimmten RetailerEntryList-Objekts"""
+
+        adm = ShoppingAdministration()
+        rel = adm.get_retailer_entry_list_by_id(id)
+        adm.delete_retailer_entry_list(rel)
+        return '', 200
+
+    @ikauf.marshal_with(retailer_entry_list)
+    @ikauf.expect(retailer_entry_list, validate=True)
+    @secured
+    def put(self, id):
+        """Update eines bestimmten RetailerEntryList-Objekts."""
+
+        adm = ShoppingAdministration()
+        rel = RetailerEntryList.from_dict(api.payload)
+
+        if rel is not None:
+            rel.set_id(id)
+            adm.save_retailer_entry_list(rel)
+            return '', 200
+        else:
+            return '', 500
+
+
+@ikauf.route('/retailer-entry-list-by-group/<int:groupId>')
+@ikauf.response(500, 'Falls Server-seitiger Fehler')
+@ikauf.param('group', 'group des zugehörigen RetailerEntryList-Objekts')
+class RetailerEntryListRelatedByGroupOperations(Resource):
+    @ikauf.marshal_with(retailer_entry_list)
+    @secured
+    def get(self, id):
+        """Auslesen eines bestimmten RetailerEntryList-Objekts nach Gruppe"""
+
+        adm = ShoppingAdministration()
+        r = adm.get_retailer_entry_list_by_group(id)
+        return r
+#todo post wurde in list operations eingefügt
+
+@ikauf.route('/retailer_entry_list/<string:retailer>')
+@ikauf.response(500, 'Falls Server-seitiger Fehler')
+@ikauf.param('retailer', 'retailer eines RetailerEntryList-Objekts')
+class RetailerEntryListRelatedByRetailerOperations(Resource):
+    @ikauf.marshal_with(retailer_entry_list)
+    @secured
+    def get(self, retailer):
+        """Auslesen eines bestimmten RetailerEntryList-Objekt nach Retailer"""
+
+        adm = ShoppingAdministration()
+        rel = adm.get_retailer_entry_list_by_retailer(retailer)
+        return rel
+
+
 """
 Start der main.py um zu testen ob es funktioniert (in der lokalen Entwicklerumgebung).
 Um dies zu testen muss, wie in der VL eine Db in Python vorliegen.
@@ -881,3 +1012,8 @@ Um dies zu testen muss, wie in der VL eine Db in Python vorliegen.
 
 if __name__ == '__main__':
     app.run(debug=True)
+
+if __name__ == '__main__':
+        adm = ShoppingAdministration()
+        x = adm.create_user("dimi", "dimitrios","4545")
+        print(x)

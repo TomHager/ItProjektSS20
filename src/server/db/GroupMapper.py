@@ -74,8 +74,8 @@ class GroupMapper(Mapper):
 
         cursor = self._cnx.cursor()
 
-        command = "UPDATE group " + "SET name=%s WHERE id=%s"
-        data = (group.get_name())
+        command = "UPDATE groups " + "SET name=%s WHERE id=%s"
+        data = (group.get_name(), group.get_id())
         cursor.execute(command, data)
 
         self._cnx.commit()

@@ -189,8 +189,8 @@ class UserMapper(Mapper):
         """
         cursor = self._cnx.cursor()
 
-        command = "UPDATE users " + "SET name=%s, email=%s, external_id=%s WHERE id=%s"
-        data = (user.get_name(), user.get_email(), user.get_external_id())
+        command = "UPDATE `users` " + "SET name=%s, `email`=%s, external_id=%s WHERE id=%s"
+        data = (user.get_name(), user.get_email(), user.get_external_id(), user.get_id())
         cursor.execute(command, data)
 
         self._cnx.commit()
@@ -209,3 +209,14 @@ class UserMapper(Mapper):
         self._cnx.commit()
         cursor.close()
 
+
+if (__name__ == "__main__"):
+    with UserMapper() as mapper:
+        erik = User()
+        erik.set_id(3)
+        erik.set_email("ronbinka")
+        erik.set_name("robin")
+        erik.set_external_id("2332")
+        print(erik)
+        result = mapper.insert(erik)
+        print(result)
