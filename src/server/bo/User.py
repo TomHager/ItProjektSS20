@@ -11,7 +11,7 @@ class User (bo.BusinessObject):
         super().__init__()
         self._name = ""  # Der Name des Benutzers.
         self._email = ""  # Die E-Mail-Adresse des Benutzers.
-        self._external_id = ""  # Die extern verwaltete User ID.
+        #self._external_id = ""  # Die extern verwaltete User ID.
 
     def get_name(self):
         """Auslesen des Benutzernamens."""
@@ -39,7 +39,7 @@ class User (bo.BusinessObject):
 
     def __str__(self):
         """Erzeugen einer einfachen textuellen Darstellung der jeweiligen Instanz."""
-        return "User: {}, {}, {}, {}".format(self.get_id(), self._name, self._email, self._external_id)
+        return "User: {}, {}, {}".format(self.get_id(), self._name, self._email)
 
     @staticmethod
     def from_dict(dictionary=dict()):

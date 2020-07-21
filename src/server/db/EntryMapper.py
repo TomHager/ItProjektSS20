@@ -59,7 +59,14 @@ class EntryMapper(Mapper):
         tuples = cursor.fetchall()
 
         for (maxid) in tuples:
-            entry.set_id(maxid[0] + 1)
+            if maxid[0] is not None:
+                """Wenn wir eine maximale ID festellen konnten, zählen wir diese
+                um 1 hoch und weisen diesen Wert als ID dem User-Objekt zu."""
+                entry.set_id(maxid[0] + 1)
+            else:
+                """Wenn wir KEINE maximale ID feststellen konnten, dann gehen wir
+                davon aus, dass die Tabelle leer ist und wir mit der ID 1 beginnen können."""
+                entry.set_id(1)
 
         command = "INSERT INTO entries (id, unit, amount, article, modification_date, user_id, " \
                   "retailer_id, shopping_list_id, bought) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)"
@@ -283,7 +290,7 @@ class EntryMapper(Mapper):
         """
         result = []
         cursor = self._cnx.cursor()
-        command = "SELECT id FROM entries WHERE retailer_id LIKE '{}' " \
+        command = "SELECT * FROM entries WHERE retailer_id LIKE '{}' " \
                   "ORDER BY retailer_id".format(retailer_id)
         cursor.execute(command)
         tuples = cursor.fetchall()

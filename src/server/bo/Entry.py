@@ -1,8 +1,5 @@
 from server.bo import BusinessObject as bo
-from server.bo import ShoppingList as shoppinglist
-from server.bo import Retailer as retailer
-from server.bo import User as user
-
+from datetime import datetime
 """ 
 @author Tom Hager
  """
@@ -14,11 +11,12 @@ class Entry(bo.BusinessObject):
         self._unit = ""
         self._amount = ""
         self._article = ""
-        self._modification_date = ""
-        self.shopping_list_id = ""
+        self._modification_date = datetime.now()
+        self._shopping_list_id = ""
         self.user_id = ""
         self.retailer_id = ""
         self.bought = ""
+        self._retailer_id = ""
 
     def get_unit(self):
         return self._unit
@@ -41,8 +39,8 @@ class Entry(bo.BusinessObject):
     def get_modification_date(self):
         return self._modification_date
 
-    def set_modification_date(self, value):
-        self._modification_date = value
+    def set_modification_date(self):
+        self._modification_date = datetime.now()
 
     def get_shopping_list_id(self):
         return self._shopping_list_id
@@ -54,13 +52,13 @@ class Entry(bo.BusinessObject):
         return self._retailer_id
 
     def set_retailer_id(self, retailer_id):
-        self._retailer_id = retailer
+        self._retailer_id = retailer_id
 
     def get_user_id(self):
-        return self._user_id
+        return self.user_id
 
     def set_user_id(self, user_id):
-        self._user_id = user_id
+        self.user_id = user_id
 
     def get_bought(self):
         return self._bought
