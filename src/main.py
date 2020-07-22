@@ -79,9 +79,11 @@ entry = api.inherit('Entry', bo, {
 })
 
 favorite = api.inherit('Favorite', bo, {
-    'unit': fields.Integer(attribute='_unit', description='Einheit eines Artikels'),
+    'unit': fields.String(attribute='_unit', description='Einheit eines Artikels'),
     'amount': fields.Integer(attribute='_amount', description='Menge eines Artikels'),
-    'article': fields.Integer(attribute='article', description='ID eines Artikels')
+    'article': fields.String(attribute='_article', description='ID eines Artikels'),
+    'retailer_id': fields.Integer(attribute='_retailer_id', description='ID eines Retailers'),
+    'group_id': fields.Integer(attribute='_group_id', description='ID einer Gruppe')
 })
 
 shopping_list = api.inherit('ShoppingList', bo, {
@@ -122,15 +124,15 @@ class FavoriteListOperations(Resource):
 
         if proposal is not None:
             x = adm.create_favorite(proposal.get_retailer_id(), proposal.get_amount(), proposal.get_unit(),
-                                    proposal.get_article())  # todo unfilled konnten problem nicht lösen
+                                    proposal.get_article(), proposal.get_retailer_id(), proposal.get_group_id())
             return x, 200
         else:
             return '', 500
 
 
-@ikauf.route('favorite-by-group/<int:favoriteId>')
+@ikauf.route('favorite-by-group/<int:group_id>')
 @ikauf.response(500, 'Falls Server-seitiger Fehler')
-@ikauf.param('id', 'ID des Favorite-Objektes')
+@ikauf.param('group_id', 'ID des Favorite-Objektes')
 class FavoriteByGroupOperations(Resource):
     @ikauf.marshal_with(favorite)
     def get(self, group_id):
@@ -141,7 +143,7 @@ class FavoriteByGroupOperations(Resource):
         return a
 
 
-@ikauf.route('favorite-by-id/<int:favoriteId>')
+@ikauf.route('favorite-by-id/<int:id>')
 @ikauf.response(500, 'Falls Server-seitiger Fehler')
 @ikauf.param('id', 'ID des Favorite-Objektes')
 class FavoriteOperations(Resource):

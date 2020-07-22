@@ -358,6 +358,7 @@ class ShoppingAdministration(object):
         favorite.set_id(favorite_id)
         favorite.set_retailer_id(retailer_id)
         favorite.set_group_id(group_id)
+        favorite.set_id(1)
 
         with FavoriteMapper() as mapper:
             return mapper.insert()
@@ -372,10 +373,10 @@ class ShoppingAdministration(object):
         with FavoriteMapper() as mapper:
             return mapper.find_by_key(favorite_id)
 
-    def get_favorite_by_group(self, favorite_id):
+    def get_favorite_by_group(self, group_id):
         """Favorite Objekt mit übergebener favorit-id auslesen."""
         with FavoriteMapper() as mapper:
-            return mapper.find_favorite_by_group(favorite_id)
+            return mapper.find_favorite_by_group(group_id)
 
     def delete_favorite_by_id(self, favorite_id):
         """gegebenes Favorite Objekt löschen."""

@@ -40,7 +40,7 @@ class Favorite(bo.BusinessObject):
         self._retailer_id = value
 
     def get_group_id(self):
-        return self.get_group_id
+        return self._group_id
 
     def set_group_id(self, value):
         self._group_id = value
