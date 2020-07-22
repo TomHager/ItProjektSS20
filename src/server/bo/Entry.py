@@ -1,6 +1,7 @@
 from server.bo import BusinessObject as bo
 from datetime import datetime
-""" 
+"""
+@author Robin Fink 
 @author Tom Hager
  """
  
@@ -15,7 +16,7 @@ class Entry(bo.BusinessObject):
         self._shopping_list_id = ""
         self.user_id = ""
         self.retailer_id = ""
-        self.bought = ""
+        self.bought = 0
         self._retailer_id = ""
 
     def get_unit(self):

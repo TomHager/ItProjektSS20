@@ -5,6 +5,7 @@ from abc import ABC, abstractmethod
 
 """ 
 @author Tom Hager
+@author Robin Fink
  """
 
 
@@ -50,4 +51,8 @@ class Mapper(AbstractContextManager, ABC):
 
     @abstractmethod
     def delete(self, object):
+        pass
+
+    @abstractmethod
+    def delete2(self, object, object2):
         pass

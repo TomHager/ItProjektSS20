@@ -2,7 +2,9 @@ from server.bo.User import User
 from server.db.Mapper import Mapper
 
 """ 
+@author Yasemin
 @author Tom Hager
+@author Robin Fink
  """
 
 

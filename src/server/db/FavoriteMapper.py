@@ -1,6 +1,9 @@
 from server.bo.Favorite import Favorite
 from server.db.Mapper import Mapper
 
+"""
+@author Tom Hager
+"""
 
 class FavoriteMapper(Mapper):
     """Mapper-Klasse, die Account-Objekte auf eine relationale

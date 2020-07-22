@@ -1,12 +1,17 @@
 from server.bo import Retailer as retailer
 from server.bo import Group as group
 
+"""
+@author Robin Fink
+"""
+
+
 class RetailerGroup(group.Group, retailer.Retailer):
 
     def __init__(self):
         super().__init__()
-        self._retailer_member = ""
-        self._retailer_group = ""
+        self._retailer_member = 0
+        self._retailer_group = 0
 
     def get_retailer_member(self):
         return self._retailer_member

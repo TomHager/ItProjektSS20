@@ -2,6 +2,9 @@ from server.bo.RetailerGroup import RetailerGroup
 
 from server.db.Mapper import Mapper
 
+"""
+@author Robin Fink
+"""
 
 class RetailerGroupMapper(Mapper):
     """Mapper-Klasse, die Account-Objekte auf eine relationale
@@ -12,29 +15,6 @@ class RetailerGroupMapper(Mapper):
 
     def __init__(self):
         super().__init__()
-
-    def find_all(self):
-        """Auslesen aller Einträge.
-
-                  :return
-                  """
-
-        result = []
-
-        cursor = self._cnx.cursor()
-        cursor.execute("SELECT * FROM retailergroups")
-        tuples = cursor.fetchall()
-
-        for (retailer_member, retailer_group) in tuples:
-            retailer_group = RetailerGroup()
-            retailer_group.set_retailer_member(retailer_member)
-            retailer_group.set_retailer_group(retailer_group)
-            result.append(retailer_group)
-
-        self._cnx.commit()
-        cursor.close()
-
-        return result
 
     def insert(self, retailer_group):
         """Einfügen eines Gruppen-Objekts in die Datenbank
@@ -47,6 +27,18 @@ class RetailerGroupMapper(Mapper):
         """
 
         cursor = self._cnx.cursor()
+        cursor.execute("SELECT MAX(retailer_member) AS maxid FROM retailergroups ")
+        tuples = cursor.fetchall()
+        #testen
+        for (maxid) in tuples:
+            if maxid[0] is not None:
+                """Wenn wir eine maximale ID festellen konnten, zählen wir diese
+                um 1 hoch und weisen diesen Wert als ID dem User-Objekt zu."""
+                retailer_group.set_id(maxid[0] + 1)
+            else:
+                """Wenn wir KEINE maximale ID feststellen konnten, dann gehen wir
+                davon aus, dass die Tabelle leer ist und wir mit der ID 1 beginnen können."""
+                retailer_group.set_id(1)
 
         command = "INSERT INTO retailergroups (retailer_member, retailer_group) VALUES (%s,%s)"
         data = (retailer_group.get_retailer_member(), retailer_group.get_retailer_group())
@@ -56,21 +48,6 @@ class RetailerGroupMapper(Mapper):
         cursor.close()
         return retailer_group
 
-    def update(self, retailer_group):
-        """Wiederholtes Schreiben eines Objekts in die Datenbank.
-
-        :param retailer_group das Objekt, das in die DB geschrieben werden soll
-        """
-
-        cursor = self._cnx.cursor()
-
-        command = "UPDATE retailergroups " + "SET retailer_member=%s, retailer_group=%s WHERE id=%s"
-        data = (retailer_group.get_retailer_member(), retailer_group.get_retailer_group())
-        cursor.execute(command, data)
-
-        self._cnx.commit()
-        cursor.close()
-
     def delete(self, retailer_group):
         """Löschen der Daten eines Gruppen-Objekts aus der Datenbank
 
@@ -79,25 +56,8 @@ class RetailerGroupMapper(Mapper):
 
         cursor = self._cnx.cursor()
 
-        command = "DELETE FROM retailergroups WHERE id={}".format(retailer_group.get_id())
-        cursor.execute(command)
-
-        self._cnx.commit()
-        cursor.close()
-
-    def find_by_key(self, key):
-        """Suchen einer Gruppe mit vorgegebener Gruppennummer. Da diese eindeutig ist
-         wird genau ein Objekt zurückgegeben.
-
-         :param key Primärschlüsselattribut (->DB)
-         :return Gruppen-Objekt, das dem übergebenen Schlüssel entspricht, None bei
-             nicht vorhandenem DB-Tupel.
-         """
-
-        result = None
-
-        cursor = self._cnx.cursor()
-        command = "SELECT * FROM retailergroups WHERE id={}".format(key)
+        command = "DELETE FROM retailergroups WHERE retailer_group={} AND retailer_member={}"\
+            .format(retailer_group.get_retailer_group(), retailer_group.get_retailer_member())
         cursor.execute(command)
         tuples = cursor.fetchall()
 
@@ -164,3 +124,12 @@ class RetailerGroupMapper(Mapper):
         cursor.close()
 
         return result
+
+if __name__ == '__main__':
+    with RetailerGroupMapper() as mapper:
+        retailergroup = RetailerGroup()
+        retailergroup.set_retailer_member(5)
+        retailergroup.set_retailer_group(1)
+        print(retailergroup)
+        result = mapper.find_retailer_by_group(1)
+        print(result)
