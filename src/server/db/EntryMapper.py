@@ -1,6 +1,10 @@
 from server.bo.Entry import Entry
 from server.db.Mapper import Mapper
+from datetime import datetime
 
+"""
+@author Robin Fink
+"""
 
 class EntryMapper(Mapper):
     """Mapper-Klasse, die Account-Objekte auf eine relationale
@@ -26,7 +30,7 @@ class EntryMapper(Mapper):
 
         tuples = cursor.fetchall()
 
-        for (id, unit, amount, article, modification_date, user_id, retailer_id, shopping_list_id) in tuples:
+        for (id, unit, amount, article, modification_date, user_id, retailer_id, shopping_list_id, bought) in tuples:
             entry = Entry()
             entry.set_id(id)
             entry.set_unit(unit)
@@ -36,7 +40,7 @@ class EntryMapper(Mapper):
             entry.set_user_id(user_id)
             entry.set_retailer_id(retailer_id)
             entry.set_shopping_list_id(shopping_list_id)
-
+            entry.set_bought(bought)
             result.append(entry)
 
         self._cnx.commit()
@@ -59,12 +63,20 @@ class EntryMapper(Mapper):
         tuples = cursor.fetchall()
 
         for (maxid) in tuples:
-            entry.set_id(maxid[0] + 1)
+            if maxid[0] is not None:
+                """Wenn wir eine maximale ID festellen konnten, zählen wir diese
+                um 1 hoch und weisen diesen Wert als ID dem User-Objekt zu."""
+                entry.set_id(maxid[0] + 1)
+            else:
+                """Wenn wir KEINE maximale ID feststellen konnten, dann gehen wir
+                davon aus, dass die Tabelle leer ist und wir mit der ID 1 beginnen können."""
+                entry.set_id(1)
 
-        command = "INSERT INTO entries (id, unit, amount, article, modification_date) " \
-                  "VALUES (%s,%s,%s,%s,%s)"
+        command = "INSERT INTO entries (id, unit, amount, article, modification_date, user_id, " \
+                  "retailer_id, shopping_list_id, bought) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)"
         data = (entry.get_id(), entry.get_unit(), entry.get_amount(), entry.get_article(),
-                entry.get_modification_date())
+                entry.get_modification_date(), entry.get_user_id(), entry.get_retailer_id(),
+                entry.get_shopping_list_id(), entry.get_bought())
         cursor.execute(command, data)
 
         self._cnx.commit()
@@ -79,9 +91,11 @@ class EntryMapper(Mapper):
 
         cursor = self._cnx.cursor()
 
-        command = "UPDATE entry " + "SET unit=%s, amount=%s, article=%s WHERE id=%s"
-        data = (entry.get_unit(), entry.get_amount(), entry.get_article,
-                entry.get_modification_date())
+        command = "UPDATE entries " + "SET unit=%s, amount=%s, article=%s, modification_date=%s, user_id=%s, " \
+                                      "retailer_id=%s, shopping_list_id=%s, bought=%s WHERE id=%s"
+        data = (entry.get_id(), entry.get_unit(), entry.get_amount(), entry.get_article,
+                entry.set_modification_date(datetime.now()), entry.get_user_id(), entry.get_retailer_id(),
+                entry.get_shopping_list_id(), entry.get_bought())
         cursor.execute(command, data)
 
         self._cnx.commit()
@@ -117,7 +131,7 @@ class EntryMapper(Mapper):
         tuples = cursor.fetchall()
 
         if tuples[0] is not None:
-            (id, unit, amount, article, modification_date, user_id, retailer_id, shopping_list_id) = tuples[0]
+            (id, unit, amount, article, modification_date, user_id, retailer_id, shopping_list_id, bought) = tuples[0]
             entry = Entry()
             entry.set_id(id)
             entry.set_unit(unit)
@@ -127,6 +141,7 @@ class EntryMapper(Mapper):
             entry.set_user_id(user_id)
             entry.set_retailer_id(retailer_id)
             entry.set_shopping_list_id(shopping_list_id)
+            entry.set_bought(bought)
 
             result = entry
 
@@ -148,7 +163,7 @@ class EntryMapper(Mapper):
         cursor.execute(command)
         tuples = cursor.fetchall()
 
-        for (id, unit, amount, article, modification_date, user_id, retailer_id, shopping_list_id) in tuples:
+        for (id, unit, amount, article, modification_date, user_id, retailer_id, shopping_list_id, bought) in tuples:
             entry = Entry()
             entry.set_id(id)
             entry.set_unit(unit)
@@ -158,6 +173,7 @@ class EntryMapper(Mapper):
             entry.set_user_id(user_id)
             entry.set_retailer_id(retailer_id)
             entry.set_shopping_list_id(shopping_list_id)
+            entry.set_bought(bought)
             result.append(entry)
 
         self._cnx.commit()
@@ -203,7 +219,7 @@ class EntryMapper(Mapper):
         cursor.execute(command)
         tuples = cursor.fetchall()
 
-        for (id, unit, amount, article, modification_date, user_id, retailer_id, shopping_list_id) in tuples:
+        for (id, unit, amount, article, modification_date, user_id, retailer_id, shopping_list_id, bought) in tuples:
             entry = Entry()
             entry.set_id(id)
             entry.set_unit(unit)
@@ -213,6 +229,7 @@ class EntryMapper(Mapper):
             entry.set_user_id(user_id)
             entry.set_retailer_id(retailer_id)
             entry.set_shopping_list_id(shopping_list_id)
+            entry.set_bought(bought)
             result.append(entry)
 
         self._cnx.commit()
@@ -277,12 +294,12 @@ class EntryMapper(Mapper):
         """
         result = []
         cursor = self._cnx.cursor()
-        command = "SELECT retailer_id FROM entries WHERE retailer_id LIKE '{}' " \
+        command = "SELECT * FROM entries WHERE retailer_id LIKE '{}' " \
                   "ORDER BY retailer_id".format(retailer_id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
-        for (id, unit, amount, article, modification_date, user_id, retailer_id, shopping_list_id) in tuples:
+        for (id, unit, amount, article, modification_date, user_id, retailer_id, shopping_list_id, bought) in tuples:
             entry = Entry()
             entry.set_id(id)
             entry.set_unit(unit)
@@ -292,6 +309,7 @@ class EntryMapper(Mapper):
             entry.set_user_id(user_id)
             entry.set_retailer_id(retailer_id)
             entry.set_shopping_list_id(shopping_list_id)
+            entry.set_bought(bought)
             result.append(entry)
 
         self._cnx.commit()
@@ -313,7 +331,7 @@ class EntryMapper(Mapper):
         cursor.execute(command)
         tuples = cursor.fetchall()
 
-        for (id, unit, amount, article, modification_date, user_id, retailer_id, shopping_list_id) in tuples:
+        for (id, unit, amount, article, modification_date, user_id, retailer_id, shopping_list_id, bought) in tuples:
             entry = Entry()
             entry.set_id(id)
             entry.set_unit(unit)
@@ -323,6 +341,7 @@ class EntryMapper(Mapper):
             entry.set_user_id(user_id)
             entry.set_retailer_id(retailer_id)
             entry.set_shopping_list_id(shopping_list_id)
+            entry.set_bought(bought)
             result.append(entry)
 
         self._cnx.commit()
@@ -343,7 +362,7 @@ class EntryMapper(Mapper):
         cursor.execute(command)
         tuples = cursor.fetchall()
 
-        for (id, unit, amount, article, modification_date, user_id, retailer_id, shopping_list_id) in tuples:
+        for (id, unit, amount, article, modification_date, user_id, retailer_id, shopping_list_id, bought) in tuples:
             entry = Entry()
             entry.set_id(id)
             entry.set_unit(unit)
@@ -353,6 +372,43 @@ class EntryMapper(Mapper):
             entry.set_user_id(user_id)
             entry.set_retailer_id(retailer_id)
             entry.set_shopping_list_id(shopping_list_id)
+            entry.set_bought(bought)
+            result.append(entry)
+
+        self._cnx.commit()
+        cursor.close()
+
+        return result
+
+    def get_report_data(self, groups_id, modification_date_from, modification_date_to):
+        """Suchen eines Eintrags mit vorgegebener ID. Da diese eindeutig ist,
+                        wird genau ein Objekt zurückgegeben.
+
+                        :param key Primärschlüsselattribut (->DB)
+                        :return Eintrag-Objekt, das dem übergebenen Schlüssel entspricht, None bei
+                            nicht vorhandenem DB-Tupel.
+                        """
+
+        result = []
+
+        cursor = self._cnx.cursor()
+        command = "SELECT * FROM entries WHERE groups_id={} AND bought=1 AND (modification_date " \
+                  "BETWEEN modification_date_from={} AND modification_date_to={})".format(groups_id, modification_date_from,
+                                                                                     modification_date_to)
+        cursor.execute(command)
+        tuples = cursor.fetchall()
+
+        for (id, unit, amount, article, modification_date, user_id, retailer_id, shopping_list_id, bought) in tuples:
+            entry = Entry()
+            entry.set_id(id)
+            entry.set_unit(unit)
+            entry.set_amount(amount)
+            entry.set_article(article)
+            entry.set_modification_date(modification_date)
+            entry.set_user_id(user_id)
+            entry.set_retailer_id(retailer_id)
+            entry.set_shopping_list_id(shopping_list_id)
+            entry.set_bought(bought)
             result.append(entry)
 
         self._cnx.commit()

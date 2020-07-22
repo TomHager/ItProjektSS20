@@ -6,7 +6,6 @@ from .bo.User import User
 from .bo.Favorite import Favorite
 from .bo.RetailerGroup import RetailerGroup
 from .bo.GroupMembership import GroupMembership
-
 from .db.EntryMapper import EntryMapper
 from .db.GroupMapper import GroupMapper
 from .db.RetailerMapper import RetailerMapper
@@ -182,12 +181,15 @@ class ShoppingAdministration(object):
         with ShoppingListMapper() as mapper:
             return mapper.find_all()
 
-    # todo Gehört hier noch entry rein?
-    def create_shopping_list(self, shopping_list_name):
+    def create_shopping_list(self, shopping_list_name, group_id):
         """Eine ShoppingList anlegen."""
         shoppinglist = ShoppingList()
         shoppinglist.set_name(shopping_list_name)
+        shoppinglist.set_group_id(group_id)
         shoppinglist.set_id(1)
+
+        with ShoppingListMapper() as mapper:
+            return mapper.insert(shoppinglist)
 
     def get_shopping_list_by_id(self, id):
         """ShoppingList mit der gegebenen ID auslesen."""
@@ -224,7 +226,7 @@ class ShoppingAdministration(object):
         with EntryMapper() as mapper:
             return mapper.find_all()
 
-    def create_entry(self, entry1):  # todo prüfen
+    def create_entry(self, entry1):
         """Einen Entry anlegen."""
         entry = Entry()
         entry.set_unit(entry1)
@@ -242,10 +244,10 @@ class ShoppingAdministration(object):
         with EntryMapper() as mapper:
             return mapper.find_by_key(entry_id)
 
-    def get_entry_by_article(self, article_id):  # todo alle entrys oder nur einer?
+    def get_entry_by_article(self, article):
         """Auslesen aller Entry Objekte anhand des Artikel-ID´s"""
         with EntryMapper() as mapper:
-            return mapper.find_entry_by_article(article_id)
+            return mapper.find_entry_by_article(article)
 
     def get_unit_amount_by_entry(self, entry):
         """gegebenen Entry löschen."""
@@ -282,11 +284,16 @@ class ShoppingAdministration(object):
         with EntryMapper() as mapper:
             mapper.update(entry)
 
+    def get_entry_by_bought(self, bought):
+        """Entry mit übergebenem Retailer auslesen."""
+        with EntryMapper() as mapper:
+            return mapper.find_entry_by_bought(bought)
+
     """
     RetailerGroup-spezifische Methoden
     """
 
-    def retailer_create_group(self, ret_group, ret_group_member):
+    def create_retailer_group(self, ret_group, ret_group_member):
         """Eine Group anlegen."""
         retailer_group = RetailerGroup()
         retailer_group.set_retailer_group(ret_group)
@@ -295,41 +302,20 @@ class ShoppingAdministration(object):
         with RetailerGroupMapper() as mapper:
             return mapper.insert(retailer_group)
 
-    def get_retailer_by_group(self, group_id):
+    def get_retailer_by_group(self, retailer_group):
         with RetailerGroupMapper() as mapper:
-            return mapper.find_retailer_by_group(group_id)
-
-    def get_all_retailer_members(self):
-        with RetailerGroupMapper() as mapper:
-            return mapper.find_all()
-
-    def delete_retailer_group_member(self, ret_group):
-
-        with RetailerGroupMapper() as mapper:
-            retailer_group_member = mapper.find_by_key(ret_group)
-
-        if not (retailer_group_member is None):
-            for r in retailer_group_member:
-                mapper.delete(r)
+            return mapper.find_retailer_by_group(retailer_group)
 
     def get_group_by_retailer(self, retailer_id):
 
         with RetailerGroupMapper() as mapper:
             return mapper.find_group_by_retailer(retailer_id)
 
-    def save_retailer_group(self, retailer_group):
-        """Update eines Retailers innerhalb einer Gruppe"""  # todo Richtig beschrieben?
-        with RetailerGroupMapper() as mapper:
-            mapper.update(retailer_group)
-
-    def delete_retailer_by_group(self, retailer_group_id):
+    def delete_retailer_group(self, retailer_group, retailer_member):
         """gegebenen retailer der Gruppe löschen."""
         with RetailerGroupMapper() as mapper:
-            retailer_group = self.get_retailer_by_group(retailer_group_id)
+            mapper.delete2(retailer_group, retailer_member)
 
-        if not (retailer_group is None):
-            for e in retailer_group:
-                mapper.delete(e)
     """
     GroupMember-spezifische Methoden
     """
@@ -338,7 +324,7 @@ class ShoppingAdministration(object):
         """Eine Group anlegen."""
         group_membership = GroupMembership()
         group_membership.set_member(user)
-        group_membership.set_membership(group)
+        group_membership.set_group_membership(group)
 
         with GroupMembershipMapper() as mapper:
             return mapper.insert(group_membership)
@@ -347,49 +333,35 @@ class ShoppingAdministration(object):
         with GroupMembershipMapper() as mapper:
             return mapper.find_user_by_group(group_membership)
 
-    def get_all_group_members(self):
-        with GroupMembershipMapper() as mapper:
-            return mapper.find_all()
 
-    def delete_group_membership(self, group_member):
+    def delete_group_membership(self, group_member, member):
 
         with GroupMembershipMapper() as mapper:
-            group_member_ship = mapper.find_by_key(group_member)
-
-        if not (group_member_ship is None):
-            for gms in group_member_ship:
-                mapper.delete(gms)
+            mapper.delete2(group_member, member)
 
     def get_group_membership_by_member(self, member):
 
         with GroupMembershipMapper() as mapper:
             return mapper.find_group_by_user(member)
 
-    def save_group_member_ship(self, group_member_ship):
-        """Update eines GroupMembers innerhalb einer Gruppe"""
-        with GroupMembershipMapper() as mapper:
-            mapper.update(group_member_ship)
-
-    def delete_member_of_group_membership(self, group_membership):
-        """gegebenen Member der Gruppe löschen."""
-        with RetailerGroupMapper() as mapper:
-            member_group = self.get_member_by_group_membership(group_membership)
-
-        if not (member_group is None):
-            for m in member_group:
-                mapper.delete(m)
 
     """
     Favorite-spezifische Methoden
     """
 
-    def create_favorite(self, favorite_id, amount, article, unit):
+    def create_favorite(self, favorite_id, amount, article, unit, retailer_id, group_id):
         """Favorite Objekte erzeugen."""
         favorite = Favorite()
         favorite.set_amount(amount)
         favorite.set_unit(unit)
         favorite.set_article(article)
-        favorite.set_id(favorite_id)  # todo so richtig?
+        favorite.set_id(favorite_id)
+        favorite.set_retailer_id(retailer_id)
+        favorite.set_group_id(group_id)
+        favorite.set_id(1)
+
+        with FavoriteMapper() as mapper:
+            return mapper.insert(favorite)
 
     def get_all_favorits(self):
         """Alle Favorite Objekte auslesen."""
@@ -400,6 +372,11 @@ class ShoppingAdministration(object):
         """Favorite Objekt mit übergebener favorit-id auslesen."""
         with FavoriteMapper() as mapper:
             return mapper.find_by_key(favorite_id)
+
+    def get_favorite_by_group(self, group_id):
+        """Favorite Objekt mit übergebener favorit-id auslesen."""
+        with FavoriteMapper() as mapper:
+            return mapper.find_favorite_by_group(group_id)
 
     def delete_favorite_by_id(self, favorite_id):
         """gegebenes Favorite Objekt löschen."""

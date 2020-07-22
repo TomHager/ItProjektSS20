@@ -1,6 +1,7 @@
 from server.bo import BusinessObject as bo
-
-""" 
+from datetime import datetime
+"""
+@author Robin Fink 
 @author Tom Hager
  """
  
@@ -11,9 +12,11 @@ class Entry(bo.BusinessObject):
         self._unit = ""
         self._amount = ""
         self._article = ""
-        self._modification_date = ""
+        self._modification_date = datetime.now()
         self._shopping_list_id = ""
         self.user_id = ""
+        self.retailer_id = ""
+        self.bought = 0
         self._retailer_id = ""
 
     def get_unit(self):
@@ -58,12 +61,18 @@ class Entry(bo.BusinessObject):
     def set_user_id(self, user_id):
         self.user_id = user_id
 
+    def get_bought(self):
+        return self._bought
+
+    def set_bought(self, value):
+        self._bought = value
+
     def __str__(self):
         """Erzeugen einer einfachen textuellen Darstellung der jeweiligen Instanz."""
-        return "Entry: {}, {}, {}, {}, {}, {}, {}, {} ".format(self.get_id(), self._unit, self._amount,
-                                                  self._article, self._modification_date,
-                                                  self._retailer_id, self._shopping_list_id,
-                                                  self.user_id)
+        return "Entry: {}, {}, {}, {}, {}, {}, {}, {}, {}".format(self.get_id(), self._unit, self._amount,
+                                                                  self._article, self._modification_date, self.user_id,
+                                                                  self._retailer_id, self._shopping_list_id,
+                                                                  self.bought)
 
     @staticmethod
     def from_dict(dictionary=dict()):
@@ -77,5 +86,6 @@ class Entry(bo.BusinessObject):
         obj.set_shopping_list_id(dictionary["shopping_list_id"])
         obj.set_user_id(dictionary["user_id"])
         obj.set_retailer_id(dictionary["retailer_id"])
+        obj.set_bought(dictionary["bought"])
 
         return obj

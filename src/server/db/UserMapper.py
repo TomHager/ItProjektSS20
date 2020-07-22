@@ -2,7 +2,9 @@ from server.bo.User import User
 from server.db.Mapper import Mapper
 
 """ 
+@author Yasemin
 @author Tom Hager
+@author Robin Fink
  """
 
 
@@ -159,6 +161,7 @@ class UserMapper(Mapper):
         :param user das zu speichernde Objekt
         :return das bereits übergebene Objekt, jedoch mit ggf. korrigierter ID.
         """
+
         cursor = self._cnx.cursor()
         cursor.execute("SELECT MAX(id) AS maxid FROM users ")
         tuples = cursor.fetchall()

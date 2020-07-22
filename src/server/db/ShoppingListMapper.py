@@ -1,6 +1,9 @@
 from server.bo.ShoppingList import ShoppingList
 from server.db.Mapper import Mapper
 
+"""
+@author Robin Fink
+"""
 
 class ShoppingListMapper (Mapper):
 
@@ -30,7 +33,6 @@ class ShoppingListMapper (Mapper):
 
         return result
 
-
     def insert(self, shoppinglist):
         """Einfügen eines Shoppinglist-Objekts in die Datenbank.
 
@@ -54,7 +56,7 @@ class ShoppingListMapper (Mapper):
                 davon aus, dass die Tabelle leer ist und wir mit der ID 1 beginnen können."""
                 shoppinglist.set_id(1)
 
-        command = "INSERT INTO shoppinglists (id, name, group_id) VALUES (%s,%s,%s)"
+        command = "INSERT INTO shoppinglists (id, name, groups_id) VALUES (%s,%s,%s)"
         data = (shoppinglist.get_id(), shoppinglist.get_name(), shoppinglist.get_group_id())
         cursor.execute(command, data)
 
@@ -70,8 +72,8 @@ class ShoppingListMapper (Mapper):
         """
         cursor = self._cnx.cursor()
 
-        command = "UPDATE shoppinglists " + "SET name=%s WHERE id=%s"
-        data = (shoppinglist.get_name(), shoppinglist.get_group_id())
+        command = "UPDATE shoppinglists " + "SET name=%s, groups_id=%s WHERE id=%s"
+        data = (shoppinglist.get_name(), shoppinglist.get_group_id(), shoppinglist.get_id())
         cursor.execute(command, data)
 
         self._cnx.commit()
@@ -149,30 +151,39 @@ class ShoppingListMapper (Mapper):
         return result
 
     def find_shopping_list_by_group(self, group_id):
-        """Auslesen aller Benutzer anhand der zugeordneten E-Mail-Adresse.
 
-        :param group_id E-Mail-Adresse der zugehörigen Benutzer.
-        :return Eine Sammlung mit User-Objekten, die sämtliche Benutzer
-            mit der gewünschten E-Mail-Adresse enthält.
+        """Suchen einer Shoppingliste mit vorgegebener Shoppinglist ID. Da diese eindeutig ist,
+        wird genau ein Objekt zurückgegeben.
+
+        :param key Primärschlüsselattribut (->DB)
+        :return Shoppinglist-Objekt, das dem übergebenen Schlüssel entspricht, None bei
+            nicht vorhandenem DB-Tupel.
         """
-        result = []
+
+        result = None
 
         cursor = self._cnx.cursor()
         command = "SELECT * FROM shoppinglists WHERE groups_id LIKE '{}' ORDER BY groups_id".format(group_id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
-        for (id, name, group_id) in tuples:
+        try:
+            (id, name, group_id) = tuples[0]
             shoppinglist = ShoppingList()
             shoppinglist.set_id(id)
             shoppinglist.set_name(name)
             shoppinglist.set_group_id(group_id)
-            result.append(shoppinglist)
+            result = shoppinglist
+        except IndexError:
+            """Der IndexError wird oben beim Zugriff auf tuples[0] auftreten, wenn der vorherige SELECT-Aufruf
+            keine Tupel liefert, sondern tuples = cursor.fetchall() eine leere Sequenz zurück gibt."""
+            result = None
 
         self._cnx.commit()
         cursor.close()
 
         return result
+
 
 
 

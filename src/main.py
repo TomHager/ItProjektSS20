@@ -18,8 +18,8 @@ from server.bo.RetailerGroup import RetailerGroup
 # selbstgeschriebener Decorator, übernimmt Authentifikation
 from SecurityDecorater import secured
 
-
-
+#Datetime importieren
+import datetime
 """
 Instanzieren von Flask. Am Ende dieser Datei erfolgt dann erst der 'Start' von Flask.
 """
@@ -72,16 +72,18 @@ entry = api.inherit('Entry', bo, {
     'article': fields.String(attribute='_article', discription='Name eines Artikel'),
     'unit': fields.String(attribute='_unit', discription='Name der Einheit'),
     'amount': fields.Integer(attribute='_amount', discription='Menge eines Artikel'),
-    'modification_date': fields.Date(attribute='_modification_date', discription='Änderungsdatum der Entry'),
+    'modification_date': fields.DateTime(attribute='_modification_date', discription='Änderungsdatum der Entry'),
     'user_id': fields.Integer(attribut='_user_id', description='Name eines Benutzers'),
     'retailer_id': fields.Integer(attribute='_retailer_id', description='Name eines Verkäufers'),
     'shopping_list_id': fields.Integer(attribute='_shopping_list_id', description='ID einer Shopping List'),
 })
 
 favorite = api.inherit('Favorite', bo, {
-    'unit': fields.Integer(attribute='_unit', description='Einheit eines Artikels'),
+    'unit': fields.String(attribute='_unit', description='Einheit eines Artikels'),
     'amount': fields.Integer(attribute='_amount', description='Menge eines Artikels'),
-    'article': fields.Integer(attribute='article', description='ID eines Artikels')
+    'article': fields.String(attribute='_article', description='ID eines Artikels'),
+    'retailer_id': fields.Integer(attribute='_retailer_id', description='ID eines Retailers'),
+    'group_id': fields.Integer(attribute='_group_id', description='ID einer Gruppe')
 })
 
 shopping_list = api.inherit('ShoppingList', bo, {
@@ -89,125 +91,141 @@ shopping_list = api.inherit('ShoppingList', bo, {
     'groups_id': fields.Integer(attribute='_groups_id', discription='ID einer Gruppe')
 })
 
-retailer_group = api.inherit('RetailerGroup', {
+retailer_groups = api.inherit('RetailerGroup', {
     'retailer_member': fields.Integer(attribute='_retailer_member', description='Retailer ID'),
     'retailer_group': fields.Integer(attribute='_retailer_group',
                                      description='Retailer Gruppe'),
 })
 
+group_member = api.inherit('GroupMember', {
+    'member': fields.Integer(attribute='_member', description='User ID'),
+    'group_membership': fields.Integer(attribute='_group_membership',
+                                 description='Gruppen ID'),
+})
 
-@ikauf.route('/entry')
+
+@ikauf.route('/favorite')
 @ikauf.response(500, "Falls Server-seitiger Fehler")
-class EntryListOperations(Resource):
-    @ikauf.marshal_list_with(entry)
+class FavoriteListOperations(Resource):
+    @ikauf.marshal_list_with(favorite)
     def get(self):
-        """Auslesen aller Entry-Objekte"""
+        """Auslesen aller Favorite-Objekte"""
 
         adm = ShoppingAdministration()
-        e = adm.get_all_entrys()
-        return e
+        a = adm.get_all_favorits()
+        return a
 
     def post(self):
-        """Anlegen eines neuen Entry-Objekts"""
+        """Anlegen eines neuen Favorite-Objekts"""
 
         adm = ShoppingAdministration()
 
-        proposal = Entry.from_dict(api.payload)
+        proposal = Favorite.from_dict(api.payload)
 
         if proposal is not None:
-            x = adm.create_entry(proposal.get_entry_name()) #todo überlgen ob : prosposal.get_entry_list() sinn macht
+            x = adm.create_favorite(proposal.get_retailer_id(), proposal.get_amount(), proposal.get_unit(),
+                                    proposal.get_article(), proposal.get_retailer_id(), proposal.get_group_id())
             return x, 200
         else:
             return '', 500
 
 
-@ikauf.route('/entry-by-id/<int:id>')
+@ikauf.route('/favorite-by-group/<int:group_id>')
 @ikauf.response(500, 'Falls Server-seitiger Fehler')
-@ikauf.param('id', 'ID des Entry-Objekts')
-class EntryOperations(Resource):
-    @ikauf.marshal_with(entry)
-    def get(self, id):
-        """Auslesen eines bestimmten Entry-Objekts"""
+@ikauf.param('group_id', 'ID des Favorite-Objektes')
+class FavoriteByGroupOperations(Resource):
+    @ikauf.marshal_with(favorite)
+    def get(self, group_id):
+        """Auslesen eines bestimmten Favorite-Objekts"""
 
         adm = ShoppingAdministration()
-        e = adm.get_entry_by_id(id)
-        return e
+        a = adm.get_favorite_by_group(group_id)
+        return a
+
+
+@ikauf.route('/favorite-by-id/<int:id>')
+@ikauf.response(500, 'Falls Server-seitiger Fehler')
+@ikauf.param('id', 'ID des Favorite-Objektes')
+class FavoriteOperations(Resource):
+    @ikauf.marshal_with(favorite)
+    def get(self, id):
+        """Auslesen eines bestimmten Favorite-Objekts"""
+
+        adm = ShoppingAdministration()
+        a = adm.get_favorite_by_id(id)
+        return a
 
     def delete(self, id):
-        """Läschen eines bestimmten Entry-Objekts"""
+        """Löschen eines bestimmten Favorite-Objekts"""
 
         adm = ShoppingAdministration()
-        e = adm.get_entry_by_id(id)
-        adm.delete_entry_by_id(e)
+        a = adm.get_favorite_by_id(id)
+        adm.delete_favorite_by_id(a)
         return '', 200
 
-    @ikauf.marshal_with(entry)
-    @ikauf.expect(entry, validate=True)
+    @ikauf.marshal_with(favorite)
+    @ikauf.expect(favorite, validate=True)
     def put(self, id):
-        """Update eines bestimmten Entry-Objekts."""
+        """Update eines bestimmten Favorite-Objekts."""
 
         adm = ShoppingAdministration()
-        e = Entry.from_dict(api.payload)
+        a = Favorite.from_dict(api.payload)
 
-        if e is not None:
-            e.set_id(id)
-            adm.save_entry(e)
+        if a is not None:
+            a.set_id(id)
+            adm.save_favorite(a)
             return '', 200
         else:
             return '', 500
 
 
-@ikauf.route('/entry-by-article/<string:article>')
-@ikauf.response(500, 'Falls Server-seitiger Fehler')
-@ikauf.param('article', 'Artikel des zugehörigen Entry-Objekts')
-class EntryRelatedByArticleOperations(Resource):
-    @ikauf.marshal_with(entry)
-    def get(self, article):
-        """Auslesen eines bestimmten Entry-Objekts nach Article"""
+@ikauf.route('/user/<int:id>')
+@ikauf.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+@ikauf.param('id', 'Die ID des User-Objekts')
+class UserOperations(Resource):
+    @ikauf.marshal_with(user)
+    @secured
+    def get(self, id):
+        """Auslesen eines bestimmten User-Objekts.
 
+        Das auszulesende Objekt wird durch die ```id``` in dem URI bestimmt.
+        """
         adm = ShoppingAdministration()
-        e = adm.get_entry_by_article(article)
-        return e
+        cust = adm.get_user_by_id(id)
+        return cust
 
+    @secured
+    def delete(self, id):
+        """Löschen eines bestimmten User-Objekts.
 
-@ikauf.route('/entry-by-retailer/<int:id>')
-@ikauf.response(500, 'Falls Server-seitiger Fehler')
-@ikauf.param('id', 'Retailer des zugehörigen Entry-Objekts')
-class EntryRelatedByRetailerOperations(Resource):
-    @ikauf.marshal_with(entry)
-    def get(self, retailer_id):
-        """Auslesen eines bestimmten Entry-Objekts nach Retailer"""
-
+        Das zu löschende Objekt wird durch die ```id``` in dem URI bestimmt.
+        """
         adm = ShoppingAdministration()
-        e = adm.get_entry_by_retailer(retailer_id)
-        return e
+        cust = adm.get_user_by_id(id)
+        adm.delete_user(cust)
+        return '', 200
 
+    @ikauf.marshal_with(user)
+    @ikauf.expect(user, validate=True)
+    def put(self, id):
+        """Update eines bestimmten User-Objekts.
 
-@ikauf.route('/entry-by-user/<int:id>')
-@ikauf.response(500, 'Falls Server-seitiger Fehler')
-@ikauf.param('id', 'User des zugehörigen Entry-Objekte')
-class EntryRelatedByUserOperations(Resource):
-    @ikauf.marshal_with(entry)
-    def get(self, user_id):
-        """Auslesen eines bestimmten Entry-Objekts nach User"""
-
+        **ACHTUNG:** Relevante id ist die id, die mittels URI bereitgestellt und somit als Methodenparameter
+        verwendet wird. Dieser Parameter überschreibt das ID-Attribut des im Payload der Anfrage übermittelten
+        Customer-Objekts.
+        """
         adm = ShoppingAdministration()
-        e = adm.get_entry_by_user(user_id)
-        return e
+        c = User.from_dict(api.payload)
 
-
-@ikauf.route('/entry-by-shoppin-list/<int:id>')
-@ikauf.response(500, 'Falls Server-seitiger Fehler')
-@ikauf.param('id', 'ShoppingList des zugehörigen Entry-Objekts')
-class EntryRelatedByShoppingListOperations(Resource):
-    @ikauf.marshal_with(entry)
-    def get(self, shopping_list_id):
-        """Auslesen eines bestimmten Entry-Objekts nach Article"""
-
-        adm = ShoppingAdministration()
-        e = adm.get_entry_by_shopping_list(shopping_list_id)
-        return e
-
+        if c is not None:
+            """Hierdurch wird die id des zu überschreibenden (vgl. Update) Customer-Objekts gesetzt.
+            Siehe Hinweise oben.
+            """
+            c.set_id(id)
+            adm.save_user(c)
+            return '', 200
+        else:
+            return '', 500
 
 """
 Start der main.py um zu testen ob es funktioniert (in der lokalen Entwicklerumgebung).
@@ -216,3 +234,21 @@ Um dies zu testen muss, wie in der VL eine Db in Python vorliegen.
 
 if __name__ == '__main__':
     app.run(debug=True)
+"""
+if __name__ == '__main__':
+    adm = ShoppingAdministration()
+    x = adm.create_favorite(3, 4, "ererere", "L", 4, 4)
+    print(x)
+
+if __name__ == '__main__':
+    adm = ShoppingAdministration()
+    a = Favorite()
+    a.set_id(3)
+    a.set_unit(5)
+    a.set_amount(50)
+    a.set_article(50)
+    a.set_retailer_id(2)
+    a.set_group_id(4)
+    x = adm.save_favorite(a)
+    print(x)
+"""

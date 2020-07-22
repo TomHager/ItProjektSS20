@@ -5,6 +5,7 @@ from abc import ABC, abstractmethod
 
 """ 
 @author Tom Hager
+@author Robin Fink
  """
 
 

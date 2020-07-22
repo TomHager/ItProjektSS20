@@ -1,6 +1,10 @@
 from server.bo.Group import Group
 from server.db.Mapper import Mapper
 
+"""
+@author Yasemin
+@Author Robin Fink
+"""
 
 class GroupMapper(Mapper):
     """Mapper-Klasse, die Account-Objekte auf eine relationale
@@ -159,6 +163,7 @@ Anmerkung: Nicht professionell aber hilfreich..."""
         result = mapper.insert(4, "Test")
         for p in result:
             print(p)"""
+
 
 group = Group()
 group.set_id(3), group.set_name("Zulu")

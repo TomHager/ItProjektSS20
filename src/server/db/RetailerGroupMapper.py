@@ -2,6 +2,9 @@ from server.bo.RetailerGroup import RetailerGroup
 
 from server.db.Mapper import Mapper
 
+"""
+@author Robin Fink
+"""
 
 class RetailerGroupMapper(Mapper):
     """Mapper-Klasse, die Account-Objekte auf eine relationale
@@ -12,29 +15,6 @@ class RetailerGroupMapper(Mapper):
 
     def __init__(self):
         super().__init__()
-
-    def find_all(self):
-        """Auslesen aller Einträge.
-
-                  :return
-                  """
-
-        result = []
-
-        cursor = self._cnx.cursor()
-        cursor.execute("SELECT * FROM retailergroups")
-        tuples = cursor.fetchall()
-
-        for (retailer_member, retailer_group) in tuples:
-            retailer_group = RetailerGroup()
-            retailer_group.set_retailer_member(retailer_member)
-            retailer_group.set_retailer_group(retailer_group)
-            result.append(retailer_group)
-
-        self._cnx.commit()
-        cursor.close()
-
-        return result
 
     def insert(self, retailer_group):
         """Einfügen eines Gruppen-Objekts in die Datenbank
@@ -47,11 +27,6 @@ class RetailerGroupMapper(Mapper):
         """
 
         cursor = self._cnx.cursor()
-        cursor.execute("SELECT MAX(id) AS maxid FROM retailerGroups")
-        tuples = cursor.fetchall()
-
-        for (maxid) in tuples:
-            retailer_group.set_id(maxid[0] + 1)
 
         command = "INSERT INTO retailergroups (retailer_member, retailer_group) VALUES (%s,%s)"
         data = (retailer_group.get_retailer_member(), retailer_group.get_retailer_group())
@@ -61,22 +36,7 @@ class RetailerGroupMapper(Mapper):
         cursor.close()
         return retailer_group
 
-    def update(self, retailer_group):
-        """Wiederholtes Schreiben eines Objekts in die Datenbank.
-
-        :param retailer_group das Objekt, das in die DB geschrieben werden soll
-        """
-
-        cursor = self._cnx.cursor()
-
-        command = "UPDATE retailergroups " + "SET retailer_member=%s, retailer_group=%s WHERE id=%s"
-        data = (retailer_group.get_retailer_member(), retailer_group.get_retailer_group())
-        cursor.execute(command, data)
-
-        self._cnx.commit()
-        cursor.close()
-
-    def delete(self, retailer_group):
+    def delete2(self, retailer_group, retailer_member):
         """Löschen der Daten eines Gruppen-Objekts aus der Datenbank
 
         :param retailer_group das aus der DB zu löschende "Objekt"
@@ -84,40 +44,13 @@ class RetailerGroupMapper(Mapper):
 
         cursor = self._cnx.cursor()
 
-        command = "DELETE FROM retailergroups WHERE id={}".format(retailer_group.get_id())
+        command = "DELETE FROM retailergroups WHERE retailer_group={} AND retailer_member={}"\
+            .format(retailer_group, retailer_member)
         cursor.execute(command)
 
         self._cnx.commit()
         cursor.close()
 
-    def find_by_key(self, key):
-        """Suchen einer Gruppe mit vorgegebener Gruppennummer. Da diese eindeutig ist
-         wird genau ein Objekt zurückgegeben.
-
-         :param key Primärschlüsselattribut (->DB)
-         :return Gruppen-Objekt, das dem übergebenen Schlüssel entspricht, None bei
-             nicht vorhandenem DB-Tupel.
-         """
-
-        result = None
-
-        cursor = self._cnx.cursor()
-        command = "SELECT * FROM retailergroups WHERE id={}".format(key)
-        cursor.execute(command)
-        tuples = cursor.fetchall()
-
-        if tuples[0] is not None:
-            (retailer_member, retailer_group) = tuples[0]
-            retailer_group = RetailerGroup()
-            retailer_group.set_retailer_member(retailer_member)
-            retailer_group.set_retailer_group(retailer_group)
-
-            result = retailer_group
-
-        self._cnx.commit()
-        cursor.close()
-
-        return result
 
     def find_group_by_retailer(self, retailer_member):
         """Auslesen einer Gruppe anhand des Gruppennames.
@@ -129,8 +62,8 @@ class RetailerGroupMapper(Mapper):
 
         result = []
         cursor = self._cnx.cursor()
-        command = "SELECT retailer_member, retailer_group FROM retailergroups " \
-                  "WHERE retailer_member={} ORDER BY retailer_member".format(retailer_member)
+        command = "SELECT * FROM retailergroups WHERE retailer_member={} ORDER BY retailer_member"\
+            .format(retailer_member)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
@@ -144,8 +77,6 @@ class RetailerGroupMapper(Mapper):
         cursor.close()
 
         return result
-
-    #todo fnd_retailer_by_group und find_by_key ist doch doppeklt gemoppelt?!
 
     def find_retailer_by_group(self, retailer_group):
         """Auslesen einer Gruppe anhand des Gruppennames.
@@ -157,7 +88,7 @@ class RetailerGroupMapper(Mapper):
 
         result = []
         cursor = self._cnx.cursor()
-        command = "SELECT * FROM retailergroups WHERE retailer_group={} ORDER BY retailer_group".format(retailer_group)
+        command = "SELECT * FROM retailergroups WHERE retailer_group={} ORDER BY retailer_group".format(retailer_group.get)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
@@ -171,3 +102,15 @@ class RetailerGroupMapper(Mapper):
         cursor.close()
 
         return result
+
+    def update(self):
+        pass
+
+    def find_all(self):
+        pass
+
+    def find_by_key(self, key):
+        pass
+
+    def delete(self):
+        pass

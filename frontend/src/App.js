@@ -14,6 +14,8 @@ import 'firebase/firestore';
 
 // import Theme from './Theme';
 import SignIn from './components/pages/SignIn';
+import UserBO from './api/UserBO';
+import ShoppingAPI from './api/ShoppingAPI';
 // import LoadingProgress from './components/dialogs/LoadingProgress';
 // import ContextErrorMessage from './components/dialogs/ContextErrorMessage';
 
@@ -26,6 +28,7 @@ import SignIn from './components/pages/SignIn';
  * @see [react-router-dom](https://reacttraining.com/react-router/web/guides/quick-start)
  *
  * @author Tom Hager
+ * @author Lukas Rutkauskas
  */
 
 export default class App extends React.Component {
@@ -142,7 +145,7 @@ export default class App extends React.Component {
               <>
                 <Redirect from="/" to="/groupList" />
                 <Route exact path="/groupList">
-                  <GroupList />
+                  <GroupList user={this.state.currentUser} />
                 </Route>
                 <Route path="/shoppingList">
                   <ShoppingList />
