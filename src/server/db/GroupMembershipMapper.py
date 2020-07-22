@@ -1,6 +1,10 @@
 from server.bo.GroupMembership import GroupMembership
 from server.db.Mapper import Mapper
 
+"""
+@author Yasemin
+@author Robin Fink
+"""
 
 class GroupMembershipMapper(Mapper):
     """Mapper-Klasse, die Account-Objekte auf eine relationale

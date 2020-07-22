@@ -1,6 +1,7 @@
 from server.bo import BusinessObject as bo
 from datetime import datetime
-""" 
+"""
+@author Robin Fink 
 @author Tom Hager
  """
  

@@ -2,6 +2,10 @@ from server.bo.Entry import Entry
 from server.db.Mapper import Mapper
 from datetime import datetime
 
+"""
+@author Robin Fink
+"""
+
 class EntryMapper(Mapper):
     """Mapper-Klasse, die Account-Objekte auf eine relationale
     Datenbank abbildet. Hierzu wird eine Reihe von Methoden zur Verfügung

@@ -543,7 +543,6 @@ class EntryRelatedByBoughtOperations(Resource):
         e = adm.get_entry_by_bought(bought)
         return e
 
-@ikauf.route('/entry-by-modification-date/<date:date>')
 
 @ikauf.route('/entry-by-modification-date/<datetime:modification_date>')
 @ikauf.response(500, 'Falls Server-seitiger Fehler')

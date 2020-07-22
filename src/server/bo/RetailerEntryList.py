@@ -4,6 +4,7 @@ from server.bo import User as user
 from server.bo import Entry as entry
 
 """ 
+@author Robin Fink
 @author Tom Hager
  """
 

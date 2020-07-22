@@ -1,6 +1,7 @@
 from server.bo import BusinessObject as bo
 
 """ 
+@author Robin Fink
 @author Tom Hager
 """
 

@@ -1,6 +1,9 @@
 from server.bo.ShoppingList import ShoppingList
 from server.db.Mapper import Mapper
 
+"""
+@author Robin Fink
+"""
 
 class ShoppingListMapper (Mapper):
 

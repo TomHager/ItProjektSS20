@@ -1,6 +1,9 @@
 from server.bo import User as user
 from server.bo import Group as group
-
+"""
+@author Yasemin
+@author Robin Fink
+"""
 
 class GroupMembership(user.User, group.Group):
 
