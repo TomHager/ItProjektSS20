@@ -39,8 +39,8 @@ class Entry(bo.BusinessObject):
     def get_modification_date(self):
         return self._modification_date
 
-    def set_modification_date(self):
-        self._modification_date = datetime.now()
+    def set_modification_date(self, value):
+        self._modification_date = value
 
     def get_shopping_list_id(self):
         return self._shopping_list_id
@@ -69,7 +69,7 @@ class Entry(bo.BusinessObject):
     def __str__(self):
         """Erzeugen einer einfachen textuellen Darstellung der jeweiligen Instanz."""
         return "Entry: {}, {}, {}, {}, {}, {}, {}, {}, {}".format(self.get_id(), self._unit, self._amount,
-                                                                  self._article, self._modification_date, self._user_id,
+                                                                  self._article, self._modification_date, self.user_id,
                                                                   self._retailer_id, self._shopping_list_id,
                                                                   self.bought)
 
