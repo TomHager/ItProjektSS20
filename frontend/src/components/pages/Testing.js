@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import ShoppingAPI from '../../api/ShoppingAPI';
 import { Button } from '@material-ui/core';
+import firebase from 'firebase/app';
+import UserBO from '../../api/UserBO';
 
 export default class Testing extends Component {
   constructor() {
@@ -16,13 +18,6 @@ export default class Testing extends Component {
     };
   }
 
-  async fetchGroups() {
-    const res = await fetch('http://127.0.0.1:5000/iKauf/user');
-    const resjson = await res.json();
-    // this.setState({ users: resjson });
-    console.log(resjson);
-  }
-
   getUsers = () => {
     ShoppingAPI.getAPI()
       .searchUserByEmail('berndbernd')
@@ -30,6 +25,14 @@ export default class Testing extends Component {
         return this.setState({ user: returnedUser });
       });
     console.log(this.state.user);
+  };
+
+  addUserToDatabase = () => {
+    const newUser = new UserBO();
+    newUser.setExternalId(firebase.auth().currentUser.uid);
+    newUser.setName(firebase.auth().currentUser.displayName);
+    newUser.setEmail(firebase.auth().currentUser.email);
+    ShoppingAPI.getAPI().addUser(newUser);
   };
 
   // getUsersByName = () => {
@@ -64,7 +67,7 @@ export default class Testing extends Component {
 
   render() {
     return (
-      <Button onClick={this.getUsers}>Display users</Button>
+      <Button onClick={this.addUserToDatabase}>Display users</Button>
       // <form onSubmit={this.handleSubmit}>
       //   <input type="text" name="name" onChange={this.handleChange} />
       //   <input type="email" name="email" onChange={this.handleChange} />

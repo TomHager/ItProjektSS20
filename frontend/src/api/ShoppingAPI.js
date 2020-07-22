@@ -123,7 +123,7 @@ export default class ShoppingAPI {
   // User related
   #getUsersURL = () => `${this.#ShoppingServerBaseURL}/user`;
   #getUserURL = (id) => `${this.#ShoppingServerBaseURL}/users/${id}`;
-  #addUserURL = () => `${this.#ShoppingServerBaseURL}/users`;
+  #addUserURL = () => `${this.#ShoppingServerBaseURL}/user`;
   #updateUserURL = (id) => `${this.#ShoppingServerBaseURL}/users/${id}`;
   #deleteUserURL = (id) => `${this.#ShoppingServerBaseURL}/users/${id}`;
   #searchUserByNameURL = (userName) =>
