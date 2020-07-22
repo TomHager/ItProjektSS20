@@ -90,9 +90,11 @@ article = api.inherit('Article', bo, {
 })
 
 favorite = api.inherit('Favorite', bo, {
-    'unit': fields.Integer(attribute='_unit', description='Einheit eines Artikels'),
+    'unit': fields.String(attribute='_unit', description='Einheit eines Artikels'),
     'amount': fields.Integer(attribute='_amount', description='Menge eines Artikels'),
-    'article': fields.Integer(attribute='article', description='ID eines Artikels')
+    'article': fields.String(attribute='_article', description='ID eines Artikels'),
+    'retailer_id': fields.Integer(attribute='_retailer_id', description='ID eines Retailers'),
+    'group_id': fields.Integer(attribute='_group_id', description='ID einer Gruppe')
 })
 
 retailer_groups = api.inherit('RetailerGroup', bo, {

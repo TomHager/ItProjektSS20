@@ -130,7 +130,7 @@ class FavoriteListOperations(Resource):
             return '', 500
 
 
-@ikauf.route('favorite-by-group/<int:group_id>')
+@ikauf.route('/favorite-by-group/<int:group_id>')
 @ikauf.response(500, 'Falls Server-seitiger Fehler')
 @ikauf.param('group_id', 'ID des Favorite-Objektes')
 class FavoriteByGroupOperations(Resource):
@@ -143,7 +143,7 @@ class FavoriteByGroupOperations(Resource):
         return a
 
 
-@ikauf.route('favorite-by-id/<int:id>')
+@ikauf.route('/favorite-by-id/<int:id>')
 @ikauf.response(500, 'Falls Server-seitiger Fehler')
 @ikauf.param('id', 'ID des Favorite-Objektes')
 class FavoriteOperations(Resource):
@@ -179,6 +179,54 @@ class FavoriteOperations(Resource):
             return '', 500
 
 
+@ikauf.route('/user/<int:id>')
+@ikauf.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+@ikauf.param('id', 'Die ID des User-Objekts')
+class UserOperations(Resource):
+    @ikauf.marshal_with(user)
+    @secured
+    def get(self, id):
+        """Auslesen eines bestimmten User-Objekts.
+
+        Das auszulesende Objekt wird durch die ```id``` in dem URI bestimmt.
+        """
+        adm = ShoppingAdministration()
+        cust = adm.get_user_by_id(id)
+        return cust
+
+    @secured
+    def delete(self, id):
+        """Löschen eines bestimmten User-Objekts.
+
+        Das zu löschende Objekt wird durch die ```id``` in dem URI bestimmt.
+        """
+        adm = ShoppingAdministration()
+        cust = adm.get_user_by_id(id)
+        adm.delete_user(cust)
+        return '', 200
+
+    @ikauf.marshal_with(user)
+    @ikauf.expect(user, validate=True)
+    def put(self, id):
+        """Update eines bestimmten User-Objekts.
+
+        **ACHTUNG:** Relevante id ist die id, die mittels URI bereitgestellt und somit als Methodenparameter
+        verwendet wird. Dieser Parameter überschreibt das ID-Attribut des im Payload der Anfrage übermittelten
+        Customer-Objekts.
+        """
+        adm = ShoppingAdministration()
+        c = User.from_dict(api.payload)
+
+        if c is not None:
+            """Hierdurch wird die id des zu überschreibenden (vgl. Update) Customer-Objekts gesetzt.
+            Siehe Hinweise oben.
+            """
+            c.set_id(id)
+            adm.save_user(c)
+            return '', 200
+        else:
+            return '', 500
+
 """
 Start der main.py um zu testen ob es funktioniert (in der lokalen Entwicklerumgebung).
 Um dies zu testen muss, wie in der VL eine Db in Python vorliegen.
@@ -186,3 +234,20 @@ Um dies zu testen muss, wie in der VL eine Db in Python vorliegen.
 
 if __name__ == '__main__':
     app.run(debug=True)
+
+if __name__ == '__main__':
+    adm = ShoppingAdministration()
+    x = adm.create_favorite(3, 4, "ererere", "L", 4, 4)
+    print(x)
+
+if __name__ == '__main__':
+    adm = ShoppingAdministration()
+    a = Favorite()
+    a.set_id(2)
+    a.set_unit('L')
+    a.set_amount(5)
+    a.set_article('Bier')
+    a.set_retailer_id(4)
+    a.set_group_id(5)
+    x = adm.save_favorite(a)
+    print(x)

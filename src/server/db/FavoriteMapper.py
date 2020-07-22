@@ -85,6 +85,8 @@ class FavoriteMapper(Mapper):
         self._cnx.commit()
         cursor.close()
 
+        return favorite
+
     def delete(self, favorite):
         """Löschen der Daten eines Artikel-Objekts aus der Datenbank.
 

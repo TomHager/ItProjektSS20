@@ -361,7 +361,7 @@ class ShoppingAdministration(object):
         favorite.set_id(1)
 
         with FavoriteMapper() as mapper:
-            return mapper.insert()
+            return mapper.insert(favorite)
 
     def get_all_favorits(self):
         """Alle Favorite Objekte auslesen."""
