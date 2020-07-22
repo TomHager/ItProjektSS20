@@ -161,6 +161,7 @@ class UserMapper(Mapper):
         :param user das zu speichernde Objekt
         :return das bereits übergebene Objekt, jedoch mit ggf. korrigierter ID.
         """
+
         cursor = self._cnx.cursor()
         cursor.execute("SELECT MAX(id) AS maxid FROM users ")
         tuples = cursor.fetchall()

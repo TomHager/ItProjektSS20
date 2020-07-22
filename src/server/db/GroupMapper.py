@@ -164,6 +164,7 @@ Anmerkung: Nicht professionell aber hilfreich..."""
         for p in result:
             print(p)"""
 
+
 group = Group()
 group.set_id(3), group.set_name("Zulu")
 if __name__ == "__main__":

@@ -79,9 +79,11 @@ entry = api.inherit('Entry', bo, {
 })
 
 favorite = api.inherit('Favorite', bo, {
-    'unit': fields.Integer(attribute='_unit', description='Einheit eines Artikels'),
+    'unit': fields.String(attribute='_unit', description='Einheit eines Artikels'),
     'amount': fields.Integer(attribute='_amount', description='Menge eines Artikels'),
-    'article': fields.Integer(attribute='article', description='ID eines Artikels')
+    'article': fields.String(attribute='_article', description='ID eines Artikels'),
+    'retailer_id': fields.Integer(attribute='_retailer_id', description='ID eines Retailers'),
+    'group_id': fields.Integer(attribute='_group_id', description='ID einer Gruppe')
 })
 
 shopping_list = api.inherit('ShoppingList', bo, {
@@ -95,23 +97,135 @@ retailer_groups = api.inherit('RetailerGroup', {
                                      description='Retailer Gruppe'),
 })
 
+group_member = api.inherit('GroupMember', {
+    'member': fields.Integer(attribute='_member', description='User ID'),
+    'group_membership': fields.Integer(attribute='_group_membership',
+                                 description='Gruppen ID'),
+})
 
-@ikauf.route('/retailer-group-delete/<int:id><int:id2>')
-@ikauf.response(500, 'Falls Server-seitiger Fehler')
-@ikauf.param('id', 'ID des ShoppingList-Objekts')
-@ikauf.param('id2', 'ID des ShoppingList-Objekts')
-class ShoppingListOperations(Resource):
-    @ikauf.marshal_with(retailer_groups)
-    def delete(self, id, id2):
-        """Löschen eines bestimmten ShoppingList-Objekts"""
+
+@ikauf.route('/favorite')
+@ikauf.response(500, "Falls Server-seitiger Fehler")
+class FavoriteListOperations(Resource):
+    @ikauf.marshal_list_with(favorite)
+    def get(self):
+        """Auslesen aller Favorite-Objekte"""
 
         adm = ShoppingAdministration()
-        sl = adm.get_retailer_by_group(id)
-        rm = adm.get_group_by_retailer(id2)
-        adm.delete_retailer_group(sl, rm)
+        a = adm.get_all_favorits()
+        return a
+
+    def post(self):
+        """Anlegen eines neuen Favorite-Objekts"""
+
+        adm = ShoppingAdministration()
+
+        proposal = Favorite.from_dict(api.payload)
+
+        if proposal is not None:
+            x = adm.create_favorite(proposal.get_retailer_id(), proposal.get_amount(), proposal.get_unit(),
+                                    proposal.get_article(), proposal.get_retailer_id(), proposal.get_group_id())
+            return x, 200
+        else:
+            return '', 500
+
+
+@ikauf.route('/favorite-by-group/<int:group_id>')
+@ikauf.response(500, 'Falls Server-seitiger Fehler')
+@ikauf.param('group_id', 'ID des Favorite-Objektes')
+class FavoriteByGroupOperations(Resource):
+    @ikauf.marshal_with(favorite)
+    def get(self, group_id):
+        """Auslesen eines bestimmten Favorite-Objekts"""
+
+        adm = ShoppingAdministration()
+        a = adm.get_favorite_by_group(group_id)
+        return a
+
+
+@ikauf.route('/favorite-by-id/<int:id>')
+@ikauf.response(500, 'Falls Server-seitiger Fehler')
+@ikauf.param('id', 'ID des Favorite-Objektes')
+class FavoriteOperations(Resource):
+    @ikauf.marshal_with(favorite)
+    def get(self, id):
+        """Auslesen eines bestimmten Favorite-Objekts"""
+
+        adm = ShoppingAdministration()
+        a = adm.get_favorite_by_id(id)
+        return a
+
+    def delete(self, id):
+        """Löschen eines bestimmten Favorite-Objekts"""
+
+        adm = ShoppingAdministration()
+        a = adm.get_favorite_by_id(id)
+        adm.delete_favorite_by_id(a)
         return '', 200
 
+    @ikauf.marshal_with(favorite)
+    @ikauf.expect(favorite, validate=True)
+    def put(self, id):
+        """Update eines bestimmten Favorite-Objekts."""
 
+        adm = ShoppingAdministration()
+        a = Favorite.from_dict(api.payload)
+
+        if a is not None:
+            a.set_id(id)
+            adm.save_favorite(a)
+            return '', 200
+        else:
+            return '', 500
+
+
+@ikauf.route('/user/<int:id>')
+@ikauf.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+@ikauf.param('id', 'Die ID des User-Objekts')
+class UserOperations(Resource):
+    @ikauf.marshal_with(user)
+    @secured
+    def get(self, id):
+        """Auslesen eines bestimmten User-Objekts.
+
+        Das auszulesende Objekt wird durch die ```id``` in dem URI bestimmt.
+        """
+        adm = ShoppingAdministration()
+        cust = adm.get_user_by_id(id)
+        return cust
+
+    @secured
+    def delete(self, id):
+        """Löschen eines bestimmten User-Objekts.
+
+        Das zu löschende Objekt wird durch die ```id``` in dem URI bestimmt.
+        """
+        adm = ShoppingAdministration()
+        cust = adm.get_user_by_id(id)
+        adm.delete_user(cust)
+        return '', 200
+
+    @ikauf.marshal_with(user)
+    @ikauf.expect(user, validate=True)
+    def put(self, id):
+        """Update eines bestimmten User-Objekts.
+
+        **ACHTUNG:** Relevante id ist die id, die mittels URI bereitgestellt und somit als Methodenparameter
+        verwendet wird. Dieser Parameter überschreibt das ID-Attribut des im Payload der Anfrage übermittelten
+        Customer-Objekts.
+        """
+        adm = ShoppingAdministration()
+        c = User.from_dict(api.payload)
+
+        if c is not None:
+            """Hierdurch wird die id des zu überschreibenden (vgl. Update) Customer-Objekts gesetzt.
+            Siehe Hinweise oben.
+            """
+            c.set_id(id)
+            adm.save_user(c)
+            return '', 200
+        else:
+            return '', 500
 
 """
 Start der main.py um zu testen ob es funktioniert (in der lokalen Entwicklerumgebung).
@@ -120,3 +234,21 @@ Um dies zu testen muss, wie in der VL eine Db in Python vorliegen.
 
 if __name__ == '__main__':
     app.run(debug=True)
+"""
+if __name__ == '__main__':
+    adm = ShoppingAdministration()
+    x = adm.create_favorite(3, 4, "ererere", "L", 4, 4)
+    print(x)
+
+if __name__ == '__main__':
+    adm = ShoppingAdministration()
+    a = Favorite()
+    a.set_id(3)
+    a.set_unit(5)
+    a.set_amount(50)
+    a.set_article(50)
+    a.set_retailer_id(2)
+    a.set_group_id(4)
+    x = adm.save_favorite(a)
+    print(x)
+"""
