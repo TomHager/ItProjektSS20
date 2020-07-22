@@ -2,6 +2,7 @@ from server.bo import BusinessObject as bo
 
 """ 
 @author Tom Hager
+@author Robin Fink
  """
  
 class Favorite(bo.BusinessObject):
@@ -12,6 +13,7 @@ class Favorite(bo.BusinessObject):
         self._amount = ""
         self._article = ""
         self._retailer_id = ""
+        self._group_id = ""
 
     def get_unit(self):
         return self._unit
@@ -37,9 +39,16 @@ class Favorite(bo.BusinessObject):
     def set_retailer_id(self, value):
         self._retailer_id = value
 
+    def get_group_id(self):
+        return self.get_group_id
+
+    def set_group_id(self, value):
+        self._group_id = value
+
     def __str__(self):
         """Erzeugen einer einfachen textuellen Darstellung der jeweiligen Instanz."""
-        return "Favorite: {}, {}, {}, {}, {}".format(self.get_id(), self._unit, self._amount, self._article, self._retailer_id)
+        return "Favorite: {}, {}, {}, {}, {}, {}".format(self.get_id(), self._unit, self._amount, self._article,
+                                                         self._retailer_id, self._group_id)
 
     @staticmethod
     def from_dict(dictionary=dict()):
@@ -50,5 +59,6 @@ class Favorite(bo.BusinessObject):
         obj.set_amount(dictionary["amount"])
         obj.set_article(dictionary["article"])
         obj.set_retailer_id(dictionary["retailer_id"])
+        obj.set_group_id(dictionary["group_id"])
 
         return obj

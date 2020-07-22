@@ -102,141 +102,79 @@ group_member = api.inherit('GroupMember', {
 })
 
 
-@ikauf.route('/user')
-@ikauf.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
-class UserListOperations(Resource):
-    @ikauf.marshal_list_with(user)
-    @secured
+@ikauf.route('/favorite')
+@ikauf.response(500, "Falls Server-seitiger Fehler")
+class FavoriteListOperations(Resource):
+    @ikauf.marshal_list_with(favorite)
     def get(self):
-        """Auslesen aller User-Objekte"""
+        """Auslesen aller Favorite-Objekte"""
 
         adm = ShoppingAdministration()
-        user = adm.get_all_users()
-        return user
+        a = adm.get_all_favorits()
+        return a
 
     def post(self):
-        """Anlegen eines neuen User-Objekts"""
+        """Anlegen eines neuen Favorite-Objekts"""
 
         adm = ShoppingAdministration()
 
-        proposal = User.from_dict(api.payload)
+        proposal = Favorite.from_dict(api.payload)
 
         if proposal is not None:
-            x = adm.create_user(proposal.get_name(), proposal.get_email(), proposal.get_external_id())
+            x = adm.create_favorite(proposal.get_retailer_id(), proposal.get_amount(), proposal.get_unit(),
+                                    proposal.get_article())  # todo unfilled konnten problem nicht lösen
             return x, 200
         else:
             return '', 500
 
 
-@ikauf.route('/user/<int:id>')
-@ikauf.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
-@ikauf.param('id', 'Die ID des User-Objekts')
-class UserOperations(Resource):
-    @ikauf.marshal_with(user)
-    @secured
-    def get(self, id):
-        """Auslesen eines bestimmten User-Objekts.
+@ikauf.route('favorite-by-group/<int:favoriteId>')
+@ikauf.response(500, 'Falls Server-seitiger Fehler')
+@ikauf.param('id', 'ID des Favorite-Objektes')
+class FavoriteByGroupOperations(Resource):
+    @ikauf.marshal_with(favorite)
+    def get(self, group_id):
+        """Auslesen eines bestimmten Favorite-Objekts"""
 
-        Das auszulesende Objekt wird durch die ```id``` in dem URI bestimmt.
-        """
         adm = ShoppingAdministration()
-        cust = adm.get_user_by_id(id)
-        return cust
+        a = adm.get_favorite_by_group(group_id)
+        return a
+
+
+@ikauf.route('favorite-by-id/<int:favoriteId>')
+@ikauf.response(500, 'Falls Server-seitiger Fehler')
+@ikauf.param('id', 'ID des Favorite-Objektes')
+class FavoriteOperations(Resource):
+    @ikauf.marshal_with(favorite)
+    def get(self, id):
+        """Auslesen eines bestimmten Favorite-Objekts"""
+
+        adm = ShoppingAdministration()
+        a = adm.get_favorite_by_id(id)
+        return a
 
     def delete(self, id):
-        """Löschen eines bestimmten User-Objekts.
+        """Löschen eines bestimmten Favorite-Objekts"""
 
-        Das zu löschende Objekt wird durch die ```id``` in dem URI bestimmt.
-        """
         adm = ShoppingAdministration()
-        cust = adm.get_user_by_id(id)
-        adm.delete_user(cust)
+        a = adm.get_favorite_by_id(id)
+        adm.delete_favorite_by_id(a)
         return '', 200
 
-    @ikauf.marshal_with(user)
-    @ikauf.expect(user, validate=True)
-    @secured
+    @ikauf.marshal_with(favorite)
+    @ikauf.expect(favorite, validate=True)
     def put(self, id):
-        """Update eines bestimmten User-Objekts.
+        """Update eines bestimmten Favorite-Objekts."""
 
-        **ACHTUNG:** Relevante id ist die id, die mittels URI bereitgestellt und somit als Methodenparameter
-        verwendet wird. Dieser Parameter überschreibt das ID-Attribut des im Payload der Anfrage übermittelten
-        Customer-Objekts.
-        """
         adm = ShoppingAdministration()
-        c = User.from_dict(api.payload)
+        a = Favorite.from_dict(api.payload)
 
-        if c is not None:
-            """Hierdurch wird die id des zu überschreibenden (vgl. Update) Customer-Objekts gesetzt.
-            Siehe Hinweise oben.
-            """
-            c.set_id(id)
-            adm.save_user(c)
+        if a is not None:
+            a.set_id(id)
+            adm.save_favorite(a)
             return '', 200
         else:
             return '', 500
-
-
-@ikauf.route('/user-by-name/<string:name>')
-@ikauf.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
-@ikauf.param('name', 'Der Name des Kunden')
-class UserByNameOperations(Resource):
-    @ikauf.marshal_with(user)
-    @secured
-    def get(self, name):
-        """ Auslesen von User-Objekten, die durch den Namen bestimmt werden.
-
-        Die auszulesenden Objekte werden durch ```name``` in dem URI bestimmt.
-        """
-        adm = ShoppingAdministration()
-        cust = adm.get_user_by_name(name)
-        return cust
-
-
-@ikauf.route('/user-by-email/<string:email>')
-@ikauf.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
-@ikauf.param('email', 'Die Email des User')
-class UserByEmailOperations(Resource):
-    @ikauf.marshal_with(user)
-    @secured
-    def get(self, email):
-        """ Auslesen von User-Objekten, die durch die E-Mail bestimmt werden.
-
-        Die auszulesenden Objekte werden durch ```email``` in dem URI bestimmt.
-        """
-        adm = ShoppingAdministration()
-        cust = adm.get_user_by_email(email)
-        return cust
-
-
-@ikauf.route('/user-by-external_id/<string:id>')
-@ikauf.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
-@ikauf.param('id', 'Die External ID des User')
-class UserByExternalIdOperations(Resource):
-    @ikauf.marshal_with(user)
-    @secured
-    def get(self, id):
-        """ Auslesen von User-Objekten, die durch die E-Mail bestimmt werden.
-
-        Die auszulesenden Objekte werden durch ```email``` in dem URI bestimmt.
-        """
-        adm = ShoppingAdministration()
-        cust = adm.get_user_by_external_id(id)
-        return cust
-
-
-@ikauf.route('/group-membership-delete/<int:group_membership><int:member>')
-@ikauf.response(500, 'Falls Server-seitiger Fehler')
-@ikauf.param('group_membership', 'ID des Membership-Objetks')
-@ikauf.param('member', 'ID des Member-Objekts')
-class DeleteGroupMembershipOperations(Resource):
-    @ikauf.marshal_with(group_member)
-    def delete(self, group_membership, member):
-        """Löschen eines bestimmten Group-Membership-Objekts"""
-
-        adm = ShoppingAdministration()
-        adm.delete_group_membership(group_membership, member)
-        return '', 200
 
 
 """
@@ -245,6 +183,4 @@ Um dies zu testen muss, wie in der VL eine Db in Python vorliegen.
 """
 
 if __name__ == '__main__':
-        adm = ShoppingAdministration()
-        x = adm.delete_group_membership(11,11)
-        print(x)
+    app.run(debug=True)

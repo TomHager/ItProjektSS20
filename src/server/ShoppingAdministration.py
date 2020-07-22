@@ -349,13 +349,18 @@ class ShoppingAdministration(object):
     Favorite-spezifische Methoden
     """
 
-    def create_favorite(self, favorite_id, amount, article, unit):
+    def create_favorite(self, favorite_id, amount, article, unit, retailer_id, group_id):
         """Favorite Objekte erzeugen."""
         favorite = Favorite()
         favorite.set_amount(amount)
         favorite.set_unit(unit)
         favorite.set_article(article)
-        favorite.set_id(favorite_id)  # todo so richtig?
+        favorite.set_id(favorite_id)
+        favorite.set_retailer_id(retailer_id)
+        favorite.set_group_id(group_id)
+
+        with FavoriteMapper() as mapper:
+            return mapper.insert()
 
     def get_all_favorits(self):
         """Alle Favorite Objekte auslesen."""
@@ -366,6 +371,11 @@ class ShoppingAdministration(object):
         """Favorite Objekt mit übergebener favorit-id auslesen."""
         with FavoriteMapper() as mapper:
             return mapper.find_by_key(favorite_id)
+
+    def get_favorite_by_group(self, favorite_id):
+        """Favorite Objekt mit übergebener favorit-id auslesen."""
+        with FavoriteMapper() as mapper:
+            return mapper.find_favorite_by_group(favorite_id)
 
     def delete_favorite_by_id(self, favorite_id):
         """gegebenes Favorite Objekt löschen."""

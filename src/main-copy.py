@@ -805,6 +805,19 @@ Klassen und Operationen für Favorite
 """
 
 
+@ikauf.route('favorite-by-id/<int:favoriteId>')
+@ikauf.response(500, 'Falls Server-seitiger Fehler')
+@ikauf.param('id', 'ID des Favorite-Objektes')
+class FavoriteByGroupOperations(Resource):
+    @ikauf.marshal_with(favorite)
+    def get(self, group_id):
+        """Auslesen eines bestimmten Favorite-Objekts"""
+
+        adm = ShoppingAdministration()
+        a = adm.get_favorite_by_group(group_id)
+        return a
+
+
 @ikauf.route('/favorite')
 @ikauf.response(500, "Falls Server-seitiger Fehler")
 class FavoriteListOperations(Resource):
