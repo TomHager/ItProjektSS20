@@ -121,14 +121,6 @@ export default class App extends React.Component {
     firebase.auth().signInWithRedirect(provider);
   };
 
-  addUserToDatabase = () => {
-    const newUser = new UserBO();
-    newUser.setExternalId(firebase.auth().currentUser.uid);
-    newUser.setName(firebase.auth().currentUser.displayName);
-    newUser.setEmail(firebase.auth().currentUser.email);
-    ShoppingAPI.getAPI().addUser(newUser);
-  };
-
   /**
    * Lifecycle method, which is called when the component gets inserted into the browsers DOM.
    * Initializes the firebase SDK.

@@ -433,7 +433,6 @@ export default class ShoppingAPI {
     return this.#fetchAdvanced(this.#searchUserByEmailURL(email)).then(
       (responseJSON) => {
         let responseUserBO = UserBO.fromJSON(responseJSON);
-        console.info(responseUserBO);
         return new Promise(function (resolve) {
           resolve(responseUserBO);
         });

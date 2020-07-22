@@ -24,7 +24,6 @@ export default class Testing extends Component {
       .then((returnedUser) => {
         return this.setState({ user: returnedUser });
       });
-    console.log(this.state.user);
   };
 
   addUserToDatabase = () => {
@@ -32,8 +31,27 @@ export default class Testing extends Component {
     newUser.setExternalId(firebase.auth().currentUser.uid);
     newUser.setName(firebase.auth().currentUser.displayName);
     newUser.setEmail(firebase.auth().currentUser.email);
-    ShoppingAPI.getAPI().addUser(newUser);
+    ShoppingAPI.getAPI()
+      .addUser(newUser)
+      .catch((e) => {
+        console.info(e);
+      });
   };
+
+  deleteUser = () => {
+    ShoppingAPI.getAPI().deleteUser(5);
+  };
+
+  updateUser = () => {
+    const newUser = this.state.user;
+    newUser[0].setName('Nemesis');
+    ShoppingAPI.getAPI().updateUser(newUser[0]);
+    console.log(newUser);
+  };
+
+  componentDidMount() {
+    this.getUsers();
+  }
 
   // getUsersByName = () => {
   //   ShoppingAPI.getAPI()
@@ -66,8 +84,9 @@ export default class Testing extends Component {
   // }
 
   render() {
+    this.addUserToDatabase();
     return (
-      <Button onClick={this.addUserToDatabase}>Display users</Button>
+      <Button onClick={this.updateUser}>Display users</Button>
       // <form onSubmit={this.handleSubmit}>
       //   <input type="text" name="name" onChange={this.handleChange} />
       //   <input type="email" name="email" onChange={this.handleChange} />

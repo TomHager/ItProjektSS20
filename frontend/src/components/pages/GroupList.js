@@ -15,7 +15,6 @@ import ManageGroup from '../dialogs/ManageGroup';
 import CreateGroup from '../dialogs/CreateGroup';
 import LeaveGroupAlert from '../dialogs/LeaveGroupAlert';
 import firebase from 'firebase/app';
-import 'firebase/auth';
 
 /**
  *
