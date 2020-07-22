@@ -226,7 +226,7 @@ class ShoppingAdministration(object):
         with EntryMapper() as mapper:
             return mapper.find_all()
 
-    def create_entry(self, entry1):  # todo prüfen
+    def create_entry(self, entry1):
         """Einen Entry anlegen."""
         entry = Entry()
         entry.set_unit(entry1)
@@ -244,7 +244,7 @@ class ShoppingAdministration(object):
         with EntryMapper() as mapper:
             return mapper.find_by_key(entry_id)
 
-    def get_entry_by_article(self, article):  # todo alle entrys oder nur einer?
+    def get_entry_by_article(self, article):
         """Auslesen aller Entry Objekte anhand des Artikel-ID´s"""
         with EntryMapper() as mapper:
             return mapper.find_entry_by_article(article)
@@ -302,45 +302,20 @@ class ShoppingAdministration(object):
         with RetailerGroupMapper() as mapper:
             return mapper.insert(retailer_group)
 
-    def get_retailer_by_group(self, group_id):
+    def get_retailer_by_group(self, retailer_group):
         with RetailerGroupMapper() as mapper:
-            return mapper.find_retailer_by_group(group_id)
-
-    def get_retailer_group_by_retailer(self, retailer):
-        with RetailerGroupMapper() as mapper:
-            return mapper.find_group_by_retailer(retailer)
-
-    def get_all_retailer_members(self):
-        with RetailerGroupMapper() as mapper:
-            return mapper.find_all()
-
-    def delete_retailer_group_member(self, ret_group):
-
-        with RetailerGroupMapper() as mapper:
-            retailer_group_member = mapper.find_by_key(ret_group)
-
-        if not (retailer_group_member is None):
-            for r in retailer_group_member:
-                mapper.delete(r)
+            return mapper.find_retailer_by_group(retailer_group)
 
     def get_group_by_retailer(self, retailer_id):
 
         with RetailerGroupMapper() as mapper:
             return mapper.find_group_by_retailer(retailer_id)
 
-    def save_retailer_group(self, retailer_group):
-        """Update eines Retailers innerhalb einer Gruppe"""  # todo Richtig beschrieben?
-        with RetailerGroupMapper() as mapper:
-            mapper.update(retailer_group)
-
-    def delete_retailer_by_group(self, retailer_group_id):
+    def delete_retailer_group(self, retailer_group, retailer_member):
         """gegebenen retailer der Gruppe löschen."""
         with RetailerGroupMapper() as mapper:
-            retailer_group = self.get_retailer_by_group(retailer_group_id)
+            mapper.delete2(retailer_group, retailer_member)
 
-        if not (retailer_group is None):
-            for e in retailer_group:
-                mapper.delete(e)
     """
     GroupMember-spezifische Methoden
     """

@@ -18,6 +18,8 @@ from server.bo.RetailerGroup import RetailerGroup
 # selbstgeschriebener Decorator, übernimmt Authentifikation
 from SecurityDecorater import secured
 
+#Datetime importieren
+import datetime
 """
 Instanzieren von Flask. Am Ende dieser Datei erfolgt dann erst der 'Start' von Flask.
 """
@@ -87,44 +89,28 @@ shopping_list = api.inherit('ShoppingList', bo, {
     'groups_id': fields.Integer(attribute='_groups_id', discription='ID einer Gruppe')
 })
 
-retailer_group = api.inherit('RetailerGroup', {
+retailer_groups = api.inherit('RetailerGroup', {
     'retailer_member': fields.Integer(attribute='_retailer_member', description='Retailer ID'),
-    'retailer_group': fields.Integer(attribute='_retailer_group', description='Retailer Gruppe'),
+    'retailer_group': fields.Integer(attribute='_retailer_group',
+                                     description='Retailer Gruppe'),
 })
 
 
-@ikauf.route('/retailer-by-group/<int:retailer_group>')
-@ikauf.route(500, 'Falls Server-seitiger Fehler')
-@ikauf.param('retailer_group', 'ID des RetailerGroup-Objekts')
-class RetailerGroupOperations(Resource):
-    @ikauf.marshal_with(retailer_group)
-    def get(self, retailer_group_id):
-        adm = ShoppingAdministration()
-        a = adm.get_retailer_by_id(retailer_group_id)
-        return a
-
-    def delete(self, id):
-        """Löschen eines bestimmten RetailerGroup-Objekts"""
+@ikauf.route('/retailer-group-delete/<int:id><int:id2>')
+@ikauf.response(500, 'Falls Server-seitiger Fehler')
+@ikauf.param('id', 'ID des ShoppingList-Objekts')
+@ikauf.param('id2', 'ID des ShoppingList-Objekts')
+class ShoppingListOperations(Resource):
+    @ikauf.marshal_with(retailer_groups)
+    def delete(self, id, id2):
+        """Löschen eines bestimmten ShoppingList-Objekts"""
 
         adm = ShoppingAdministration()
-        a = adm.get_retailer_by_group(id)
-        adm.delete_retailer_by_group(a)
+        sl = adm.get_retailer_by_group(id)
+        rm = adm.get_group_by_retailer(id2)
+        adm.delete_retailer_group(sl, rm)
         return '', 200
 
-    @ikauf.marshal_with(retailer_group)
-    @ikauf.expect(retailer_group, validate=True)
-    def put(self, id):
-        """Update eines bestimmten RetailerGroup-Objekts."""
-
-        adm = ShoppingAdministration()
-        a = RetailerGroup.from_dict(api.payload)
-
-        if a is not None:
-            a.set_id(id)
-            adm.save_retailer_group(a)
-            return '', 200
-        else:
-            return '', 500
 
 
 """
