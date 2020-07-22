@@ -37,12 +37,12 @@ export default class GroupList extends Component {
   }
 
   //Group Functions
-  async fetchGroups() {
-    const res = await fetch('http://DESKTOP-S3RCLLP:8081/api/iKauf/groups');
-    const resjson = await res.json();
-    this.setState({ groupRows: resjson });
-    console.log(this.state.groupRows);
-  }
+  // async fetchGroups() {
+  //   const res = await fetch('http://DESKTOP-S3RCLLP:8081/api/iKauf/groups');
+  //   const resjson = await res.json();
+  //   this.setState({ groupRows: resjson });
+  //   console.log(this.state.groupRows);
+  // }
 
   getCurrUser = () => {
     console.log('Eingeloggter User:', firebase.auth().currentUser.displayName);
@@ -84,10 +84,10 @@ export default class GroupList extends Component {
   };
 
   //calls all Callbacks for Repor Selection
-  componentDidMount = () => {
-    this.fetchGroups();
-    console.log('All Callbacks initialised');
-  };
+  // componentDidMount = () => {
+  //   this.fetchGroups();
+  //   console.log('All Callbacks initialised');
+  // };
 
   render() {
     const groupRows = this.state.groupRows;

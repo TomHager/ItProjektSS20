@@ -26,7 +26,7 @@ class Mapper(AbstractContextManager, ABC):
 
             self._cnx = connector.connect(user='root', password='root',
                                           host='127.0.0.1',
-                                          database='itprojektss20')
+                                          database='it projekt ss20')
 
         return self
 
@@ -51,8 +51,4 @@ class Mapper(AbstractContextManager, ABC):
 
     @abstractmethod
     def delete(self, object):
-        pass
-
-    @abstractmethod
-    def delete2(self, object, object2):
         pass

@@ -112,7 +112,8 @@ class ShoppingAdministration(object):
     def get_groups_of_user(self, user):
         """Alle Groups des gegebenen Usser auslesen."""
         with GroupMapper() as mapper:
-            return mapper.find_by_key(user.get_id())  # Vorsicht: nicht geprüft! #todo nochmal anschauen groupmembership
+            # Vorsicht: nicht geprüft! #todo nochmal anschauen groupmembership
+            return mapper.find_by_key(user.get_id())
 
     def get_all_groups(self):
         """Alle Gruppen Objekte auslesen."""
@@ -201,7 +202,8 @@ class ShoppingAdministration(object):
         with ShoppingListMapper() as mapper:
             mapper.delete(shoppinglist)
 
-    def get_shopping_list_by_name(self, shopping_list_name):  # todo nicht fertig bzw iwas fehlt
+    # todo nicht fertig bzw iwas fehlt
+    def get_shopping_list_by_name(self, shopping_list_name):
         """ShoppingList mit übergebenem shopping-list-name auslesen."""
 
         with ShoppingListMapper() as mapper:
@@ -359,7 +361,8 @@ class ShoppingAdministration(object):
     def delete_member_of_group_membership(self, group_membership):
         """gegebenen Member der Gruppe löschen."""
         with RetailerGroupMapper() as mapper:
-            member_group = self.get_member_by_group_membership(group_membership)
+            member_group = self.get_member_by_group_membership(
+                group_membership)
 
         if not (member_group is None):
             for m in member_group:
