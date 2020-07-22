@@ -95,24 +95,99 @@ retailer_groups = api.inherit('RetailerGroup', {
                                      description='Retailer Gruppe'),
 })
 
+group_member = api.inherit('GroupMember', {
+    'member': fields.Integer(attribute='_member', description='User ID'),
+    'group_membership': fields.Integer(attribute='_group_membership',
+                                 description='Gruppen ID'),
+})
 
-@ikauf.route('/retailer-group-delete/<int:id><int:id2>')
+
+@ikauf.route('/group-membership-delete/<int:group_membership><int:member>')
 @ikauf.response(500, 'Falls Server-seitiger Fehler')
-@ikauf.param('id', 'ID des ShoppingList-Objekts')
-@ikauf.param('id2', 'ID des ShoppingList-Objekts')
-class ShoppingListOperations(Resource):
-    @ikauf.marshal_with(retailer_groups)
-    def delete(self, id, id2):
-        """Löschen eines bestimmten ShoppingList-Objekts"""
+@ikauf.param('group_membership', 'ID des Membership-Objetks')
+@ikauf.param('member', 'ID des Member-Objekts')
+class DeleteGroupMembershipOperations(Resource):
+    @ikauf.marshal_with(group_member)
+    def delete(self, group_membership, member):
+        """Löschen eines bestimmten Group-Membership-Objekts"""
 
         adm = ShoppingAdministration()
-        sl = adm.get_retailer_by_group(id)
-        rm = adm.get_group_by_retailer(id2)
-        adm.delete_retailer_group(sl, rm)
+        adm.delete_group_membership(group_membership, member)
         return '', 200
 
 
+@ikauf.route('/create_group_membership')
+@ikauf.response(500, "Falls Server-seitiger Fehler")
+class GroupMembershipListOperations(Resource):
+    def post(self):
+        """Anlegen eines neuen Group-Membership-Objekts für einen gegebene Group"""
 
+        adm = ShoppingAdministration()
+
+        gms = adm.get_member_by_group_membership(id)
+
+        if gms is not None:
+            x = adm.create_group_membership(gms)
+            return x, 200
+        else:
+            return 'GroupMembership unknown',
+
+
+@ikauf.route('/groupmembership-by-member/<int:member>')
+@ikauf.response(500, 'Falls Server-seitiger Fehler')
+@ikauf.param('member', 'Member-Obkjekt des zugehörigen Gruppmembership-Objekts')
+class GroupMembershipRelatedByMemberOperations(Resource):
+    @ikauf.marshal_with(group_member)
+    def get(self, member):
+        """Auslesen eines bestimmten Retailer-Objekts nach Gruppe"""
+
+        adm = ShoppingAdministration()
+        gms = adm.get_group_membership_by_member(member)
+        return gms
+
+
+@ikauf.route('/member-by-groupmembership/<int:group_membership>')
+@ikauf.response(500, 'Falls Server-seitiger Fehler')
+@ikauf.param('group_membership', 'Gruppmembership-Obkjekt des zugehörigen Member-Objekts')
+class MemberRelatedByGroupMembershipOperations(Resource):
+    @ikauf.marshal_with(group_member)
+    def get(self, group_membership):
+        """Auslesen eines bestimmten Retailer Member-Objekts nach Retailer"""
+
+        adm = ShoppingAdministration()
+        mem = adm.get_member_by_group_membership(group_membership)
+        return mem
+
+
+@ikauf.route('/retailer-by-group')
+@ikauf.response(500, "Falls Server-seitiger Fehler")
+class RetailerGroupListOperations(Resource):
+    def post(self):
+        """Anlegen eines neuen Retailer-Objekts für einen gegebene Group"""
+
+        adm = ShoppingAdministration()
+
+        r = adm.get_retailer_by_group(id)
+
+        if r is not None:
+            x = adm.create_retailer(r)
+            return x, 200
+        else:
+            return 'Group unknown',
+
+
+@ikauf.route('/retailer-group-delete/<int:retailer_group><int:retailer_member>')
+@ikauf.response(500, 'Falls Server-seitiger Fehler')
+@ikauf.param('retailer_group', 'ID des RetailerGroup-Objetks')
+@ikauf.param('retailer_member', 'ID des RetailerMember-Objekts')
+class DeleteRetailerGroupOperations(Resource):
+    @ikauf.marshal_with(retailer_groups)
+    def delete(self, retailer_group, retailer_member):
+        """Löschen eines bestimmten ShoppingList-Objekts"""
+
+        adm = ShoppingAdministration()
+        adm.delete_retailer_group(retailer_group, retailer_member)
+        return '', 200
 """
 Start der main.py um zu testen ob es funktioniert (in der lokalen Entwicklerumgebung).
 Um dies zu testen muss, wie in der VL eine Db in Python vorliegen.

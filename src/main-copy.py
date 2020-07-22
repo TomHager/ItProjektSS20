@@ -95,7 +95,7 @@ favorite = api.inherit('Favorite', bo, {
     'article': fields.Integer(attribute='article', description='ID eines Artikels')
 })
 
-retailer_group = api.inherit('RetailerGroup', bo, {
+retailer_groups = api.inherit('RetailerGroup', bo, {
     'retailer_member': fields.Integer(attribute='_retailer_member', description='Retailer ID'),
     'retailer_group': fields.Integer(attribute='_retailer_group',
                                      description='Retailer Gruppee'),
@@ -663,62 +663,49 @@ class ShoppingListRelatedByGroupIdOperations(Resource):
 
 
 """
-Klassen und Operationen für GroupMembership
+Klassen und Operationen für RetailerGroup
 """
 
 
-@ikauf.route('/retailer-by-group/<int:retailer_group')
-@ikauf.route(500, 'Falls Server-seitiger Fehler')
-@ikauf.param('retailer_group', 'ID des RetailerGroup-Objekts')
-class RetailerGroupOperations(Resource):
-    @ikauf.marshal_with(retailer_group)
-    @secured
-    def delete(self, id):
-        """Löschen eines bestimmten RetailerGroup-Objekts"""
-
-        adm = ShoppingAdministration()
-        a = adm.get_retailer_by_group(id)
-        adm.delete_retailer_by_group(a)
-        return '', 200
-
-@ikauf.route('/retailer-by-group/<int:retailer_group')
-@ikauf.route('/retailer-by-group/<int:retailer_member')
-@ikauf.route(500, 'Falls Server-seitiger Fehler')
-@ikauf.param('retailer_group', 'ID des RetailerGroup-Objekts')
-class RetailerGroupOperations(Resource):
+@ikauf.route('/retailer-group-delete/<int:retailer_group><int:retailer_member>')
+@ikauf.response(500, 'Falls Server-seitiger Fehler')
+@ikauf.param('retailer_group', 'ID des RetailerGroup-Objetks')
+@ikauf.param('retailer_member', 'ID des RetailerMember-Objekts')
+class DeleteRetailerGroupOperations(Resource):
     @ikauf.marshal_with(retailer_groups)
-    def delete(self, retailer_groups, retailer_member):
-        """Löschen eines bestimmten RetailerGroup-Objekts"""
+    @secured
+    def delete(self, retailer_group, retailer_member):
+        """Löschen eines bestimmten ShoppingList-Objekts"""
 
         adm = ShoppingAdministration()
-        rg = adm.get_retailer_by_group(retailer_groups)
-        rm = adm.get_group_by_retailer(retailer_member)
-        adm.delete_retailer_by_group(rg, rm)
+        adm.delete_retailer_group(retailer_group, retailer_member)
         return '', 200
+
 
 @ikauf.route('/retailer-by-group')
 @ikauf.response(500, "Falls Server-seitiger Fehler")
 class RetailerGroupListOperations(Resource):
     @secured
-    def post(self):
+    def post(self, id):
         """Anlegen eines neuen Retailer-Objekts für einen gegebene Group"""
 
         adm = ShoppingAdministration()
 
-        r = adm.get_retailer_by_group(id) #todo stimmt id?
+        r = adm.get_retailer_by_group(id)
+        ret = adm.get_group_by_retailer(id)
 
-        if r is not None:
-            x = adm.create_retailer(r)
+        if (r, ret) is not None:
+            x = adm.create_retailer_group(r, ret)
             return x, 200
         else:
-            return 'Group unknown',
+            return 'RetailerGroup unknown',
 
 
 @ikauf.route('/retailer-member-by-group/<int:retailer_group>')
 @ikauf.response(500, 'Falls Server-seitiger Fehler')
-@ikauf.param('retailer_group', 'Gruppen-Objekt des zugehörigen RetailerEntryList-Objekts')
+@ikauf.param('retailer_group', 'RetailerGroup-Objekt des zugehörigen RetailerMembers-Objekts')
 class RetailerGroupRelatedByGroupOperations(Resource):
-    @ikauf.marshal_with(retailer_group)
+    @ikauf.marshal_with(retailer_groups)
     @secured
     def get(self, retailer_group):
         """Auslesen eines bestimmten Retailer-Objekts nach Gruppe"""
@@ -732,7 +719,7 @@ class RetailerGroupRelatedByGroupOperations(Resource):
 @ikauf.response(500, 'Falls Server-seitiger Fehler')
 @ikauf.param('retailer_member', 'Gruppen-Objekt des zugehörigen RetailerEntryList-Objekts')
 class RetailerGroupRelatedByRetailerOperations(Resource):
-    @ikauf.marshal_with(retailer_group)
+    @ikauf.marshal_with(retailer_groups)
     @secured
     def get(self, retailer_member):
         """Auslesen eines bestimmten Retailer Member-Objekts nach Retailer"""
@@ -747,88 +734,66 @@ Klassen und Operationen für GroupMembership
 """
 
 
-@ikauf.route('/group-membership')
-@ikauf.route(500, 'Falls Server-seitiger Fehler')
-@ikauf.param('id', 'ID des GroupMembership-Objekts')
-class GroupMembershipOperations(Resource):
+@ikauf.route('/group-membership-delete/<int:group_membership><int:member>')
+@ikauf.response(500, 'Falls Server-seitiger Fehler')
+@ikauf.param('group_membership', 'ID des Membership-Objetks')
+@ikauf.param('member', 'ID des Member-Objekts')
+class DeleteGroupMembershipOperations(Resource):
     @ikauf.marshal_with(group_member)
     @secured
-    def get(self, id):
-        """Auslesen eines bestimmten GroupMembership-Objekts"""
-        adm = ShoppingAdministration()
-        a = adm.get_member_by_group_membership(id)
-        return a
-
-    @secured
-    def delete(self, id):
-        """Löschen eines bestimmten GroupMembership-Objekts"""
+    def delete(self, group_membership, member):
+        """Löschen eines bestimmten Group-Membership-Objekts"""
 
         adm = ShoppingAdministration()
-        a = adm.get_member_by_group_membership(id)
-        adm.delete_member_of_group_membership(a)
+        adm.delete_group_membership(group_membership, member)
         return '', 200
 
-    @ikauf.marshal_with(group_member)
-    @ikauf.expect(group_member, validate=True)
-    @secured
-    def put(self, id):
-        """Update eines bestimmten GroupMembership-Objekts."""
 
-        adm = ShoppingAdministration()
-        a = GroupMembership.from_dict(api.payload)
-
-        if a is not None:
-            a.set_id(id)
-            adm.save_group_member_ship(a)
-            return '', 200
-        else:
-            return '', 500
-
-
-@ikauf.route('/group-membership')
+@ikauf.route('/create_group_membership')
 @ikauf.response(500, "Falls Server-seitiger Fehler")
 class GroupMembershipListOperations(Resource):
-    @ikauf.marshal_list_with(group_member)
     @secured
-    def get(self):
-        """Auslesen aller GroupMembership-Objekte"""
-
-        adm = ShoppingAdministration()
-        gms = adm.get_all_group_members()
-        return gms
-
-    @secured
-    def post(self):
-        """Anlegen eines neuen GroupMembership-Objekts für einen gegebene Group"""
+    def post(self, id):
+        """Anlegen eines neuen Group-Membership-Objekts für einen gegebene Group"""
 
         adm = ShoppingAdministration()
 
-        r = adm.get_member_by_group_membership(id)
-        x = adm.get_group_membership_by_member(id)
+        gms = adm.get_member_by_group_membership(id)
+        gms2 = adm.get_group_membership_by_member(id)
 
-        if r is not None:
-            x = adm.create_group_membership(r, x)
+        if gms is not None:
+            x = adm.create_group_membership(gms, gms2)
             return x, 200
         else:
-            return 'Group unknown', 500
+            return 'GroupMembership unknown',
 
 
-@ikauf.route('/groups-by-membership/int:id>')
-@ikauf.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
-@ikauf.param('userId', 'Das User Objekt')
-class GroupsByMembershipOperations(Resource):
-    @ikauf.marshal_with(group_member)
+@ikauf.route('/groupmembership-by-member/<int:member>')
+@ikauf.response(500, 'Falls Server-seitiger Fehler')
+@ikauf.param('member', 'Member-Obkjekt des zugehörigen Gruppmembership-Objekts')
+class GroupMembershipRelatedByMemberOperations(Resource):
     @secured
+    @ikauf.marshal_with(group_member)
     def get(self, member):
-        """ Auslesen von Gruppen-Objekten, die durch den User bestimmt werden.
+        """Auslesen eines bestimmten Retailer-Objekts nach Gruppe"""
 
-        Die auszulesenden Objekte werden durch ```user``` in dem URI bestimmt.
-        """
         adm = ShoppingAdministration()
-        cust = adm.get_group_by_user(member)
-        return cust
+        gms = adm.get_group_membership_by_member(member)
+        return gms
 
 
+@ikauf.route('/member-by-groupmembership/<int:group_membership>')
+@ikauf.response(500, 'Falls Server-seitiger Fehler')
+@ikauf.param('group_membership', 'Gruppmembership-Obkjekt des zugehörigen Member-Objekts')
+class MemberRelatedByGroupMembershipOperations(Resource):
+    @secured
+    @ikauf.marshal_with(group_member)
+    def get(self, group_membership):
+        """Auslesen eines bestimmten Retailer Member-Objekts nach Retailer"""
+
+        adm = ShoppingAdministration()
+        mem = adm.get_member_by_group_membership(group_membership)
+        return mem
 
 
 """

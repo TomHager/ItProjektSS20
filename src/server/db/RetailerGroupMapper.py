@@ -27,18 +27,6 @@ class RetailerGroupMapper(Mapper):
         """
 
         cursor = self._cnx.cursor()
-        cursor.execute("SELECT MAX(retailer_member) AS maxid FROM retailergroups ")
-        tuples = cursor.fetchall()
-        #testen
-        for (maxid) in tuples:
-            if maxid[0] is not None:
-                """Wenn wir eine maximale ID festellen konnten, zählen wir diese
-                um 1 hoch und weisen diesen Wert als ID dem User-Objekt zu."""
-                retailer_group.set_id(maxid[0] + 1)
-            else:
-                """Wenn wir KEINE maximale ID feststellen konnten, dann gehen wir
-                davon aus, dass die Tabelle leer ist und wir mit der ID 1 beginnen können."""
-                retailer_group.set_id(1)
 
         command = "INSERT INTO retailergroups (retailer_member, retailer_group) VALUES (%s,%s)"
         data = (retailer_group.get_retailer_member(), retailer_group.get_retailer_group())
@@ -48,7 +36,7 @@ class RetailerGroupMapper(Mapper):
         cursor.close()
         return retailer_group
 
-    def delete(self, retailer_group):
+    def delete2(self, retailer_group, retailer_member):
         """Löschen der Daten eines Gruppen-Objekts aus der Datenbank
 
         :param retailer_group das aus der DB zu löschende "Objekt"
@@ -57,22 +45,12 @@ class RetailerGroupMapper(Mapper):
         cursor = self._cnx.cursor()
 
         command = "DELETE FROM retailergroups WHERE retailer_group={} AND retailer_member={}"\
-            .format(retailer_group.get_retailer_group(), retailer_group.get_retailer_member())
+            .format(retailer_group, retailer_member)
         cursor.execute(command)
-        tuples = cursor.fetchall()
-
-        if tuples[0] is not None:
-            (retailer_member, retailer_group) = tuples[0]
-            retailer_group = RetailerGroup()
-            retailer_group.set_retailer_member(retailer_member)
-            retailer_group.set_retailer_group(retailer_group)
-
-            result = retailer_group
 
         self._cnx.commit()
         cursor.close()
 
-        return result
 
     def find_group_by_retailer(self, retailer_member):
         """Auslesen einer Gruppe anhand des Gruppennames.
@@ -110,7 +88,7 @@ class RetailerGroupMapper(Mapper):
 
         result = []
         cursor = self._cnx.cursor()
-        command = "SELECT * FROM retailergroups WHERE retailer_group={} ORDER BY retailer_group".format(retailer_group)
+        command = "SELECT * FROM retailergroups WHERE retailer_group={} ORDER BY retailer_group".format(retailer_group.get)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
@@ -125,11 +103,14 @@ class RetailerGroupMapper(Mapper):
 
         return result
 
-if __name__ == '__main__':
-    with RetailerGroupMapper() as mapper:
-        retailergroup = RetailerGroup()
-        retailergroup.set_retailer_member(5)
-        retailergroup.set_retailer_group(1)
-        print(retailergroup)
-        result = mapper.find_retailer_by_group(1)
-        print(result)
+    def update(self):
+        pass
+
+    def find_all(self):
+        pass
+
+    def find_by_key(self, key):
+        pass
+
+    def delete(self):
+        pass

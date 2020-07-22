@@ -324,7 +324,7 @@ class ShoppingAdministration(object):
         """Eine Group anlegen."""
         group_membership = GroupMembership()
         group_membership.set_member(user)
-        group_membership.set_membership(group)
+        group_membership.set_group_membership(group)
 
         with GroupMembershipMapper() as mapper:
             return mapper.insert(group_membership)
@@ -333,37 +333,17 @@ class ShoppingAdministration(object):
         with GroupMembershipMapper() as mapper:
             return mapper.find_user_by_group(group_membership)
 
-    def get_all_group_members(self):
-        with GroupMembershipMapper() as mapper:
-            return mapper.find_all()
 
-    def delete_group_membership(self, group_member):
+    def delete_group_membership(self, group_member, member):
 
         with GroupMembershipMapper() as mapper:
-            group_member_ship = mapper.find_by_key(group_member)
-
-        if not (group_member_ship is None):
-            for gms in group_member_ship:
-                mapper.delete(gms)
+            mapper.delete2(group_member, member)
 
     def get_group_membership_by_member(self, member):
 
         with GroupMembershipMapper() as mapper:
             return mapper.find_group_by_user(member)
 
-    def save_group_member_ship(self, group_member_ship):
-        """Update eines GroupMembers innerhalb einer Gruppe"""
-        with GroupMembershipMapper() as mapper:
-            mapper.update(group_member_ship)
-
-    def delete_member_of_group_membership(self, group_membership):
-        """gegebenen Member der Gruppe löschen."""
-        with RetailerGroupMapper() as mapper:
-            member_group = self.get_member_by_group_membership(group_membership)
-
-        if not (member_group is None):
-            for m in member_group:
-                mapper.delete(m)
 
     """
     Favorite-spezifische Methoden

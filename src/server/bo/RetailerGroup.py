@@ -10,8 +10,8 @@ class RetailerGroup(group.Group, retailer.Retailer):
 
     def __init__(self):
         super().__init__()
-        self._retailer_member = 0
-        self._retailer_group = 0
+        self._retailer_member = ""
+        self._retailer_group = ""
 
     def get_retailer_member(self):
         return self._retailer_member
