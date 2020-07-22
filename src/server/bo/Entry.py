@@ -15,7 +15,7 @@ class Entry(bo.BusinessObject):
         self._shopping_list_id = ""
         self.user_id = ""
         self.retailer_id = ""
-        self.bought = ""
+        self.bought = 0
         self._retailer_id = ""
 
     def get_unit(self):

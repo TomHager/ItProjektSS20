@@ -88,7 +88,7 @@ class EntryMapper(Mapper):
         cursor = self._cnx.cursor()
 
         command = "UPDATE entries " + "SET unit=%s, amount=%s, article=%s, modification_date=%s, user_id=%s, " \
-                                    "retailer_id=%s, shopping_list_id=%s, bought=%s WHERE id=%s"
+                                      "retailer_id=%s, shopping_list_id=%s, bought=%s WHERE id=%s"
         data = (entry.get_id(), entry.get_unit(), entry.get_amount(), entry.get_article,
                 entry.set_modification_date(datetime.now()), entry.get_user_id(), entry.get_retailer_id(),
                 entry.get_shopping_list_id(), entry.get_bought())
@@ -376,16 +376,21 @@ class EntryMapper(Mapper):
 
         return result
 
-    def find_entry_by_bought(self, bought):
-        """Auslesen aller Benutzer anhand der zugeordneten E-Mail-Adresse.
+    def get_report_data(self, groups_id, modification_date_from, modification_date_to):
+        """Suchen eines Eintrags mit vorgegebener ID. Da diese eindeutig ist,
+                        wird genau ein Objekt zurückgegeben.
 
-        :param bought E-Mail-Adresse der zugehörigen Benutzer.
-        :return Eine Sammlung mit User-Objekten, die sämtliche Benutzer
-            mit der gewünschten E-Mail-Adresse enthält.
-        """
+                        :param key Primärschlüsselattribut (->DB)
+                        :return Eintrag-Objekt, das dem übergebenen Schlüssel entspricht, None bei
+                            nicht vorhandenem DB-Tupel.
+                        """
+
         result = []
+
         cursor = self._cnx.cursor()
-        command = "SELECT * FROM entries WHERE bought LIKE '{}' ORDER BY bought".format(bought)
+        command = "SELECT * FROM entries WHERE groups_id={} AND bought=1 AND (modification_date " \
+                  "BETWEEN modification_date_from={} AND modification_date_to={})".format(groups_id, modification_date_from,
+                                                                                     modification_date_to)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
