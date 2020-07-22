@@ -101,17 +101,11 @@ export class CreateGroup extends Component {
 
   handleCreateGroup = (event) => {
     event.preventDefault();
-    console.log('Created Group : ' + this.state.groupName);
-    const url = 'http://desktop-s3rcllp:8081/api/iKauf/groups';
-    const data = { name: this.state.groupName };
-    fetch(url, {
-      method: 'POST', // or "POST"
-      body: JSON.stringify(data), // data can be `string` or {object}!
-      headers: { 'Content-Type': 'application/json' },
-    })
-      .then((res) => res.json())
-      .catch((error) => console.error('Error:', error))
-      .then((response) => console.log('Success:', response));
+    const newGroup = new GroupBO();
+    newGroup.setName(this.state.groupName);
+    ShoppingAPI.getAPI()
+      .addGroup(newGroup)
+      .then(console.log('Created group: ' + this.state.groupName));
   };
 
   render() {

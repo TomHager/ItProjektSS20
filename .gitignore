@@ -32,4 +32,5 @@ http-fake-backend/node_modules
 src/server/__pycache__
 src/server/bo/__pycache__
 src/server/db/__pycache__
+src/__pycache__
 

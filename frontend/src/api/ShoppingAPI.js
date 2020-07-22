@@ -1,12 +1,12 @@
-import EntryBO from "./EntryBO";
-import FavoriteBO from "./FavoriteBO";
-import GroupBO from "./GroupBO";
-import GroupMembershipBO from "./GroupMembershipBO";
-import RetailerBO from "./RetailerBO";
-import RetailerEntryListBO from "./RetailerEntryListBO";
-import RetailerGroupBO from "./RetailerGroupBO";
-import ShoppingListBO from "./ShoppingListBO";
-import UserBO from "./UserBO";
+import EntryBO from './EntryBO';
+import FavoriteBO from './FavoriteBO';
+import GroupBO from './GroupBO';
+import GroupMembershipBO from './GroupMembershipBO';
+import RetailerBO from './RetailerBO';
+import RetailerEntryListBO from './RetailerEntryListBO';
+import RetailerGroupBO from './RetailerGroupBO';
+import ShoppingListBO from './ShoppingListBO';
+import UserBO from './UserBO';
 
 /**
  * Abstracts the REST interface of the Python backend with convenient access methods.
@@ -20,7 +20,7 @@ export default class ShoppingAPI {
   // Singelton instance
   static #api = null;
 
-  #ShoppingServerBaseURL = "/iKauf";
+  #ShoppingServerBaseURL = 'http://127.0.0.1:5000/iKauf';
 
   // Entries related
   #getEntriesURL = () => `${this.#ShoppingServerBaseURL}/entries`;
@@ -121,15 +121,15 @@ export default class ShoppingAPI {
     `${this.#ShoppingServerBaseURL}/shoppinglist-by-name/${shoppinglistName}`;
 
   // User related
-  #getUsersURL = () => `${this.#ShoppingServerBaseURL}/users`;
+  #getUsersURL = () => `${this.#ShoppingServerBaseURL}/user`;
   #getUserURL = (id) => `${this.#ShoppingServerBaseURL}/users/${id}`;
   #addUserURL = () => `${this.#ShoppingServerBaseURL}/users`;
   #updateUserURL = (id) => `${this.#ShoppingServerBaseURL}/users/${id}`;
   #deleteUserURL = (id) => `${this.#ShoppingServerBaseURL}/users/${id}`;
-  #searchUserByNameURL = (userEmail) =>
-    `${this.#ShoppingServerBaseURL}/user-by-email/${userEmail}`;
-  #searchUserByEmailURL = (userName) =>
+  #searchUserByNameURL = (userName) =>
     `${this.#ShoppingServerBaseURL}/user-by-name/${userName}`;
+  #searchUserByEmailURL = (email) =>
+    `${this.#ShoppingServerBaseURL}/user-by-email/${email}`;
 
   static getAPI() {
     if (this.#api == null) {
@@ -148,12 +148,12 @@ export default class ShoppingAPI {
 
   // Entry Methoden
   getEntries() {
-    console.log("FETCH API");
+    console.log('FETCH API');
     return this.#fetchAdvanced(this.#getEntriesURL()).then((responseJSON) => {
       let entryBOs = EntryBO.fromJSON(responseJSON);
       // console.info(entryBOs);
       return new Promise(function (resolve) {
-        console.log("Failed");
+        console.log('Failed');
         resolve(entryBOs);
       });
     });
@@ -174,10 +174,10 @@ export default class ShoppingAPI {
 
   addEntry(entryBO) {
     return this.#fetchAdvanced(this.#addEntryURL(), {
-      method: "POST",
+      method: 'POST',
       headers: {
-        Accept: "application/json, text/plain",
-        "Content-type": "application/json",
+        Accept: 'application/json, text/plain',
+        'Content-type': 'application/json',
       },
       body: JSON.stringify(entryBO),
     }).then((responseJSON) => {
@@ -192,10 +192,10 @@ export default class ShoppingAPI {
 
   updateEntry(entryBO) {
     return this.#fetchAdvanced(this.#updateEntryURL(entryBO.getID()), {
-      method: "PUT",
+      method: 'PUT',
       headers: {
-        Accept: "application/json, text/plain",
-        "Content-type": "application/json",
+        Accept: 'application/json, text/plain',
+        'Content-type': 'application/json',
       },
       body: JSON.stringify(entryBO),
     }).then((responseJSON) => {
@@ -210,7 +210,7 @@ export default class ShoppingAPI {
 
   deleteEntry(entryId) {
     return this.#fetchAdvanced(this.#deleteEntryURL(entryId), {
-      method: "DELETE",
+      method: 'DELETE',
     }).then((responseJSON) => {
       // We always get an array of EntryBO.fromJSON
       let responseEntryBO = EntryBO.fromJSON(responseJSON)[0];
@@ -284,10 +284,10 @@ export default class ShoppingAPI {
 
   addGroup(groupBO) {
     return this.#fetchAdvanced(this.#addGroupURL(), {
-      method: "POST",
+      method: 'POST',
       headers: {
-        Accept: "application/json, text/plain",
-        "Content-type": "application/json",
+        Accept: 'application/json, text/plain',
+        'Content-type': 'application/json',
       },
       body: JSON.stringify(groupBO),
     }).then((responseJSON) => {
@@ -302,10 +302,10 @@ export default class ShoppingAPI {
 
   updateGroup(groupBO) {
     return this.#fetchAdvanced(this.#updateGroupURL(groupBO.getID()), {
-      method: "PUT",
+      method: 'PUT',
       headers: {
-        Accept: "application/json, text/plain",
-        "Content-type": "application/json",
+        Accept: 'application/json, text/plain',
+        'Content-type': 'application/json',
       },
       body: JSON.stringify(groupBO),
     }).then((responseJSON) => {
@@ -320,7 +320,7 @@ export default class ShoppingAPI {
 
   deleteGroup(groupId) {
     return this.#fetchAdvanced(this.#deleteGroupURL(groupId), {
-      method: "DELETE",
+      method: 'DELETE',
     }).then((responseJSON) => {
       // We always get an array of GroupBO.fromJSON
       let responseGroupBO = GroupBO.fromJSON(responseJSON)[0];
@@ -369,10 +369,10 @@ export default class ShoppingAPI {
 
   addUser(userBO) {
     return this.#fetchAdvanced(this.#addUserURL(), {
-      method: "POST",
+      method: 'POST',
       headers: {
-        Accept: "application/json, text/plain",
-        "Content-type": "application/json",
+        Accept: 'application/json, text/plain',
+        'Content-type': 'application/json',
       },
       body: JSON.stringify(userBO),
     }).then((responseJSON) => {
@@ -387,10 +387,10 @@ export default class ShoppingAPI {
 
   updateUser(userBO) {
     return this.#fetchAdvanced(this.#updateUserURL(userBO.getID()), {
-      method: "PUT",
+      method: 'PUT',
       headers: {
-        Accept: "application/json, text/plain",
-        "Content-type": "application/json",
+        Accept: 'application/json, text/plain',
+        'Content-type': 'application/json',
       },
       body: JSON.stringify(userBO),
     }).then((responseJSON) => {
@@ -405,7 +405,7 @@ export default class ShoppingAPI {
 
   deleteUser(userId) {
     return this.#fetchAdvanced(this.#deleteUserURL(userId), {
-      method: "DELETE",
+      method: 'DELETE',
     }).then((responseJSON) => {
       // We always get an array of UserBO.fromJSON
       let responseUserBO = UserBO.fromJSON(responseJSON)[0];
@@ -428,13 +428,14 @@ export default class ShoppingAPI {
     );
   }
 
-  searchUserByEmail(userEmail) {
-    return this.#fetchAdvanced(this.#searchUserByEmailURL(userEmail)).then(
+  searchUserByEmail(email) {
+    console.info('start');
+    return this.#fetchAdvanced(this.#searchUserByEmailURL(email)).then(
       (responseJSON) => {
-        let userBOs = UserBO.fromJSON(responseJSON);
-        // console.info(userBOs);
+        let responseUserBO = UserBO.fromJSON(responseJSON);
+        console.info(responseUserBO);
         return new Promise(function (resolve) {
-          resolve(userBOs);
+          resolve(responseUserBO);
         });
       }
     );
@@ -469,10 +470,10 @@ export default class ShoppingAPI {
 
   addShoppingList(shoppingListBO) {
     return this.#fetchAdvanced(this.#addShoppingListURL(), {
-      method: "POST",
+      method: 'POST',
       headers: {
-        Accept: "application/json, text/plain",
-        "Content-type": "application/json",
+        Accept: 'application/json, text/plain',
+        'Content-type': 'application/json',
       },
       body: JSON.stringify(shoppingListBO),
     }).then((responseJSON) => {
@@ -489,10 +490,10 @@ export default class ShoppingAPI {
     return this.#fetchAdvanced(
       this.#updateShoppingListURL(shoppingListBO.getID()),
       {
-        method: "PUT",
+        method: 'PUT',
         headers: {
-          Accept: "application/json, text/plain",
-          "Content-type": "application/json",
+          Accept: 'application/json, text/plain',
+          'Content-type': 'application/json',
         },
         body: JSON.stringify(shoppingListBO),
       }
@@ -508,7 +509,7 @@ export default class ShoppingAPI {
 
   deleteShoppingList(shoppingListId) {
     return this.#fetchAdvanced(this.#deleteShoppingListURL(shoppingListId), {
-      method: "DELETE",
+      method: 'DELETE',
     }).then((responseJSON) => {
       // We always get an array of ShoppingListBO.fromJSON
       let responseShoppingListBO = ShoppingListBO.fromJSON(responseJSON)[0];
@@ -570,10 +571,10 @@ export default class ShoppingAPI {
 
   addRetailer(retailerBO) {
     return this.#fetchAdvanced(this.#addRetailerURL(), {
-      method: "POST",
+      method: 'POST',
       headers: {
-        Accept: "application/json, text/plain",
-        "Content-type": "application/json",
+        Accept: 'application/json, text/plain',
+        'Content-type': 'application/json',
       },
       body: JSON.stringify(retailerBO),
     }).then((responseJSON) => {
@@ -588,10 +589,10 @@ export default class ShoppingAPI {
 
   updateRetailer(retailerBO) {
     return this.#fetchAdvanced(this.#updateRetailerURL(retailerBO.getID()), {
-      method: "PUT",
+      method: 'PUT',
       headers: {
-        Accept: "application/json, text/plain",
-        "Content-type": "application/json",
+        Accept: 'application/json, text/plain',
+        'Content-type': 'application/json',
       },
       body: JSON.stringify(RetailerBO),
     }).then((responseJSON) => {
@@ -606,7 +607,7 @@ export default class ShoppingAPI {
 
   deleteRetailer(retailerId) {
     return this.#fetchAdvanced(this.#deleteRetailerURL(retailerId), {
-      method: "DELETE",
+      method: 'DELETE',
     }).then((responseJSON) => {
       // We always get an array of RetailerBO.fromJSON
       let responseRetailerBO = RetailerBO.fromJSON(responseJSON)[0];
@@ -668,10 +669,10 @@ export default class ShoppingAPI {
 
   addFavorite(favoriteBO) {
     return this.#fetchAdvanced(this.#addFavoriteURL(), {
-      method: "POST",
+      method: 'POST',
       headers: {
-        Accept: "application/json, text/plain",
-        "Content-type": "application/json",
+        Accept: 'application/json, text/plain',
+        'Content-type': 'application/json',
       },
       body: JSON.stringify(favoriteBO),
     }).then((responseJSON) => {
@@ -686,10 +687,10 @@ export default class ShoppingAPI {
 
   updateFavorite(favoriteBO) {
     return this.#fetchAdvanced(this.#updateFavoriteURL(favoriteBO.getID()), {
-      method: "PUT",
+      method: 'PUT',
       headers: {
-        Accept: "application/json, text/plain",
-        "Content-type": "application/json",
+        Accept: 'application/json, text/plain',
+        'Content-type': 'application/json',
       },
       body: JSON.stringify(favoriteBO),
     }).then((responseJSON) => {
@@ -704,7 +705,7 @@ export default class ShoppingAPI {
 
   deleteFavorite(favoriteId) {
     return this.#fetchAdvanced(this.#deleteFavoriteURL(favoriteId), {
-      method: "DELETE",
+      method: 'DELETE',
     }).then((responseJSON) => {
       // We always get an array of FavoriteBO.fromJSON
       let responseFavoriteBO = FavoriteBO.fromJSON(responseJSON)[0];
@@ -746,10 +747,10 @@ export default class ShoppingAPI {
 
   addGroupMembership(groupMembershipBO) {
     return this.#fetchAdvanced(this.#addGroupMembershipURL(), {
-      method: "POST",
+      method: 'POST',
       headers: {
-        Accept: "application/json   , text/plain",
-        "Content-type": "application/json",
+        Accept: 'application/json   , text/plain',
+        'Content-type': 'application/json',
       },
       body: JSON.stringify(groupMembershipBO),
     }).then((responseJSON) => {
@@ -768,10 +769,10 @@ export default class ShoppingAPI {
     return this.#fetchAdvanced(
       this.#updateGroupMembershipURL(groupMembershipBO.getID()),
       {
-        method: "PUT",
+        method: 'PUT',
         headers: {
-          Accept: "application/json, text/plain",
-          "Content-type": "application/json",
+          Accept: 'application/json, text/plain',
+          'Content-type': 'application/json',
         },
         body: JSON.stringify(groupMembershipBO),
       }
@@ -791,7 +792,7 @@ export default class ShoppingAPI {
     return this.#fetchAdvanced(
       this.#deleteGroupMembershipURL(groupMembershipId),
       {
-        method: "DELETE",
+        method: 'DELETE',
       }
     ).then((responseJSON) => {
       // We always get an array of GroupMembershipBO.fromJSON
@@ -846,10 +847,10 @@ export default class ShoppingAPI {
 
   addRetailerGroup(retailerGroupBO) {
     return this.#fetchAdvanced(this.#addRetailerGroupURL(), {
-      method: "POST",
+      method: 'POST',
       headers: {
-        Accept: "application/json, text/plain",
-        "Content-type": "application/json",
+        Accept: 'application/json, text/plain',
+        'Content-type': 'application/json',
       },
       body: JSON.stringify(RetailerGroupBO),
     }).then((responseJSON) => {
@@ -866,10 +867,10 @@ export default class ShoppingAPI {
     return this.#fetchAdvanced(
       this.#updateRetailerGroupURL(retailerGroupBO.getID()),
       {
-        method: "PUT",
+        method: 'PUT',
         headers: {
-          Accept: "application/json, text/plain",
-          "Content-type": "application/json",
+          Accept: 'application/json, text/plain',
+          'Content-type': 'application/json',
         },
         body: JSON.stringify(retailerGroupBO),
       }
@@ -885,7 +886,7 @@ export default class ShoppingAPI {
 
   deleteRetailerGroup(retailerGroupId) {
     return this.#fetchAdvanced(this.#deleteRetailerGroupURL(retailerGroupId), {
-      method: "DELETE",
+      method: 'DELETE',
     }).then((responseJSON) => {
       // We always get an array of RetailerGroupBO.fromJSON
       let responseRetailerGroupBO = RetailerGroupBO.fromJSON(responseJSON)[0];
@@ -939,10 +940,10 @@ export default class ShoppingAPI {
 
   addRetailerEntryList(retailerEntryListBO) {
     return this.#fetchAdvanced(this.#addRetailerEntryListURL(), {
-      method: "POST",
+      method: 'POST',
       headers: {
-        Accept: "application/json, text/plain",
-        "Content-type": "application/json",
+        Accept: 'application/json, text/plain',
+        'Content-type': 'application/json',
       },
       body: JSON.stringify(retailerEntryListBO),
     }).then((responseJSON) => {
@@ -961,10 +962,10 @@ export default class ShoppingAPI {
     return this.#fetchAdvanced(
       this.#updateRetailerEntryListURL(retailerEntryListBO.getID()),
       {
-        method: "PUT",
+        method: 'PUT',
         headers: {
-          Accept: "application/json, text/plain",
-          "Content-type": "application/json",
+          Accept: 'application/json, text/plain',
+          'Content-type': 'application/json',
         },
         body: JSON.stringify(RetailerEntryListBO),
       }
@@ -984,7 +985,7 @@ export default class ShoppingAPI {
     return this.#fetchAdvanced(
       this.#deleteRetailerEntryListURL(retailerEntryListId),
       {
-        method: "DELETE",
+        method: 'DELETE',
       }
     ).then((responseJSON) => {
       // We always get an array of RetailerEntryListBO.fromJSON

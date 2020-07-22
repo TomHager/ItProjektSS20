@@ -9,14 +9,13 @@ import {
   Paper,
   // IconButton,
 } from '@material-ui/core';
-// import ShoppingAPI from "../../api/ShoppingAPI";
+import ShoppingAPI from '../../api/ShoppingAPI';
 import EditGroup from '../dialogs/EditGroup';
 import ManageGroup from '../dialogs/ManageGroup';
 import CreateGroup from '../dialogs/CreateGroup';
 import LeaveGroupAlert from '../dialogs/LeaveGroupAlert';
-// import firebase from 'firebase/app';
-// import 'firebase/auth';
-// import ShoppingAPI from '../../api/ShoppingAPI';
+import firebase from 'firebase/app';
+import 'firebase/auth';
 
 /**
  *
@@ -38,52 +37,57 @@ export default class GroupList extends Component {
   }
 
   //Group Functions
-  async fetchGroups() {
-    const res = await fetch('http://DESKTOP-S3RCLLP:8081/api/iKauf/groups');
-    const resjson = await res.json();
-    this.setState({ groupRows: resjson });
-    console.log(resjson);
-  }
+  // async fetchGroups() {
+  //   const res = await fetch('http://DESKTOP-S3RCLLP:8081/api/iKauf/groups');
+  //   const resjson = await res.json();
+  //   this.setState({ groupRows: resjson });
+  //   console.log(this.state.groupRows);
+  // }
 
-  // getCurrUser = () => {
-  //   console.log('eingeloggter User:', firebase.auth().currentUser);
-  //   console.log('usertoken:');
-  //   ShoppingAPI.getAPI()
-  //     .getUserByExternalId(firebase.auth().currentUser.uid)
-  //     .then((returnedUser) => {
-  //       return this.setState({ user: returnedUser }), this.getGroupsByUser();
-  //     });
-  // };
+  getCurrUser = () => {
+    console.log('Eingeloggter User:', firebase.auth().currentUser.displayName);
+    ShoppingAPI.getAPI()
+      .getUserByExternalId(firebase.auth().currentUser.uid)
+      .then((returnedUser) => {
+        return this.setState({ user: returnedUser }), this.getGroupsByUser();
+      });
+  };
 
-  // getGroupsByUserId = () => {
-  //   console.log('wir holen uns den User');
-  //   ShoppingAPI.getAPI()
-  //     .getGroupsByUserId(this.state.user.getID())
-  //     .then((returnedGroups) => return this.setState({groupRows: returnedGroups});
-  // };
+  getGroupsByUserId = () => {
+    console.log('Getting groups');
+    ShoppingAPI.getAPI()
+      .getGroupsByUserId(this.state.user.getID())
+      .then((returnedGroups) => {
+        return this.setState({ groupRows: returnedGroups });
+      });
+  };
 
-  // getGroupMembersByGroupId = () => {
-  //   console.log('get groupMembers');
-  //   ShoppingAPI.getAPI()
-  //     .getGroupMembership(this.state.group.getID())
-  //     .then((returnedMembers) => return this.setState({groupMembers: returnedMembers});
-  // };
+  getGroupMembersByGroupId = () => {
+    console.log('Get groupMembers');
+    ShoppingAPI.getAPI()
+      .getGroupMembership(this.state.group.getID())
+      .then((returnedMembers) => {
+        return this.setState({ groupMembers: returnedMembers });
+      });
+  };
 
-  // deleteGroupMembership = (groupID) => {
-  //   ShoppingAPI.getAPI()
-  //     .deleteGroupMembership(groupID)
-  //     .then(
-  //       this.setState({
-  //         groupRows: this.state.lists.filter((group) => group.getID() !== groupId),
-  //       })
-  //     );
-  // };
+  deleteGroupMembership = (groupID) => {
+    ShoppingAPI.getAPI()
+      .deleteGroupMembership(groupID)
+      .then(
+        this.setState({
+          groupRows: this.state.groupRows.filter(
+            (group) => group.getID() !== groupID
+          ),
+        })
+      );
+  };
 
   //calls all Callbacks for Repor Selection
-  componentDidMount = () => {
-    this.fetchGroups();
-    console.log('All Callbacks initialised');
-  };
+  // componentDidMount = () => {
+  //   this.fetchGroups();
+  //   console.log('All Callbacks initialised');
+  // };
 
   render() {
     const groupRows = this.state.groupRows;

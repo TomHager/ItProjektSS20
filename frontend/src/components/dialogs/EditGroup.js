@@ -1,13 +1,14 @@
-import React, { Component } from "react";
-import Button from "@material-ui/core/Button";
-import TextField from "@material-ui/core/TextField";
-import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import EditIcon from "@material-ui/icons/Edit";
-import IconButton from "@material-ui/core/IconButton";
+import React, { Component } from 'react';
+import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import EditIcon from '@material-ui/icons/Edit';
+import IconButton from '@material-ui/core/IconButton';
+import ShoppingAPI from '../../api/ShoppingAPI';
 // import ShoppingAPI from "../../api/ShoppingAPI";
 
 /**
@@ -22,7 +23,7 @@ export class EditGroup extends Component {
 
     this.state = {
       open: false,
-      newName: "",
+      newName: '',
     };
   }
 
@@ -55,17 +56,10 @@ export class EditGroup extends Component {
 
   handleUpdate = (event) => {
     event.preventDefault();
-    console.log("New group name : " + this.state.newName);
-    const url = "http://desktop-s3rcllp:8081/api/iKauf/groups";
-    const data = { name: this.state.newName };
-    fetch(url, {
-      method: "PUT", // or "POST"
-      body: JSON.stringify(data), // data can be `string` or {object}!
-      headers: { "Content-Type": "application/json" },
-    })
-      .then((res) => res.json())
-      .catch((error) => console.error("Error:", error))
-      .then((response) => console.log("Success:", response));
+    const updatedGroup = this.state.newName;
+    ShoppingAPI.getAPI()
+      .updateGroup(updatedGroup)
+      .catch((error) => console.error('Error:', error));
     console.log(this.state.newName);
   };
 
@@ -79,7 +73,7 @@ export class EditGroup extends Component {
       <div>
         <IconButton
           aria-label="Edit"
-          style={{ float: "right" }}
+          style={{ float: 'right' }}
           onClick={this.handleClickOpen}
         >
           <EditIcon />
@@ -106,7 +100,7 @@ export class EditGroup extends Component {
             <Button onClick={this.handleClose} color="primary">
               Cancel
             </Button>
-            <Button onClick={this.handleUpdate.bind(this)} color="primary">
+            <Button onClick={this.handleUpdate} color="primary">
               Submit
             </Button>
           </DialogActions>

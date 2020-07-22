@@ -20,6 +20,7 @@ import PersonIcon from '@material-ui/icons/Person';
 import DeleteIcon from '@material-ui/icons/Delete';
 import AddUser from '../subcomponents/AddUser';
 import { v4 as uuidv4 } from 'uuid';
+import UserBO from '../../api/UserBO';
 
 /**
  *
@@ -50,14 +51,14 @@ export class EditGroup extends Component {
 
   // }
 
-  async fetchGroups() {
+  async fetchUsers() {
     const res = await fetch('http://DESKTOP-S3RCLLP:8081/api/iKauf/users');
     const resjson = await res.json();
     this.setState({ users: resjson });
   }
 
   componentDidMount = () => {
-    this.fetchGroups();
+    this.fetchUsers();
     console.log('All Callbacks initialised');
   };
 
@@ -68,10 +69,8 @@ export class EditGroup extends Component {
   };
 
   addUser = (email) => {
-    const newUser = {
-      id: uuidv4(),
-      email,
-    };
+    const newUser = new UserBO();
+    newUser.setEmail(email);
     this.setState({ users: [...this.state.users, newUser] });
   };
 

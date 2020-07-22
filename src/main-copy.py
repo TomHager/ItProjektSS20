@@ -69,18 +69,18 @@ retailer = api.inherit('retailer', bo, {
 })
 
 entry = api.inherit('Entry', bo, {
-  'article': fields.String(attribute='_article', discription='Name eines Artikel'),
-  'unit': fields.String(attribute='_unit', discription='Name der Einheit'),
-  'amount': fields.Integer(attribute='_amount', discription='Menge eines Artikel'),
-  'modification_date': fields.DateTime(attribute='_modification_date', discription='Änderungsdatum der Entry'),
-  'user_id': fields.Integer(attribut='_user_id', description='Name eines Benutzers'),
-  'retailer_id': fields.Integer(attribute='_retailer_id', description='Name eines Verkäufers'),
-  'shopping_list_id': fields.Integer(attribute='_shopping_list_id', description='ID einer Shopping List'),
+    'article': fields.String(attribute='_article', discription='Name eines Artikel'),
+    'unit': fields.String(attribute='_unit', discription='Name der Einheit'),
+    'amount': fields.Integer(attribute='_amount', discription='Menge eines Artikel'),
+    'modification_date': fields.DateTime(attribute='_modification_date', discription='Änderungsdatum der Entry'),
+    'user_id': fields.Integer(attribut='_user_id', description='Name eines Benutzers'),
+    'retailer_id': fields.Integer(attribute='_retailer_id', description='Name eines Verkäufers'),
+    'shopping_list_id': fields.Integer(attribute='_shopping_list_id', description='ID einer Shopping List'),
 })
 
 shopping_list = api.inherit('ShoppingList', bo, {
-  'name': fields.String(attribute='_name', discription='Name einer Shoppingliste'),
-  'group_id': fields.Integer(attribute='_group_id', discription='ID einer Gruppe')
+    'name': fields.String(attribute='_name', discription='Name einer Shoppingliste'),
+    'group_id': fields.Integer(attribute='_group_id', discription='ID einer Gruppe')
 })
 
 article = api.inherit('Article', bo, {
@@ -430,7 +430,8 @@ class EntryListOperations(Resource):
         proposal = Entry.from_dict(api.payload)
 
         if proposal is not None:
-            x = adm.create_entry(proposal.get_entry_name()) #todo überlgen ob : prosposal.get_entry_list() sinn macht
+            # todo überlgen ob : prosposal.get_entry_list() sinn macht
+            x = adm.create_entry(proposal.get_entry_name())
             return x, 200
         else:
             return '', 500
@@ -530,7 +531,8 @@ class EntryRelatedByShoppingListOperations(Resource):
         e = adm.get_entry_by_shopping_list(shopping_list_id)
         return e
 
-@ikauf.route('/entry-by-bought/<tinyint:bought>')
+
+@ikauf.route('/entry-by-bought')
 @ikauf.response(500, 'Falls Server-seitiger Fehler')
 @ikauf.param('bought', 'ShoppingList des zugehörigen Entry-Objekts')
 class EntryRelatedByBoughtOperations(Resource):
@@ -544,18 +546,19 @@ class EntryRelatedByBoughtOperations(Resource):
         return e
 
 
-@ikauf.route('/entry-by-modification-date/<datetime:modification_date>')
-@ikauf.response(500, 'Falls Server-seitiger Fehler')
-@ikauf.param('modification_date', 'ModificationDate des zugehörigen Entry-Objekts')
-class EntryRelatedByModificationDateOperations(Resource):
-    @ikauf.marshal_with(entry)
-    @secured
-    def get(self, modification_date):
-        """Auslesen eines bestimmten Entry-Objekts nach Article"""
+# @ikauf.route('/entry-by-modification-date/<date:date>')
+# @ikauf.route('/entry-by-modification-date/<datetime:modification_date>')
+# @ikauf.response(500, 'Falls Server-seitiger Fehler')
+# @ikauf.param('modification_date', 'ModificationDate des zugehörigen Entry-Objekts')
+# class EntryRelatedByModificationDateOperations(Resource):
+#     @ikauf.marshal_with(entry)
+#     @secured
+#     def get(self, modification_date):
+#         """Auslesen eines bestimmten Entry-Objekts nach Article"""
 
-        adm = ShoppingAdministration()
-        e = adm.get_entry_by_modification_date(modification_date)
-        return e
+#         adm = ShoppingAdministration()
+#         e = adm.get_entry_by_modification_date(modification_date)
+#         return e
 
 
 """
@@ -584,7 +587,8 @@ class ShoppingListListOperations(Resource):
         prosposal = ShoppingList.from_dict(api.payload)
 
         if prosposal is not None:
-            x = adm.create_shopping_list(prosposal.get_shopping_list_name, prosposal.get_group_id())
+            x = adm.create_shopping_list(
+                prosposal.get_shopping_list_name, prosposal.get_group_id())
             return x, 200
         else:
             return '', 500
@@ -629,8 +633,8 @@ class ShoppingListOperations(Resource):
             return '', 500
 
 
-"""ShoppingListRealatedByIdOperations wird weggelassen, da das holen der shoppinglist bereits über 
-ShoppingListOperations realisiert wird. Deshalbt hat ShoppingListRealatedByIdOperations  keine 
+"""ShoppingListRealatedByIdOperations wird weggelassen, da das holen der shoppinglist bereits über
+ShoppingListOperations realisiert wird. Deshalbt hat ShoppingListRealatedByIdOperations  keine
 daseinberechtigung"""
 
 
@@ -821,8 +825,8 @@ class FavoriteListOperations(Resource):
         proposal = Favorite.from_dict(api.payload)
 
         if proposal is not None:
-            x = adm.create_favorite(proposal.get_favorit(), proposal.get_amount(), proposal.get_unit(),
-                                    proposal.get_article()) # todo unfilled konnten problem nicht lösen
+            x = adm.create_favorite(proposal.get_retailer_id(), proposal.get_amount(), proposal.get_unit(),
+                                    proposal.get_article())  # todo unfilled konnten problem nicht lösen
             return x, 200
         else:
             return '', 500
@@ -877,6 +881,6 @@ if __name__ == '__main__':
     app.run(debug=True)
 
 if __name__ == '__main__':
-        adm = ShoppingAdministration()
-        x = adm.create_user("dimi", "dimitrios","4545")
-        print(x)
+    adm = ShoppingAdministration()
+    x = adm.create_user("dimi", "dimitrios", "4545")
+    print(x)
