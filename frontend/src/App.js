@@ -1,19 +1,19 @@
-import React from "react";
-import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
+import React from 'react';
+import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
 // import { Container, ThemeProvider, CssBaseline } from '@material-ui/core';
-import Header from "./components/layout/Header";
-import Retailer from "./components/pages/Retailer";
-import GroupList from "./components/pages/GroupList";
-import Favorite from "./components/pages/Favorite";
-import ShoppingList from "./components/pages/ShoppingList";
-import Testing from "./components/pages/Testing";
+import Header from './components/layout/Header';
+import Retailer from './components/pages/Retailer';
+import GroupList from './components/pages/GroupList';
+import Favorite from './components/pages/Favorite';
+import ShoppingList from './components/pages/ShoppingList';
+import Testing from './components/pages/Testing';
 // import Register from "./components/layout/Register";
-import * as firebase from "firebase/app";
-import "firebase/auth";
-import "firebase/firestore";
+import * as firebase from 'firebase/app';
+import 'firebase/auth';
+import 'firebase/firestore';
 
 // import Theme from './Theme';
-import SignIn from "./components/pages/SignIn";
+import SignIn from './components/pages/SignIn';
 // import LoadingProgress from './components/dialogs/LoadingProgress';
 // import ContextErrorMessage from './components/dialogs/ContextErrorMessage';
 
@@ -31,13 +31,13 @@ import SignIn from "./components/pages/SignIn";
 export default class App extends React.Component {
   // Your web app's Firebase configuration
   #firebaseConfig = {
-    apiKey: "AIzaSyD498NU9OvpRyOx3P8BPXFwgZQTUpuI_2M",
-    authDomain: "ikauf-cd279.firebaseapp.com",
-    databaseURL: "https://ikauf-cd279.firebaseio.com",
-    projectId: "ikauf-cd279",
-    storageBucket: "ikauf-cd279.appspot.com",
-    messagingSenderId: "27804612844",
-    appId: "1:27804612844:web:ca587cb2195fde89c0cdc9",
+    apiKey: 'AIzaSyD498NU9OvpRyOx3P8BPXFwgZQTUpuI_2M',
+    authDomain: 'ikauf-cd279.firebaseapp.com',
+    databaseURL: 'https://ikauf-cd279.firebaseio.com',
+    projectId: 'ikauf-cd279',
+    storageBucket: 'ikauf-cd279.appspot.com',
+    messagingSenderId: '27804612844',
+    appId: '1:27804612844:web:ca587cb2195fde89c0cdc9',
   };
 
   /** Constructor of the app, which initializes firebase  */
@@ -95,7 +95,7 @@ export default class App extends React.Component {
         });
     } else {
       // User has logged out, so clear the id token
-      document.cookie = "token=;path=/";
+      document.cookie = 'token=;path=/';
 
       // Set the logged out user to null
       this.setState({
@@ -126,14 +126,14 @@ export default class App extends React.Component {
    */
   componentDidMount() {
     firebase.initializeApp(this.#firebaseConfig);
-    firebase.auth().languageCode = "en";
+    firebase.auth().languageCode = 'en';
     firebase.auth().onAuthStateChanged(this.handleAuthStateChange);
   }
 
   /** Renders the whole app */
   render() {
     return (
-      <div style={{ backgroundColor: "#f4f4f4" }}>
+      <div style={{ backgroundColor: '#f4f4f4' }}>
         <Router basename={process.env.PUBLIC_URL}>
           <Header user={this.state.currentUser} />
           {
