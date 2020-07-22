@@ -102,7 +102,7 @@ retailer_groups = api.inherit('RetailerGroup', bo, {
 })
 group_member = api.inherit('GroupMember', bo, {
     'member': fields.Integer(attribute='_member', description='User ID'),
-    'membership': fields.Integer(attribute='_membership',
+    'group_membership': fields.Integer(attribute='_group_membership',
                                  description='Gruppen ID'),
 })\
 

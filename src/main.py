@@ -102,6 +102,129 @@ group_member = api.inherit('GroupMember', {
 })
 
 
+@ikauf.route('/user')
+@ikauf.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+class UserListOperations(Resource):
+    @ikauf.marshal_list_with(user)
+    @secured
+    def get(self):
+        """Auslesen aller User-Objekte"""
+
+        adm = ShoppingAdministration()
+        user = adm.get_all_users()
+        return user
+
+    def post(self):
+        """Anlegen eines neuen User-Objekts"""
+
+        adm = ShoppingAdministration()
+
+        proposal = User.from_dict(api.payload)
+
+        if proposal is not None:
+            x = adm.create_user(proposal.get_name(), proposal.get_email(), proposal.get_external_id())
+            return x, 200
+        else:
+            return '', 500
+
+
+@ikauf.route('/user/<int:id>')
+@ikauf.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+@ikauf.param('id', 'Die ID des User-Objekts')
+class UserOperations(Resource):
+    @ikauf.marshal_with(user)
+    @secured
+    def get(self, id):
+        """Auslesen eines bestimmten User-Objekts.
+
+        Das auszulesende Objekt wird durch die ```id``` in dem URI bestimmt.
+        """
+        adm = ShoppingAdministration()
+        cust = adm.get_user_by_id(id)
+        return cust
+
+    def delete(self, id):
+        """Löschen eines bestimmten User-Objekts.
+
+        Das zu löschende Objekt wird durch die ```id``` in dem URI bestimmt.
+        """
+        adm = ShoppingAdministration()
+        cust = adm.get_user_by_id(id)
+        adm.delete_user(cust)
+        return '', 200
+
+    @ikauf.marshal_with(user)
+    @ikauf.expect(user, validate=True)
+    @secured
+    def put(self, id):
+        """Update eines bestimmten User-Objekts.
+
+        **ACHTUNG:** Relevante id ist die id, die mittels URI bereitgestellt und somit als Methodenparameter
+        verwendet wird. Dieser Parameter überschreibt das ID-Attribut des im Payload der Anfrage übermittelten
+        Customer-Objekts.
+        """
+        adm = ShoppingAdministration()
+        c = User.from_dict(api.payload)
+
+        if c is not None:
+            """Hierdurch wird die id des zu überschreibenden (vgl. Update) Customer-Objekts gesetzt.
+            Siehe Hinweise oben.
+            """
+            c.set_id(id)
+            adm.save_user(c)
+            return '', 200
+        else:
+            return '', 500
+
+
+@ikauf.route('/user-by-name/<string:name>')
+@ikauf.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+@ikauf.param('name', 'Der Name des Kunden')
+class UserByNameOperations(Resource):
+    @ikauf.marshal_with(user)
+    @secured
+    def get(self, name):
+        """ Auslesen von User-Objekten, die durch den Namen bestimmt werden.
+
+        Die auszulesenden Objekte werden durch ```name``` in dem URI bestimmt.
+        """
+        adm = ShoppingAdministration()
+        cust = adm.get_user_by_name(name)
+        return cust
+
+
+@ikauf.route('/user-by-email/<string:email>')
+@ikauf.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+@ikauf.param('email', 'Die Email des User')
+class UserByEmailOperations(Resource):
+    @ikauf.marshal_with(user)
+    @secured
+    def get(self, email):
+        """ Auslesen von User-Objekten, die durch die E-Mail bestimmt werden.
+
+        Die auszulesenden Objekte werden durch ```email``` in dem URI bestimmt.
+        """
+        adm = ShoppingAdministration()
+        cust = adm.get_user_by_email(email)
+        return cust
+
+
+@ikauf.route('/user-by-external_id/<string:id>')
+@ikauf.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+@ikauf.param('id', 'Die External ID des User')
+class UserByExternalIdOperations(Resource):
+    @ikauf.marshal_with(user)
+    @secured
+    def get(self, id):
+        """ Auslesen von User-Objekten, die durch die E-Mail bestimmt werden.
+
+        Die auszulesenden Objekte werden durch ```email``` in dem URI bestimmt.
+        """
+        adm = ShoppingAdministration()
+        cust = adm.get_user_by_external_id(id)
+        return cust
+
+
 @ikauf.route('/group-membership-delete/<int:group_membership><int:member>')
 @ikauf.response(500, 'Falls Server-seitiger Fehler')
 @ikauf.param('group_membership', 'ID des Membership-Objetks')
@@ -116,82 +239,12 @@ class DeleteGroupMembershipOperations(Resource):
         return '', 200
 
 
-@ikauf.route('/create_group_membership')
-@ikauf.response(500, "Falls Server-seitiger Fehler")
-class GroupMembershipListOperations(Resource):
-    def post(self):
-        """Anlegen eines neuen Group-Membership-Objekts für einen gegebene Group"""
-
-        adm = ShoppingAdministration()
-
-        gms = adm.get_member_by_group_membership(id)
-
-        if gms is not None:
-            x = adm.create_group_membership(gms)
-            return x, 200
-        else:
-            return 'GroupMembership unknown',
-
-
-@ikauf.route('/groupmembership-by-member/<int:member>')
-@ikauf.response(500, 'Falls Server-seitiger Fehler')
-@ikauf.param('member', 'Member-Obkjekt des zugehörigen Gruppmembership-Objekts')
-class GroupMembershipRelatedByMemberOperations(Resource):
-    @ikauf.marshal_with(group_member)
-    def get(self, member):
-        """Auslesen eines bestimmten Retailer-Objekts nach Gruppe"""
-
-        adm = ShoppingAdministration()
-        gms = adm.get_group_membership_by_member(member)
-        return gms
-
-
-@ikauf.route('/member-by-groupmembership/<int:group_membership>')
-@ikauf.response(500, 'Falls Server-seitiger Fehler')
-@ikauf.param('group_membership', 'Gruppmembership-Obkjekt des zugehörigen Member-Objekts')
-class MemberRelatedByGroupMembershipOperations(Resource):
-    @ikauf.marshal_with(group_member)
-    def get(self, group_membership):
-        """Auslesen eines bestimmten Retailer Member-Objekts nach Retailer"""
-
-        adm = ShoppingAdministration()
-        mem = adm.get_member_by_group_membership(group_membership)
-        return mem
-
-
-@ikauf.route('/retailer-by-group')
-@ikauf.response(500, "Falls Server-seitiger Fehler")
-class RetailerGroupListOperations(Resource):
-    def post(self):
-        """Anlegen eines neuen Retailer-Objekts für einen gegebene Group"""
-
-        adm = ShoppingAdministration()
-
-        r = adm.get_retailer_by_group(id)
-
-        if r is not None:
-            x = adm.create_retailer(r)
-            return x, 200
-        else:
-            return 'Group unknown',
-
-
-@ikauf.route('/retailer-group-delete/<int:retailer_group><int:retailer_member>')
-@ikauf.response(500, 'Falls Server-seitiger Fehler')
-@ikauf.param('retailer_group', 'ID des RetailerGroup-Objetks')
-@ikauf.param('retailer_member', 'ID des RetailerMember-Objekts')
-class DeleteRetailerGroupOperations(Resource):
-    @ikauf.marshal_with(retailer_groups)
-    def delete(self, retailer_group, retailer_member):
-        """Löschen eines bestimmten ShoppingList-Objekts"""
-
-        adm = ShoppingAdministration()
-        adm.delete_retailer_group(retailer_group, retailer_member)
-        return '', 200
 """
 Start der main.py um zu testen ob es funktioniert (in der lokalen Entwicklerumgebung).
 Um dies zu testen muss, wie in der VL eine Db in Python vorliegen.
 """
 
 if __name__ == '__main__':
-    app.run(debug=True)
+        adm = ShoppingAdministration()
+        x = adm.delete_group_membership(11,11)
+        print(x)

@@ -42,13 +42,6 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main-copy.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/main-copy.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/server/ShoppingAdministration.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/ShoppingAdministration.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/server/bo/GroupMembership.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/bo/GroupMembership.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/server/bo/RetailerGroup.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/bo/RetailerGroup.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/server/db/GroupMembershipMapper.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/db/GroupMembershipMapper.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/server/db/Mapper.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/db/Mapper.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/server/db/RetailerGroupMapper.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/db/RetailerGroupMapper.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/server/db/UserMapper.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/db/UserMapper.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -278,7 +271,14 @@
       <option name="project" value="LOCAL" />
       <updated>1595424131610</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="Main.py minor fixes und andere Änderungen in Bo's und Mappern">
+      <created>1595439459387</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1595439459387</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -343,22 +343,22 @@
       <screen x="0" y="0" width="1280" height="680" />
     </state>
     <state x="421" y="96" key="FileChooserDialogImpl/0.0.1280.680@0.0.1280.680" timestamp="1595330525064" />
-    <state width="1876" height="218" key="GridCell.Tab.0.bottom" timestamp="1595438715346">
+    <state width="1876" height="218" key="GridCell.Tab.0.bottom" timestamp="1595440310630">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1876" height="218" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1595438715346" />
-    <state width="1876" height="218" key="GridCell.Tab.0.center" timestamp="1595438715346">
+    <state width="1876" height="218" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1595440310630" />
+    <state width="1876" height="218" key="GridCell.Tab.0.center" timestamp="1595440310630">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1876" height="218" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1595438715346" />
-    <state width="1876" height="218" key="GridCell.Tab.0.left" timestamp="1595438715346">
+    <state width="1876" height="218" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1595440310630" />
+    <state width="1876" height="218" key="GridCell.Tab.0.left" timestamp="1595440310630">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1876" height="218" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1595438715346" />
-    <state width="1876" height="218" key="GridCell.Tab.0.right" timestamp="1595438715346">
+    <state width="1876" height="218" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1595440310630" />
+    <state width="1876" height="218" key="GridCell.Tab.0.right" timestamp="1595440310630">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1876" height="218" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1595438715346" />
+    <state width="1876" height="218" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1595440310630" />
     <state x="184" y="84" key="MergeDialog" timestamp="1595269161372">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
