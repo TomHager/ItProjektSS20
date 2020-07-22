@@ -234,7 +234,7 @@ Um dies zu testen muss, wie in der VL eine Db in Python vorliegen.
 
 if __name__ == '__main__':
     app.run(debug=True)
-
+"""
 if __name__ == '__main__':
     adm = ShoppingAdministration()
     x = adm.create_favorite(3, 4, "ererere", "L", 4, 4)
@@ -243,11 +243,12 @@ if __name__ == '__main__':
 if __name__ == '__main__':
     adm = ShoppingAdministration()
     a = Favorite()
-    a.set_id(2)
-    a.set_unit('L')
-    a.set_amount(5)
-    a.set_article('Bier')
-    a.set_retailer_id(4)
-    a.set_group_id(5)
+    a.set_id(3)
+    a.set_unit(5)
+    a.set_amount(50)
+    a.set_article(50)
+    a.set_retailer_id(2)
+    a.set_group_id(4)
     x = adm.save_favorite(a)
     print(x)
+"""
