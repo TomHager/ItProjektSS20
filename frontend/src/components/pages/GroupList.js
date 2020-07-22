@@ -48,7 +48,8 @@ export default class GroupList extends Component {
     ShoppingAPI.getAPI()
       .getUserByExternalId(firebase.auth().currentUser.uid)
       .then((returnedUser) => {
-        return this.setState({ user: returnedUser }), this.getGroupsByUser();
+        this.setState({ user: returnedUser });
+        this.getGroupsByUser();
       });
   };
 
@@ -75,9 +76,7 @@ export default class GroupList extends Component {
       .deleteGroupMembership(groupID)
       .then(
         this.setState({
-          groupRows: this.state.groupRows.filter(
-            (group) => group.getID() !== groupID
-          ),
+          groupRows: this.state.groupRows.filter((group) => group.getID() !== groupID),
         })
       );
   };

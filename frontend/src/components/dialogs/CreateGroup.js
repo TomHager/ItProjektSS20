@@ -20,7 +20,7 @@ import IconButton from '@material-ui/core/IconButton';
 import AddUser from '../subcomponents/AddUser';
 import DeleteIcon from '@material-ui/icons/Delete';
 import GroupBO from '../../api/GroupBO';
-import GroupMembershipBO from '../../api/GroupMembershipBO';
+// import GroupMembershipBO from '../../api/GroupMembershipBO';
 import ShoppingAPI from '../../api/ShoppingAPI';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -173,9 +173,7 @@ export class CreateGroup extends Component {
                       key={row.id}
                       style={{
                         backgroundColor:
-                          row.id === this.state.memberIndex
-                            ? '#0090FF'
-                            : 'white',
+                          row.id === this.state.memberIndex ? '#0090FF' : 'white',
                       }}
                       // onClick={this.groupClickHandler.bind(this, row)}
                     >

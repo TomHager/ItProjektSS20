@@ -363,29 +363,24 @@ export default class Favorite extends Component {
                 <TableRow key={row.id}>
                   {/* Retailer */}
                   <TableCell id={`${row.id} retailer`}>
-                    {
-                      rowIndex === row.id ? (
-                        <Select
-                          id="editRetailer"
-                          key={row.retailerId}
-                          defaultValue={row.retailerId}
-                          onChange={(e) =>
-                            this.setState({ editRetailer: parseInt(e.target.value) })
-                          }
-                        >
-                          {retailers.map((option) => (
-                            <option key={option.id} value={option.id}>
-                              {option.name}
-                            </option>
-                          ))}
-                        </Select>
-                      ) : (
-                        // (console.log(retailers, row.retailerId),
-                        // retailers.find((x) => x.id == 3).name)
-                        retailers.find((x) => x.id === row.retailerId).name
-                      )
-                      // row.retailerId
-                    }
+                    {rowIndex === row.id ? (
+                      <Select
+                        id="editRetailer"
+                        key={row.retailerId}
+                        defaultValue={row.retailerId}
+                        onChange={(e) =>
+                          this.setState({ editRetailer: parseInt(e.target.value) })
+                        }
+                      >
+                        {retailers.map((option) => (
+                          <option key={option.id} value={option.id}>
+                            {option.name}
+                          </option>
+                        ))}
+                      </Select>
+                    ) : (
+                      retailers.find((x) => x.id === row.retailerId).name
+                    )}
                   </TableCell>
 
                   {/* Article */}
