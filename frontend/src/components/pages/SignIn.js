@@ -20,7 +20,6 @@ class SignIn extends Component {
    */
   handleSignInButtonClicked = () => {
     this.props.onSignIn();
-    this.addUserToDatabase();
   };
 
   /** Renders the sign in page, if user objext is null */

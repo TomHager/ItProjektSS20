@@ -59,13 +59,13 @@ export default class ShoppingAPI {
   #getGroupMembershipURL = (id) =>
     `${this.#ShoppingServerBaseURL}/groupMemberships/${id}`;
   #addGroupMembershipURL = () =>
-    `${this.#ShoppingServerBaseURL}/groupMemberships`;
+    `${this.#ShoppingServerBaseURL}/create-group-membership`;
   #updateGroupMembershipURL = (id) =>
     `${this.#ShoppingServerBaseURL}/groupMemberships/${id}`;
   #deleteGroupMembershipURL = (id) =>
     `${this.#ShoppingServerBaseURL}/groupMemberships/${id}`;
   #searchGroupsByMemberURL = (userId) =>
-    `${this.#ShoppingServerBaseURL}/groups-by-membership/${userId}`;
+    `${this.#ShoppingServerBaseURL}/groupmembership-by-member/${userId}`;
 
   // Retailers related
   #getRetailersURL = () => `${this.#ShoppingServerBaseURL}/retailers`;
@@ -98,7 +98,8 @@ export default class ShoppingAPI {
   #getRetailerGroupsURL = () => `${this.#ShoppingServerBaseURL}/retailerGroups`;
   #getRetailerGroupURL = (id) =>
     `${this.#ShoppingServerBaseURL}/retailerGroups/${id}`;
-  #addRetailerGroupURL = () => `${this.#ShoppingServerBaseURL}/retailerGroups`;
+  #addRetailerGroupURL = () =>
+    `${this.#ShoppingServerBaseURL}/retailer-by-group`;
   #updateRetailerGroupURL = (id) =>
     `${this.#ShoppingServerBaseURL}/retailerGroups/${id}`;
   #deleteRetailerGroupURL = (id) =>
@@ -844,7 +845,7 @@ export default class ShoppingAPI {
     );
   }
 
-  addRetailerGroup(retailerGroupBO) {
+  addRetailerGroup(RetailerGroupBO) {
     return this.#fetchAdvanced(this.#addRetailerGroupURL(), {
       method: 'POST',
       headers: {

@@ -6,6 +6,7 @@ from server.db.Mapper import Mapper
 @author Robin Fink
 """
 
+
 class RetailerGroupMapper(Mapper):
     """Mapper-Klasse, die Account-Objekte auf eine relationale
         Datenbank abbildet. Hierzu wird eine Reihe von Methoden zur Verfügung
@@ -29,7 +30,8 @@ class RetailerGroupMapper(Mapper):
         cursor = self._cnx.cursor()
 
         command = "INSERT INTO retailergroups (retailer_member, retailer_group) VALUES (%s,%s)"
-        data = (retailer_group.get_retailer_member(), retailer_group.get_retailer_group())
+        data = (retailer_group.get_retailer_member(),
+                retailer_group.get_retailer_group())
         cursor.execute(command, data)
 
         self._cnx.commit()
@@ -50,7 +52,6 @@ class RetailerGroupMapper(Mapper):
 
         self._cnx.commit()
         cursor.close()
-
 
     def find_group_by_retailer(self, retailer_member):
         """Auslesen einer Gruppe anhand des Gruppennames.
@@ -88,7 +89,8 @@ class RetailerGroupMapper(Mapper):
 
         result = []
         cursor = self._cnx.cursor()
-        command = "SELECT * FROM retailergroups WHERE retailer_group={} ORDER BY retailer_group".format(retailer_group.get)
+        command = "SELECT * FROM retailergroups WHERE retailer_group={} ORDER BY retailer_group".format(
+            retailer_group)
         cursor.execute(command)
         tuples = cursor.fetchall()
 

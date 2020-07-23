@@ -61,6 +61,9 @@ export default class Favorite extends Component {
       // Error for Edit
       errorEArticle: false,
       errorEAmount: false,
+
+      //
+      unfilteredData: [],
     };
   }
 
@@ -106,7 +109,7 @@ export default class Favorite extends Component {
         bought: true,
       },
       {
-        id: 3,
+        id: 6,
         article: 'Ananas',
         amount: 6,
         unit: 'g',
@@ -115,9 +118,10 @@ export default class Favorite extends Component {
       },
     ];
     setTimeout(() => {
-      this.setState({ data: data });
+      this.setState({ data: data, unfilteredData: data });
       console.log('fetch favorites complete');
     }, 600);
+    document.getElementById('filter').value = '';
   }
 
   // Start Callbacks
@@ -140,6 +144,21 @@ export default class Favorite extends Component {
     document.getElementById('addArticle').value = '';
     document.getElementById('addAmount').value = 1;
     document.getElementById('addUnit').value = this.state.units[0].name;
+  };
+
+  // Search by article name
+  search = (req, data) => {
+    this.setState({
+      data: data.filter(
+        (el) => el.article.toLowerCase().indexOf(req.trim().toLowerCase()) > -1
+      ),
+    });
+  };
+
+  // Resets search
+  resetSearch = () => {
+    document.getElementById('filter').value = '';
+    this.search('', this.state.unfilteredData);
   };
 
   // All ClickHanlder for Table
@@ -190,9 +209,9 @@ export default class Favorite extends Component {
 
   addFavorite = () => {
     const { retailer, article, amount, unit, retailers, units } = this.state;
-    console.log(retailer);
+    // @TODO fav should be respons of Async Add
     const fav = {
-      id: 3,
+      id: Math.floor(Math.random() * Math.floor(500)),
       retailerId: retailer,
       article,
       amount,
@@ -200,12 +219,12 @@ export default class Favorite extends Component {
       // @TODO groupId from parent component
       // groupId: this.props.groupId,
     };
-    this.setAddError(article, amount);
-    this.setState((prevState) => {
-      const data = [...prevState.data];
-      data.unshift(fav);
-      return { ...prevState, data };
-    });
+    // this.setAddError(article, amount);
+    // this.setState((prevState) => {
+    //   const data = [...prevState.data];
+    //   data.unshift(fav);
+    //   return { ...prevState, data };
+    // });
     document.getElementById('addRetailer').value = retailers[0].id;
     document.getElementById('addArticle').value = '';
     document.getElementById('addAmount').value = 1;
@@ -216,12 +235,15 @@ export default class Favorite extends Component {
       amount: 1,
       unit: units[0].name,
     });
+    // On success add to unfilteredData
+    this.state.unfilteredData.push(fav);
+    this.setState({ unfilteredData: this.state.unfilteredData });
+    this.resetSearch();
   };
 
   // Updates selected entry
   validateUpdateFavorite = (id) => {
     const { editRetailer, editArticle, editAmount, editUnit } = this.state;
-    console.log(editRetailer);
     const favorite = {
       id,
       retailerId: editRetailer,
@@ -239,21 +261,23 @@ export default class Favorite extends Component {
 
   updateFavorite = (favorite) => {
     this.setEditError(favorite.article, favorite.amount);
-    // Timout to test Async
+    // @TODO Async Update
+    // On success
     setTimeout(() => {
       this.setState((prevState) => {
-        const data = [...prevState.data];
-        data[data.indexOf(this.state.oldData)] = favorite;
-        return { ...prevState, data };
+        const unfilteredData = [...prevState.unfilteredData];
+        unfilteredData[unfilteredData.indexOf(this.state.oldData)] = favorite;
+        return { ...prevState, unfilteredData };
       });
       this.toggleSelectedRow(favorite);
+      this.resetSearch();
     }, 500);
   };
 
   // Delete selected entry
   delFavorite = (favId) => {
     console.log(favId);
-    this.fetchFavorites();
+    // this.fetchFavorites();
   };
 
   render() {
@@ -266,6 +290,7 @@ export default class Favorite extends Component {
       errorAAmount,
       errorEArticle,
       errorEAmount,
+      unfilteredData,
     } = this.state;
     console.log('render');
     return (
@@ -276,6 +301,14 @@ export default class Favorite extends Component {
           <IconButton onClick={(e) => this.refresh()}>
             <Refresh />
           </IconButton>
+          {/* Search articles */}
+          <Input
+            type="text"
+            id="filter"
+            placeholder="search article"
+            defaultValue=""
+            onChange={(e) => this.search(e.target.value, unfilteredData)}
+          ></Input>
 
           <Table size="small">
             <TableHead>
