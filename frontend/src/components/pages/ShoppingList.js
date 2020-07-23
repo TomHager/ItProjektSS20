@@ -18,7 +18,7 @@ import {
 // import EntryBO from '../../api/EntryBO';
 
 /**
- * Displays favorites for given group
+ * Displays entries for selected group, shoppinglist and retailer
  *
  * @author Tom Hager
  */
@@ -61,6 +61,9 @@ export default class Favorite extends Component {
       // Error for Edit
       errorEArticle: false,
       errorEAmount: false,
+
+      // Search filter
+      unfilteredData: [],
     };
   }
 
@@ -68,9 +71,6 @@ export default class Favorite extends Component {
 
   // Fetching all entrys of a RetailerShoppingList
   fetchEntries() {
-    // const res = await fetch('http://DESKTOP-DU328LQ:8081/api/iKauf/entries');
-    // const resjson = await res.json();
-    // this.setState({ data: resjson });
     const data = [
       {
         id: 1,
@@ -107,7 +107,7 @@ export default class Favorite extends Component {
       },
     ];
     setTimeout(() => {
-      this.setState({ data: data });
+      this.setState({ data: data, unfilteredData: data });
       console.log('fetch entries complete');
     }, 1000);
   }
@@ -167,6 +167,21 @@ export default class Favorite extends Component {
   };
   // @TODO Search
 
+  // Search for a article in given list
+  search = (req, data) => {
+    this.setState({
+      data: data.filter(
+        (el) => el.article.toLowerCase().indexOf(req.trim().toLowerCase()) > -1
+      ),
+    });
+  };
+
+  // Resets search
+  resetSearch = () => {
+    document.getElementById('filter').value = '';
+    this.search('', this.state.unfilteredData);
+  };
+
   // All ClickHanlder for Table
   // Toggle selected Row
   toggleSelectedRow = (data) => {
@@ -186,6 +201,7 @@ export default class Favorite extends Component {
 
   // Toggle bought boolean
   toggleBought = (entry) => {
+    console.log('update bought');
     let {
       id,
       unit,
@@ -270,7 +286,14 @@ export default class Favorite extends Component {
   // @TODO Async add entry
   addEntry() {
     const { retailer, article, amount, unit, retailers, units } = this.state;
-    const entry = { id: 3, retailer, article, amount, unit };
+    // @TODO entry should be respons of Async Add
+    const entry = {
+      id: Math.floor(Math.random() * Math.floor(500)),
+      retailer,
+      article,
+      amount,
+      unit,
+    };
     this.setAddError(article, amount);
     console.log(this.state.addedInput);
     this.setState((prevState) => {
@@ -287,23 +310,26 @@ export default class Favorite extends Component {
       amount: 1,
       unit: units[0].name,
     });
+    // On success add to unfilteredData
+    this.state.unfilteredData.push(entry);
+    this.setState({ unfilteredData: this.state.unfilteredData });
+    this.resetSearch();
   }
 
   // Update method
   // Updates selected entry
   updateEntry(entry) {
+    // @TODO Async Update
+    // On success
     setTimeout(() => {
       this.setState((prevState) => {
-        const data = [...prevState.data];
-        data[data.indexOf(this.state.oldData)] = entry;
-        return { ...prevState, data };
+        const unfilteredData = [...prevState.unfilteredData];
+        unfilteredData[unfilteredData.indexOf(this.state.oldData)] = entry;
+        return { ...prevState, unfilteredData };
       });
       this.toggleSelectedRow(entry);
-      this.state.rowIndex === entry.id
-        ? this.toggleSelectedRow(entry)
-        : // setState for false missing
-          console.log('Triggered Update Event');
-    }, 1000);
+      this.resetSearch();
+    }, 500);
   }
 
   // Delete selected entry
@@ -323,6 +349,7 @@ export default class Favorite extends Component {
       errorAAmount,
       errorEArticle,
       errorEAmount,
+      unfilteredData,
     } = this.state;
     console.info('render');
     return (
@@ -356,11 +383,13 @@ export default class Favorite extends Component {
               <option key={option.id}>{option.name}</option>
             ))}
           </Select>
+          {/* Search articles */}
           <Input
             type="text"
             id="filter"
             placeholder="search article"
             defaultValue=""
+            onChange={(e) => this.search(e.target.value, unfilteredData)}
           ></Input>
 
           {/* Table start */}
@@ -437,7 +466,7 @@ export default class Favorite extends Component {
                 <TableRow key={row.id}>
                   {/* Bought */}
                   <TableCell>
-                    <Checkbox onClick={this.toggleBought(row)}></Checkbox>
+                    <Checkbox onClick={this.toggleBought.bind(this, row)}></Checkbox>
                   </TableCell>
 
                   {/* Article */}
