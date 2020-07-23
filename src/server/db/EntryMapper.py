@@ -93,9 +93,9 @@ class EntryMapper(Mapper):
 
         command = "UPDATE entries " + "SET unit=%s, amount=%s, article=%s, modification_date=%s, user_id=%s, " \
                                       "retailer_id=%s, shopping_list_id=%s, bought=%s WHERE id=%s"
-        data = (entry.get_id(), entry.get_unit(), entry.get_amount(), entry.get_article,
+        data = (entry.get_unit(), entry.get_amount(), entry.get_article,
                 entry.set_modification_date(datetime.now()), entry.get_user_id(), entry.get_retailer_id(),
-                entry.get_shopping_list_id(), entry.get_bought())
+                entry.get_shopping_list_id(), entry.get_bought(), entry.get_id())
         cursor.execute(command, data)
 
         self._cnx.commit()
