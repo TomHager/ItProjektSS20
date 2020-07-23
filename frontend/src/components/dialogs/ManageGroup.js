@@ -19,7 +19,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import PersonIcon from '@material-ui/icons/Person';
 import DeleteIcon from '@material-ui/icons/Delete';
 import AddUser from '../subcomponents/AddUser';
-import { v4 as uuidv4 } from 'uuid';
+// import { v4 as uuidv4 } from 'uuid';
 import UserBO from '../../api/UserBO';
 
 /**
@@ -124,9 +124,7 @@ export class EditGroup extends Component {
                       key={row.id}
                       style={{
                         backgroundColor:
-                          row.id === this.state.memberIndex
-                            ? '#0090FF'
-                            : 'white',
+                          row.id === this.state.memberIndex ? '#0090FF' : 'white',
                       }}
                       // onClick={this.groupClickHandler.bind(this, row)}
                     >

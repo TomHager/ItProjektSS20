@@ -1,6 +1,9 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
-import { Button, Grid, Typography, withStyles } from "@material-ui/core";
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { Button, Grid, Typography, withStyles } from '@material-ui/core';
+// import firebase from 'firebase/app';
+// import UserBO from '../../api/UserBO';
+// import ShoppingAPI from '../../api/ShoppingAPI';
 
 /**
  * Renders a landing page for users who are not signed in. Provides a sign in button
@@ -17,12 +20,12 @@ class SignIn extends Component {
    */
   handleSignInButtonClicked = () => {
     this.props.onSignIn();
+    this.addUserToDatabase();
   };
 
   /** Renders the sign in page, if user objext is null */
   render() {
     const { classes } = this.props;
-
     return (
       <div>
         <Typography className={classes.root} align="center" variant="h6">

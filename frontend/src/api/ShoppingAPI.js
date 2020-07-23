@@ -20,7 +20,7 @@ export default class ShoppingAPI {
   // Singelton instance
   static #api = null;
 
-  #ShoppingServerBaseURL = 'http://127.0.0.1:5000/iKauf';
+  #ShoppingServerBaseURL = '/iKauf';
 
   // Entries related
   #getEntriesURL = () => `${this.#ShoppingServerBaseURL}/entries`;
@@ -123,7 +123,7 @@ export default class ShoppingAPI {
   // User related
   #getUsersURL = () => `${this.#ShoppingServerBaseURL}/user`;
   #getUserURL = (id) => `${this.#ShoppingServerBaseURL}/users/${id}`;
-  #addUserURL = () => `${this.#ShoppingServerBaseURL}/users`;
+  #addUserURL = () => `${this.#ShoppingServerBaseURL}/user`;
   #updateUserURL = (id) => `${this.#ShoppingServerBaseURL}/users/${id}`;
   #deleteUserURL = (id) => `${this.#ShoppingServerBaseURL}/users/${id}`;
   #searchUserByNameURL = (userName) =>
@@ -433,7 +433,6 @@ export default class ShoppingAPI {
     return this.#fetchAdvanced(this.#searchUserByEmailURL(email)).then(
       (responseJSON) => {
         let responseUserBO = UserBO.fromJSON(responseJSON);
-        console.info(responseUserBO);
         return new Promise(function (resolve) {
           resolve(responseUserBO);
         });

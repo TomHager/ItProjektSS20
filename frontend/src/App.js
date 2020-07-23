@@ -14,8 +14,8 @@ import 'firebase/firestore';
 
 // import Theme from './Theme';
 import SignIn from './components/pages/SignIn';
-import UserBO from './api/UserBO';
-import ShoppingAPI from './api/ShoppingAPI';
+// import UserBO from './api/UserBO';
+// import ShoppingAPI from './api/ShoppingAPI';
 // import LoadingProgress from './components/dialogs/LoadingProgress';
 // import ContextErrorMessage from './components/dialogs/ContextErrorMessage';
 
@@ -119,14 +119,6 @@ export default class App extends React.Component {
     });
     const provider = new firebase.auth.GoogleAuthProvider();
     firebase.auth().signInWithRedirect(provider);
-  };
-
-  addUserToDatabase = () => {
-    const newUser = new UserBO();
-    newUser.setExternalId(firebase.auth().currentUser.uid);
-    newUser.setName(firebase.auth().currentUser.displayName);
-    newUser.setEmail(firebase.auth().currentUser.email);
-    ShoppingAPI.getAPI().addUser(newUser);
   };
 
   /**

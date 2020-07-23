@@ -105,7 +105,7 @@ retailer_groups = api.inherit('RetailerGroup', bo, {
 group_member = api.inherit('GroupMember', bo, {
     'member': fields.Integer(attribute='_member', description='User ID'),
     'group_membership': fields.Integer(attribute='_group_membership',
-                                 description='Gruppen ID'),
+                                       description='Gruppen ID'),
 })\
 
 
@@ -134,7 +134,8 @@ class UserListOperations(Resource):
         proposal = User.from_dict(api.payload)
 
         if proposal is not None:
-            x = adm.create_user(proposal.get_name(), proposal.get_email(), proposal.get_external_id())
+            x = adm.create_user(
+                proposal.get_name(), proposal.get_email(), proposal.get_external_id())
             return x, 200
         else:
             return '', 500
@@ -211,7 +212,6 @@ class UserByNameOperations(Resource):
 @ikauf.param('email', 'Die Email des User')
 class UserByEmailOperations(Resource):
     @ikauf.marshal_with(user)
-    @secured
     def get(self, email):
         """ Auslesen von User-Objekten, die durch die E-Mail bestimmt werden.
 
@@ -884,7 +884,6 @@ class FavoriteOperations(Resource):
             return '', 200
         else:
             return '', 500
-
 
 
 """
