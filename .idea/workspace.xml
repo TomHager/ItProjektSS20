@@ -26,9 +26,11 @@
     </select>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2c1c77a4-6169-48a4-a7a4-a8dc3ff2c5dd" name="Default Changelist" comment="Mapper.py, FavoriteMapper.py - favorite gefixed">
+    <list default="true" id="2c1c77a4-6169-48a4-a7a4-a8dc3ff2c5dd" name="Default Changelist" comment="ShoppingAdministration.py  Teil gefixed">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/server/ShoppingAdministration.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/ShoppingAdministration.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/server/bo/Entry.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/bo/Entry.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/server/db/Mapper.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/db/Mapper.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/server/db/ShoppingListMapper.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/db/ShoppingListMapper.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -377,20 +379,20 @@
     <state x="186" y="81" key="SettingsEditor/0.0.1368.872@0.0.1368.872" timestamp="1591108101784" />
     <state x="209" y="86" key="SettingsEditor/0.0.1536.920@0.0.1536.920" timestamp="1595072197023" />
     <state x="261" y="97" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1595002662026" />
-    <state x="277" y="169" key="Vcs.Push.Dialog.v2" timestamp="1595517894176">
+    <state x="277" y="169" key="Vcs.Push.Dialog.v2" timestamp="1595533658806">
       <screen x="0" y="0" width="1368" height="872" />
     </state>
-    <state x="277" y="169" key="Vcs.Push.Dialog.v2/0.0.1368.872@0.0.1368.872" timestamp="1595517894176" />
+    <state x="277" y="169" key="Vcs.Push.Dialog.v2/0.0.1368.872@0.0.1368.872" timestamp="1595533658806" />
     <state x="389" y="202" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1595424095640" />
     <state x="691" y="417" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1595177953047">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="492" y="350" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1368.872@0.0.1368.872" timestamp="1591103046248" />
     <state x="691" y="417" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1040@0.0.1920.1040" timestamp="1595177953047" />
-    <state x="534" y="195" key="git4idea.branch.GitSmartOperationDialog" timestamp="1595533215852">
+    <state x="534" y="195" key="git4idea.branch.GitSmartOperationDialog" timestamp="1595533643239">
       <screen x="0" y="0" width="1368" height="872" />
     </state>
-    <state x="534" y="195" key="git4idea.branch.GitSmartOperationDialog/0.0.1368.872@0.0.1368.872" timestamp="1595533215852" />
+    <state x="534" y="195" key="git4idea.branch.GitSmartOperationDialog/0.0.1368.872@0.0.1368.872" timestamp="1595533643239" />
     <state x="599" y="205" key="git4idea.branch.GitSmartOperationDialog/0.0.1536.920@0.0.1536.920" timestamp="1595082924229" />
     <state x="749" y="232" key="git4idea.branch.GitSmartOperationDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1595163924336" />
     <state x="143" y="229" width="672" height="678" key="search.everywhere.popup" timestamp="1595160748656">
