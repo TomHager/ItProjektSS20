@@ -5,6 +5,7 @@ from server.db.Mapper import Mapper
 @author Robin Fink
 """
 
+
 class ShoppingListMapper (Mapper):
 
     def __init__(self):
@@ -57,7 +58,8 @@ class ShoppingListMapper (Mapper):
                 shoppinglist.set_id(1)
 
         command = "INSERT INTO shoppinglists (id, name, groups_id) VALUES (%s,%s,%s)"
-        data = (shoppinglist.get_id(), shoppinglist.get_name(), shoppinglist.get_group_id())
+        data = (shoppinglist.get_id(), shoppinglist.get_name(),
+                shoppinglist.get_group_id())
         cursor.execute(command, data)
 
         self._cnx.commit()
@@ -73,7 +75,8 @@ class ShoppingListMapper (Mapper):
         cursor = self._cnx.cursor()
 
         command = "UPDATE shoppinglists " + "SET name=%s, groups_id=%s WHERE id=%s"
-        data = (shoppinglist.get_name(), shoppinglist.get_group_id(), shoppinglist.get_id())
+        data = (shoppinglist.get_name(),
+                shoppinglist.get_group_id(), shoppinglist.get_id())
         cursor.execute(command, data)
 
         self._cnx.commit()
@@ -86,7 +89,8 @@ class ShoppingListMapper (Mapper):
         """
         cursor = self._cnx.cursor()
 
-        command = "DELETE FROM shoppinglists WHERE id={}".format(shoppinglist.get_id())
+        command = "DELETE FROM shoppinglists WHERE id={}".format(
+            shoppinglist.get_id())
         cursor.execute(command)
 
         self._cnx.commit()
@@ -104,7 +108,8 @@ class ShoppingListMapper (Mapper):
         result = None
 
         cursor = self._cnx.cursor()
-        command = "SELECT id, name, groups_id FROM shoppinglists WHERE id={}".format(key)
+        command = "SELECT id, name, groups_id FROM shoppinglists WHERE id={}".format(
+            key)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
@@ -134,7 +139,8 @@ class ShoppingListMapper (Mapper):
         """
         result = []
         cursor = self._cnx.cursor()
-        command = "SELECT id, name, groups_id FROM shoppinglists WHERE name LIKE '{}' ORDER BY name".format(name)
+        command = "SELECT id, name, groups_id FROM shoppinglists WHERE name= {} ORDER BY name".format(
+            name)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
@@ -151,7 +157,6 @@ class ShoppingListMapper (Mapper):
         return result
 
     def find_shopping_list_by_group(self, group_id):
-
         """Suchen einer Shoppingliste mit vorgegebener Shoppinglist ID. Da diese eindeutig ist,
         wird genau ein Objekt zurückgegeben.
 
@@ -162,7 +167,8 @@ class ShoppingListMapper (Mapper):
 
         result = []
         cursor = self._cnx.cursor()
-        command = "SELECT id, name, groups_id FROM shoppinglists WHERE name LIKE '{}' ORDER BY name".format(group_id)
+        command = "SELECT id, name, groups_id FROM shoppinglists WHERE group_id={} ORDER BY id".format(
+            group_id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
@@ -177,8 +183,6 @@ class ShoppingListMapper (Mapper):
         cursor.close()
 
         return result
-
-
 
 
 if (__name__ == "__main__"):

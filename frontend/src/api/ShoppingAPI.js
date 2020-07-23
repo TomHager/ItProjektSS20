@@ -26,16 +26,14 @@ export default class ShoppingAPI {
   #getEntriesURL = () => `${this.#ShoppingServerBaseURL}/entries`;
   #getEntryURL = (id) => `${this.#ShoppingServerBaseURL}/entries/${id}`;
   #addEntryURL = () => `${this.#ShoppingServerBaseURL}/entries`;
-  #updateEntryURL = (id) => `${this.#ShoppingServerBaseURL}/entries/${id}`;
+  #updateEntryURL = (id) => `${this.#ShoppingServerBaseURL}/entry-by-id/${id}`;
   #deleteEntryURL = (id) => `${this.#ShoppingServerBaseURL}/entries/${id}`;
   #searchEntryByAmountURL = (amount) =>
     `${this.#ShoppingServerBaseURL}/entries-by-name/${amount}`;
   #searchEntryByArticleURL = (articleName) =>
     `${this.#ShoppingServerBaseURL}/entry-by-article/${articleName}`;
-  #searchEntryByRetailerEntryListURL = (retailerEntryList) =>
-    `${
-      this.#ShoppingServerBaseURL
-    }/entry-by-retailer-entry-list/${retailerEntryList}`;
+  #searchEntriesByShoppingListURL = (shoppingListId) =>
+    `${this.#ShoppingServerBaseURL}/entry-by-shopping-list/${shoppingListId}`;
 
   // Favorites related
   #getFavoritesURL = () => `${this.#ShoppingServerBaseURL}/favorites`;
@@ -120,9 +118,9 @@ export default class ShoppingAPI {
   #deleteShoppingListURL = (id) =>
     `${this.#ShoppingServerBaseURL}/shoppingLists/${id}`;
   #searchShoppingListByGroupIdURL = (groupId) =>
-    `${this.#ShoppingServerBaseURL}/shoppinglist-by-group-id/${groupId}`;
+    `${this.#ShoppingServerBaseURL}/shopping-list-by-group-id/${groupId}`;
   #searchShoppingListByNameURL = (shoppinglistName) =>
-    `${this.#ShoppingServerBaseURL}/shoppinglist-by-name/${shoppinglistName}`;
+    `${this.#ShoppingServerBaseURL}/shopping-list-by-name/${shoppinglistName}`;
 
   // User related
   #getUsersURL = () => `${this.#ShoppingServerBaseURL}/user`;
@@ -237,9 +235,9 @@ export default class ShoppingAPI {
     );
   }
 
-  searchEntryByRetailerEntryList(retailerEntryList) {
+  getEntriesByShoppingListId(shoppingListId) {
     return this.#fetchAdvanced(
-      this.#searchEntryByRetailerEntryListURL(retailerEntryList)
+      this.#searchEntriesByShoppingListURL(shoppingListId)
     ).then((responseJSON) => {
       let entryBOs = EntryBO.fromJSON(responseJSON);
       // console.info(entryBOs);

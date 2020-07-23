@@ -7,6 +7,7 @@ import RetailerBO from '../../api/RetailerBO';
 import GroupMembershipBO from '../../api/GroupMembershipBO';
 import RetailerGroupBO from '../../api/RetailerGroupBO';
 import FavoriteBO from '../../api/FavoriteBO';
+import EntryBO from '../../api/EntryBO';
 
 export default class Testing extends Component {
   constructor() {
@@ -169,6 +170,7 @@ export default class Testing extends Component {
   };
 
   //Notwendig Für Shoppingliste
+  //Läuft
   getShoppingListsByGroup = () => {
     ShoppingAPI.getAPI()
       .searchShoppingListByGroupId(2)
@@ -177,6 +179,55 @@ export default class Testing extends Component {
         console.log(this.state.lists);
       });
   };
+  //Läuft
+  getEntriesByShoppingList = () => {
+    ShoppingAPI.getAPI()
+      .getEntriesByShoppingListId(2)
+      .then((result) => {
+        this.setState({ lists: result });
+        console.log(this.state.lists);
+      });
+  };
+
+  //TODO
+  // getEntriesByShoppingListandRetailer
+
+  // TODO
+  // getRetailersByGroup = () => {
+  //   ShoppingAPI.getAPI()
+  //     .
+  //     .then((result) => {
+  //       this.setState({ lists: result });
+  //       console.log(this.state.lists);
+  //     });
+  // };
+  // TODO
+  // getUserByEntry = () => {
+  //   ShoppingAPI.getAPI()
+  //     .
+  //     .then((result) => {
+  //       this.setState({ lists: result });
+  //       console.log(this.state.lists);
+  //     });
+  // };
+  //TODO
+  updateEntrys = () => {
+    const updatedEntry = this.state.lists;
+    console.log(updatedEntry[0]);
+    updatedEntry[0].setArticle('Bier');
+    ShoppingAPI.getAPI().updateEntry(updatedEntry[0]);
+  };
+
+  updateShoppingList = () => {
+    const updatedEntry = this.state.lists;
+    console.log(updatedEntry[0]);
+    updatedEntry[0].setArticle('Bier');
+    ShoppingAPI.getAPI().updateEntry(updatedEntry[0]);
+  };
+
+  // createShoppingList
+  // deleteShoppingList
+  // deleteListEntry
 
   // componentDidMount() {
   //   this.getUsers();
@@ -211,13 +262,12 @@ export default class Testing extends Component {
   componentDidMount() {
     this.getUsers();
     this.getFavoritesByGroup();
+    this.getEntriesByShoppingList();
   }
 
   render() {
     return (
-      <Button onClick={this.getShoppingListsByGroup}>
-        Let the testing begin!
-      </Button>
+      <Button onClick={this.updateEntrys}>Let the testing begin!</Button>
       // <form onSubmit={this.handleSubmit}>
       //   <input type="text" name="name" onChange={this.handleChange} />
       //   <input type="email" name="email" onChange={this.handleChange} />

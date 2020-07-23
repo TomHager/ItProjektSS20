@@ -4,7 +4,8 @@ from datetime import datetime
 @author Robin Fink 
 @author Tom Hager
  """
- 
+
+
 class Entry(bo.BusinessObject):
 
     def __init__(self):
@@ -14,10 +15,9 @@ class Entry(bo.BusinessObject):
         self._article = ""
         self._modification_date = datetime.now()
         self._shopping_list_id = ""
-        self.user_id = ""
-        self.retailer_id = ""
-        self.bought = 0
+        self._user_id = ""
         self._retailer_id = ""
+        self._bought = ""
 
     def get_unit(self):
         return self._unit
@@ -46,33 +46,33 @@ class Entry(bo.BusinessObject):
     def get_shopping_list_id(self):
         return self._shopping_list_id
 
-    def set_shopping_list_id(self, shopping_list_id):
-        self._shopping_list_id = shopping_list_id
+    def set_shopping_list_id(self, value):
+        self._shopping_list_id = value
 
     def get_retailer_id(self):
         return self._retailer_id
 
-    def set_retailer_id(self, retailer_id):
-        self._retailer_id = retailer_id
+    def set_retailer_id(self, value):
+        self._retailer_id = value
 
     def get_user_id(self):
-        return self.user_id
+        return self._user_id
 
-    def set_user_id(self, user_id):
-        self.user_id = user_id
+    def set_user_id(self, value):
+        self._user_id = value
 
     def get_bought(self):
         return self._bought
 
-    def set_bought(self, value):
-        self._bought = value
+    def set_bought(self, bought):
+        self._bought = bought
 
     def __str__(self):
         """Erzeugen einer einfachen textuellen Darstellung der jeweiligen Instanz."""
         return "Entry: {}, {}, {}, {}, {}, {}, {}, {}, {}".format(self.get_id(), self._unit, self._amount,
-                                                                  self._article, self._modification_date, self.user_id,
+                                                                  self._article, self._modification_date, self._user_id,
                                                                   self._retailer_id, self._shopping_list_id,
-                                                                  self.bought)
+                                                                  self._bought)
 
     @staticmethod
     def from_dict(dictionary=dict()):
