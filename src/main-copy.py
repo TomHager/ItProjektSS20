@@ -841,7 +841,7 @@ class FavoriteListOperations(Resource):
 
         if proposal is not None:
             x = adm.create_favorite(proposal.get_retailer_id(), proposal.get_amount(), proposal.get_unit(),
-                                    proposal.get_article())  # todo unfilled konnten problem nicht lösen
+                                    proposal.get_article(), proposal.get_retailer_id(), proposal.get_group_id())  # todo unfilled konnten problem nicht lösen
             return x, 200
         else:
             return '', 500
