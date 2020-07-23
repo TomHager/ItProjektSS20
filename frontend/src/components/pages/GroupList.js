@@ -76,7 +76,9 @@ export default class GroupList extends Component {
       .deleteGroupMembership(groupID)
       .then(
         this.setState({
-          groupRows: this.state.groupRows.filter((group) => group.getID() !== groupID),
+          groupRows: this.state.groupRows.filter(
+            (group) => group.getID() !== groupID
+          ),
         })
       );
   };

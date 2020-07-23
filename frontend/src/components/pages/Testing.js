@@ -49,9 +49,9 @@ export default class Testing extends Component {
     console.log(newUser);
   };
 
-  componentDidMount() {
-    this.getUsers();
-  }
+  // componentDidMount() {
+  //   this.getUsers();
+  // }
 
   // getUsersByName = () => {
   //   ShoppingAPI.getAPI()
@@ -79,12 +79,11 @@ export default class Testing extends Component {
   // };
 
   // displayUsers = () => console.log(this.state.users);
-  // componentDidMount() {
-  //   this.getUsers();
-  // }
+  componentDidMount() {
+    this.getUsers();
+  }
 
   render() {
-    this.addUserToDatabase();
     return (
       <Button onClick={this.updateUser}>Display users</Button>
       // <form onSubmit={this.handleSubmit}>
