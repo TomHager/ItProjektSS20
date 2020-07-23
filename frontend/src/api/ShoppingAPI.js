@@ -120,7 +120,7 @@ export default class ShoppingAPI {
   #deleteShoppingListURL = (id) =>
     `${this.#ShoppingServerBaseURL}/shoppingLists/${id}`;
   #searchShoppingListByGroupIdURL = (groupId) =>
-    `${this.#ShoppingServerBaseURL}/shoppinglist-by-group-id/${groupId}`;
+    `${this.#ShoppingServerBaseURL}/shopping-list-by-group-id/${groupId}`;
   #searchShoppingListByNameURL = (shoppinglistName) =>
     `${this.#ShoppingServerBaseURL}/shoppinglist-by-name/${shoppinglistName}`;
 
