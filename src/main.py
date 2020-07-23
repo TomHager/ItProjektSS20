@@ -518,7 +518,7 @@ class EntryRelatedByUserOperations(Resource):
         return e
 
 
-@ikauf.route('/entry-by-shoppin-list/<int:shopping_list_id>')
+@ikauf.route('/entry-by-shopping-list/<int:shopping_list_id>')
 @ikauf.response(500, 'Falls Server-seitiger Fehler')
 @ikauf.param('shopping_list_id', 'ShoppingList des zugehörigen Entry-Objekts')
 class EntryRelatedByShoppingListOperations(Resource):
