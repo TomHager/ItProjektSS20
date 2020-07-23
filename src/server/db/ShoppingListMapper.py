@@ -139,7 +139,7 @@ class ShoppingListMapper (Mapper):
         """
         result = []
         cursor = self._cnx.cursor()
-        command = "SELECT id, name, groups_id FROM shoppinglists WHERE name LIKE '{}' ORDER BY name".format(
+        command = "SELECT id, name, groups_id FROM shoppinglists WHERE name= {} ORDER BY name".format(
             name)
         cursor.execute(command)
         tuples = cursor.fetchall()
@@ -167,7 +167,7 @@ class ShoppingListMapper (Mapper):
 
         result = []
         cursor = self._cnx.cursor()
-        command = "SELECT * FROM shoppinglists WHERE groups_id={} ORDER BY id".format(
+        command = "SELECT id, name, groups_id FROM shoppinglists WHERE group_id={} ORDER BY id".format(
             group_id)
         cursor.execute(command)
         tuples = cursor.fetchall()

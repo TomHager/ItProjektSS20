@@ -13,16 +13,17 @@ import {
   TableRow,
   Input,
   NativeSelect as Select,
+  Checkbox,
 } from '@material-ui/core';
 // import EntryBO from '../../api/EntryBO';
 
 /**
- * Displays favorites for given group
+ * Displays entries for selected group, shoppinglist and retailer
  *
  * @author Tom Hager
  */
 
-export default class Favorite extends Component {
+export default class RetailerEntryList extends Component {
   constructor(props) {
     super(props);
 
@@ -38,16 +39,15 @@ export default class Favorite extends Component {
         { name: 'pack' },
       ],
       retailers: [{ name: 'loading' }],
+      members: [{ name: 'loading' }],
       rowIndex: -1,
 
       // Add favorite entry
-      retailer: '',
       article: '',
       amount: 1,
       unit: '',
 
       // Edit favorite entry
-      editRetailer: '',
       editArticle: '',
       editAmount: 1,
       editUnit: '',
@@ -62,80 +62,100 @@ export default class Favorite extends Component {
       errorEArticle: false,
       errorEAmount: false,
 
-      //
+      // Search filter
       unfilteredData: [],
     };
   }
 
-  async fetchRetailers() {
-    // @TODO fetch retailer
-    setTimeout(() => {
-      const retailers = [
-        { id: 1, name: 'Edeka' },
-        { id: 2, name: 'Rewe' },
-        { id: 3, name: 'Kaufland' },
-        { id: 9, name: 'Test' },
-      ];
-      // setState before fetchfavorites because we need retailers in state
-      this.setState({
-        retailers,
-        retailer: retailers[0].id,
-        editRetailer: retailers[0].id,
-        unit: this.state.units[0].name,
-        editUnit: this.state.units[0].name,
-      });
-      this.fetchFavorites();
-    }, 1000);
-  }
+  // All Asynccallbacks
 
-  // Fetching all favorites for a group
-  async fetchFavorites() {
-    // @TODO fetch favorites
+  // Fetching all entrys of a RetailerShoppingList
+  fetchEntries() {
     const data = [
       {
         id: 1,
-        article: 'Apfel',
         amount: 4,
         unit: 'Kg',
-        retailerId: 2,
-        bought: false,
+        article: 'Apfel',
+        modificationDate: Date.now(),
+        shoppingListId: 1,
+        userId: 1,
+        retailerId: 1,
+        bought: 0,
       },
       {
         id: 2,
-        article: 'Birne',
         amount: 3,
         unit: 'pcs',
-        retailerId: 9,
-        bought: true,
+        article: 'Birne',
+        modificationDate: Date.now(),
+        shoppingListId: 1,
+        userId: 1,
+        retailerId: 2,
+        bought: 1,
       },
       {
-        id: 6,
-        article: 'Ananas',
+        id: 3,
         amount: 6,
         unit: 'g',
-        retailerId: 3,
-        bought: false,
+        article: 'Ananas',
+        modificationDate: Date.now(),
+        shoppingListId: 1,
+        userId: 1,
+        retailerId: 2,
+        bought: 0,
       },
     ];
     setTimeout(() => {
       this.setState({ data: data, unfilteredData: data });
-      console.log('fetch favorites complete');
-    }, 600);
-    document.getElementById('filter').value = '';
+      console.log('fetch entries complete');
+    }, 1000);
+  }
+
+  // Fetch all retailer of a group
+  fetchRetailer() {
+    const retailers = [
+      { id: 1, name: 'Edeka' },
+      { id: 2, name: 'Rewe' },
+      { id: 3, name: 'Kaufland' },
+      { id: 4, name: 'Test' },
+    ];
+    setTimeout(() => {
+      this.setState({ retailers: retailers });
+      console.log('fetch retailers complete');
+    }, 1000);
+  }
+
+  // Fetch all members of a group
+  fetchMembers() {
+    const members = [
+      { id: 1, name: 'Tom' },
+      { id: 2, name: 'Robin' },
+      { id: 3, name: 'Dimi' },
+    ];
+    setTimeout(() => {
+      this.setState({ members: members });
+      console.log('fetch members complete');
+    }, 1000);
   }
 
   // Start Callbacks
   componentDidMount() {
-    console.log('Mount');
-    // fetch all starts with Retailer
-    this.fetchRetailers();
+    this.fetchEntries();
+    this.fetchRetailer();
+    this.fetchMembers();
+    const { units } = this.state;
+    this.setState({
+      unit: units[0].name,
+      editUnit: units[0].name,
+    });
   }
-
-  //Refreshs page and resets all state elements
-  refresh = (e) => {
+  //Refreshs page
+  refresh = () => {
     this.setState({
       data: [],
       retailers: [{ name: 'loading' }],
+      members: [{ name: 'loading' }],
       errorAArticle: false,
       errorAAmount: false,
       rowIndex: -1,
@@ -145,8 +165,9 @@ export default class Favorite extends Component {
     document.getElementById('addAmount').value = 1;
     document.getElementById('addUnit').value = this.state.units[0].name;
   };
+  // @TODO Search
 
-  // Search by article name
+  // Search for a article in given list
   search = (req, data) => {
     this.setState({
       data: data.filter(
@@ -161,6 +182,22 @@ export default class Favorite extends Component {
     this.search('', this.state.unfilteredData);
   };
 
+  // Sort selected column
+  sort(key, order = 'asc') {
+    return function innerSort(a, b) {
+      const varA = typeof a[key] === 'string' ? a[key].toLowerCase() : a[key];
+      const varB = typeof b[key] === 'string' ? b[key].toLowerCase() : b[key];
+
+      let comparison = 0;
+      if (varA > varB) {
+        comparison = 1;
+      } else if (varA < varB) {
+        comparison = -1;
+      }
+      return order === 'desc' ? comparison * -1 : comparison;
+    };
+  }
+
   // All ClickHanlder for Table
   // Toggle selected Row
   toggleSelectedRow = (data) => {
@@ -170,7 +207,6 @@ export default class Favorite extends Component {
     this.setState({ oldData: data });
     // Allways sets state of these elements
     this.setState({
-      editRetailer: data.retailerId,
       editArticle: data.article,
       editAmount: data.amount,
       editUnit: data.unit,
@@ -179,110 +215,133 @@ export default class Favorite extends Component {
     });
   };
 
-  // Display correct error input field
-  setAddError = (article, amount) => {
-    article.trim() !== ''
-      ? this.setState({ errorAArticle: false })
-      : this.setState({ errorAArticle: true });
-    amount > 0
-      ? this.setState({ errorAAmount: false })
-      : this.setState({ errorAAmount: true });
-  };
-
-  setEditError = (article, amount) => {
-    article.trim() !== ''
-      ? this.setState({ errorEArticle: false })
-      : this.setState({ errorEArticle: true });
-    amount > 0
-      ? this.setState({ errorEAmount: false })
-      : this.setState({ errorEAmount: true });
-  };
-
-  // Add favorite entry
-  validateAddFavorite = () => {
-    const { article, amount } = this.state;
-    const aAmount = Math.round(amount * 1000) / 1000;
-    article.trim() !== '' && aAmount > 0
-      ? this.addFavorite()
-      : this.setAddError(article, aAmount);
-  };
-
-  addFavorite = () => {
-    const { retailer, article, amount, unit, retailers, units } = this.state;
-    // @TODO fav should be respons of Async Add
-    const fav = {
-      id: Math.floor(Math.random() * Math.floor(500)),
-      retailerId: retailer,
-      article,
-      amount,
-      unit,
-      // @TODO groupId from parent component
-      // groupId: this.props.groupId,
-    };
-    // this.setAddError(article, amount);
-    // this.setState((prevState) => {
-    //   const data = [...prevState.data];
-    //   data.unshift(fav);
-    //   return { ...prevState, data };
-    // });
-    document.getElementById('addRetailer').value = retailers[0].id;
-    document.getElementById('addArticle').value = '';
-    document.getElementById('addAmount').value = 1;
-    document.getElementById('addUnit').value = units[0].name;
-    this.setState({
-      retailer: retailers[0].id,
-      article: '',
-      amount: 1,
-      unit: units[0].name,
-    });
-    // On success add to unfilteredData
-    this.state.unfilteredData.push(fav);
-    this.setState({ unfilteredData: this.state.unfilteredData });
-    this.resetSearch();
-  };
-
-  // Updates selected entry
-  validateUpdateFavorite = (id) => {
-    const { editRetailer, editArticle, editAmount, editUnit } = this.state;
-    const eAmount = Math.round(editAmount * 1000) / 1000;
-    const favorite = {
-      id,
-      retailerId: editRetailer,
-      article: editArticle,
-      amount: eAmount,
-      unit: editUnit,
-      // @TODO groupId from parent component
-      // groupId: this.props.groupId
-    };
-    editArticle.trim() !== '' && eAmount > 0
-      ? this.updateFavorite(favorite)
-      : this.setEditError(editArticle, eAmount);
-  };
-
-  updateFavorite = (favorite) => {
-    this.setEditError(favorite.article, favorite.amount);
+  // Toggle bought boolean
+  toggleBought = (entry) => {
+    console.log('update bought');
+    entry.bought === 1 ? (entry.bought = 0) : (entry.bought = 1);
+    console.log(entry.bought);
     // @TODO Async Update
     // On success
     setTimeout(() => {
       this.setState((prevState) => {
         const unfilteredData = [...prevState.unfilteredData];
-        unfilteredData[unfilteredData.indexOf(this.state.oldData)] = favorite;
+        unfilteredData[unfilteredData.indexOf(this.state.oldData)] = entry;
         return { ...prevState, unfilteredData };
       });
-      this.toggleSelectedRow(favorite);
-      this.resetSearch();
+      // this.resetSearch();
     }, 500);
+    console.log(entry);
   };
 
+  // Display correct error input field for add
+  setAddError = (article, amount) => {
+    article.trim() !== ''
+      ? this.setState({ errorAArticle: false })
+      : this.setState({ errorAArticle: true });
+    amount !== '' && amount > 0
+      ? this.setState({ errorAAmount: false })
+      : this.setState({ errorAAmount: true });
+  };
+
+  // Display correct error input field for edit
+  setEditError = (article, amount) => {
+    article.trim() !== ''
+      ? this.setState({ errorEArticle: false })
+      : this.setState({ errorEArticle: true });
+    amount !== '' && amount > 0
+      ? this.setState({ errorEAmount: false })
+      : this.setState({ errorEAmount: true });
+  };
+
+  // Validate add entry
+  validateAdd = () => {
+    const { article, amount } = this.state;
+    article.trim() !== '' && amount !== '' && amount > 0
+      ? this.addEntry()
+      : this.setAddError(article, amount);
+  };
+
+  // Validate edit entry
+  validateEdit = (id) => {
+    const { editRetailer, editArticle, editAmount, editUnit } = this.state;
+    const entry = {
+      id,
+      retailer: editRetailer,
+      article: editArticle,
+      amount: editAmount,
+      unit: editUnit,
+    };
+    editArticle.trim() !== '' && editAmount !== '' && editAmount > 0
+      ? this.editEntry(entry)
+      : this.setEditError(editArticle, editAmount);
+  };
+
+  // Update edited entry
+  editEntry = (entry) => {
+    this.setEditError(entry.article, entry.amount);
+    this.updateEntry(entry);
+  };
+
+  // Add method
+  // Add new entry
+  // @TODO Async add entry
+  addEntry() {
+    const { article, amount, unit, units } = this.state;
+    // @TODO entry should be respons of Async Add
+    const entry = {
+      id: Math.floor(Math.random() * Math.floor(500)),
+      article,
+      amount,
+      unit,
+    };
+    this.setAddError(article, amount);
+    this.setState((prevState) => {
+      const data = [...prevState.data];
+      data.unshift(entry);
+      return { ...prevState, data };
+    });
+    document.getElementById('addArticle').value = '';
+    document.getElementById('addAmount').value = 1;
+    document.getElementById('addUnit').value = units[0].name;
+    this.setState({
+      article: '',
+      amount: 1,
+      unit: units[0].name,
+    });
+    // On success add to unfilteredData
+    this.state.unfilteredData.push(entry);
+    this.setState({ unfilteredData: this.state.unfilteredData });
+    this.resetSearch();
+    console.log(entry);
+  }
+
+  // Update method
+  // Updates selected entry
+  updateEntry(entry) {
+    // @TODO Async Update
+    // On success
+    setTimeout(() => {
+      this.setState((prevState) => {
+        const unfilteredData = [...prevState.unfilteredData];
+        unfilteredData[unfilteredData.indexOf(this.state.oldData)] = entry;
+        return { ...prevState, unfilteredData };
+      });
+      this.toggleSelectedRow(entry);
+      this.resetSearch();
+    }, 500);
+    console.log(entry);
+  }
+
   // Delete selected entry
-  delFavorite = (favId) => {
-    console.log(favId);
-    // this.fetchFavorites();
+  delFavorite = (id) => {
+    console.log(id);
+    // this.fetchEntries();
   };
 
   render() {
     const {
       retailers,
+      members,
       units,
       data,
       rowIndex,
@@ -292,15 +351,42 @@ export default class Favorite extends Component {
       errorEAmount,
       unfilteredData,
     } = this.state;
-    console.log('render');
+    console.info('render');
     return (
       <React.Fragment>
         <Container maxWidth="md">
           <CssBaseline />
           {/* Refresh table content */}
           <IconButton>
-            <Refresh onClick={(e) => this.refresh()} />
+            <Refresh id={'refreshBtn'} onClick={(e) => this.refresh()} />
           </IconButton>
+          {/* Retailer for entries */}
+          <Select
+            id="selectedRetailer"
+            retailers={retailers}
+            defaultValue={retailers[0].name}
+            //
+            onChange={(e) => this.setRetailer.bind(this)}
+          >
+            {retailers.map((option) => (
+              <option key={`${option.id} retailer`} value={option.id}>
+                {option.name}
+              </option>
+            ))}
+          </Select>
+          {/* Members responsible for entries */}
+          <Select
+            id="selectedMember"
+            members={members}
+            defaultValue={members[0].name}
+            onChange={(e) => this.setState({ members: e.target.value })}
+          >
+            {members.map((option) => (
+              <option key={`${option.id} member`} value={option.id}>
+                {option.name}
+              </option>
+            ))}
+          </Select>
           {/* Search articles */}
           <Input
             type="text"
@@ -310,11 +396,12 @@ export default class Favorite extends Component {
             onChange={(e) => this.search(e.target.value, unfilteredData)}
           ></Input>
 
+          {/* Table start */}
           <Table size="small">
             <TableHead>
               <TableRow>
                 <TableCell>
-                  <h4>Retailer</h4>
+                  <h4>Bought</h4>
                 </TableCell>
                 <TableCell>
                   <h4>Article</h4>
@@ -335,20 +422,7 @@ export default class Favorite extends Component {
             <TableBody>
               <TableRow>
                 <TableCell>
-                  <Select
-                    id="addRetailer"
-                    retailers={retailers}
-                    defaultValue={retailers[0].id}
-                    onChange={(e) =>
-                      this.setState({ retailer: parseInt(e.target.value) })
-                    }
-                  >
-                    {retailers.map((option) => (
-                      <option key={`ed ${option.id}`} value={option.id}>
-                        {option.name}
-                      </option>
-                    ))}
-                  </Select>
+                  <Checkbox disabled></Checkbox>
                 </TableCell>
                 <TableCell>
                   <Input
@@ -380,42 +454,28 @@ export default class Favorite extends Component {
                     onChange={(e) => this.setState({ unit: e.target.value })}
                   >
                     {units.map((option) => (
-                      <option key={`un ${option.name}`}>{option.name}</option>
+                      <option key={option.name}>{option.name}</option>
                     ))}
                   </Select>
                 </TableCell>
                 <TableCell>
                   <IconButton>
-                    <AddBox onClick={this.validateAddFavorite.bind(this)} />
+                    <AddBox id={'addBtn'} onClick={this.validateAdd.bind(this)} />
                   </IconButton>
                 </TableCell>
               </TableRow>
 
-              {/* Show all favorite articles of group */}
+              {/* Show all entries of group */}
               {data.map((row) => (
                 <TableRow key={row.id}>
-                  {/* Retailer */}
-                  <TableCell id={`${row.id} retailer`}>
-                    {rowIndex === row.id ? (
-                      <Select
-                        id="editRetailer"
-                        key={row.retailerId}
-                        defaultValue={row.retailerId}
-                        onChange={(e) =>
-                          this.setState({ editRetailer: parseInt(e.target.value) })
-                        }
-                      >
-                        {retailers.map((option) => (
-                          <option key={option.id} value={option.id}>
-                            {option.name}
-                          </option>
-                        ))}
-                      </Select>
-                    ) : (
-                      retailers.find((x) => x.id === row.retailerId).name
-                    )}
+                  {/* Bought */}
+                  <TableCell>
+                    <Checkbox
+                      id={`${row.id} checkbox`}
+                      defaultChecked={row.bought === 0 ? true : false}
+                      onClick={this.toggleBought.bind(this, row)}
+                    ></Checkbox>
                   </TableCell>
-
                   {/* Article */}
                   <TableCell id={`${row.id} article`}>
                     {rowIndex === row.id ? (
@@ -432,7 +492,6 @@ export default class Favorite extends Component {
                       row.article
                     )}
                   </TableCell>
-
                   {/* Amount */}
                   <TableCell id={`${row.id} amount`}>
                     {rowIndex === row.id ? (
@@ -449,7 +508,6 @@ export default class Favorite extends Component {
                       row.amount
                     )}
                   </TableCell>
-
                   {/* Unit */}
                   <TableCell id={`${row.id} unit`}>
                     {rowIndex === row.id ? (
@@ -466,12 +524,11 @@ export default class Favorite extends Component {
                       row.unit
                     )}
                   </TableCell>
-
                   {/* Actions */}
                   <TableCell id={`${row.id} id`}>
                     <IconButton id={`${row.id} btn1`}>
                       {rowIndex === row.id ? (
-                        <Check onClick={this.validateUpdateFavorite.bind(this, row.id)} />
+                        <Check onClick={this.validateEdit.bind(this, row.id)} />
                       ) : (
                         <Edit onClick={this.toggleSelectedRow.bind(this, row)} />
                       )}
