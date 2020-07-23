@@ -58,7 +58,7 @@ export default class GroupList extends Component {
     ShoppingAPI.getAPI()
       .getGroupMembership(1)
       .then((returnedGroupmemberships) => {
-        return this.setState({ groupMemberships: returnedGroupmemberships });
+        this.setState({ groupMemberships: returnedGroupmemberships });
         console.log(this.state.groupMemberships);
       });
   };
@@ -78,9 +78,7 @@ export default class GroupList extends Component {
       .deleteGroupMembership(groupID)
       .then(
         this.setState({
-          groupRows: this.state.groupRows.filter(
-            (group) => group.getID() !== groupID
-          ),
+          groupRows: this.state.groupRows.filter((group) => group.getID() !== groupID),
         })
       );
   };

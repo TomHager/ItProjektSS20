@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Paper, Typography, TextField, Button } from '@material-ui/core';
+import { Paper, Typography, Button } from '@material-ui/core';
 import firebase from 'firebase/app';
 import ShoppingAPI from '../../api/ShoppingAPI';
 import UserBO from '../../api/UserBO';
@@ -51,8 +51,8 @@ export default class Register extends Component {
         <Typography>Hello {firebase.auth().currentUser.displayName}</Typography>
         <br />
         <Typography>
-          If you are using this app the first time, please activate your account
-          in <b>iKauf</b>:
+          If you are using this app the first time, please activate your account in{' '}
+          <b>iKauf</b>:
         </Typography>
 
         <br />
