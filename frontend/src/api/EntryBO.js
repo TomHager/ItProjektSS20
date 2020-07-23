@@ -5,11 +5,11 @@ import BusinessObject from './BusinessObject';
  */
 
 export default class EntryBO extends BusinessObject {
-  constructor(unit, amount, name, modificationDate) {
+  constructor(unit, amount, article, modificationDate) {
     super();
     this.unit = unit;
     this.amount = amount;
-    this.name = name;
+    this.article = article;
     this.modification_date = modificationDate;
   }
 
@@ -29,12 +29,12 @@ export default class EntryBO extends BusinessObject {
     this.amount = amount;
   }
 
-  getName() {
-    return this.name;
+  getArticle() {
+    return this.article;
   }
 
-  setName(name) {
-    this.name = name;
+  setArticle(article) {
+    this.article = article;
   }
 
   getModificationDate(modificationDate) {

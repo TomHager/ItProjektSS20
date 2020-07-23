@@ -4,7 +4,8 @@ from datetime import datetime
 @author Robin Fink 
 @author Tom Hager
  """
- 
+
+
 class Entry(bo.BusinessObject):
 
     def __init__(self):
@@ -63,8 +64,8 @@ class Entry(bo.BusinessObject):
     def get_bought(self):
         return self._bought
 
-    def set_bought(self, value):
-        self._bought = value
+    def set_bought(self, bought):
+        self._bought = bought
 
     def __str__(self):
         """Erzeugen einer einfachen textuellen Darstellung der jeweiligen Instanz."""
