@@ -75,7 +75,7 @@ entry = api.inherit('Entry', bo, {
     'user_id': fields.Integer(attribut='_user_id', description='Name eines Benutzers'),
     'retailer_id': fields.Integer(attribute='_retailer_id', description='Name eines Verkäufers'),
     'shopping_list_id': fields.Integer(attribute='_shopping_list_id', description='ID einer Shopping List'),
-    'bought': fields.String(attribute='_bought', discription='Prüft ob der Artikel gekauft wurde'),
+    'bought': fields.Integer(attribute='_bought', discription='Prüft ob der Artikel gekauft wurde'),
 })
 
 shopping_list = api.inherit('ShoppingList', bo, {
