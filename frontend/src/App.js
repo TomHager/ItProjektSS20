@@ -5,7 +5,7 @@ import Header from './components/layout/Header';
 import Retailer from './components/pages/Retailer';
 import GroupList from './components/pages/GroupList';
 import Favorite from './components/pages/Favorite';
-import ShoppingList from './components/pages/ShoppingList';
+import RetailerEntryList from './components/pages/RetailerEntryList';
 import Testing from './components/pages/Testing';
 // import Register from "./components/layout/Register";
 import * as firebase from 'firebase/app';
@@ -148,7 +148,7 @@ export default class App extends React.Component {
                   <GroupList user={this.state.currentUser} />
                 </Route>
                 <Route path="/shoppingList">
-                  <ShoppingList />
+                  <RetailerEntryList />
                 </Route>
                 <Route path="/profile">
                   <Favorite />
