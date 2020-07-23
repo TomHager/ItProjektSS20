@@ -3,7 +3,6 @@ from server.db.Mapper import Mapper
 
 """
 @author Tom Hager
-@author Robin Fink
 """
 
 class FavoriteMapper(Mapper):
@@ -78,7 +77,7 @@ class FavoriteMapper(Mapper):
         cursor = self._cnx.cursor()
 
         command = "UPDATE favorites " + "SET unit=%s, amount=%s, article=%s, retailer_id=%s, group_id=%s WHERE id=%s"
-        data = (favorite.get_unit(), favorite.get_amount(), favorite.get_article(),
+        data = ( favorite.get_unit(), favorite.get_amount(), favorite.get_article(),
                 favorite.get_retailer_id(), favorite.get_group_id(), favorite.get_id())
         cursor.execute(command, data)
 
