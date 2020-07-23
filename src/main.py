@@ -836,14 +836,14 @@ class FavoriteListOperations(Resource):
         proposal = Favorite.from_dict(api.payload)
 
         if proposal is not None:
-            x = adm.create_favorite(proposal.get_retailer_id(), proposal.get_amount(), proposal.get_unit(),
-                                    proposal.get_article())  # todo unfilled konnten problem nicht lösen
+            x = adm.create_favorite(proposal.get_amount(), proposal.get_unit(),
+                                    proposal.get_article(), proposal.get_retailer_id(), proposal.get_group_id())
             return x, 200
         else:
             return '', 500
 
 
-@ikauf.route('favorite-by-id/<int:favoriteId>')
+@ikauf.route('/favorite-by-id/<int:id>')
 @ikauf.response(500, 'Falls Server-seitiger Fehler')
 @ikauf.param('id', 'ID des Favorite-Objektes')
 class FavoriteOperations(Resource):
@@ -880,6 +880,20 @@ class FavoriteOperations(Resource):
             return '', 200
         else:
             return '', 500
+
+
+@ikauf.route('/favorite-by-group/<int:id>')
+@ikauf.response(500, 'Falls Server-seitiger Fehler')
+@ikauf.param('id', 'Group ID des zugehörigen ShoppingList-Objekts')
+class FavoriteRelatedByGroupId(Resource):
+    @ikauf.marshal_with(favorite)
+    # @secured
+    def get(self, id):
+        """Auslesen eines bestimmten Favorite-Objekts nach Group ID"""
+
+        adm = ShoppingAdministration()
+        sl = adm.get_favorite_by_group(id)
+        return sl
 
 
 """
