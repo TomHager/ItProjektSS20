@@ -5,6 +5,7 @@ from server.db.Mapper import Mapper
 @author Tom Hager
 """
 
+
 class FavoriteMapper(Mapper):
     """Mapper-Klasse, die Account-Objekte auf eine relationale
         Datenbank abbildet. Hierzu wird eine Reihe von Methoden zur Verfügung
@@ -76,8 +77,9 @@ class FavoriteMapper(Mapper):
 
         cursor = self._cnx.cursor()
 
-        command = "UPDATE favorites " + "SET unit=%s, amount=%s, article=%s, retailer_id=%s, group_id=%s WHERE id=%s"
-        data = ( favorite.get_unit(), favorite.get_amount(), favorite.get_article(),
+        command = "UPDATE favorites " + \
+            "SET unit=%s, amount=%s, article=%s, retailer_id=%s, group_id=%s WHERE id=%s"
+        data = (favorite.get_unit(), favorite.get_amount(), favorite.get_article(),
                 favorite.get_retailer_id(), favorite.get_group_id(), favorite.get_id())
         cursor.execute(command, data)
 
@@ -125,7 +127,6 @@ class FavoriteMapper(Mapper):
             favorite.set_retailer_id(retailer_id)
             favorite.set_group_id(group_id)
 
-
             result = favorite
 
         self._cnx.commit()
@@ -133,24 +134,55 @@ class FavoriteMapper(Mapper):
 
         return result
 
+    # def find_favorite_by_group(self, group_id):
+    #     """Suchen eines Eintrags mit vorgegebener ID. Da diese eindeutig ist,
+    #                     wird genau ein Objekt zurückgegeben.
+
+    #                     :param key Primärschlüsselattribut (->DB)
+    #                     :return Eintrag-Objekt, das dem übergebenen Schlüssel entspricht, None bei
+    #                         nicht vorhandenem DB-Tupel.
+    #                     """
+
+    #     result = None
+
+    #     cursor = self._cnx.cursor()
+    #     command = "SELECT * FROM favorites WHERE group_id={}".format(group_id)
+    #     cursor.execute(command)
+    #     tuples = cursor.fetchall()
+
+    #     if tuples[0] is not None:
+    #         (id, unit, amount, article, retailer_id, group_id) = tuples[0]
+    #         favorite = Favorite()
+    #         favorite.set_id(id)
+    #         favorite.set_unit(unit)
+    #         favorite.set_amount(amount)
+    #         favorite.set_article(article)
+    #         favorite.set_retailer_id(retailer_id)
+    #         favorite.set_group_id(group_id)
+
+    #         result = favorite
+
+    #     self._cnx.commit()
+    #     cursor.close()
+
+    #     return result
+
     def find_favorite_by_group(self, group_id):
-        """Suchen eines Eintrags mit vorgegebener ID. Da diese eindeutig ist,
-                        wird genau ein Objekt zurückgegeben.
+        """Auslesen einer Gruppe anhand des Gruppennames.
 
-                        :param key Primärschlüsselattribut (->DB)
-                        :return Eintrag-Objekt, das dem übergebenen Schlüssel entspricht, None bei
-                            nicht vorhandenem DB-Tupel.
-                        """
+                :param member Gruppenname der gesuchten Gruppe.
+                :return Das Gruppen-Objekt,
+                    mit dem gewünschten Gruppennamen enthält.
+                """
 
-        result = None
-
+        result = []
         cursor = self._cnx.cursor()
-        command = "SELECT * FROM favorites WHERE group_id={}".format(group_id)
+        command = "SELECT * FROM favorites WHERE group_id={} ORDER BY id".format(
+            group_id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
-        if tuples[0] is not None:
-            (id, unit, amount, article, retailer_id, group_id) = tuples[0]
+        for (id, unit, amount, article, retailer_id, group_id) in tuples:
             favorite = Favorite()
             favorite.set_id(id)
             favorite.set_unit(unit)
@@ -158,16 +190,12 @@ class FavoriteMapper(Mapper):
             favorite.set_article(article)
             favorite.set_retailer_id(retailer_id)
             favorite.set_group_id(group_id)
-
-
-            result = favorite
+            result.append(favorite)
 
         self._cnx.commit()
         cursor.close()
 
         return result
-
-
 
 
 """Zu Testzwecken können wir diese Datei bei Bedarf auch ausführen, 

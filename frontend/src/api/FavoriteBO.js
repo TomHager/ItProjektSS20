@@ -5,7 +5,7 @@ import BusinessObject from './BusinessObject';
  */
 
 export default class FavoriteBO extends BusinessObject {
-  constructor(unit, amount, article) {
+  constructor(unit, amount, article, retailer_id, group_id) {
     super();
     this.unit = unit;
     this.amount = amount;

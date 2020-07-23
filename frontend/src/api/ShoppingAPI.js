@@ -40,9 +40,12 @@ export default class ShoppingAPI {
   // Favorites related
   #getFavoritesURL = () => `${this.#ShoppingServerBaseURL}/favorites`;
   #getFavoriteURL = (id) => `${this.#ShoppingServerBaseURL}/favorites/${id}`;
-  #addFavoriteURL = () => `${this.#ShoppingServerBaseURL}/favorites`;
-  #updateFavoriteURL = (id) => `${this.#ShoppingServerBaseURL}/favorites/${id}`;
+  #addFavoriteURL = () => `${this.#ShoppingServerBaseURL}/favorite`;
+  #updateFavoriteURL = (id) =>
+    `${this.#ShoppingServerBaseURL}/favorite-by-id/${id}`;
   #deleteFavoriteURL = (id) => `${this.#ShoppingServerBaseURL}/favorites/${id}`;
+  #searchFavoriteByGroupURL = (groupId) =>
+    `${this.#ShoppingServerBaseURL}/favorite-by-group/${groupId}`;
 
   // Groups related
   #getGroupsURL = () => `${this.#ShoppingServerBaseURL}/groups`;
@@ -533,15 +536,15 @@ export default class ShoppingAPI {
   }
 
   searchShoppingListByGroupId(groupId) {
-    return this.#fetchAdvanced(this.#searchShoppingListByNameURL(groupId)).then(
-      (responseJSON) => {
-        let shoppingListBOs = ShoppingListBO.fromJSON(responseJSON);
-        // console.info(shoppinglistBOs);
-        return new Promise(function (resolve) {
-          resolve(shoppingListBOs);
-        });
-      }
-    );
+    return this.#fetchAdvanced(
+      this.#searchShoppingListByGroupIdURL(groupId)
+    ).then((responseJSON) => {
+      let shoppingListBOs = ShoppingListBO.fromJSON(responseJSON);
+      // console.info(shoppinglistBOs);
+      return new Promise(function (resolve) {
+        resolve(shoppingListBOs);
+      });
+    });
   }
 
   // Retailer Methoden
@@ -714,6 +717,18 @@ export default class ShoppingAPI {
         resolve(responseFavoriteBO);
       });
     });
+  }
+
+  searchFavoriteByGroup(groupId) {
+    return this.#fetchAdvanced(this.#searchFavoriteByGroupURL(groupId)).then(
+      (responseJSON) => {
+        let favoriteBOs = FavoriteBO.fromJSON(responseJSON);
+        // console.info(favoriteBOs);
+        return new Promise(function (resolve) {
+          resolve(favoriteBOs);
+        });
+      }
+    );
   }
 
   // GroupMembership Methoden

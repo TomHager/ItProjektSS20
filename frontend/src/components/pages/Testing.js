@@ -21,6 +21,8 @@ export default class Testing extends Component {
       user: null,
       GroupmemberShip: null,
       retailers: null,
+      favorite: null,
+      lists: null,
     };
   }
 
@@ -67,10 +69,10 @@ export default class Testing extends Component {
   };
 
   //Retailer
-
+  //TODO
   addRetailerToDatabase = () => {
     const newRetailer = new RetailerBO();
-    newRetailer.setName('Aldi');
+    newRetailer.setName('Lidl');
     ShoppingAPI.getAPI()
       .addRetailer(newRetailer)
       .catch((e) => {
@@ -80,7 +82,7 @@ export default class Testing extends Component {
 
   //Groupmembership
 
-  getgroupMemebershipByUserID = () => {
+  getgroupMembershipByUserID = () => {
     ShoppingAPI.getAPI()
       .searchGroupsByMember(1)
       .then((result) => {
@@ -110,7 +112,7 @@ export default class Testing extends Component {
 
   addRetailergroup = () => {
     const newMembership = new RetailerGroupBO();
-    newMembership.setRetailerGroup(3);
+    newMembership.setRetailerGroup(6);
     newMembership.setRetailerMember(3);
     // const newMembership = { member: 3, group_membership: 3 };
     console.log(newMembership);
@@ -124,7 +126,7 @@ export default class Testing extends Component {
   //Notwendig für Favorites
 
   //Läuft
-  getgroupMemebershipByUserID = () => {
+  getgroupMembershipByUserID = () => {
     ShoppingAPI.getAPI()
       .searchGroupsByMember(1)
       .then((result) => {
@@ -133,21 +135,48 @@ export default class Testing extends Component {
       });
   };
 
-  //TODO
-  // getFavoritesByGroup = () => {
-  //   ShoppingAPI.getAPI().
-  // }
-
-  addFavorite = () => {
-    const newFavorite = new FavoriteBO();
-    newFavorite.setArticle('Zwiebeln');
-    newFavorite.setUnit('kg');
-    newFavorite.setAmount(1);
-    console.log(newFavorite);
-    ShoppingAPI.getAPI().addFavorite(newFavorite);
+  //Läuft
+  getFavoritesByGroup = () => {
+    ShoppingAPI.getAPI()
+      .searchFavoriteByGroup(2)
+      .then((result) => {
+        this.setState({ favorite: result });
+        console.log(this.state.favorite);
+      });
   };
 
-  // updateFavorite
+  //Läuft
+  addFavorite = () => {
+    const newFavorite = new FavoriteBO();
+    newFavorite.setUnit('kg');
+    newFavorite.setAmount(1);
+    newFavorite.setArticle('Birnen');
+    newFavorite.setRetailerID(4);
+    newFavorite.setGroupID(3);
+    console.log(newFavorite);
+    ShoppingAPI.getAPI()
+      .addFavorite(newFavorite)
+      .catch((e) => {
+        console.info(e);
+      });
+  };
+
+  //Läuft
+  updateFavorite = () => {
+    const updatedFavorite = this.state.favorite;
+    updatedFavorite[0].setUnit('l');
+    ShoppingAPI.getAPI().updateFavorite(updatedFavorite[0]);
+  };
+
+  //Notwendig Für Shoppingliste
+  getShoppingListsByGroup = () => {
+    ShoppingAPI.getAPI()
+      .searchShoppingListByGroupId(2)
+      .then((result) => {
+        this.setState({ lists: result });
+        console.log(this.state.lists);
+      });
+  };
 
   // componentDidMount() {
   //   this.getUsers();
@@ -181,12 +210,12 @@ export default class Testing extends Component {
   // displayUsers = () => console.log(this.state.users);
   componentDidMount() {
     this.getUsers();
-    this.getgroupMemebershipByUserID();
+    this.getFavoritesByGroup();
   }
 
   render() {
     return (
-      <Button onClick={this.getgroupMemebershipByUserID}>
+      <Button onClick={this.getShoppingListsByGroup}>
         Let the testing begin!
       </Button>
       // <form onSubmit={this.handleSubmit}>
