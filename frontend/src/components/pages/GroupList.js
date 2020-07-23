@@ -32,6 +32,7 @@ export default class GroupList extends Component {
       groupRows: [],
       groupIndex: -1,
       user: null,
+      groupMemberships: [],
     };
   }
 
@@ -46,28 +47,29 @@ export default class GroupList extends Component {
   getCurrUser = () => {
     console.log('Eingeloggter User:', firebase.auth().currentUser.displayName);
     ShoppingAPI.getAPI()
-      .getUserByExternalId(firebase.auth().currentUser.uid)
+      .searchUserByEmail(firebase.auth().currentUser.email)
       .then((returnedUser) => {
         this.setState({ user: returnedUser });
-        this.getGroupsByUser();
       });
   };
 
-  getGroupsByUserId = () => {
-    console.log('Getting groups');
+  getGroupMembershipByUserId = () => {
+    console.log('Get groupmemberships');
     ShoppingAPI.getAPI()
-      .getGroupsByUserId(this.state.user.getID())
+      .getGroupMembership(1)
+      .then((returnedGroupmemberships) => {
+        return this.setState({ groupMemberships: returnedGroupmemberships });
+        console.log(this.state.groupMemberships);
+      });
+  };
+
+  getGroupsByGroupId = () => {
+    console.log('Getting groups');
+    this.getCurrUser();
+    ShoppingAPI.getAPI()
+      .getGroupsByUserId(this.state.user[0].id)
       .then((returnedGroups) => {
         return this.setState({ groupRows: returnedGroups });
-      });
-  };
-
-  getGroupMembersByGroupId = () => {
-    console.log('Get groupMembers');
-    ShoppingAPI.getAPI()
-      .getGroupMembership(this.state.group.getID())
-      .then((returnedMembers) => {
-        return this.setState({ groupMembers: returnedMembers });
       });
   };
 
@@ -84,10 +86,10 @@ export default class GroupList extends Component {
   };
 
   //calls all Callbacks for Repor Selection
-  // componentDidMount = () => {
-  //   this.fetchGroups();
-  //   console.log('All Callbacks initialised');
-  // };
+  componentDidMount = () => {
+    this.getGroupMembershipByUserId();
+    console.log('All Callbacks initialised');
+  };
 
   render() {
     const groupRows = this.state.groupRows;
