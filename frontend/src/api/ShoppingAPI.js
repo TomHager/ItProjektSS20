@@ -25,7 +25,7 @@ export default class ShoppingAPI {
   // Entries related
   #getEntriesURL = () => `${this.#ShoppingServerBaseURL}/entries`;
   #getEntryURL = (id) => `${this.#ShoppingServerBaseURL}/entries/${id}`;
-  #addEntryURL = () => `${this.#ShoppingServerBaseURL}/entries`;
+  #addEntryURL = () => `${this.#ShoppingServerBaseURL}/entry`;
   #updateEntryURL = (id) => `${this.#ShoppingServerBaseURL}/entry-by-id/${id}`;
   #deleteEntryURL = (id) => `${this.#ShoppingServerBaseURL}/entries/${id}`;
   #searchEntryByAmountURL = (amount) =>

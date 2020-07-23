@@ -215,14 +215,32 @@ export default class Testing extends Component {
     const updatedEntry = this.state.lists;
     console.log(updatedEntry[0]);
     updatedEntry[0].setArticle('Bier');
+    updatedEntry[0].setUserId(2);
     ShoppingAPI.getAPI().updateEntry(updatedEntry[0]);
   };
 
-  updateShoppingList = () => {
-    const updatedEntry = this.state.lists;
-    console.log(updatedEntry[0]);
-    updatedEntry[0].setArticle('Bier');
-    ShoppingAPI.getAPI().updateEntry(updatedEntry[0]);
+  // updateShoppingList = () => {
+  //   const updatedShoppingList = this.state.lists;
+  //   console.log(updatedEntry[0]);
+  //   updatedEntry[0].setArticle('Bier');
+  //   ShoppingAPI.getAPI().updateEntry(updatedEntry[0]);
+  // };
+  //TODO
+  createEntry = () => {
+    const newEntry = new EntryBO();
+    newEntry.setArticle('Wachteln');
+    newEntry.setAmount(23);
+    newEntry.setUnit('kg');
+    newEntry.setUserId(2);
+    newEntry.setModificationDate('2020-07-03 00:00:00');
+    newEntry.setRetailerId(1);
+    newEntry.setShoppingListId(2);
+    console.log(newEntry);
+    ShoppingAPI.getAPI()
+      .addEntry(newEntry)
+      .catch((e) => {
+        console.info(e);
+      });
   };
 
   // createShoppingList
@@ -267,7 +285,7 @@ export default class Testing extends Component {
 
   render() {
     return (
-      <Button onClick={this.updateEntrys}>Let the testing begin!</Button>
+      <Button onClick={this.createEntry}>Let the testing begin!</Button>
       // <form onSubmit={this.handleSubmit}>
       //   <input type="text" name="name" onChange={this.handleChange} />
       //   <input type="email" name="email" onChange={this.handleChange} />
