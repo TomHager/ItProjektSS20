@@ -43,11 +43,11 @@ class Entry(bo.BusinessObject):
     def set_modification_date(self, value):
         self._modification_date = value
 
-    def get_shopping_list_id(self):
-        return self._shopping_list_id
+    def get_user_id(self):
+        return self._user_id
 
-    def set_shopping_list_id(self, value):
-        self._shopping_list_id = value
+    def set_user_id(self, value):
+        self._user_id = value
 
     def get_retailer_id(self):
         return self._retailer_id
@@ -55,11 +55,11 @@ class Entry(bo.BusinessObject):
     def set_retailer_id(self, value):
         self._retailer_id = value
 
-    def get_user_id(self):
-        return self._user_id
+    def get_shopping_list_id(self):
+        return self._shopping_list_id
 
-    def set_user_id(self, value):
-        self._user_id = value
+    def set_shopping_list_id(self, value):
+        self._shopping_list_id = value
 
     def get_bought(self):
         return self._bought
@@ -83,9 +83,9 @@ class Entry(bo.BusinessObject):
         obj.set_amount(dictionary["amount"])
         obj.set_article(dictionary["article"])
         obj.set_modification_date(dictionary["modification_date"])
-        obj.set_shopping_list_id(dictionary["shopping_list_id"])
         obj.set_user_id(dictionary["user_id"])
         obj.set_retailer_id(dictionary["retailer_id"])
+        obj.set_shopping_list_id(dictionary["shopping_list_id"])
         obj.set_bought(dictionary["bought"])
 
         return obj

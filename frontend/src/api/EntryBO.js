@@ -5,12 +5,25 @@ import BusinessObject from './BusinessObject';
  */
 
 export default class EntryBO extends BusinessObject {
-  constructor(unit, amount, article, modificationDate) {
+  constructor(
+    unit,
+    amount,
+    article,
+    modificationDate,
+    userId,
+    retailerId,
+    shoppingListId,
+    bought
+  ) {
     super();
     this.unit = unit;
     this.amount = amount;
     this.article = article;
     this.modification_date = modificationDate;
+    this.user_id = userId;
+    this.retailer_id = retailerId;
+    this.shopping_list_id = shoppingListId;
+    this.bought = bought;
   }
 
   getUnit() {
@@ -37,12 +50,44 @@ export default class EntryBO extends BusinessObject {
     this.article = article;
   }
 
-  getModificationDate(modificationDate) {
+  getModificationDate() {
     return this.modification_date;
   }
 
   setModificationDate(modificationDate) {
     this.modification_date = modificationDate;
+  }
+
+  getUserId() {
+    return this.user_id;
+  }
+
+  setUserId(userId) {
+    this.user_id = userId;
+  }
+
+  getRetailerId() {
+    return this.retailer_id;
+  }
+
+  setRetailerId(retailerId) {
+    this.retailer_id = retailerId;
+  }
+
+  getShoppingListId() {
+    return this.shopping_list_id;
+  }
+
+  setShoppingListId(shoppingListId) {
+    this.shopping_list_id = shoppingListId;
+  }
+
+  getBought() {
+    return this.bought;
+  }
+
+  setBought(bought) {
+    this.bought = bought;
   }
 
   /*
