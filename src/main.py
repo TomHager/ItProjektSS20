@@ -179,53 +179,6 @@ class FavoriteOperations(Resource):
             return '', 500
 
 
-@ikauf.route('/user/<int:id>')
-@ikauf.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
-@ikauf.param('id', 'Die ID des User-Objekts')
-class UserOperations(Resource):
-    @ikauf.marshal_with(user)
-    @secured
-    def get(self, id):
-        """Auslesen eines bestimmten User-Objekts.
-
-        Das auszulesende Objekt wird durch die ```id``` in dem URI bestimmt.
-        """
-        adm = ShoppingAdministration()
-        cust = adm.get_user_by_id(id)
-        return cust
-
-    @secured
-    def delete(self, id):
-        """Löschen eines bestimmten User-Objekts.
-
-        Das zu löschende Objekt wird durch die ```id``` in dem URI bestimmt.
-        """
-        adm = ShoppingAdministration()
-        cust = adm.get_user_by_id(id)
-        adm.delete_user(cust)
-        return '', 200
-
-    @ikauf.marshal_with(user)
-    @ikauf.expect(user, validate=True)
-    def put(self, id):
-        """Update eines bestimmten User-Objekts.
-
-        **ACHTUNG:** Relevante id ist die id, die mittels URI bereitgestellt und somit als Methodenparameter
-        verwendet wird. Dieser Parameter überschreibt das ID-Attribut des im Payload der Anfrage übermittelten
-        Customer-Objekts.
-        """
-        adm = ShoppingAdministration()
-        c = User.from_dict(api.payload)
-
-        if c is not None:
-            """Hierdurch wird die id des zu überschreibenden (vgl. Update) Customer-Objekts gesetzt.
-            Siehe Hinweise oben.
-            """
-            c.set_id(id)
-            adm.save_user(c)
-            return '', 200
-        else:
-            return '', 500
 
 """
 Start der main.py um zu testen ob es funktioniert (in der lokalen Entwicklerumgebung).
