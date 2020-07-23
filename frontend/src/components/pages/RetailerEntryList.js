@@ -22,6 +22,7 @@ import {
  *
  * @author Tom Hager
  */
+// Sort selected column
 
 export default class RetailerEntryList extends Component {
   constructor(props) {
@@ -38,7 +39,7 @@ export default class RetailerEntryList extends Component {
         { name: 'pcs' },
         { name: 'pack' },
       ],
-      retailers: [{ name: 'loading' }],
+      retailer: { name: 'loading' },
       members: [{ name: 'loading' }],
       rowIndex: -1,
 
@@ -66,7 +67,6 @@ export default class RetailerEntryList extends Component {
       unfilteredData: [],
     };
   }
-
   // All Asynccallbacks
 
   // Fetching all entrys of a RetailerShoppingList
@@ -77,10 +77,10 @@ export default class RetailerEntryList extends Component {
         amount: 4,
         unit: 'Kg',
         article: 'Apfel',
-        modificationDate: Date.now(),
-        shoppingListId: 1,
-        userId: 1,
-        retailerId: 1,
+        modification_date: this.getModDate(),
+        shopping_list_id: 1,
+        user_id: 1,
+        retailer_id: 1,
         bought: 0,
       },
       {
@@ -88,10 +88,10 @@ export default class RetailerEntryList extends Component {
         amount: 3,
         unit: 'pcs',
         article: 'Birne',
-        modificationDate: Date.now(),
-        shoppingListId: 1,
-        userId: 1,
-        retailerId: 2,
+        modification_date: '2020-07-02T23:59:59',
+        shopping_list_id: 1,
+        user_id: 1,
+        retailer_id: 2,
         bought: 1,
       },
       {
@@ -99,10 +99,10 @@ export default class RetailerEntryList extends Component {
         amount: 6,
         unit: 'g',
         article: 'Ananas',
-        modificationDate: Date.now(),
-        shoppingListId: 1,
-        userId: 1,
-        retailerId: 2,
+        modification_date: this.getModDate(),
+        shopping_list_id: 1,
+        user_id: 1,
+        retailer_id: 2,
         bought: 0,
       },
     ];
@@ -112,19 +112,20 @@ export default class RetailerEntryList extends Component {
     }, 1000);
   }
 
+  // Fetch all members of a group
   // Fetch all retailer of a group
-  fetchRetailer() {
-    const retailers = [
-      { id: 1, name: 'Edeka' },
-      { id: 2, name: 'Rewe' },
-      { id: 3, name: 'Kaufland' },
-      { id: 4, name: 'Test' },
-    ];
-    setTimeout(() => {
-      this.setState({ retailers: retailers });
-      console.log('fetch retailers complete');
-    }, 1000);
-  }
+  // fetchRetailer() {
+  //   const retailers = [
+  //     { id: 1, name: 'Edeka' },
+  //     { id: 2, name: 'Rewe' },
+  //     { id: 3, name: 'Kaufland' },
+  //     { id: 4, name: 'Test' },
+  //   ];
+  //   setTimeout(() => {
+  //     this.setState({ retailers: retailers });
+  //     console.log('fetch retailers complete');
+  //   }, 1000);
+  // }
 
   // Fetch all members of a group
   fetchMembers() {
@@ -142,30 +143,43 @@ export default class RetailerEntryList extends Component {
   // Start Callbacks
   componentDidMount() {
     this.fetchEntries();
-    this.fetchRetailer();
+    // this.fetchRetailer();
     this.fetchMembers();
     const { units } = this.state;
     this.setState({
+      // @TODO
+      // retailer: this.props.retailer
       unit: units[0].name,
       editUnit: units[0].name,
     });
   }
+
+  // get Date as YYYY-MM-DDTHH:MM:SS
+  getModDate = () => new Date().toISOString().substr(0, 19);
+
   //Refreshs page
   refresh = () => {
-    this.setState({
-      data: [],
-      retailers: [{ name: 'loading' }],
-      members: [{ name: 'loading' }],
-      errorAArticle: false,
-      errorAAmount: false,
-      rowIndex: -1,
-    });
-    this.componentDidMount();
-    document.getElementById('addArticle').value = '';
-    document.getElementById('addAmount').value = 1;
-    document.getElementById('addUnit').value = this.state.units[0].name;
+    const nData = this.state.data;
+    for (let i in nData) {
+      nData[i].modification_date = Date.parse(nData[i].modification_date);
+    }
+    nData.sort((a, b) => a.modification_date - b.modification_date);
+    nData.sort((a, b) => a.bought - b.bought);
+    console.log(nData);
+    console.log(this.getModDate());
+    // this.setState({
+    //   data: [],
+    //   retailers: [{ name: 'loading' }],
+    //   members: [{ name: 'loading' }],
+    //   errorAArticle: false,
+    //   errorAAmount: false,
+    //   rowIndex: -1,
+    // });
+    // this.componentDidMount();
+    // document.getElementById('addArticle').value = '';
+    // document.getElementById('addAmount').value = 1;
+    // document.getElementById('addUnit').value = this.state.units[0].name;
   };
-  // @TODO Search
 
   // Search for a article in given list
   search = (req, data) => {
@@ -181,22 +195,6 @@ export default class RetailerEntryList extends Component {
     document.getElementById('filter').value = '';
     this.search('', this.state.unfilteredData);
   };
-
-  // Sort selected column
-  sort(key, order = 'asc') {
-    return function innerSort(a, b) {
-      const varA = typeof a[key] === 'string' ? a[key].toLowerCase() : a[key];
-      const varB = typeof b[key] === 'string' ? b[key].toLowerCase() : b[key];
-
-      let comparison = 0;
-      if (varA > varB) {
-        comparison = 1;
-      } else if (varA < varB) {
-        comparison = -1;
-      }
-      return order === 'desc' ? comparison * -1 : comparison;
-    };
-  }
 
   // All ClickHanlder for Table
   // Toggle selected Row
@@ -340,7 +338,7 @@ export default class RetailerEntryList extends Component {
 
   render() {
     const {
-      retailers,
+      retailer,
       members,
       units,
       data,
@@ -356,12 +354,14 @@ export default class RetailerEntryList extends Component {
       <React.Fragment>
         <Container maxWidth="md">
           <CssBaseline />
+
+          <h3>{retailer.name}</h3>
           {/* Refresh table content */}
           <IconButton>
             <Refresh id={'refreshBtn'} onClick={(e) => this.refresh()} />
           </IconButton>
-          {/* Retailer for entries */}
-          <Select
+          {/* @TODO #nicetohave Retailer for entries */}
+          {/* <Select
             id="selectedRetailer"
             retailers={retailers}
             defaultValue={retailers[0].name}
@@ -373,11 +373,12 @@ export default class RetailerEntryList extends Component {
                 {option.name}
               </option>
             ))}
-          </Select>
+          </Select> */}
           {/* Members responsible for entries */}
           <Select
             id="selectedMember"
             members={members}
+            align="right"
             defaultValue={members[0].name}
             onChange={(e) => this.setState({ members: e.target.value })}
           >
