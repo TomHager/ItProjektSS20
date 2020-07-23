@@ -99,7 +99,7 @@ export default class RetailerEntryList extends Component {
         amount: 6,
         unit: 'g',
         article: 'Ananas',
-        modification_date: this.getModDate(),
+        modification_date: '2020-07-02T23:59:59',
         shopping_list_id: 1,
         user_id: 1,
         retailer_id: 2,
@@ -160,13 +160,14 @@ export default class RetailerEntryList extends Component {
   //Refreshs page
   refresh = () => {
     const nData = this.state.data;
-    for (let i in nData) {
-      nData[i].modification_date = Date.parse(nData[i].modification_date);
+    for (let i of nData) {
+      i.modification_date = Date.parse(i.modification_date);
     }
     nData.sort((a, b) => a.modification_date - b.modification_date);
-    nData.sort((a, b) => a.bought - b.bought);
+    nData.sort((a, b) => b.bought - a.bought);
+    this.setState({ data: nData });
     console.log(nData);
-    console.log(this.getModDate());
+    // console.log(this.getModDate());
     // this.setState({
     //   data: [],
     //   retailers: [{ name: 'loading' }],
@@ -330,6 +331,13 @@ export default class RetailerEntryList extends Component {
     console.log(entry);
   }
 
+  updateMember(id) {
+    for (let i of this.state.unfilteredData) {
+      i.user_id = id;
+      // @TODO Update Async for each element in list
+    }
+  }
+
   // Delete selected entry
   delFavorite = (id) => {
     console.log(id);
@@ -378,7 +386,6 @@ export default class RetailerEntryList extends Component {
           <Select
             id="selectedMember"
             members={members}
-            align="right"
             defaultValue={members[0].name}
             onChange={(e) => this.setState({ members: e.target.value })}
           >
