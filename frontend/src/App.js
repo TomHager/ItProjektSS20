@@ -11,6 +11,7 @@ import Testing from './components/pages/Testing';
 import * as firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
+import Register from './components/layout/Register';
 
 // import Theme from './Theme';
 import SignIn from './components/pages/SignIn';
@@ -143,7 +144,10 @@ export default class App extends React.Component {
             // Is a user signed in?
             this.state.currentUser ? (
               <>
-                <Redirect from="/" to="/groupList" />
+                <Redirect from="/" to="/welcome" />
+                <Route exact path="/welcome">
+                  <Register />
+                </Route>
                 <Route exact path="/groupList">
                   <GroupList user={this.state.currentUser} />
                 </Route>

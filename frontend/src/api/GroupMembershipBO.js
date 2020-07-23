@@ -1,13 +1,11 @@
-import BusinessObject from './BusinessObject';
 /**
  * @author Erik Lebedkin
  */
 
-export default class GroupMembershipBO extends BusinessObject {
-  constructor(member, membership) {
-    super();
+export default class GroupMembershipBO {
+  constructor(member, group_membership) {
     this.member = member;
-    this.membership = membership;
+    this.group_membership = group_membership;
   }
 
   setGroupMember(member) {
@@ -18,12 +16,12 @@ export default class GroupMembershipBO extends BusinessObject {
     return this.member;
   }
 
-  setGroupMembership(membership) {
-    this.membership = membership;
+  setGroupMembership(group_membership) {
+    this.group_membership = group_membership;
   }
 
   getGroupMembership() {
-    return this.membership;
+    return this.group_membership;
   }
 
   // Returns an Array of CustomerBOs from a given JSON structure

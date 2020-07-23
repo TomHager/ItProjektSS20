@@ -1,12 +1,9 @@
-import BusinessObject from './BusinessObject';
-
 /**
  * @author Tom Hager
  */
 
-export default class RetailerGroupBO extends BusinessObject {
+export default class RetailerGroupBO {
   constructor(retailerMember, retailerGroup) {
-    super();
     this.retailer_member = retailerMember;
     this.retailer_group = retailerGroup;
   }

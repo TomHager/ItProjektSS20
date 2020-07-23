@@ -160,24 +160,18 @@ class ShoppingListMapper (Mapper):
             nicht vorhandenem DB-Tupel.
         """
 
-        result = None
-
+        result = []
         cursor = self._cnx.cursor()
-        command = "SELECT * FROM shoppinglists WHERE groups_id LIKE '{}' ORDER BY groups_id".format(group_id)
+        command = "SELECT id, name, groups_id FROM shoppinglists WHERE name LIKE '{}' ORDER BY name".format(group_id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
-        try:
-            (id, name, group_id) = tuples[0]
+        for (id, name, group_id) in tuples:
             shoppinglist = ShoppingList()
             shoppinglist.set_id(id)
             shoppinglist.set_name(name)
             shoppinglist.set_group_id(group_id)
-            result = shoppinglist
-        except IndexError:
-            """Der IndexError wird oben beim Zugriff auf tuples[0] auftreten, wenn der vorherige SELECT-Aufruf
-            keine Tupel liefert, sondern tuples = cursor.fetchall() eine leere Sequenz zurück gibt."""
-            result = None
+            result.append(shoppinglist)
 
         self._cnx.commit()
         cursor.close()

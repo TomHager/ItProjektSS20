@@ -64,8 +64,7 @@ group = api.inherit('Group', bo, {
 })
 
 retailer = api.inherit('retailer', bo, {
-    'retailer_name': fields.String(attribute='_name', description='Name eines Verkäufers'),
-    'group_id': fields.Integer(attribute='_id', description='ID einer Gruppe')
+    'name': fields.String(attribute='_name', description='Name eines Verkäufers'),
 })
 
 entry = api.inherit('Entry', bo, {
@@ -343,7 +342,7 @@ class RetailerListOperations(Resource):
 
         adm = ShoppingAdministration()
 
-        r = adm.get_retailer_by_group(id)
+        r = RetailerGroup.from_dict(api.payload)
 
         if r is not None:
             x = adm.create_retailer(r)
@@ -691,17 +690,16 @@ class DeleteRetailerGroupOperations(Resource):
 @ikauf.response(500, "Falls Server-seitiger Fehler")
 class RetailerGroupListOperations(Resource):
     # @secured
-    def post(self, id):
+    def post(self):
         """Anlegen eines neuen Retailer-Objekts für einen gegebene Group"""
 
         adm = ShoppingAdministration()
 
-        r = adm.get_retailer_by_group(id)
-        ret = adm.get_group_by_retailer(id)
+        proposal = RetailerGroup.from_dict(api.payload)
 
-        if (r, ret) is not None:
-            x = adm.create_retailer_group(r, ret)
-            return x, 200
+        if proposal is not None:
+            x = adm.create_retailer_group(
+                proposal.get_retailer_group(), proposal.get_retailer_member())
         else:
             return 'RetailerGroup unknown',
 
@@ -754,20 +752,19 @@ class DeleteGroupMembershipOperations(Resource):
         return '', 200
 
 
-@ikauf.route('/create_group_membership')
+@ikauf.route('/create-group-membership')
 @ikauf.response(500, "Falls Server-seitiger Fehler")
 class GroupMembershipListOperations(Resource):
-    # @secured
-    def post(self, id):
+    def post(self):
         """Anlegen eines neuen Group-Membership-Objekts für einen gegebene Group"""
 
         adm = ShoppingAdministration()
 
-        gms = adm.get_member_by_group_membership(id)
-        gms2 = adm.get_group_membership_by_member(id)
+        proposal = GroupMembership.from_dict(api.payload)
 
-        if gms is not None:
-            x = adm.create_group_membership(gms, gms2)
+        if proposal is not None:
+            x = adm.create_group_membership(
+                proposal.get_member(), proposal.get_group_membership())
             return x, 200
         else:
             return 'GroupMembership unknown',
@@ -839,14 +836,14 @@ class FavoriteListOperations(Resource):
         proposal = Favorite.from_dict(api.payload)
 
         if proposal is not None:
-            x = adm.create_favorite(proposal.get_retailer_id(), proposal.get_amount(), proposal.get_unit(),
-                                    proposal.get_article())  # todo unfilled konnten problem nicht lösen
+            x = adm.create_favorite(proposal.get_amount(), proposal.get_unit(),
+                                    proposal.get_article(), proposal.get_retailer_id(), proposal.get_group_id())
             return x, 200
         else:
             return '', 500
 
 
-@ikauf.route('favorite-by-id/<int:favoriteId>')
+@ikauf.route('/favorite-by-id/<int:id>')
 @ikauf.response(500, 'Falls Server-seitiger Fehler')
 @ikauf.param('id', 'ID des Favorite-Objektes')
 class FavoriteOperations(Resource):
@@ -883,6 +880,20 @@ class FavoriteOperations(Resource):
             return '', 200
         else:
             return '', 500
+
+
+@ikauf.route('/favorite-by-group/<int:id>')
+@ikauf.response(500, 'Falls Server-seitiger Fehler')
+@ikauf.param('id', 'Group ID des zugehörigen ShoppingList-Objekts')
+class FavoriteRelatedByGroupId(Resource):
+    @ikauf.marshal_with(favorite)
+    # @secured
+    def get(self, id):
+        """Auslesen eines bestimmten Favorite-Objekts nach Group ID"""
+
+        adm = ShoppingAdministration()
+        sl = adm.get_favorite_by_group(id)
+        return sl
 
 
 """

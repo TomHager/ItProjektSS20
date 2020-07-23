@@ -40,9 +40,12 @@ export default class ShoppingAPI {
   // Favorites related
   #getFavoritesURL = () => `${this.#ShoppingServerBaseURL}/favorites`;
   #getFavoriteURL = (id) => `${this.#ShoppingServerBaseURL}/favorites/${id}`;
-  #addFavoriteURL = () => `${this.#ShoppingServerBaseURL}/favorites`;
-  #updateFavoriteURL = (id) => `${this.#ShoppingServerBaseURL}/favorites/${id}`;
+  #addFavoriteURL = () => `${this.#ShoppingServerBaseURL}/favorite`;
+  #updateFavoriteURL = (id) =>
+    `${this.#ShoppingServerBaseURL}/favorite-by-id/${id}`;
   #deleteFavoriteURL = (id) => `${this.#ShoppingServerBaseURL}/favorites/${id}`;
+  #searchFavoriteByGroupURL = (groupId) =>
+    `${this.#ShoppingServerBaseURL}/favorite-by-group/${groupId}`;
 
   // Groups related
   #getGroupsURL = () => `${this.#ShoppingServerBaseURL}/groups`;
@@ -59,13 +62,13 @@ export default class ShoppingAPI {
   #getGroupMembershipURL = (id) =>
     `${this.#ShoppingServerBaseURL}/groupMemberships/${id}`;
   #addGroupMembershipURL = () =>
-    `${this.#ShoppingServerBaseURL}/groupMemberships`;
+    `${this.#ShoppingServerBaseURL}/create-group-membership`;
   #updateGroupMembershipURL = (id) =>
     `${this.#ShoppingServerBaseURL}/groupMemberships/${id}`;
   #deleteGroupMembershipURL = (id) =>
     `${this.#ShoppingServerBaseURL}/groupMemberships/${id}`;
   #searchGroupsByMemberURL = (userId) =>
-    `${this.#ShoppingServerBaseURL}/groups-by-membership/${userId}`;
+    `${this.#ShoppingServerBaseURL}/groupmembership-by-member/${userId}`;
 
   // Retailers related
   #getRetailersURL = () => `${this.#ShoppingServerBaseURL}/retailers`;
@@ -98,7 +101,8 @@ export default class ShoppingAPI {
   #getRetailerGroupsURL = () => `${this.#ShoppingServerBaseURL}/retailerGroups`;
   #getRetailerGroupURL = (id) =>
     `${this.#ShoppingServerBaseURL}/retailerGroups/${id}`;
-  #addRetailerGroupURL = () => `${this.#ShoppingServerBaseURL}/retailerGroups`;
+  #addRetailerGroupURL = () =>
+    `${this.#ShoppingServerBaseURL}/retailer-by-group`;
   #updateRetailerGroupURL = (id) =>
     `${this.#ShoppingServerBaseURL}/retailerGroups/${id}`;
   #deleteRetailerGroupURL = (id) =>
@@ -532,15 +536,15 @@ export default class ShoppingAPI {
   }
 
   searchShoppingListByGroupId(groupId) {
-    return this.#fetchAdvanced(this.#searchShoppingListByNameURL(groupId)).then(
-      (responseJSON) => {
-        let shoppingListBOs = ShoppingListBO.fromJSON(responseJSON);
-        // console.info(shoppinglistBOs);
-        return new Promise(function (resolve) {
-          resolve(shoppingListBOs);
-        });
-      }
-    );
+    return this.#fetchAdvanced(
+      this.#searchShoppingListByGroupIdURL(groupId)
+    ).then((responseJSON) => {
+      let shoppingListBOs = ShoppingListBO.fromJSON(responseJSON);
+      // console.info(shoppinglistBOs);
+      return new Promise(function (resolve) {
+        resolve(shoppingListBOs);
+      });
+    });
   }
 
   // Retailer Methoden
@@ -715,6 +719,18 @@ export default class ShoppingAPI {
     });
   }
 
+  searchFavoriteByGroup(groupId) {
+    return this.#fetchAdvanced(this.#searchFavoriteByGroupURL(groupId)).then(
+      (responseJSON) => {
+        let favoriteBOs = FavoriteBO.fromJSON(responseJSON);
+        // console.info(favoriteBOs);
+        return new Promise(function (resolve) {
+          resolve(favoriteBOs);
+        });
+      }
+    );
+  }
+
   // GroupMembership Methoden
 
   getGroupMemberships() {
@@ -844,7 +860,7 @@ export default class ShoppingAPI {
     );
   }
 
-  addRetailerGroup(retailerGroupBO) {
+  addRetailerGroup(RetailerGroupBO) {
     return this.#fetchAdvanced(this.#addRetailerGroupURL(), {
       method: 'POST',
       headers: {
