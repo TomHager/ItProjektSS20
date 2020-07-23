@@ -97,24 +97,24 @@ export default class Favorite extends Component {
         article: 'Apfel',
         amount: 4,
         unit: 'Kg',
-        retailerId: 2,
-        bought: false,
+        retailer_id: 2,
+        group_id: 1,
       },
       {
         id: 2,
         article: 'Birne',
         amount: 3,
         unit: 'pcs',
-        retailerId: 9,
-        bought: true,
+        retailer_id: 9,
+        group_id: 1,
       },
       {
         id: 6,
         article: 'Ananas',
         amount: 6,
         unit: 'g',
-        retailerId: 3,
-        bought: false,
+        retailer_id: 3,
+        group_id: 1,
       },
     ];
     setTimeout(() => {
@@ -170,7 +170,7 @@ export default class Favorite extends Component {
     this.setState({ oldData: data });
     // Allways sets state of these elements
     this.setState({
-      editRetailer: data.retailerId,
+      editRetailer: data.retailer_id,
       editArticle: data.article,
       editAmount: data.amount,
       editUnit: data.unit,
@@ -212,10 +212,11 @@ export default class Favorite extends Component {
     // @TODO fav should be respons of Async Add
     const fav = {
       id: Math.floor(Math.random() * Math.floor(500)),
-      retailerId: retailer,
       article,
       amount,
       unit,
+      retailer_id: retailer,
+      group_id: 1,
       // @TODO groupId from parent component
       // groupId: this.props.groupId,
     };
@@ -247,10 +248,12 @@ export default class Favorite extends Component {
     const eAmount = Math.round(editAmount * 1000) / 1000;
     const favorite = {
       id,
-      retailerId: editRetailer,
       article: editArticle,
       amount: eAmount,
       unit: editUnit,
+      retailer_id: editRetailer,
+      group_id: 1,
+
       // @TODO groupId from parent component
       // groupId: this.props.groupId
     };
@@ -399,8 +402,8 @@ export default class Favorite extends Component {
                     {rowIndex === row.id ? (
                       <Select
                         id="editRetailer"
-                        key={row.retailerId}
-                        defaultValue={row.retailerId}
+                        key={row.retailer_id}
+                        defaultValue={row.retailer_id}
                         onChange={(e) =>
                           this.setState({ editRetailer: parseInt(e.target.value) })
                         }
@@ -412,7 +415,7 @@ export default class Favorite extends Component {
                         ))}
                       </Select>
                     ) : (
-                      retailers.find((x) => x.id === row.retailerId).name
+                      retailers.find((x) => x.id === row.retailer_id).name
                     )}
                   </TableCell>
 
