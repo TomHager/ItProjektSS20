@@ -27,7 +27,7 @@ export default class ShoppingAPI {
   #getEntryURL = (id) => `${this.#ShoppingServerBaseURL}/entries/${id}`;
   #addEntryURL = () => `${this.#ShoppingServerBaseURL}/entry`;
   #updateEntryURL = (id) => `${this.#ShoppingServerBaseURL}/entry-by-id/${id}`;
-  #deleteEntryURL = (id) => `${this.#ShoppingServerBaseURL}/entries/${id}`;
+  #deleteEntryURL = (id) => `${this.#ShoppingServerBaseURL}/entry-by-id/${id}`;
   #searchEntryByAmountURL = (amount) =>
     `${this.#ShoppingServerBaseURL}/entries-by-name/${amount}`;
   #searchEntryByArticleURL = (articleName) =>
@@ -112,11 +112,11 @@ export default class ShoppingAPI {
   #getShoppingListsURL = () => `${this.#ShoppingServerBaseURL}/shoppingLists`;
   #getShoppingListURL = (id) =>
     `${this.#ShoppingServerBaseURL}/shoppingLists/${id}`;
-  #addShoppingListURL = () => `${this.#ShoppingServerBaseURL}/shoppingLists`;
+  #addShoppingListURL = () => `${this.#ShoppingServerBaseURL}/shopping-list`;
   #updateShoppingListURL = (id) =>
-    `${this.#ShoppingServerBaseURL}/shoppingLists/${id}`;
+    `${this.#ShoppingServerBaseURL}/shopping-list-by-id/${id}`;
   #deleteShoppingListURL = (id) =>
-    `${this.#ShoppingServerBaseURL}/shoppingLists/${id}`;
+    `${this.#ShoppingServerBaseURL}/shopping-list-by-id/${id}`;
   #searchShoppingListByGroupIdURL = (groupId) =>
     `${this.#ShoppingServerBaseURL}/shopping-list-by-group-id/${groupId}`;
   #searchShoppingListByNameURL = (shoppinglistName) =>
@@ -184,8 +184,8 @@ export default class ShoppingAPI {
       body: JSON.stringify(entryBO),
     }).then((responseJSON) => {
       // We always get an array of EntryBO.fromJSON, but only need one object
-      let responseEntryBO = EntryBO.fromJSON(responseJSON)[0];
-      // console.info(entryBOs);
+      // console.info(responseJSON);
+      let responseEntryBO = EntryBO.fromJSON(responseJSON);
       return new Promise(function (resolve) {
         resolve(responseEntryBO);
       });

@@ -245,27 +245,35 @@ export default class Testing extends Component {
         console.info(e);
       });
   };
+  //TODO
+  createShoppingList = () => {
+    const newList = new ShoppingListBO();
+    newList.setName('Wocheneinkauf');
+    newList.setGroupId(3);
+    console.log(newList);
+    ShoppingAPI.getAPI()
+      .addShoppingList(newList)
+      .catch((e) => {
+        console.info(e);
+      });
+  };
+  //TODO
+  updateShoppingList = () => {
+    const updatedShoppingList = this.state.lists;
+    updatedShoppingList[0].setGroupId(3);
+    console.log(updatedShoppingList[0]);
+    ShoppingAPI.getAPI().updateShoppingList(updatedShoppingList[0]);
+  };
 
-  // createShoppingList = () => {
-  //   const newList = new ShoppingListBO();
-  //   newList.setName('Wocheneinkauf');
-  //   newList.setGroupId(3);
-  //   console.log(newEntry);
-  //   ShoppingAPI.getAPI()
-  //     .addShoppingList(newEntry)
-  //     .catch((e) => {
-  //       console.info(e);
-  //     });
-  // };
+  //Läuft
+  deleteShoppingList = () => {
+    ShoppingAPI.getAPI().deleteShoppingList(2);
+  };
 
-  // updateShoppingList = () => {
-  //   const updatedShoppingList = this.state.lists;
-  //   console.log(updatedEntry[0]);
-  //   updatedEntry[0].setArticle('Bier');
-  //   ShoppingAPI.getAPI().updateEntry(updatedEntry[0]);
-  // };
-  // deleteShoppingList
-  // deleteListEntry
+  //Läuft
+  deleteListEntry = () => {
+    ShoppingAPI.getAPI().deleteEntry(4);
+  };
 
   // getUsersByName = () => {
   //   ShoppingAPI.getAPI()
@@ -297,11 +305,12 @@ export default class Testing extends Component {
     this.getUsers();
     this.getFavoritesByGroup();
     this.getEntriesByShoppingList();
+    this.getShoppingListsByGroup();
   }
 
   render() {
     return (
-      <Button onClick={this.addFavorite}>Let the testing begin!</Button>
+      <Button onClick={this.updateShoppingList}>Let the testing begin!</Button>
       // <form onSubmit={this.handleSubmit}>
       //   <input type="text" name="name" onChange={this.handleChange} />
       //   <input type="email" name="email" onChange={this.handleChange} />
