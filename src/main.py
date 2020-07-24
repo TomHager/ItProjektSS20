@@ -587,10 +587,10 @@ class ShoppingListListOperations(Resource):
 
         adm = ShoppingAdministration()
 
-        prosposal = ShoppingList.from_dict(api.payload)
+        proposal = ShoppingList.from_dict(api.payload)
 
-        if prosposal is not None:
-            x = adm.create_shopping_list(prosposal.get_shopping_list_name, prosposal.get_group_id())
+        if proposal is not None:
+            x = adm.create_shopping_list(proposal.get_shopping_list_name, proposal.get_group_id())
             return x, 200
         else:
             return '', 500
@@ -882,6 +882,20 @@ class FavoriteOperations(Resource):
             return '', 200
         else:
             return '', 500
+
+@ikauf.route('/favorite-by-group/<int:id>')
+@ikauf.response(500, 'Falls Server-seitiger Fehler')
+@ikauf.param('id', 'Group ID des zugehörigen ShoppingList-Objekts')
+class FavoriteRelatedByGroupId(Resource):
+    @ikauf.marshal_with(favorite)
+
+    def get(self, id):
+        """Auslesen eines bestimmten ShoppingList-Objekts nach Group ID"""
+
+        adm = ShoppingAdministration()
+        sl = adm.get_favorite_by_group(id)
+        return sl
+
 
 
 @ikauf.route('/favorite-by-group/<int:id>')

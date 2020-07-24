@@ -8,6 +8,6 @@
     "fake-b": "npm start --prefix http-fake-backend"
   },
   "dependencies": {
-    "firebase": "^7.16.1"
+    "firebase": "^7.17.1"
   }
 }
