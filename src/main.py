@@ -18,7 +18,7 @@ from server.bo.GroupMembership import GroupMembership
 
 # selbstgeschriebener Decorator, übernimmt Authentifikation
 
-from SecurityDecorater import secured
+
 
 """
 Instanzieren von Flask. Am Ende dieser Datei erfolgt dann erst der 'Start' von Flask.
