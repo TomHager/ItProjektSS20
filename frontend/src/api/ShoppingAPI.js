@@ -36,8 +36,10 @@ export default class ShoppingAPI {
     `${this.#ShoppingServerBaseURL}/entry-by-shopping-list/${shoppingListId}`;
   #searchUserByEntryURL = (entryId) =>
     `${this.#ShoppingServerBaseURL}/user-by-entry/${entryId}`;
-  #searchEntryByShoppingListAndRetailerURL = (retailerId, shoppingListId) =>
-    `${this.#ShoppingServerBaseURL}/entry-by-shopping-list-and-retailer/${retailerId, shoppingListId}`;
+  #searchEntryByShoppingListAndRetailerURL = (shoppingListId, retailerId) =>
+    `${
+      this.#ShoppingServerBaseURL
+    }/entry-by-shopping-list-and-retailer/${shoppingListId}${retailerId}`;
 
   // Favorites related
   #getFavoritesURL = () => `${this.#ShoppingServerBaseURL}/favorites`;
@@ -277,17 +279,16 @@ export default class ShoppingAPI {
   }
 
   searchEntryByShoppingListAndRetailer(shoppingListId, retailerId) {
-    return this.#fetchAdvanced(this.#searchEntryByShoppingListAndRetailerURL(shoppingListId, retailerId)).then(
-      (responseJSON) => {
-        let entryBOs= EntryBO.fromJSON(responseJSON);
-        // console.info(entryBOs);
-        return new Promise(function (resolve) {
-          resolve(entryBOs);
-        });
-      }
-    );
+    return this.#fetchAdvanced(
+      this.#searchEntryByShoppingListAndRetailerURL(shoppingListId, retailerId)
+    ).then((responseJSON) => {
+      let entryBOs = EntryBO.fromJSON(responseJSON);
+      // console.info(entryBOs);
+      return new Promise(function (resolve) {
+        resolve(entryBOs);
+      });
+    });
   }
-
 
   // Group Methoden
 

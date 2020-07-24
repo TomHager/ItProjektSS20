@@ -25,6 +25,7 @@ export default class Testing extends Component {
       retailers: null,
       favorite: null,
       lists: null,
+      entries: null,
     };
   }
 
@@ -110,8 +111,8 @@ export default class Testing extends Component {
   //Läuft
   addRetailergroup = () => {
     const newMembership = new RetailerGroupBO();
-    newMembership.setRetailerGroup(6);
-    newMembership.setRetailerMember(3);
+    newMembership.setRetailerGroup(3);
+    newMembership.setRetailerMember(9);
     // const newMembership = { member: 3, group_membership: 3 };
     console.log(newMembership);
     ShoppingAPI.getAPI()
@@ -192,7 +193,7 @@ export default class Testing extends Component {
       });
   };
 
-  //Läuft, aber ohne group_id Rückgabewert
+  //Läuft
   getRetailersByGroup = () => {
     ShoppingAPI.getAPI()
       .searchRetailerMemberByGroup(2)
@@ -202,12 +203,17 @@ export default class Testing extends Component {
       });
   };
 
-  // TODO
-  // getEntriesByShoppingListAndRetailer = () => {
-  //   ShoppingAPI.getAPI().
-  // };
+  // Läuft
+  getEntriesByShoppingListAndRetailer = () => {
+    ShoppingAPI.getAPI()
+      .searchEntryByShoppingListAndRetailer(3, 2)
+      .then((result) => {
+        this.setState({ entries: result });
+        console.log(this.state.entries);
+      });
+  };
 
-  // Läuft, aber User_Id null
+  // Läuft
   getUserByEntry = () => {
     ShoppingAPI.getAPI()
       .searchUserByEntry(3)
