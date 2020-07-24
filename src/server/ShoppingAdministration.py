@@ -238,6 +238,8 @@ class ShoppingAdministration(object):
         entry.set_shopping_list_id(shopping_list_id)
         entry.set_bought(bought)
         entry.set_id(1)
+        with EntryMapper() as mapper:
+            return  mapper.insert(entry)
 
     def delete_entry_by_id(self, entry_id):
         """gegebenen Entry löschen."""
