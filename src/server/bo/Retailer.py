@@ -7,7 +7,7 @@ from server.bo import BusinessObject as bo
 
 
 class Retailer (bo.BusinessObject):
-
+    """Realisierung der Händler."""
     def __init__(self):
         super().__init__()
         self._name = ""

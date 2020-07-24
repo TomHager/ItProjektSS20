@@ -2,14 +2,12 @@
 from flask import Flask
 from flask_restx import Resource, Api, fields
 from flask_cors import CORS
-from datetime import datetime
 
 # Zugriff auf BusinessObject Klassen und Applikationslogik
 from server.ShoppingAdministration import ShoppingAdministration
 from server.bo.User import User
 from server.bo.Group import Group
 from server.bo.Retailer import Retailer
-from server.bo.RetailerEntryList import RetailerEntryList
 from server.bo.Entry import Entry
 from server.bo.ShoppingList import ShoppingList
 from server.bo.Favorite import Favorite
@@ -620,8 +618,7 @@ class EntryRelatedByArticleOperations(Resource):
         """Auslesen eines bestimmten Entry-Objekts nach Article"""
 
         adm = ShoppingAdministration()
-        e = adm.get_report_data(
-            group_id, modification_date_from, modification_date_to)
+        e = adm.get_report_data(group_id, modification_date_from, modification_date_to)
         return e
 
 

@@ -4,9 +4,10 @@ from server.bo import BusinessObject as bo
 @author Tom Hager
 @author Robin Fink
  """
- 
-class Favorite(bo.BusinessObject):
 
+
+class Favorite(bo.BusinessObject):
+    """Realisierung der Favoriten."""
     def __init__(self):
         super().__init__()
         self._unit = ""
@@ -16,33 +17,43 @@ class Favorite(bo.BusinessObject):
         self._group_id = ""
 
     def get_unit(self):
+        """Auslesen der Messeinheit."""
         return self._unit
 
     def set_unit(self, value):
+        """Setzen der Messeinheit."""
         self._unit = value
 
     def get_amount(self):
+        """Auslesen der Anzahl."""
         return self._amount
 
     def set_amount(self, value):
+        """Setzen der Anzahl."""
         self._amount = value
 
     def get_article(self):
+        """Auslesen des Artickelnamens ."""
         return self._article
 
     def set_article(self, value):
+        """Setzen des Artickelnamens."""
         self._article = value
 
     def get_retailer_id(self):
+        """Auslesen der Händler."""
         return self._retailer_id
 
     def set_retailer_id(self, value):
+        """Setzen der Händler."""
         self._retailer_id = value
 
     def get_group_id(self):
+        """Auslesen der Gruppe."""
         return self._group_id
 
     def set_group_id(self, value):
+        """Setzen der Gruppe."""
         self._group_id = value
 
     def __str__(self):
