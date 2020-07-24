@@ -317,7 +317,7 @@ export default class Testing extends Component {
   // Reportgenerator
   getEntryByGroupAndModifticationDataFromAndModificationDataTo = () => {
     ShoppingAPI.getAPI()
-      .searchReportDataURL(3, '2020-07-05T00:00:00', '2020-07-15T00:00:00')
+      .searchReportDataURL(3, '2020-07-05', '2020-07-15')
       .then((result) => {
         this.setState({ reportEntries: result });
         console.log(this.state.reportEntries);
