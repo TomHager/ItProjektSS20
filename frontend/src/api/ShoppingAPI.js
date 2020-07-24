@@ -41,7 +41,8 @@ export default class ShoppingAPI {
   #addFavoriteURL = () => `${this.#ShoppingServerBaseURL}/favorite`;
   #updateFavoriteURL = (id) =>
     `${this.#ShoppingServerBaseURL}/favorite-by-id/${id}`;
-  #deleteFavoriteURL = (id) => `${this.#ShoppingServerBaseURL}/favorites/${id}`;
+  #deleteFavoriteURL = (id) =>
+    `${this.#ShoppingServerBaseURL}/favorite-by-id/${id}`;
   #searchFavoriteByGroupURL = (groupId) =>
     `${this.#ShoppingServerBaseURL}/favorite-by-group/${groupId}`;
 

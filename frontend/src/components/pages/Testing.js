@@ -30,6 +30,7 @@ export default class Testing extends Component {
 
   //User
 
+  //Läuft
   getCurrUser = () => {
     console.log('Eingeloggter User:', firebase.auth().currentUser.displayName);
     ShoppingAPI.getAPI()
@@ -39,7 +40,8 @@ export default class Testing extends Component {
       });
   };
 
-  getUsers = () => {
+  //Läuft
+  getUserByEmail = () => {
     ShoppingAPI.getAPI()
       .searchUserByEmail('berndbernd')
       .then((returnedUser) => {
@@ -47,6 +49,7 @@ export default class Testing extends Component {
       });
   };
 
+  //Läuft
   addUserToDatabase = () => {
     const newUser = new UserBO();
     newUser.setExternalId(firebase.auth().currentUser.uid);
@@ -59,10 +62,7 @@ export default class Testing extends Component {
       });
   };
 
-  deleteUser = () => {
-    ShoppingAPI.getAPI().deleteUser(5);
-  };
-
+  //Läuft
   updateUser = () => {
     const newUser = this.state.user;
     newUser[0].setName('Nemesis');
@@ -70,8 +70,14 @@ export default class Testing extends Component {
     console.log(newUser);
   };
 
+  //Läuft
+  deleteUser = () => {
+    ShoppingAPI.getAPI().deleteUser(5);
+  };
+
   //Groupmembership
 
+  //Läuft
   getgroupMembershipByUserID = () => {
     ShoppingAPI.getAPI()
       .searchGroupsByMember(1)
@@ -81,6 +87,7 @@ export default class Testing extends Component {
       });
   };
 
+  //Läuft
   addGroupMembership = () => {
     const newMembership = new GroupMembershipBO();
     newMembership.setGroupMember(4);
@@ -100,6 +107,7 @@ export default class Testing extends Component {
 
   //RetailerGroup
 
+  //Läuft
   addRetailergroup = () => {
     const newMembership = new RetailerGroupBO();
     newMembership.setRetailerGroup(6);
@@ -158,7 +166,13 @@ export default class Testing extends Component {
     ShoppingAPI.getAPI().updateFavorite(updatedFavorite[0]);
   };
 
+  //Läuft
+  deleteFavorite = () => {
+    ShoppingAPI.getAPI().deleteFavorite(2);
+  };
+
   //Notwendig Für Shoppingliste
+
   //Läuft
   getShoppingListsByGroup = () => {
     ShoppingAPI.getAPI()
@@ -188,7 +202,7 @@ export default class Testing extends Component {
       });
   };
 
-  //TODO
+  // TODO
   // getEntriesByShoppingListAndRetailer
 
   // TODO
@@ -285,7 +299,7 @@ export default class Testing extends Component {
   };
 
   componentDidMount() {
-    this.getUsers();
+    this.getUserByEmail();
     this.getFavoritesByGroup();
     this.getEntriesByShoppingList();
     this.getShoppingListsByGroup();
@@ -293,9 +307,7 @@ export default class Testing extends Component {
 
   render() {
     return (
-      <Button onClick={this.addRetailerToDatabase}>
-        Let the testing begin!
-      </Button>
+      <Button onClick={this.deleteFavorite}>Let the testing begin!</Button>
       // <form onSubmit={this.handleSubmit}>
       //   <input type="text" name="name" onChange={this.handleChange} />
       //   <input type="email" name="email" onChange={this.handleChange} />
