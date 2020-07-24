@@ -1,19 +1,18 @@
 from server.bo import BusinessObject as bo
 
 """ 
-@author Yasemin
 @author Robin Fink
 @author Tom Hager
  """
 
 
 class User (bo.BusinessObject):
-
+    """Realisierung der Benutzer."""
     def __init__(self):
         super().__init__()
         self._name = ""  # Der Name des Benutzers.
         self._email = ""  # Die E-Mail-Adresse des Benutzers.
-        #self._external_id = ""  # Die extern verwaltete User ID.
+        #self._external_id = ""  # Die extern verwaltete User ID. #TODO Wird das noch benötigt?
 
     def get_name(self):
         """Auslesen des Benutzernamens."""
@@ -45,7 +44,7 @@ class User (bo.BusinessObject):
 
     @staticmethod
     def from_dict(dictionary=dict()):
-        """Umwandeln eines Python dict() in einen User()."""
+        """Umwandeln eines Python dict() in ein User-Objekt."""
         obj = User()
         obj.set_id(dictionary["id"])  # eigentlich Teil von BusinessObject !
         obj.set_name(dictionary["name"])

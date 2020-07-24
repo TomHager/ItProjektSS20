@@ -52,9 +52,9 @@ class GroupMembershipMapper(Mapper):
         cursor.close()
 
     def find_group_by_user(self, member):
-        """Auslesen einer Gruppe anhand des Gruppennames.
+        """Auslesen einer Gruppe anhand der UserId.
 
-                :param member Gruppenname der gesuchten Gruppe.
+                :param member Gruppenname der gesuchten Gruppe.  #todo so richtig wir übergeben doch den user?
                 :return Das Gruppen-Objekt,
                     mit dem gewünschten Gruppennamen enthält.
                 """

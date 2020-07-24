@@ -2,14 +2,12 @@
 from flask import Flask
 from flask_restx import Resource, Api, fields
 from flask_cors import CORS
-from datetime import datetime
 
 # Zugriff auf BusinessObject Klassen und Applikationslogik
 from server.ShoppingAdministration import ShoppingAdministration
 from server.bo.User import User
 from server.bo.Group import Group
 from server.bo.Retailer import Retailer
-from server.bo.RetailerEntryList import RetailerEntryList
 from server.bo.Entry import Entry
 from server.bo.ShoppingList import ShoppingList
 from server.bo.Favorite import Favorite
@@ -172,19 +170,13 @@ class UserOperations(Resource):
     @ikauf.marshal_with(user)
     @ikauf.expect(user, validate=True)
     def put(self, id):
-        """Update eines bestimmten User-Objekts.
+        """Update eines bestimmten User-Objekts."""
 
-        **ACHTUNG:** Relevante id ist die id, die mittels URI bereitgestellt und somit als Methodenparameter
-        verwendet wird. Dieser Parameter überschreibt das ID-Attribut des im Payload der Anfrage übermittelten
-        Customer-Objekts.
-        """
+
         adm = ShoppingAdministration()
         c = User.from_dict(api.payload)
 
         if c is not None:
-            """Hierdurch wird die id des zu überschreibenden (vgl. Update) Customer-Objekts gesetzt.
-            Siehe Hinweise oben.
-            """
             c.set_id(id)
             adm.save_user(c)
             return adm.save_user, 200
@@ -230,9 +222,9 @@ class UserByExternalIdOperations(Resource):
     @ikauf.marshal_with(user)
     # @secured
     def get(self, id):
-        """ Auslesen von User-Objekten, die durch die E-Mail bestimmt werden.
+        """ Auslesen von User-Objekten, die durch die ExternalId bestimmt werden.
 
-        Die auszulesenden Objekte werden durch ```email``` in dem URI bestimmt.
+        Die auszulesenden Objekte werden durch ```external_id``` in dem URI bestimmt.
         """
         adm = ShoppingAdministration()
         cust = adm.get_user_by_external_id(id)
@@ -433,7 +425,6 @@ class EntryListOperations(Resource):
         proposal = Entry.from_dict(api.payload)
 
         if proposal is not None:
-            # todo überlgen ob : prosposal.get_entry_list() sinn macht
             x = adm.create_entry(proposal.get_unit(), proposal.get_amount(), proposal.get_article(),
                                  proposal.get_modification_date(), proposal.get_user_id(), proposal.get_retailer_id(),
                                  proposal.get_shopping_list_id(), proposal.get_bought())
@@ -620,8 +611,7 @@ class EntryRelatedByArticleOperations(Resource):
         """Auslesen eines bestimmten Entry-Objekts nach Article"""
 
         adm = ShoppingAdministration()
-        e = adm.get_report_data(
-            group_id, modification_date_from, modification_date_to)
+        e = adm.get_report_data(group_id, modification_date_from, modification_date_to)
         return e
 
 
