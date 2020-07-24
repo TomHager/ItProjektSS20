@@ -18,7 +18,6 @@ from .db.FavoriteMapper import FavoriteMapper
 
 class ShoppingAdministration(object):
 
-    # Todo nochmal durchgehen welche attribute wichtig sind für die methoden, vllt fehlt was
 
     def __init__(self):
         pass
@@ -27,11 +26,8 @@ class ShoppingAdministration(object):
     User-spezifische Methoden
     """
 
-    # todo set_id bei jedem BO schaune ob es mit einer for-schleife und counter generiert und
-    # immer weiter zähelen soll
-
     def create_user(self, name, email, external_id):
-        """Einen Benutzer anlegen"""
+        """Ein User Objekt anlegen."""
         user = User()
         user.set_name(name)
         user.set_email(email)
@@ -42,7 +38,7 @@ class ShoppingAdministration(object):
             return mapper.insert(user)
 
     def get_user_by_name(self, name):
-        """Alle Benutzer mit Namen name auslesen."""
+        """Alle Benutzer mit Namen auslesen."""
         with UserMapper() as mapper:
             return mapper.find_by_name(name)
 
@@ -67,7 +63,7 @@ class ShoppingAdministration(object):
             return mapper.find_all()
 
     def save_user(self, user):
-        """Den gegebenen Benutzer speichern."""
+        """Den gegebenen Benutzer updaten."""
         with UserMapper() as mapper:
             mapper.update(user)
 
@@ -76,14 +72,13 @@ class ShoppingAdministration(object):
         with UserMapper() as mapper:
             mapper.delete(user)
 
-
-
     """
     Group-spezifische Methoden
     """
 
+
     def create_group(self, group_name):
-        """Eine Group anlegen."""
+        """Ein Group Objekt anlegen."""
         group = Group()
         group.set_name(group_name)
         group.set_id(1)
@@ -102,19 +97,18 @@ class ShoppingAdministration(object):
             return mapper.find_by_key(id)
 
     def get_group_by_user(self, user):
-        """Group mit der gegebenen User auslesen."""
+        """Group mit dem gegebenen User auslesen."""
         with GroupMapper() as mapper:
             return mapper.find_by_user(user)
 
     def get_user_by_group(self, group):
-        """Group mit der gegebenen User auslesen."""
+        """User mit der gegebenen Group auslesen."""
         with UserMapper() as mapper:
             return mapper.find_by_user(group)
 
     def get_groups_of_user(self, user):
-        """Alle Groups des gegebenen Usser auslesen."""
+        """Alle Groups des gegebenen User auslesen."""
         with GroupMapper() as mapper:
-            # Vorsicht: nicht geprüft! #todo nochmal anschauen groupmembership
             return mapper.find_by_key(user.get_id())
 
     def get_all_groups(self):
@@ -123,7 +117,7 @@ class ShoppingAdministration(object):
             return mapper.find_all()
 
     def save_group(self, group):
-        """gegebene Group speichern."""
+        """gegebene Group updaten."""
         with GroupMapper() as mapper:
             mapper.update(group)
 
@@ -137,7 +131,7 @@ class ShoppingAdministration(object):
     """
 
     def create_retailer(self, retailer_name):
-        """Einen Retailer anlegen."""
+        """Ein Retailer Objekt anlegen."""
         retailer = Retailer()
         retailer.set_name(retailer_name)
         retailer.set_id(1)
@@ -161,7 +155,7 @@ class ShoppingAdministration(object):
             return mapper.find_retailer_by_retailer_entry_list(retailer_entry_list)
 
     def save_retailer(self, retailer):
-        """gegebene Group speichern."""
+        """gegebenen Retailer updaten."""
         with RetailerMapper() as mapper:
             mapper.update(retailer)
 
@@ -185,7 +179,7 @@ class ShoppingAdministration(object):
             return mapper.find_all()
 
     def create_shopping_list(self, name, groups_id):
-        """Eine ShoppingList anlegen."""
+        """Ein ShoppingList Objekt anlegen."""
         shoppinglist = ShoppingList()
         shoppinglist.set_name(name)
         shoppinglist.set_group_id(groups_id)
@@ -204,7 +198,7 @@ class ShoppingAdministration(object):
         with ShoppingListMapper() as mapper:
             mapper.delete(shoppinglist)
 
-    # todo nicht fertig bzw iwas fehlt
+
     def get_shopping_list_by_name(self, shopping_list_name):
         """ShoppingList mit übergebenem shopping-list-name auslesen."""
 
@@ -212,12 +206,12 @@ class ShoppingAdministration(object):
             return mapper.find_shopping_list_by_name(shopping_list_name)
 
     def get_shopping_list_by_group_id(self, group):
-        """ShoppingList mit der gegebenen Group auslesen."""
+        """ShoppingList mit der gegebenen Group-Id auslesen."""
         with ShoppingListMapper() as mapper:
             return mapper.find_shopping_list_by_group(group)
 
     def save_shopping_list(self, shopping_list):
-        """Update eines Shoppinglist Objektes"""  # todo Richtig beschrieben?
+        """Update eines Shoppinglist Objektes"""
         with ShoppingListMapper() as mapper:
             mapper.update(shopping_list)
 
@@ -225,13 +219,14 @@ class ShoppingAdministration(object):
     Entry-spezifische Methoden
     """
 
+
     def get_all_entrys(self):
         """Alle Entry Objekte auslesen."""
         with EntryMapper() as mapper:
             return mapper.find_all()
 
     def create_entry(self, unit, amount, article, modification_date, user_id, retailer_id, shopping_list_id, bought):
-        """Einen Entry anlegen."""
+        """Ein Entry Objekt anlegen."""
         entry = Entry()
         entry.set_unit(unit)
         entry.set_amount(amount)
@@ -260,8 +255,8 @@ class ShoppingAdministration(object):
         with EntryMapper() as mapper:
             return mapper.find_entry_by_article(article)
 
-    def get_unit_amount_by_entry(self, entry):
-        """gegebenen Entry löschen."""
+    def get_unit_amount_by_entry(self, entry): #todo Braucht man des=?
+        """Auslesen aller Messei Objekte anhand des Artikel-ID´s"""
         with EntryMapper() as mapper:
             return mapper.find_unit_amount_by_entry(entry)
 
@@ -296,27 +291,27 @@ class ShoppingAdministration(object):
             return mapper.find_entry_by_group(group_id)
 
     def get_entry_by_shopping_list_and_retailer_id(self, shopping_list_id, retailer_id):
-        """Entry mit übergebenem ShoppingList auslesen."""
+        """Entry mit übergebener ShoppingList-Id und Retailer-Id auslesen."""
         with EntryMapper() as mapper:
             return mapper.find_entry_by_shopping_list_and_retailer_id(shopping_list_id, retailer_id)
 
     def save_entry(self, entry):
-        """Update eines Entry Objektes"""  # todo Richtig beschrieben?
+        """Update eines Entry Objektes"""
         with EntryMapper() as mapper:
             mapper.update(entry)
 
     def get_entry_by_bought(self, bought):
-        """Entry mit übergebenem Retailer auslesen."""
+        """Entry mit übergebenem Bought-Boolean auslesen.""" #todo richtig beschrieben bought id oder boolean?
         with EntryMapper() as mapper:
             return mapper.find_entry_by_bought(bought)
 
     def get_report_data(self, groups_id, modification_date_from, modification_date_to):
-        """Entry mit übergebenem Retailer auslesen."""
+        """Entries für eine gegebene Gruppe innerhalb eines bestimmten Zeitraumes auslesen."""
         with EntryMapper() as mapper:
             return mapper.get_report_data(groups_id, modification_date_from, modification_date_to)
 
     def get_user_by_entry_id(self, number):
-        """Den Benutzer mit der gegebenen ID auslesen."""
+        """Den Benutzer mit der gegebenen Entry-ID auslesen."""
         with EntryMapper() as mapper:
             return mapper.find_user_by_entry_id(number)
 
@@ -325,7 +320,7 @@ class ShoppingAdministration(object):
     """
 
     def create_retailer_group(self, ret_group, ret_group_member):
-        """Eine Group anlegen."""
+        """Ein RetailerGroup Objekt anlegen."""
         retailer_group = RetailerGroup()
         retailer_group.set_retailer_group(ret_group)
         retailer_group.set_retailer_member(ret_group_member)
@@ -334,16 +329,17 @@ class ShoppingAdministration(object):
             return mapper.insert(retailer_group)
 
     def get_retailer_by_group(self, retailer_group):
+        """Alle Retailer einer Gruppe auslesen."""
         with RetailerGroupMapper() as mapper:
             return mapper.find_retailer_by_group(retailer_group)
 
     def get_group_by_retailer(self, retailer_id):
-
+        """Alle Gruppe in der ein Retailer enthalen ist auslesen."""
         with RetailerGroupMapper() as mapper:
             return mapper.find_group_by_retailer(retailer_id)
 
     def delete_retailer_group(self, retailer_group, retailer_member):
-        """gegebenen retailer der Gruppe löschen."""
+        """Gegebenen Retailer der Gruppe löschen."""
         with RetailerGroupMapper() as mapper:
             mapper.delete2(retailer_group, retailer_member)
 
@@ -352,7 +348,7 @@ class ShoppingAdministration(object):
     """
 
     def create_group_membership(self, user, group):
-        """Eine Group anlegen."""
+        """Eine Group-Objekt anlegen."""
         group_membership = GroupMembership()
         group_membership.set_member(user)
         group_membership.set_group_membership(group)
@@ -361,25 +357,26 @@ class ShoppingAdministration(object):
             return mapper.insert(group_membership)
 
     def get_member_by_group_membership(self, group_membership):
+        """Ein User aus einer gegebenen Gruppe auslesen."""
         with GroupMembershipMapper() as mapper:
             return mapper.find_user_by_group(group_membership)
 
-    def delete_group_membership(self, group_member, member):
-
-        with GroupMembershipMapper() as mapper:
-            mapper.delete2(group_member, member)
-
     def get_group_membership_by_member(self, member):
-
+        """Alle Gruppen eines Users auslesen."""
         with GroupMembershipMapper() as mapper:
             return mapper.find_group_by_user(member)
+
+    def delete_group_membership(self, group_member, member):
+        """Gebenen User aus einer Gruppe löschen."""
+        with GroupMembershipMapper() as mapper:
+            mapper.delete2(group_member, member)
 
     """
     Favorite-spezifische Methoden
     """
 
     def create_favorite(self, unit, amount, article, retailer_id, group_id):
-        """Favorite Objekte erzeugen."""
+        """Favorite Objekt erzeugen."""
         favorite = Favorite()
         favorite.set_unit(unit)
         favorite.set_amount(amount)
@@ -402,7 +399,7 @@ class ShoppingAdministration(object):
             return mapper.find_by_key(favorite_id)
 
     def get_favorite_by_group(self, group_id):
-        """Favorite Objekt mit übergebener favorit-id auslesen."""
+        """Favorite Objekt mit übergebener GruppenId auslesen."""
         with FavoriteMapper() as mapper:
             return mapper.find_favorite_by_group(group_id)
 

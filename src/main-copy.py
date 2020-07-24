@@ -8,16 +8,13 @@ from server.ShoppingAdministration import ShoppingAdministration
 from server.bo.User import User
 from server.bo.Group import Group
 from server.bo.Retailer import Retailer
-from server.bo.RetailerEntryList import RetailerEntryList
 from server.bo.Entry import Entry
 from server.bo.ShoppingList import ShoppingList
 from server.bo.Favorite import Favorite
-from server.bo.RetailerGroup import RetailerGroup
-from server.bo.GroupMembership import GroupMembership
 
 # selbstgeschriebener Decorator, übernimmt Authentifikation
 
-from SecurityDecorater import secured
+from server.SecurityDecorater import secured
 
 """
 Instanzieren von Flask. Am Ende dieser Datei erfolgt dann erst der 'Start' von Flask.
