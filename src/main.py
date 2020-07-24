@@ -839,8 +839,8 @@ class FavoriteListOperations(Resource):
         proposal = Favorite.from_dict(api.payload)
 
         if proposal is not None:
-            x = adm.create_favorite(proposal.get_amount(), proposal.get_unit(),
-                                    proposal.get_article(), proposal.get_retailer_id(), proposal.get_group_id())
+            x = adm.create_favorite(proposal.get_unit(), proposal.get_amount(), proposal.get_article(),
+                                    proposal.get_retailer_id(), proposal.get_group_id())
             return x, 200
         else:
             return '', 500
