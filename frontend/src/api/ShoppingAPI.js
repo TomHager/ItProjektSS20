@@ -62,7 +62,7 @@ export default class ShoppingAPI {
     `${this.#ShoppingServerBaseURL}/favorite-by-group/${groupId}`;
 
   // Groups related
-  #getGroupsURL = () => `${this.#ShoppingServerBaseURL}/groups`;
+  #getGroupsURL = () => `${this.#ShoppingServerBaseURL}/group`;
   #getGroupURL = (id) => `${this.#ShoppingServerBaseURL}/group/${id}`;
   #addGroupURL = () => `${this.#ShoppingServerBaseURL}/groups`;
   #updateGroupURL = (id) => `${this.#ShoppingServerBaseURL}/groups/${id}`;

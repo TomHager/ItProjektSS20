@@ -34,6 +34,8 @@ export default class GroupList extends Component {
       currentUser: null,
       groupMemberships: [],
       group: null,
+      allGroups: [],
+      filteredGroups: null,
     };
   }
 
@@ -51,6 +53,7 @@ export default class GroupList extends Component {
       .searchUserByEmail(firebase.auth().currentUser.email)
       .then((returnedUser) => {
         this.setState({ currentUser: returnedUser });
+        console.log(this.state.currentUser);
       });
   };
 
@@ -62,6 +65,23 @@ export default class GroupList extends Component {
         this.setState({ groupMemberships: result });
         console.log(this.state.groupMemberships);
       });
+  };
+
+  getAllGroups = () => {
+    ShoppingAPI.getAPI()
+      .getGroups()
+      .then((result) => {
+        this.setState({ allGroups: result });
+        console.log(this.state.allGroups);
+      });
+  };
+
+  filterGroupsByGroupId = () => {
+    groups = this.state.allGroups;
+    groupMemberships = this.state.groupMemberships;
+    const filteredGroups = groups.filter(
+      (group) => group.id === groupMemberships.id
+    );
   };
 
   // getGroupsByGroupId = () => {
@@ -89,7 +109,9 @@ export default class GroupList extends Component {
 
   //calls all Callbacks for Repor Selection
   componentDidMount = () => {
+    this.getCurrUser();
     this.getGroupMembershipsByUserId();
+    this.getAllGroups();
     console.log('All Callbacks initialised');
   };
 
