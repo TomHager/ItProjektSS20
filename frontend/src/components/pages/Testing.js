@@ -227,7 +227,7 @@ export default class Testing extends Component {
     ShoppingAPI.getAPI().updateEntry(updatedEntry[0]);
   };
 
-  // TODO
+  // Läuft
   createEntry = () => {
     const newEntry = new EntryBO();
     newEntry.setUnit('kg');
@@ -275,32 +275,6 @@ export default class Testing extends Component {
     ShoppingAPI.getAPI().deleteEntry(4);
   };
 
-  // getUsersByName = () => {
-  //   ShoppingAPI.getAPI()
-  //     .searchUserByName('Alex')
-  //     .then((returnedUser) => {
-  //       return this.setState({ user: returnedUser });
-  //     });
-  //   console.log(this.state.user);
-  // };
-
-  //     .catch((e) =>
-  //       this.setState({
-  //         // Reset state with error from catch
-  //         users: [],
-  //         loadingInProgress: false, // disable loading indicator
-  //         error: e,
-  //       })
-  //     );
-
-  //   // set loading to true
-  //   this.setState({
-  //     loadingInProgress: true,
-  //     error: null,
-  //   });
-  // };
-
-  // displayUsers = () => console.log(this.state.users);
   componentDidMount() {
     this.getUsers();
     this.getFavoritesByGroup();
@@ -310,7 +284,7 @@ export default class Testing extends Component {
 
   render() {
     return (
-      <Button onClick={this.updateShoppingList}>Let the testing begin!</Button>
+      <Button onClick={this.createShoppingList}>Let the testing begin!</Button>
       // <form onSubmit={this.handleSubmit}>
       //   <input type="text" name="name" onChange={this.handleChange} />
       //   <input type="email" name="email" onChange={this.handleChange} />
