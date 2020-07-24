@@ -310,10 +310,10 @@ class ShoppingAdministration(object):
         with EntryMapper() as mapper:
             return mapper.find_entry_by_bought(bought)
 
-    def get_report_data(self, groups_id, modification_date_from, modification_date_to):
+    def get_report_data(self, group_id, modification_date_from, modification_date_to):
         """Entry mit übergebenem Retailer auslesen."""
         with EntryMapper() as mapper:
-            return mapper.get_report_data(groups_id, modification_date_from, modification_date_to)
+            return mapper.get_report_data(group_id, modification_date_from, modification_date_to)
 
     def get_user_by_entry_id(self, number):
         """Den Benutzer mit der gegebenen ID auslesen."""
