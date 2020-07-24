@@ -354,11 +354,11 @@ class ShoppingAdministration(object):
     Favorite-spezifische Methoden
     """
 
-    def create_favorite(self, amount, article, unit, retailer_id, group_id):
+    def create_favorite(self, unit, amount, article, retailer_id, group_id):
         """Favorite Objekte erzeugen."""
         favorite = Favorite()
-        favorite.set_amount(amount)
         favorite.set_unit(unit)
+        favorite.set_amount(amount)
         favorite.set_article(article)
         favorite.set_retailer_id(retailer_id)
         favorite.set_group_id(group_id)
