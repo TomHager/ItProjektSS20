@@ -41,6 +41,12 @@ export default class ShoppingAPI {
       this.#ShoppingServerBaseURL
     }/entry-by-shopping-list-and-retailer/${shoppingListId}${retailerId}`;
 
+  #searchReportDataURL = (group_id,modification_date_from, modification_date_to) =>
+    `${
+      this.#ShoppingServerBaseURL
+    }/report-data/${group_id}${modification_date_from}${modification_date_to}`;
+
+
   // Favorites related
   #getFavoritesURL = () => `${this.#ShoppingServerBaseURL}/favorites`;
   #getFavoriteURL = (id) => `${this.#ShoppingServerBaseURL}/favorites/${id}`;
@@ -289,6 +295,19 @@ export default class ShoppingAPI {
       });
     });
   }
+
+  searchReportDataURL(group_id,modification_date_from,modification_date_to){
+    return this.#fetchAdvanced(
+      this.#searchReportDataURL(group_id,modification_date_from,modification_date_to)
+    ).then((responseJSON) => {
+      let entryBOs = EntryBO.fromJSON(responseJSON);
+      // console.info(entryBOs);
+      return new Promise(function (resolve) {
+        resolve(entryBOs);
+      });
+    });
+  }
+
 
   // Group Methoden
 
