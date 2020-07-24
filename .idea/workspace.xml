@@ -28,6 +28,7 @@
   <component name="ChangeListManager">
     <list default="true" id="2c1c77a4-6169-48a4-a7a4-a8dc3ff2c5dd" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/api/ShoppingAPI.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/api/ShoppingAPI.js" afterDir="false" />
     </list>
     <list id="f3527e18-98fc-47e9-96b2-6aff7f2e2547" name="Updated main-copy.py Added FavoriteRelatedByGroupId" comment="" />
     <option name="SHOW_DIALOG" value="false" />
@@ -303,7 +304,14 @@
       <option name="project" value="LOCAL" />
       <updated>1595597847924</updated>
     </task>
-    <option name="localTasksCounter" value="22" />
+    <task id="LOCAL-00022" summary="Updated ShoppingAPI.js">
+      <created>1595598494593</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1595598494593</updated>
+    </task>
+    <option name="localTasksCounter" value="23" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -354,18 +362,19 @@
     <MESSAGE value="Entry.py, main.py Entry gefixed" />
     <MESSAGE value="Entry.py  Teil gefixed" />
     <MESSAGE value="Updated main.py getUserByEntry" />
-    <option name="LAST_COMMIT_MESSAGE" value="Updated main.py getUserByEntry" />
+    <MESSAGE value="Updated ShoppingAPI.js" />
+    <option name="LAST_COMMIT_MESSAGE" value="Updated ShoppingAPI.js" />
   </component>
   <component name="WindowStateProjectService">
     <state x="386" y="321" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1594991804807">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="386" y="321" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1594991804807" />
-    <state x="436" y="7" key="CommitChangelistDialog2" timestamp="1595597847450">
+    <state x="436" y="7" key="CommitChangelistDialog2" timestamp="1595598494207">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="311" y="6" key="CommitChangelistDialog2/0.0.1368.872@0.0.1368.872" timestamp="1595547556013" />
-    <state x="436" y="7" key="CommitChangelistDialog2/0.0.1920.1040@0.0.1920.1040" timestamp="1595597847450" />
+    <state x="436" y="7" key="CommitChangelistDialog2/0.0.1920.1040@0.0.1920.1040" timestamp="1595598494207" />
     <state x="421" y="96" key="FileChooserDialogImpl" timestamp="1595330525064">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
@@ -410,11 +419,11 @@
     <state x="186" y="81" key="SettingsEditor/0.0.1368.872@0.0.1368.872" timestamp="1591108101784" />
     <state x="209" y="86" key="SettingsEditor/0.0.1536.920@0.0.1536.920" timestamp="1595072197023" />
     <state x="261" y="97" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1595002662026" />
-    <state x="389" y="202" key="Vcs.Push.Dialog.v2" timestamp="1595598002734">
+    <state x="389" y="202" key="Vcs.Push.Dialog.v2" timestamp="1595598501182">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="277" y="169" key="Vcs.Push.Dialog.v2/0.0.1368.872@0.0.1368.872" timestamp="1595547617695" />
-    <state x="389" y="202" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1595598002734" />
+    <state x="389" y="202" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1595598501182" />
     <state x="691" y="417" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1595177953047">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>

@@ -36,6 +36,8 @@ export default class ShoppingAPI {
     `${this.#ShoppingServerBaseURL}/entry-by-shopping-list/${shoppingListId}`;
   #searchUserByEntryURL = (entryId) =>
     `${this.#ShoppingServerBaseURL}/user-by-entry/${entryId}`;
+  #searchEntryByShoppingListAndRetailerURL = (retailerId, shoppingListId) =>
+    `${this.#ShoppingServerBaseURL}/entry-by-shopping-list-and-retailer/${retailerId, shoppingListId}`;
 
   // Favorites related
   #getFavoritesURL = () => `${this.#ShoppingServerBaseURL}/favorites`;
@@ -266,6 +268,18 @@ export default class ShoppingAPI {
     return this.#fetchAdvanced(this.#searchUserByEntryURL(entryId)).then(
       (responseJSON) => {
         let entryBOs = EntryBO.fromJSON(responseJSON);
+        // console.info(entryBOs);
+        return new Promise(function (resolve) {
+          resolve(entryBOs);
+        });
+      }
+    );
+  }
+
+  searchEntryByShoppingListAndRetailer(shoppingListId, retailerId) {
+    return this.#fetchAdvanced(this.#searchEntryByShoppingListAndRetailerURL(shoppingListId, retailerId)).then(
+      (responseJSON) => {
+        let entryBOs= EntryBO.fromJSON(responseJSON);
         // console.info(entryBOs);
         return new Promise(function (resolve) {
           resolve(entryBOs);
