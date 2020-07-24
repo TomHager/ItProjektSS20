@@ -1,25 +1,24 @@
 import React, {Component} from 'react';
-import ShoppingListList from './ShoppingListList';
+import RetailerEntryList from './RetailerEntryList';
 import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/CardContent'
-import Typogrphy, { Typography } from '@material-ui/core'
 /* import RetailerBO from '../../api/RetailerBO';
 import ShoppingAPI from '../../api/ShoppingAPI';
 import ShoppingListBo from '../../api/ShoppingListBO'; */
 
 
 
-export default class ShoppingList extends Component{
+export default class ShoppingListList extends Component{
   constructor(props){
     super(props);
 
     this.state = {
       data: [],
-      shoppinglists: [],
+      retailers:[]
     }
   }
     //testdata
-  fetchShoppinglists() {
+  fetchShoppinglistlists() {
       const data = [
         {
           id: 1,
@@ -43,7 +42,7 @@ export default class ShoppingList extends Component{
       this.setState({data})
     }
   //Alle Retailers fetchen der jeweiligen Gruppe
-/*   fetchRetailers(){
+  fetchRetailers(){
     const retailers = [{
       id:1,
       name: "EDEKA"
@@ -58,29 +57,28 @@ export default class ShoppingList extends Component{
     }]
     this.setState({retailers})
   }
- */
+
   componentDidMount(){
-    /* this.fetchRetailers(); */
-    this.fetchShoppinglists();
+    this.fetchRetailers();
+    this.fetchShoppinglistlists();
   }
 
   render(){
     const {data,
       shoppingListId,
       groupsId,
-      shoppinglistname,
+      retailers,
     } = this.state
     return(
       <div>
           {data.map((elem) => (
             <Card>
-              <CardContent>
-                {/* <Typography>{elem.name}</Typography> */}
-                  <ShoppingListList 
+              <CardContent style = {{marginTop:10}} variant ="h5">
+                <RetailerEntryList 
                   shoppingListId = {shoppingListId}
+                  retailer = {retailers.find((x) => x.id === elem.retailer_id)}
                   groupsId = {groupsId}
-                  shoppinglistname = {shoppinglistname}
-                />     
+                />
               </CardContent>
             </Card>
           ))}
@@ -88,12 +86,3 @@ export default class ShoppingList extends Component{
     );
   }
 }
-
-// ruft die RetailerEntryLists richtig auf, nur wiederholen. muss auf 1 mal pro Shoppinglist geändert werden
-/*           <ShoppingListList 
-                  shoppingListId = {shoppingListId}
-                  groupsId = {groupsId}
-                  shoppinglistname = {shoppinglistname}
-                /> */
-
-/*  retailer = {retailers.find((x) => x.id === elem.retailer_id)} */

@@ -7,6 +7,7 @@ import GroupList from './components/pages/GroupList';
 import Favorite from './components/pages/Favorite';
 import RetailerEntryList from './components/pages/RetailerEntryList';
 import Testing from './components/pages/Testing';
+import ShoppingList from './components/pages/ShoppingList'
 // import Register from "./components/layout/Register";
 import * as firebase from 'firebase/app';
 import 'firebase/auth';
@@ -151,7 +152,10 @@ export default class App extends React.Component {
                 <Route exact path="/groupList">
                   <GroupList user={this.state.currentUser} />
                 </Route>
-                <Route path="/shoppingList">
+                <Route path="/shoppinglist">
+                  <ShoppingList/>
+                </Route>
+                <Route path="/retailerEntryList">
                   <RetailerEntryList />
                 </Route>
                 <Route path="/profile">
