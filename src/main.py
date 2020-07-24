@@ -565,6 +565,18 @@ class EntryRelatedByBoughtOperations(Resource):
         return e
 
 
+@ikauf.route('/user-by-entry/<int:id>')
+@ikauf.response(500, 'Falls Server-seitiger Fehler')
+@ikauf.param('id', 'Group ID des zugehörigen ShoppingList-Objekts')
+class UserRelatedByEntryIdOperations(Resource):
+    @ikauf.marshal_with(entry)
+    def get(self, id):
+        """Auslesen eines bestimmten ShoppingList-Objekts nach Group ID"""
+
+        adm = ShoppingAdministration()
+        sl = adm.get_user_by_entry_id(id)
+        return sl
+
 # @ikauf.route('/entry-by-modification-date/<date:date>')
 # @ikauf.route('/entry-by-modification-date/<datetime:modification_date>')
 # @ikauf.response(500, 'Falls Server-seitiger Fehler')
