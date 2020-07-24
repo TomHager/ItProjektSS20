@@ -8,6 +8,7 @@ import GroupMembershipBO from '../../api/GroupMembershipBO';
 import RetailerGroupBO from '../../api/RetailerGroupBO';
 import FavoriteBO from '../../api/FavoriteBO';
 import EntryBO from '../../api/EntryBO';
+import ShoppingListBO from '../../api/ShoppingListBO';
 
 export default class Testing extends Component {
   constructor() {
@@ -151,7 +152,7 @@ export default class Testing extends Component {
     const newFavorite = new FavoriteBO();
     newFavorite.setUnit('kg');
     newFavorite.setAmount(1);
-    newFavorite.setArticle('Birnen');
+    newFavorite.setArticle('Erdbeeren');
     newFavorite.setRetailerID(4);
     newFavorite.setGroupID(3);
     console.log(newFavorite);
@@ -210,7 +211,7 @@ export default class Testing extends Component {
   //       console.log(this.state.lists);
   //     });
   // };
-  //TODO
+  // Läuft
   updateEntrys = () => {
     const updatedEntry = {
       id: 3,
@@ -224,27 +225,19 @@ export default class Testing extends Component {
       bought: 0,
     };
     ShoppingAPI.getAPI().updateEntry(updatedEntry[0]);
-  
   };
 
-
-    
-  // updateShoppingList = () => {
-  //   const updatedShoppingList = this.state.lists;
-  //   console.log(updatedEntry[0]);
-  //   updatedEntry[0].setArticle('Bier');
-  //   ShoppingAPI.getAPI().updateEntry(updatedEntry[0]);
-  // };
-  //TODO
+  // Läuft
   createEntry = () => {
     const newEntry = new EntryBO();
-    newEntry.setArticle('Wachteln');
-    newEntry.setAmount(23);
     newEntry.setUnit('kg');
-    newEntry.setUserId(2);
+    newEntry.setAmount(23);
+    newEntry.setArticle('Wachteln');
     newEntry.setModificationDate('2020-07-03 00:00:00');
+    newEntry.setUserId(2);
     newEntry.setRetailerId(1);
     newEntry.setShoppingListId(2);
+    newEntry.setBought(0);
     console.log(newEntry);
     ShoppingAPI.getAPI()
       .addEntry(newEntry)
@@ -252,50 +245,46 @@ export default class Testing extends Component {
         console.info(e);
       });
   };
+  //TODO
+  createShoppingList = () => {
+    const newList = new ShoppingListBO();
+    newList.setName('Wocheneinkauf');
+    newList.setGroupId(3);
+    console.log(newList);
+    ShoppingAPI.getAPI()
+      .addShoppingList(newList)
+      .catch((e) => {
+        console.info(e);
+      });
+  };
+  //TODO
+  updateShoppingList = () => {
+    const updatedShoppingList = this.state.lists;
+    updatedShoppingList[0].setGroupId(3);
+    console.log(updatedShoppingList[0]);
+    ShoppingAPI.getAPI().updateShoppingList(updatedShoppingList[0]);
+  };
 
-  // createShoppingList
-  // deleteShoppingList
-  // deleteListEntry
+  //Läuft
+  deleteShoppingList = () => {
+    ShoppingAPI.getAPI().deleteShoppingList(2);
+  };
 
-  // componentDidMount() {
-  //   this.getUsers();
-  // }
+  //Läuft
+  deleteListEntry = () => {
+    ShoppingAPI.getAPI().deleteEntry(4);
+  };
 
-  // getUsersByName = () => {
-  //   ShoppingAPI.getAPI()
-  //     .searchUserByName('Alex')
-  //     .then((returnedUser) => {
-  //       return this.setState({ user: returnedUser });
-  //     });
-  //   console.log(this.state.user);
-  // };
-
-  //     .catch((e) =>
-  //       this.setState({
-  //         // Reset state with error from catch
-  //         users: [],
-  //         loadingInProgress: false, // disable loading indicator
-  //         error: e,
-  //       })
-  //     );
-
-  //   // set loading to true
-  //   this.setState({
-  //     loadingInProgress: true,
-  //     error: null,
-  //   });
-  // };
-
-  // displayUsers = () => console.log(this.state.users);
   componentDidMount() {
     this.getUsers();
     this.getFavoritesByGroup();
     this.getEntriesByShoppingList();
+    this.getShoppingListsByGroup();
   }
 
   render() {
     return (
-      <Button onClick={this.updateEntrys}>Let the testing begin!</Button>
+      <Button onClick={this.createShoppingList}>Let the testing begin!</Button>
       // <form onSubmit={this.handleSubmit}>
       //   <input type="text" name="name" onChange={this.handleChange} />
       //   <input type="email" name="email" onChange={this.handleChange} />

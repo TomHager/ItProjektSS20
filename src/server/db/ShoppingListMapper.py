@@ -74,7 +74,8 @@ class ShoppingListMapper (Mapper):
         cursor = self._cnx.cursor()
 
         command = "UPDATE shoppinglists " + "SET name=%s, groups_id=%s WHERE id=%s"
-        data = (shoppinglist.get_name(), shoppinglist.get_group_id(), shoppinglist.get_id())
+        data = (shoppinglist.get_name(),
+                shoppinglist.get_group_id(), shoppinglist.get_id())
         cursor.execute(command, data)
 
         self._cnx.commit()
@@ -87,7 +88,8 @@ class ShoppingListMapper (Mapper):
         """
         cursor = self._cnx.cursor()
 
-        command = "DELETE FROM shoppinglists WHERE id={}".format(shoppinglist.get_id())
+        command = "DELETE FROM shoppinglists WHERE id={}".format(
+            shoppinglist.get_id())
         cursor.execute(command)
 
         self._cnx.commit()
@@ -105,7 +107,8 @@ class ShoppingListMapper (Mapper):
         result = None
 
         cursor = self._cnx.cursor()
-        command = "SELECT id, name, groups_id FROM shoppinglists WHERE id={}".format(key)
+        command = "SELECT id, name, groups_id FROM shoppinglists WHERE id={}".format(
+            key)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
@@ -163,7 +166,8 @@ class ShoppingListMapper (Mapper):
 
         result = []
         cursor = self._cnx.cursor()
-        command = "SELECT id, name, groups_id FROM shoppinglists WHERE group_id={} ORDER BY id".format(groups_id)
+        command = "SELECT id, name, groups_id FROM shoppinglists WHERE group_id={} ORDER BY id".format(
+            groups_id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 

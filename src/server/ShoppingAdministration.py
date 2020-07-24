@@ -112,7 +112,8 @@ class ShoppingAdministration(object):
     def get_groups_of_user(self, user):
         """Alle Groups des gegebenen Usser auslesen."""
         with GroupMapper() as mapper:
-            return mapper.find_by_key(user.get_id())  # Vorsicht: nicht geprüft! #todo nochmal anschauen groupmembership
+            # Vorsicht: nicht geprüft! #todo nochmal anschauen groupmembership
+            return mapper.find_by_key(user.get_id())
 
     def get_all_groups(self):
         """Alle Gruppen Objekte auslesen."""
@@ -201,7 +202,8 @@ class ShoppingAdministration(object):
         with ShoppingListMapper() as mapper:
             mapper.delete(shoppinglist)
 
-    def get_shopping_list_by_name(self, shopping_list_name):  # todo nicht fertig bzw iwas fehlt
+    # todo nicht fertig bzw iwas fehlt
+    def get_shopping_list_by_name(self, shopping_list_name):
         """ShoppingList mit übergebenem shopping-list-name auslesen."""
 
         with ShoppingListMapper() as mapper:
@@ -340,7 +342,6 @@ class ShoppingAdministration(object):
         with GroupMembershipMapper() as mapper:
             return mapper.find_user_by_group(group_membership)
 
-
     def delete_group_membership(self, group_member, member):
 
         with GroupMembershipMapper() as mapper:
@@ -350,7 +351,6 @@ class ShoppingAdministration(object):
 
         with GroupMembershipMapper() as mapper:
             return mapper.find_group_by_user(member)
-
 
     """
     Favorite-spezifische Methoden
