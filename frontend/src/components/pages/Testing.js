@@ -8,6 +8,7 @@ import GroupMembershipBO from '../../api/GroupMembershipBO';
 import RetailerGroupBO from '../../api/RetailerGroupBO';
 import FavoriteBO from '../../api/FavoriteBO';
 import EntryBO from '../../api/EntryBO';
+import ShoppingListBO from '../../api/ShoppingListBO';
 
 export default class Testing extends Component {
   constructor() {
@@ -210,7 +211,7 @@ export default class Testing extends Component {
   //       console.log(this.state.lists);
   //     });
   // };
-  //TODO
+  // Läuft
   updateEntrys = () => {
     const updatedEntry = this.state.lists;
     console.log(updatedEntry[0]);
@@ -219,13 +220,7 @@ export default class Testing extends Component {
     ShoppingAPI.getAPI().updateEntry(updatedEntry[0]);
   };
 
-  // updateShoppingList = () => {
-  //   const updatedShoppingList = this.state.lists;
-  //   console.log(updatedEntry[0]);
-  //   updatedEntry[0].setArticle('Bier');
-  //   ShoppingAPI.getAPI().updateEntry(updatedEntry[0]);
-  // };
-  //TODO
+  // TODO
   createEntry = () => {
     const newEntry = new EntryBO();
     newEntry.setArticle('Wachteln');
@@ -243,13 +238,26 @@ export default class Testing extends Component {
       });
   };
 
-  // createShoppingList
+  createShoppingList = () => {
+    const newList = new ShoppingListBO();
+    newList.setName('Wocheneinkauf');
+    newList.setGroupId(3);
+    console.log(newEntry);
+    ShoppingAPI.getAPI()
+      .addShoppingList(newEntry)
+      .catch((e) => {
+        console.info(e);
+      });
+  };
+
+  // updateShoppingList = () => {
+  //   const updatedShoppingList = this.state.lists;
+  //   console.log(updatedEntry[0]);
+  //   updatedEntry[0].setArticle('Bier');
+  //   ShoppingAPI.getAPI().updateEntry(updatedEntry[0]);
+  // };
   // deleteShoppingList
   // deleteListEntry
-
-  // componentDidMount() {
-  //   this.getUsers();
-  // }
 
   // getUsersByName = () => {
   //   ShoppingAPI.getAPI()
