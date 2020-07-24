@@ -288,6 +288,11 @@ class ShoppingAdministration(object):
         with EntryMapper() as mapper:
             return mapper.find_entry_by_shopping_list(shopping_list_id)
 
+    def get_entry_by_group(self, group_id):
+        """Entry mit übergebenem ShoppingList auslesen."""
+        with EntryMapper() as mapper:
+            return mapper.find_entry_by_group(group_id)
+
     def get_entry_by_shopping_list_and_retailer_id(self, shopping_list_id, retailer_id):
         """Entry mit übergebenem ShoppingList auslesen."""
         with EntryMapper() as mapper:
@@ -302,6 +307,11 @@ class ShoppingAdministration(object):
         """Entry mit übergebenem Retailer auslesen."""
         with EntryMapper() as mapper:
             return mapper.find_entry_by_bought(bought)
+
+    def get_report_data(self, groups_id, modification_date_from, modification_date_to):
+        """Entry mit übergebenem Retailer auslesen."""
+        with EntryMapper() as mapper:
+            return mapper.get_report_data(groups_id, modification_date_from, modification_date_to)
 
     """
     RetailerGroup-spezifische Methoden
