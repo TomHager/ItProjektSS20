@@ -8,7 +8,7 @@ export default class ShoppingListBO extends BusinessObject {
   constructor(name, groupId) {
     super();
     this.name = name;
-    this.groups_id = groupId;
+    this.group_id = groupId;
   }
 
   getName() {
@@ -24,7 +24,7 @@ export default class ShoppingListBO extends BusinessObject {
   }
 
   setGroupId(groupId) {
-    this.groups_id = groupId;
+    this.group_id = groupId;
   }
 
   // Returns an Array of CustomerBOs from a given JSON structure

@@ -70,18 +70,6 @@ export default class Testing extends Component {
     console.log(newUser);
   };
 
-  //Retailer
-  //TODO
-  addRetailerToDatabase = () => {
-    const newRetailer = new RetailerBO();
-    newRetailer.setName('Lidl');
-    ShoppingAPI.getAPI()
-      .addRetailer(newRetailer)
-      .catch((e) => {
-        console.info(e);
-      });
-  };
-
   //Groupmembership
 
   getgroupMembershipByUserID = () => {
@@ -190,18 +178,19 @@ export default class Testing extends Component {
       });
   };
 
-  //TODO
-  // getEntriesByShoppingListandRetailer
+  //Läuft, aber ohne group_id Rückgabewert
+  getRetailersByGroup = () => {
+    ShoppingAPI.getAPI()
+      .searchRetailerMemberByGroup(2)
+      .then((result) => {
+        this.setState({ retailers: result });
+        console.log(this.state.retailers);
+      });
+  };
 
-  // TODO
-  // getRetailersByGroup = () => {
-  //   ShoppingAPI.getAPI()
-  //     .
-  //     .then((result) => {
-  //       this.setState({ lists: result });
-  //       console.log(this.state.lists);
-  //     });
-  // };
+  //TODO
+  // getEntriesByShoppingListAndRetailer
+
   // TODO
   // getUserByEntry = () => {
   //   ShoppingAPI.getAPI()
@@ -211,6 +200,7 @@ export default class Testing extends Component {
   //       console.log(this.state.lists);
   //     });
   // };
+
   // Läuft
   updateEntrys = () => {
     const updatedEntry = {
@@ -257,7 +247,7 @@ export default class Testing extends Component {
         console.info(e);
       });
   };
-  //TODO
+  //Läuft
   updateShoppingList = () => {
     const updatedShoppingList = this.state.lists;
     updatedShoppingList[0].setName('BBQ Party');
@@ -276,6 +266,24 @@ export default class Testing extends Component {
     ShoppingAPI.getAPI().deleteEntry(4);
   };
 
+  //RetailerList
+
+  //Läuft
+  addRetailerToDatabase = () => {
+    const newRetailer = new RetailerBO();
+    newRetailer.setName('Lidl');
+    ShoppingAPI.getAPI()
+      .addRetailer(newRetailer)
+      .catch((e) => {
+        console.info(e);
+      });
+  };
+
+  //Läuft
+  deleteRetailer = () => {
+    ShoppingAPI.getAPI().deleteRetailer(2);
+  };
+
   componentDidMount() {
     this.getUsers();
     this.getFavoritesByGroup();
@@ -285,7 +293,9 @@ export default class Testing extends Component {
 
   render() {
     return (
-      <Button onClick={this.updateShoppingList}>Let the testing begin!</Button>
+      <Button onClick={this.addRetailerToDatabase}>
+        Let the testing begin!
+      </Button>
       // <form onSubmit={this.handleSubmit}>
       //   <input type="text" name="name" onChange={this.handleChange} />
       //   <input type="email" name="email" onChange={this.handleChange} />

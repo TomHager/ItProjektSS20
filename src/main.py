@@ -343,10 +343,10 @@ class RetailerListOperations(Resource):
 
         adm = ShoppingAdministration()
 
-        r = RetailerGroup.from_dict(api.payload)
+        r = Retailer.from_dict(api.payload)
 
         if r is not None:
-            x = adm.create_retailer(r)
+            x = adm.create_retailer(r.get_name())
             return x, 200
         else:
             return 'Group unknown', 500
