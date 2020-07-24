@@ -226,7 +226,7 @@ class ShoppingAdministration(object):
         with EntryMapper() as mapper:
             return mapper.find_all()
 
-    def create_entry(self, unit, amount, article, modification_date, user_id, retailer_id, shopping_list_id,bought):
+    def create_entry(self, unit, amount, article, modification_date, user_id, retailer_id, shopping_list_id, bought):
         """Einen Entry anlegen."""
         entry = Entry()
         entry.set_unit(unit)
