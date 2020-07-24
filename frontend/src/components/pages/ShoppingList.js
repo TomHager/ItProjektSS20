@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import ShoppingListList from './ShoppingListList';
 import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/CardContent'
-import Typogrphy, { Typography } from '@material-ui/core'
+import Typography from '@material-ui/core/Typography'
 /* import RetailerBO from '../../api/RetailerBO';
 import ShoppingAPI from '../../api/ShoppingAPI';
 import ShoppingListBo from '../../api/ShoppingListBO'; */
@@ -16,6 +16,7 @@ export default class ShoppingList extends Component{
     this.state = {
       data: [],
       shoppinglists: [],
+      rowIndex: -1,
     }
   }
     //testdata
@@ -42,45 +43,43 @@ export default class ShoppingList extends Component{
       ]
       this.setState({data})
     }
-  //Alle Retailers fetchen der jeweiligen Gruppe
-/*   fetchRetailers(){
-    const retailers = [{
-      id:1,
-      name: "EDEKA"
-    },
-    {
-      id:2,
-      name: "EDEKA2"
-    },
-    {
-      id:3,
-      name: "EDEKA3"
-    }]
-    this.setState({retailers})
-  }
- */
+
   componentDidMount(){
-    /* this.fetchRetailers(); */
     this.fetchShoppinglists();
   }
+
+  toggleHidden = (id) =>{
+    this.state.rowIndex === id
+    ? this.setState({ rowIndex: -1})
+    : this.setState({rowIndex: id});
+    }
 
   render(){
     const {data,
       shoppingListId,
       groupsId,
+      rowIndex,
       shoppinglistname,
     } = this.state
     return(
       <div>
           {data.map((elem) => (
-            <Card>
+            <Card style ={{ 
+              margin : "5px",
+              fontSize: "100px"
+              
+              }}>
               <CardContent>
-                {/* <Typography>{elem.name}</Typography> */}
-                  <ShoppingListList 
-                  shoppingListId = {shoppingListId}
-                  groupsId = {groupsId}
-                  shoppinglistname = {shoppinglistname}
-                />     
+                  <Typography id = {elem.id} onClick = {() => this.toggleHidden(elem.id)}> EinkaufsListe: {elem.name}
+                    {rowIndex === elem.id &&
+                    <Typography>
+                    <ShoppingListList 
+                      shoppingListId = {shoppingListId}
+                      groupsId = {groupsId}
+                      shoppinglistname = {shoppinglistname}
+                    />
+                    </Typography>}
+                  </Typography>
               </CardContent>
             </Card>
           ))}
@@ -88,12 +87,3 @@ export default class ShoppingList extends Component{
     );
   }
 }
-
-// ruft die RetailerEntryLists richtig auf, nur wiederholen. muss auf 1 mal pro Shoppinglist geändert werden
-/*           <ShoppingListList 
-                  shoppingListId = {shoppingListId}
-                  groupsId = {groupsId}
-                  shoppinglistname = {shoppinglistname}
-                /> */
-
-/*  retailer = {retailers.find((x) => x.id === elem.retailer_id)} */

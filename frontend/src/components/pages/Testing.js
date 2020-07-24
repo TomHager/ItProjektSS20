@@ -25,6 +25,7 @@ export default class Testing extends Component {
       entries: null,
       reportEntries: null,
       groups: null,
+      allGroups: null,
     };
   }
 
@@ -112,6 +113,15 @@ export default class Testing extends Component {
       .then((result) => {
         this.setState({ groups: result });
         console.log(this.state.groups);
+      });
+  };
+
+  getAllGroups = () => {
+    ShoppingAPI.getAPI()
+      .getGroups()
+      .then((result) => {
+        this.setState({ allGroups: result });
+        console.log(this.state.allGroups);
       });
   };
 
@@ -340,10 +350,11 @@ export default class Testing extends Component {
   };
 
   componentDidMount() {
-    this.getUserByEmail();
-    this.getFavoritesByGroup();
-    this.getEntriesByShoppingList();
-    this.getShoppingListsByGroup();
+    // this.getUserByEmail();
+    // this.getFavoritesByGroup();
+    // this.getEntriesByShoppingList();
+    // this.getShoppingListsByGroup();
+    this.getAllGroups();
   }
 
   render() {

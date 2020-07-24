@@ -1,7 +1,6 @@
 from server.bo.Entry import Entry
 from server.db.Mapper import Mapper
 
-from datetime import datetime
 """
 @author Robin Fink
 """
@@ -104,7 +103,7 @@ class EntryMapper(Mapper):
         cursor.close()
 
     def delete(self, entry):
-        """Löschen der Daten eines Retailer-Objekts aus der Datenbank.
+        """Löschen der Daten eines Entry-Objekts aus der Datenbank.
 
         :param retailer das aus der DB zu löschende "Objekt"
         """
@@ -188,7 +187,7 @@ class EntryMapper(Mapper):
         return result
 
     def find_unit_amount_by_entry(self, entry_id):
-        """Auslesen Menge anhand des Eintrags
+        """Auslesen Messeinheit und Menge anhand des Eintrags
 
                                 :param entry_id
                                 :return amount, mit den zugehörigen Eintrag.
@@ -213,7 +212,7 @@ class EntryMapper(Mapper):
         return result
 
     def find_entry_by_modification_date(self, modification_date):
-        """Auslesen Eintrag anhand des Änderungsdatums
+        """Auslesen eines Eintrags anhand des Änderungsdatums
 
                                         :param modification_date
                                         :return entry, mit dem zutreffenden Veränderungsdatum.
@@ -246,11 +245,10 @@ class EntryMapper(Mapper):
         return result
 
     def find_retailer_by_entry(self, id):
-        """Auslesen aller Benutzer anhand der zugeordneten E-Mail-Adresse.
+        """Auslesen aller Retailer anhand des zugeordneten Eintrags.
 
-        :param entry E-Mail-Adresse der zugehörigen Benutzer.
-        :return Eine Sammlung mit User-Objekten, die sämtliche Benutzer
-            mit der gewünschten E-Mail-Adresse enthält.
+        :param id Id des zugehörigen Entries.
+        :return Eine Sammlung mit Retailer-Objekten
         """
         result = []
         cursor = self._cnx.cursor()
@@ -270,12 +268,11 @@ class EntryMapper(Mapper):
         return result
 
     def find_entry_by_retailer(self, retailer_id):
-        """Auslesen aller Benutzer anhand der zugeordneten E-Mail-Adresse.
+        """Auslesen aller Entries anhand der zugeordneten RetailerId.
 
-        :param entry E-Mail-Adresse der zugehörigen Benutzer.
-        :return Eine Sammlung mit User-Objekten, die sämtliche Benutzer
-            mit der gewünschten E-Mail-Adresse enthält.
-        """
+        :param retailer_id RetailerId des zugehörigen Retailers.
+        :return Eine Sammlung mit Entry-Objekten"""
+
         result = []
         cursor = self._cnx.cursor()
         command = "SELECT * FROM entries WHERE retailer_id LIKE '{}' ORDER BY id".format(
@@ -303,12 +300,10 @@ class EntryMapper(Mapper):
         return result
 
     def find_entry_by_shopping_list(self, shopping_list_id):
-        """Auslesen aller Benutzer anhand der zugeordneten E-Mail-Adresse.
+        """Auslesen aller Entries anhand der zugeordneten ShoppingListId.
 
-        :param shopping_list_id E-Mail-Adresse der zugehörigen Benutzer.
-        :return Eine Sammlung mit User-Objekten, die sämtliche Benutzer
-            mit der gewünschten E-Mail-Adresse enthält.
-        """
+        :param shopping_list_id ShoppingListId der zugehörigen ShoppingList.
+        :return Eine Sammlung mit Entry-Objekten"""
         result = []
         cursor = self._cnx.cursor()
         command = "SELECT * FROM entries WHERE shopping_list_id LIKE '{}' ORDER BY id".format(
@@ -336,12 +331,10 @@ class EntryMapper(Mapper):
         return result
 
     def find_entry_by_user(self, user_id):
-        """Auslesen aller Benutzer anhand der zugeordneten E-Mail-Adresse.
+        """"Auslesen aller Entries anhand der zugeordneten UserId.
 
-        :param user_id E-Mail-Adresse der zugehörigen Benutzer.
-        :return Eine Sammlung mit User-Objekten, die sämtliche Benutzer
-            mit der gewünschten E-Mail-Adresse enthält.
-        """
+        :param user_id UserId des zugehörigen Users.
+        :return Eine Sammlung mit Entry-Objekten"""
         result = []
         cursor = self._cnx.cursor()
         command = "SELECT * FROM entries WHERE user_id LIKE '{}' ORDER BY id".format(
@@ -369,12 +362,10 @@ class EntryMapper(Mapper):
         return result
 
     def find_entry_by_group(self, group_id):
-        """Auslesen aller Benutzer anhand der zugeordneten E-Mail-Adresse.
+        """Auslesen aller Entries anhand der zugeordneten GroupId.
 
-        :param group_id E-Mail-Adresse der zugehörigen Benutzer.
-        :return Eine Sammlung mit User-Objekten, die sämtliche Benutzer
-            mit der gewünschten E-Mail-Adresse enthält.
-        """
+        :param group_id RetailerId der zugehörigen GroupId.
+        :return Eine Sammlung mit Entry-Objekten"""
         result = []
         cursor = self._cnx.cursor()
         command = "SELECT * FROM entries WHERE group_id LIKE '{}' ORDER BY id".format(
@@ -402,12 +393,11 @@ class EntryMapper(Mapper):
         return result
 
     def find_entry_by_shopping_list_and_retailer_id(self, shopping_list_id, retailer_id):
-        """Auslesen aller Benutzer anhand der zugeordneten E-Mail-Adresse.
+        """Auslesen aller Entries anhand der zugeordneten RetailerId und ShoppingListId.
 
-        :param shopping_list_id E-Mail-Adresse der zugehörigen Benutzer.
-        :return Eine Sammlung mit User-Objekten, die sämtliche Benutzer
-            mit der gewünschten E-Mail-Adresse enthält.
-        """
+        :param retailer_id RetailerId des zugehörigen Retailers.
+        :param shopping_list_id ShoppingListId der zugehörigen ShoppingList.
+        :return Eine Sammlung mit Entry-Objekten"""
         result = []
         cursor = self._cnx.cursor()
         command = "SELECT * FROM entries WHERE shopping_list_id={} AND retailer_id={} " \
@@ -435,13 +425,14 @@ class EntryMapper(Mapper):
         return result
 
     def get_report_data(self, group_id, modification_date_from, modification_date_to):
-        """Suchen eines Eintrags mit vorgegebener ID. Da diese eindeutig ist,
+        """Suchen eines Eintrags mit vorgegebener ID. Da diese eindeutig ist,   #todo Wie hier beschreiben
                         wird genau ein Objekt zurückgegeben.
 
-                        :param key Primärschlüsselattribut (->DB)
-                        :return Eintrag-Objekt, das dem übergebenen Schlüssel entspricht, None bei
-                            nicht vorhandenem DB-Tupel.
-                        """
+                        :param group_id GroupId der zugehörigen Group.
+                        :param modification_date_from Anfangsdatum für die Filterung.
+                        :param modification_date_to Enddatum für die Filterung
+                        :return Eintrag-Objekt, das dem übergebenen Schlüssel entspricht"""
+
         # data_string = modification_date_from_js
         # data_format = '%Y-%m-%d'
         # date_obj = datetime.strptime(data_string, data_format)
@@ -483,11 +474,10 @@ class EntryMapper(Mapper):
         return result
 
     def find_user_by_entry_id(self, entry_id):
-        """Auslesen aller Benutzer anhand der zugeordneten E-Mail-Adresse.
+        """Auslesen aller Benutzer anhand der zugeordneten Entries.
 
-        :param user_id E-Mail-Adresse der zugehörigen Benutzer.
-        :return Eine Sammlung mit User-Objekten, die sämtliche Benutzer
-            mit der gewünschten E-Mail-Adresse enthält.
+        :param entry_id EntryId des zugehörigen Entries.
+        :return Eine Sammlung mit User-Objekten
         """
         result = []
         cursor = self._cnx.cursor()

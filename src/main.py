@@ -16,7 +16,7 @@ from server.bo.GroupMembership import GroupMembership
 
 # selbstgeschriebener Decorator, übernimmt Authentifikation
 
-from SecurityDecorater import secured
+
 
 """
 Instanzieren von Flask. Am Ende dieser Datei erfolgt dann erst der 'Start' von Flask.
@@ -170,19 +170,13 @@ class UserOperations(Resource):
     @ikauf.marshal_with(user)
     @ikauf.expect(user, validate=True)
     def put(self, id):
-        """Update eines bestimmten User-Objekts.
+        """Update eines bestimmten User-Objekts."""
 
-        **ACHTUNG:** Relevante id ist die id, die mittels URI bereitgestellt und somit als Methodenparameter
-        verwendet wird. Dieser Parameter überschreibt das ID-Attribut des im Payload der Anfrage übermittelten
-        Customer-Objekts.
-        """
+
         adm = ShoppingAdministration()
         c = User.from_dict(api.payload)
 
         if c is not None:
-            """Hierdurch wird die id des zu überschreibenden (vgl. Update) Customer-Objekts gesetzt.
-            Siehe Hinweise oben.
-            """
             c.set_id(id)
             adm.save_user(c)
             return adm.save_user, 200
@@ -228,9 +222,9 @@ class UserByExternalIdOperations(Resource):
     @ikauf.marshal_with(user)
     # @secured
     def get(self, id):
-        """ Auslesen von User-Objekten, die durch die E-Mail bestimmt werden.
+        """ Auslesen von User-Objekten, die durch die ExternalId bestimmt werden.
 
-        Die auszulesenden Objekte werden durch ```email``` in dem URI bestimmt.
+        Die auszulesenden Objekte werden durch ```external_id``` in dem URI bestimmt.
         """
         adm = ShoppingAdministration()
         cust = adm.get_user_by_external_id(id)
