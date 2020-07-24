@@ -3,9 +3,9 @@
  */
 
 export default class GroupMembershipBO {
-  constructor(member, group_membership) {
+  constructor(member, groupMembership) {
     this.member = member;
-    this.group_membership = group_membership;
+    this.group_membership = groupMembership;
   }
 
   setGroupMember(member) {
@@ -16,15 +16,15 @@ export default class GroupMembershipBO {
     return this.member;
   }
 
-  setGroupMembership(group_membership) {
-    this.group_membership = group_membership;
+  setGroupMembership(groupMembership) {
+    this.group_membership = groupMembership;
   }
 
   getGroupMembership() {
     return this.group_membership;
   }
 
-  // Returns an Array of CustomerBOs from a given JSON structure
+  // Returns an Array of GroupMembershipBO from a given JSON structure
   static fromJSON(groupMemberships) {
     let result = [];
 
