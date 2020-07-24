@@ -33,6 +33,7 @@ export default class GroupList extends Component {
       groupIndex: -1,
       user: null,
       groupMemberships: [],
+      group: null,
     };
   }
 
@@ -53,12 +54,12 @@ export default class GroupList extends Component {
       });
   };
 
-  getGroupMembershipByUserId = () => {
+  getGroupMembershipsByUserId = () => {
     console.log('Get groupmemberships');
     ShoppingAPI.getAPI()
-      .getGroupMembership(1)
-      .then((returnedGroupmemberships) => {
-        this.setState({ groupMemberships: returnedGroupmemberships });
+      .searchGroupsByMember(1)
+      .then((result) => {
+        this.setState({ groupMemberships: result });
         console.log(this.state.groupMemberships);
       });
   };
@@ -67,9 +68,10 @@ export default class GroupList extends Component {
     console.log('Getting groups');
     this.getCurrUser();
     ShoppingAPI.getAPI()
-      .getGroupsByUserId(this.state.user[0].id)
+      .getGroup(3)
       .then((returnedGroups) => {
-        return this.setState({ groupRows: returnedGroups });
+        this.setState({ group: returnedGroups });
+        console.log(this.state.group);
       });
   };
 
@@ -78,14 +80,16 @@ export default class GroupList extends Component {
       .deleteGroupMembership(groupID)
       .then(
         this.setState({
-          groupRows: this.state.groupRows.filter((group) => group.getID() !== groupID),
+          groupRows: this.state.groupRows.filter(
+            (group) => group.getID() !== groupID
+          ),
         })
       );
   };
 
   //calls all Callbacks for Repor Selection
   componentDidMount = () => {
-    this.getGroupMembershipByUserId();
+    this.getGroupMembershipsByUserId();
     console.log('All Callbacks initialised');
   };
 

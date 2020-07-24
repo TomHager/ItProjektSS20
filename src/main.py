@@ -608,7 +608,7 @@ class UserRelatedByEntryIdOperations(Resource):
         return sl
 
 
-@ikauf.route('/report-data/<int:group_id><int:modification_date_from><int:modification_date_to>')
+@ikauf.route('/report-data/<int:group_id><string:modification_date_from><string:modification_date_to>')
 @ikauf.response(500, 'Falls Server-seitiger Fehler')
 @ikauf.param('group_id', 'Gruppe des zugehörigen Entry-Objekts')
 @ikauf.param('modification_date_from', 'Anfangsdatum des zugehörigen Entry-Objekts')
