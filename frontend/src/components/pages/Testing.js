@@ -9,7 +9,6 @@ import RetailerGroupBO from '../../api/RetailerGroupBO';
 import FavoriteBO from '../../api/FavoriteBO';
 import EntryBO from '../../api/EntryBO';
 import ShoppingListBO from '../../api/ShoppingListBO';
-import ReportValuesBO from '../../api/ReportValuesBO';
 
 export default class Testing extends Component {
   constructor() {
@@ -329,12 +328,8 @@ export default class Testing extends Component {
   getEntryByGroupAndModifticationDataFromAndModificationDataTo = () => {
     // const dateFrom = new Date('July 5, 2020');
     // const dateTo = new Date('July 15, 2020');
-    const dateFrom = new Date('July 5, 2020 03:00:00')
-      .toISOString()
-      .substr(0, 19);
-    const dateTo = new Date('July 20, 2020 03:00:00')
-      .toISOString()
-      .substr(0, 19);
+    const dateFrom = new Date('July 5, 2020 03:00:00').toISOString().substr(0, 19);
+    const dateTo = new Date('July 20, 2020 03:00:00').toISOString().substr(0, 19);
     console.log(dateFrom);
     console.log(dateTo);
     // const reportValues = new ReportValuesBO();
@@ -359,11 +354,7 @@ export default class Testing extends Component {
 
   render() {
     return (
-      <Button
-        onClick={
-          this.getEntryByGroupAndModifticationDataFromAndModificationDataTo
-        }
-      >
+      <Button onClick={this.getEntryByGroupAndModifticationDataFromAndModificationDataTo}>
         Let the testing begin!
       </Button>
       // <form onSubmit={this.handleSubmit}>
