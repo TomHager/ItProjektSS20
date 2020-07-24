@@ -2,11 +2,9 @@ from server.bo.User import User
 from server.db.Mapper import Mapper
 
 """ 
-@author Yasemin
 @author Tom Hager
 @author Robin Fink
  """
-
 
 
 class UserMapper(Mapper):
@@ -41,7 +39,7 @@ class UserMapper(Mapper):
     def find_by_name(self, name):
         """Auslesen aller Benutzer anhand des Benutzernamens.
 
-        :param name Name der zugehörigen Benutzer.
+        :param name Name des zugehörigen Benutzer.
         :return Eine Sammlung mit User-Objekten, die sämtliche Benutzer
             mit dem gewünschten Namen enthält.
         """
@@ -101,7 +99,7 @@ class UserMapper(Mapper):
     def find_by_email(self, email):
         """Auslesen aller Benutzer anhand des Benutzernamens.
 
-        :param name Name der zugehörigen Benutzer.
+        :param email Name der zugehörigen Benutzer.
         :return Eine Sammlung mit User-Objekten, die sämtliche Benutzer
             mit dem gewünschten Namen enthält.
         """
@@ -211,8 +209,6 @@ class UserMapper(Mapper):
 
         self._cnx.commit()
         cursor.close()
-
-
 
 
 if (__name__ == "__main__"):

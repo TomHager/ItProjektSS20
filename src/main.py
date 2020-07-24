@@ -425,7 +425,6 @@ class EntryListOperations(Resource):
         proposal = Entry.from_dict(api.payload)
 
         if proposal is not None:
-            # todo überlgen ob : prosposal.get_entry_list() sinn macht
             x = adm.create_entry(proposal.get_unit(), proposal.get_amount(), proposal.get_article(),
                                  proposal.get_modification_date(), proposal.get_user_id(), proposal.get_retailer_id(),
                                  proposal.get_shopping_list_id(), proposal.get_bought())
