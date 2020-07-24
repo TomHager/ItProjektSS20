@@ -535,6 +535,22 @@ class EntryRelatedByShoppingListOperations(Resource):
         return e
 
 
+@ikauf.route('/entry-by-shopping-list-and-retailer/<int:shopping_list_id><int:retailer_id>')
+@ikauf.response(500, 'Falls Server-seitiger Fehler')
+@ikauf.param('shopping_list_id', 'ShoppingList des zugehörigen Entry-Objekts')
+@ikauf.param('retailer_id', 'Retailer des zugehörigen Entry-Objekts')
+class EntryRelatedByShoppingListOperations(Resource):
+    @ikauf.marshal_with(entry)
+    # @secured
+    def get(self, shopping_list_id, retailer_id):
+        """Auslesen eines bestimmten Entry-Objekts nach Article"""
+
+        adm = ShoppingAdministration()
+        e = adm.get_entry_by_shopping_list_and_retailer_id(
+            shopping_list_id, retailer_id)
+        return e
+
+
 @ikauf.route('/entry-by-bought')
 @ikauf.response(500, 'Falls Server-seitiger Fehler')
 @ikauf.param('bought', 'ShoppingList des zugehörigen Entry-Objekts')

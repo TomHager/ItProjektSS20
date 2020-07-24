@@ -288,6 +288,11 @@ class ShoppingAdministration(object):
         with EntryMapper() as mapper:
             return mapper.find_entry_by_shopping_list(shopping_list_id)
 
+    def get_entry_by_shopping_list_and_retailer_id(self, shopping_list_id, retailer_id):
+        """Entry mit übergebenem ShoppingList auslesen."""
+        with EntryMapper() as mapper:
+            return mapper.find_entry_by_shopping_list_and_retailer_id(shopping_list_id, retailer_id)
+
     def save_entry(self, entry):
         """Update eines Entry Objektes"""  # todo Richtig beschrieben?
         with EntryMapper() as mapper:
