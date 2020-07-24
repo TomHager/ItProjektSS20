@@ -16,7 +16,7 @@ export default class Testing extends Component {
     this.state = {
       name: '',
       email: '',
-      users: [],
+      users: null,
       filteredUsers: [],
       loadingInProgress: false,
       error: null,
@@ -203,17 +203,19 @@ export default class Testing extends Component {
   };
 
   // TODO
-  // getEntriesByShoppingListAndRetailer
-
-  // TODO
-  // getUserByEntry = () => {
-  //   ShoppingAPI.getAPI()
-  //     .
-  //     .then((result) => {
-  //       this.setState({ lists: result });
-  //       console.log(this.state.lists);
-  //     });
+  // getEntriesByShoppingListAndRetailer = () => {
+  //   ShoppingAPI.getAPI().
   // };
+
+  // Läuft, aber User_Id null
+  getUserByEntry = () => {
+    ShoppingAPI.getAPI()
+      .searchUserByEntry(3)
+      .then((result) => {
+        this.setState({ users: result });
+        console.log(this.state.users);
+      });
+  };
 
   // Läuft
   updateEntrys = () => {
@@ -307,7 +309,7 @@ export default class Testing extends Component {
 
   render() {
     return (
-      <Button onClick={this.deleteFavorite}>Let the testing begin!</Button>
+      <Button onClick={this.getUserByEntry}>Let the testing begin!</Button>
       // <form onSubmit={this.handleSubmit}>
       //   <input type="text" name="name" onChange={this.handleChange} />
       //   <input type="email" name="email" onChange={this.handleChange} />

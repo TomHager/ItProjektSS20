@@ -14,7 +14,7 @@ class Entry(bo.BusinessObject):
         self._amount = ""
         self._article = ""
         self._modification_date = datetime.now()
-        self._user_id = ""
+        self.user_id = ""
         self._retailer_id = ""
         self._shopping_list_id = ""
         self._bought = ""
@@ -44,10 +44,10 @@ class Entry(bo.BusinessObject):
         self._modification_date = value
 
     def get_user_id(self):
-        return self._user_id
+        return self.user_id
 
     def set_user_id(self, value):
-        self._user_id = value
+        self.user_id = value
 
     def get_retailer_id(self):
         return self._retailer_id
@@ -70,7 +70,7 @@ class Entry(bo.BusinessObject):
     def __str__(self):
         """Erzeugen einer einfachen textuellen Darstellung der jeweiligen Instanz."""
         return "Entry: {}, {}, {}, {}, {}, {}, {}, {}, {}".format(self.get_id(), self._unit, self._amount,
-                                                                  self._article, self._modification_date, self._user_id,
+                                                                  self._article, self._modification_date, self.user_id,
                                                                   self._retailer_id, self._shopping_list_id,
                                                                   self._bought)
 
