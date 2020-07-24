@@ -2,6 +2,7 @@
 from flask import Flask
 from flask_restx import Resource, Api, fields
 from flask_cors import CORS
+from datetime import datetime
 
 # Zugriff auf BusinessObject Klassen und Applikationslogik
 from server.ShoppingAdministration import ShoppingAdministration
@@ -607,7 +608,7 @@ class UserRelatedByEntryIdOperations(Resource):
         return sl
 
 
-@ikauf.route('/report-data/<int:group_id><datetime:modification_date_from><datetime:modification_date_to>')
+@ikauf.route('/report-data/<int:group_id><int:modification_date_from><int:modification_date_to>')
 @ikauf.response(500, 'Falls Server-seitiger Fehler')
 @ikauf.param('group_id', 'Gruppe des zugehörigen Entry-Objekts')
 @ikauf.param('modification_date_from', 'Anfangsdatum des zugehörigen Entry-Objekts')

@@ -306,6 +306,12 @@ export default class Testing extends Component {
     ShoppingAPI.getAPI().deleteRetailer(2);
   };
 
+  // Reportgenerator
+
+  // getEntryByGroupAndModifticationDataFromAndModificationDataTo = () => {
+  //   ShoppingAPI.getAPI().
+  // }
+
   componentDidMount() {
     this.getUserByEmail();
     this.getFavoritesByGroup();
