@@ -41,11 +41,14 @@ export default class ShoppingAPI {
       this.#ShoppingServerBaseURL
     }/entry-by-shopping-list-and-retailer/${shoppingListId}${retailerId}`;
 
-  #searchReportDataURL = (group_id,modification_date_from, modification_date_to) =>
+  #searchReportDataURL = (
+    group_id,
+    modification_date_from,
+    modification_date_to
+  ) =>
     `${
       this.#ShoppingServerBaseURL
-    }/report-data/${group_id}${modification_date_from}${modification_date_to}`;
-
+    }/report-data/${group_id},${modification_date_from},${modification_date_to}`;
 
   // Favorites related
   #getFavoritesURL = () => `${this.#ShoppingServerBaseURL}/favorites`;
@@ -60,7 +63,7 @@ export default class ShoppingAPI {
 
   // Groups related
   #getGroupsURL = () => `${this.#ShoppingServerBaseURL}/groups`;
-  #getGroupURL = (id) => `${this.#ShoppingServerBaseURL}/groups/${id}`;
+  #getGroupURL = (id) => `${this.#ShoppingServerBaseURL}/group/${id}`;
   #addGroupURL = () => `${this.#ShoppingServerBaseURL}/groups`;
   #updateGroupURL = (id) => `${this.#ShoppingServerBaseURL}/groups/${id}`;
   #deleteGroupURL = (id) => `${this.#ShoppingServerBaseURL}/groups/${id}`;
@@ -296,9 +299,13 @@ export default class ShoppingAPI {
     });
   }
 
-  searchReportDataURL(group_id,modification_date_from,modification_date_to){
+  searchReportDataURL(group_id, modification_date_from, modification_date_to) {
     return this.#fetchAdvanced(
-      this.#searchReportDataURL(group_id,modification_date_from,modification_date_to)
+      this.#searchReportDataURL(
+        group_id,
+        modification_date_from,
+        modification_date_to
+      )
     ).then((responseJSON) => {
       let entryBOs = EntryBO.fromJSON(responseJSON);
       // console.info(entryBOs);
@@ -307,7 +314,6 @@ export default class ShoppingAPI {
       });
     });
   }
-
 
   // Group Methoden
 

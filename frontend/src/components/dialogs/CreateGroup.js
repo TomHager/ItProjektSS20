@@ -173,7 +173,9 @@ export class CreateGroup extends Component {
                       key={row.id}
                       style={{
                         backgroundColor:
-                          row.id === this.state.memberIndex ? '#0090FF' : 'white',
+                          row.id === this.state.memberIndex
+                            ? '#0090FF'
+                            : 'white',
                       }}
                       // onClick={this.groupClickHandler.bind(this, row)}
                     >

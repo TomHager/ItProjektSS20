@@ -31,8 +31,9 @@ export default class GroupList extends Component {
     this.state = {
       groupRows: [],
       groupIndex: -1,
-      user: null,
+      currentUser: null,
       groupMemberships: [],
+      group: null,
     };
   }
 
@@ -49,43 +50,46 @@ export default class GroupList extends Component {
     ShoppingAPI.getAPI()
       .searchUserByEmail(firebase.auth().currentUser.email)
       .then((returnedUser) => {
-        this.setState({ user: returnedUser });
+        this.setState({ currentUser: returnedUser });
       });
   };
 
-  getGroupMembershipByUserId = () => {
+  getGroupMembershipsByUserId = () => {
     console.log('Get groupmemberships');
     ShoppingAPI.getAPI()
-      .getGroupMembership(1)
-      .then((returnedGroupmemberships) => {
-        this.setState({ groupMemberships: returnedGroupmemberships });
+      .searchGroupsByMember(1)
+      .then((result) => {
+        this.setState({ groupMemberships: result });
         console.log(this.state.groupMemberships);
       });
   };
 
-  getGroupsByGroupId = () => {
-    console.log('Getting groups');
-    this.getCurrUser();
-    ShoppingAPI.getAPI()
-      .getGroupsByUserId(this.state.user[0].id)
-      .then((returnedGroups) => {
-        return this.setState({ groupRows: returnedGroups });
-      });
-  };
+  // getGroupsByGroupId = () => {
+  //   for(let i = 0, i < console.log('Getting groups');
+  //   this.getCurrUser();
+  //   ShoppingAPI.getAPI()
+  //     .getGroup(this.state.groupMemberships[0])
+  //     .then((returnedGroups) => {
+  //       this.setState({ group: returnedGroups });
+  //       console.log(this.state.group);
+  //     });
+  // };
 
   deleteGroupMembership = (groupID) => {
     ShoppingAPI.getAPI()
       .deleteGroupMembership(groupID)
       .then(
         this.setState({
-          groupRows: this.state.groupRows.filter((group) => group.getID() !== groupID),
+          groupRows: this.state.groupRows.filter(
+            (group) => group.getID() !== groupID
+          ),
         })
       );
   };
 
   //calls all Callbacks for Repor Selection
   componentDidMount = () => {
-    this.getGroupMembershipByUserId();
+    this.getGroupMembershipsByUserId();
     console.log('All Callbacks initialised');
   };
 
