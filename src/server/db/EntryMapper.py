@@ -1,6 +1,7 @@
 from server.bo.Entry import Entry
 from server.db.Mapper import Mapper
 
+from datetime import datetime
 """
 @author Robin Fink
 """
@@ -426,7 +427,7 @@ class EntryMapper(Mapper):
 
         return result
 
-    def get_report_data(self, group_id, modification_date_from, modification_date_to):
+    def get_report_data(self, group_id, modification_date_from_js, modification_date_to_js):
         """Suchen eines Eintrags mit vorgegebener ID. Da diese eindeutig ist,
                         wird genau ein Objekt zurückgegeben.
 
@@ -434,12 +435,24 @@ class EntryMapper(Mapper):
                         :return Eintrag-Objekt, das dem übergebenen Schlüssel entspricht, None bei
                             nicht vorhandenem DB-Tupel.
                         """
+        data_string = modification_date_from_js
+        data_format = '%Y-%m-%d'
+        date_obj = datetime.strptime(data_string, data_format)
+        modification_date_from = date_obj
+
+        data_string = modification_date_to_js
+        data_format = '%Y-%m-%d'
+        date_obj = datetime.strptime(data_string, data_format)
+        modification_date_to = date_obj
 
         result = []
 
         cursor = self._cnx.cursor()
         command = "SELECT * FROM entries WHERE group_id={} AND bought=1 AND (modification_date " \
-                  "BETWEEN {} AND {})".format(group_id, modification_date_from, modification_date_to)
+                  "BETWEEN '{}' AND '{}')".format(group_id, modification_date_from, modification_date_to)
+        print(command)
+
+
         cursor.execute(command)
         tuples = cursor.fetchall()
 
@@ -499,6 +512,6 @@ um die grundsätzliche Funktion zu überprüfen.
 Anmerkung: Nicht professionell aber hilfreich..."""
 if (__name__ == "__main__"):
     with EntryMapper() as mapper:
-        result = mapper.find_all()
+        result = mapper.get_report_data(2, "2020-01-01", "2020-07-25")
         for p in result:
             print(p)
