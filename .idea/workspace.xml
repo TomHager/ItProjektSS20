@@ -26,13 +26,20 @@
     </select>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2c1c77a4-6169-48a4-a7a4-a8dc3ff2c5dd" name="Default Changelist" comment="ShoppingAdministration.py  Teil gefixed">
+    <list default="true" id="2c1c77a4-6169-48a4-a7a4-a8dc3ff2c5dd" name="Default Changelist" comment="Updated main-copy.py&#10;Added FavoriteRelatedByGroupId">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/pages/Testing.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/pages/Testing.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-report/src/components/pages/ReportDataTable.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-report/src/components/pages/ReportDataTable.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main-copy.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/main-copy.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/server/ShoppingAdministration.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/ShoppingAdministration.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/server/db/EntryMapper.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/db/EntryMapper.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/server/db/GroupMembershipMapper.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/db/GroupMembershipMapper.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/server/db/Mapper.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/db/Mapper.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/server/db/UserMapper.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/db/UserMapper.py" afterDir="false" />
     </list>
+    <list id="f3527e18-98fc-47e9-96b2-6aff7f2e2547" name="Updated main-copy.py Added FavoriteRelatedByGroupId" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -74,7 +81,7 @@
     <property name="restartRequiresConfirmation" value="false" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
-  <component name="RunManager" selected="Python.main">
+  <component name="RunManager" selected="Python.main-copy">
     <configuration name="GroupMapper" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="ItProjektSS20" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -364,26 +371,26 @@
       <screen x="0" y="0" width="1280" height="680" />
     </state>
     <state x="421" y="96" key="FileChooserDialogImpl/0.0.1280.680@0.0.1280.680" timestamp="1595330525064" />
-    <state width="1348" height="202" key="GridCell.Tab.0.bottom" timestamp="1595581032184">
-      <screen x="0" y="0" width="1368" height="872" />
+    <state width="949" height="281" key="GridCell.Tab.0.bottom" timestamp="1595597645803">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1348" height="202" key="GridCell.Tab.0.bottom/0.0.1368.872@0.0.1368.872" timestamp="1595581032184" />
-    <state width="1876" height="218" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1595447367142" />
-    <state width="1348" height="202" key="GridCell.Tab.0.center" timestamp="1595581032183">
-      <screen x="0" y="0" width="1368" height="872" />
+    <state width="949" height="281" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1595597645803" />
+    <state width="949" height="281" key="GridCell.Tab.0.center" timestamp="1595597645802">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1348" height="202" key="GridCell.Tab.0.center/0.0.1368.872@0.0.1368.872" timestamp="1595581032183" />
-    <state width="1876" height="218" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1595447367141" />
-    <state width="1348" height="202" key="GridCell.Tab.0.left" timestamp="1595581032183">
-      <screen x="0" y="0" width="1368" height="872" />
+    <state width="949" height="281" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1595597645802" />
+    <state width="949" height="281" key="GridCell.Tab.0.left" timestamp="1595597645802">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1348" height="202" key="GridCell.Tab.0.left/0.0.1368.872@0.0.1368.872" timestamp="1595581032183" />
-    <state width="1876" height="218" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1595447367141" />
-    <state width="1348" height="202" key="GridCell.Tab.0.right" timestamp="1595581032183">
-      <screen x="0" y="0" width="1368" height="872" />
+    <state width="949" height="281" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1595597645802" />
+    <state width="949" height="281" key="GridCell.Tab.0.right" timestamp="1595597645803">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1348" height="202" key="GridCell.Tab.0.right/0.0.1368.872@0.0.1368.872" timestamp="1595581032183" />
-    <state width="1876" height="218" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1595447367141" />
+    <state width="949" height="281" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1595597645803" />
     <state x="184" y="84" key="MergeDialog" timestamp="1595269161372">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>

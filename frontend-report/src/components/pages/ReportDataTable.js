@@ -1,4 +1,12 @@
 import React, { Component } from 'react';
+import { Button } from '@material-ui/core';
+import firebase from 'firebase/app';
+import EntryBO from 'src/api/EntryBO';
+import GroupBO from '.src/api/GroupBO';
+import ShoppingAPI from 'src/api//ShoppingAPI';
+import UserBO from '../';
+
+
 import {
   Table,
   TableBody,
@@ -24,6 +32,17 @@ export default class ReportDataTable extends Component {
     this.state = {
       entryRows: [],
       entryIndex: -1,
+      name: '',
+      email: '',
+      users: [],
+      filteredUsers: [],
+      loadingInProgress: false,
+      error: null,
+      user: null,
+      GroupmemberShip: null,
+      retailers: null,
+      favorite: null,
+      lists: null,
     };
   }
 
@@ -106,4 +125,33 @@ export default class ReportDataTable extends Component {
       </TableContainer>
     );
   }
+
+
+  getEntriesByShoppingList = () => {
+    ShoppingAPI.getAPI()
+      .getEntriesByShoppingListId(2)
+      .then((result) => {
+        this.setState({ lists: result });
+        console.log(this.state.lists);
+      });
+  };
+
+  componentDidMount() {
+    this.getUsers();
+    this.getFavoritesByGroup();
+    this.getEntriesByShoppingList();
+    this.getShoppingListsByGroup();
+  }
+
+  render() {
+    return (
+      <Button onClick={this.getEntriesByShoppingList}>Let the testing begin!</Button>
+      // <form onSubmit={this.handleSubmit}>
+      //   <input type="text" name="name" onChange={this.handleChange} />
+      //   <input type="email" name="email" onChange={this.handleChange} />
+      //   <input type="submit" value="Add user" />{' '}
+      // </form>
+    );
+  }
 }
+
