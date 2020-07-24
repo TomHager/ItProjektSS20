@@ -71,10 +71,11 @@ entry = api.inherit('Entry', bo, {
     'unit': fields.String(attribute='_unit', discription='Name der Einheit'),
     'amount': fields.Integer(attribute='_amount', discription='Menge eines Artikel'),
     'article': fields.String(attribute='_article', discription='Name eines Artikel'),
-    'modification_date': fields.DateTime(attribute='_modification_date', discription='Änderungsdatum der Entry'),
+    'modification_date': fields.String(attribute='_modification_date', discription='Änderungsdatum der Entry'),
     'user_id': fields.Integer(attribut='_user_id', description='Name eines Benutzers'),
     'retailer_id': fields.Integer(attribute='_retailer_id', description='Name eines Verkäufers'),
     'shopping_list_id': fields.Integer(attribute='_shopping_list_id', description='ID einer Shopping List'),
+    'group_id': fields.Integer(attribute='_group_id', description='Gruppen ID einer Shopping List'),
     'bought': fields.Integer(attribute='_bought', discription='Prüft ob der Artikel gekauft wurde'),
 })
 
@@ -343,10 +344,10 @@ class RetailerListOperations(Resource):
 
         adm = ShoppingAdministration()
 
-        r = RetailerGroup.from_dict(api.payload)
+        r = Retailer.from_dict(api.payload)
 
         if r is not None:
-            x = adm.create_retailer(r)
+            x = adm.create_retailer(r.get_name())
             return x, 200
         else:
             return 'Group unknown', 500
@@ -535,6 +536,50 @@ class EntryRelatedByShoppingListOperations(Resource):
         return e
 
 
+@ikauf.route('/entry-by-shopping-list/<int:shopping_list_id>')
+@ikauf.response(500, 'Falls Server-seitiger Fehler')
+@ikauf.param('shopping_list_id', 'ShoppingList des zugehörigen Entry-Objekts')
+class EntryRelatedByShoppingListOperations(Resource):
+    @ikauf.marshal_with(entry)
+    # @secured
+    def get(self, shopping_list_id):
+        """Auslesen eines bestimmten Entry-Objekts nach Article"""
+
+        adm = ShoppingAdministration()
+        e = adm.get_entry_by_shopping_list(shopping_list_id)
+        return e
+
+
+@ikauf.route('/entry-by-group/<int:group_id>')
+@ikauf.response(500, 'Falls Server-seitiger Fehler')
+@ikauf.param('group_id', 'Gruppe des zugehörigen Entry-Objekts')
+class EntryRelatedByShoppingListOperations(Resource):
+    @ikauf.marshal_with(entry)
+    # @secured
+    def get(self, group_id):
+        """Auslesen eines bestimmten Entry-Objekts nach Article"""
+
+        adm = ShoppingAdministration()
+        e = adm.get_entry_by_group(group_id)
+        return e
+
+
+@ikauf.route('/entry-by-shopping-list-and-retailer/<int:shopping_list_id><int:retailer_id>')
+@ikauf.response(500, 'Falls Server-seitiger Fehler')
+@ikauf.param('shopping_list_id', 'ShoppingList des zugehörigen Entry-Objekts')
+@ikauf.param('retailer_id', 'Retailer des zugehörigen Entry-Objekts')
+class EntryRelatedByShoppingListOperations(Resource):
+    @ikauf.marshal_with(entry)
+    # @secured
+    def get(self, shopping_list_id, retailer_id):
+        """Auslesen eines bestimmten Entry-Objekts nach Article"""
+
+        adm = ShoppingAdministration()
+        e = adm.get_entry_by_shopping_list_and_retailer_id(
+            shopping_list_id, retailer_id)
+        return e
+
+
 @ikauf.route('/entry-by-bought')
 @ikauf.response(500, 'Falls Server-seitiger Fehler')
 @ikauf.param('bought', 'ShoppingList des zugehörigen Entry-Objekts')
@@ -549,6 +594,36 @@ class EntryRelatedByBoughtOperations(Resource):
         return e
 
 
+@ikauf.route('/user-by-entry/<int:id>')
+@ikauf.response(500, 'Falls Server-seitiger Fehler')
+@ikauf.param('id', 'Group ID des zugehörigen ShoppingList-Objekts')
+class UserRelatedByEntryIdOperations(Resource):
+    @ikauf.marshal_with(entry)
+    def get(self, id):
+        """Auslesen eines bestimmten ShoppingList-Objekts nach Group ID"""
+
+        adm = ShoppingAdministration()
+        sl = adm.get_user_by_entry_id(id)
+        return sl
+
+
+@ikauf.route('/report-data/<int:group_id><string:modification_date_from><string:modification_date_to>')
+@ikauf.response(500, 'Falls Server-seitiger Fehler')
+@ikauf.param('group_id', 'Gruppe des zugehörigen Entry-Objekts')
+@ikauf.param('modification_date_from', 'Anfangsdatum des zugehörigen Entry-Objekts')
+@ikauf.param('modification_date_to', 'Enddatum des zugehörigen Entry-Objekts')
+class EntryRelatedByArticleOperations(Resource):
+    @ikauf.marshal_with(entry)
+    # @secured
+    def get(self, group_id, modification_date_from, modification_date_to):
+        """Auslesen eines bestimmten Entry-Objekts nach Article"""
+
+        adm = ShoppingAdministration()
+        e = adm.get_report_data(
+            group_id, modification_date_from, modification_date_to)
+        return e
+
+
 # @ikauf.route('/entry-by-modification-date/<date:date>')
 # @ikauf.route('/entry-by-modification-date/<datetime:modification_date>')
 # @ikauf.response(500, 'Falls Server-seitiger Fehler')
@@ -558,10 +633,6 @@ class EntryRelatedByBoughtOperations(Resource):
 #     #@secured
 #     def get(self, modification_date):
 #         """Auslesen eines bestimmten Entry-Objekts nach Article"""
-
-#         adm = ShoppingAdministration()
-#         e = adm.get_entry_by_modification_date(modification_date)
-#         return e
 
 
 """
@@ -587,11 +658,12 @@ class ShoppingListListOperations(Resource):
 
         adm = ShoppingAdministration()
 
-        prosposal = ShoppingList.from_dict(api.payload)
+        proposal = ShoppingList.from_dict(api.payload)
 
-        if prosposal is not None:
+        if proposal is not None:
             x = adm.create_shopping_list(
-                prosposal.get_shopping_list_name, prosposal.get_group_id())
+                proposal.get_name(), proposal.get_group_id())
+
             return x, 200
         else:
             return '', 500
@@ -906,3 +978,8 @@ Um dies zu testen muss, wie in der VL eine Db in Python vorliegen.
 
 if __name__ == '__main__':
     app.run(debug=True)
+
+# if __name__ == '__main__':
+#     adm = ShoppingAdministration()
+#     x = adm.create_shopping_list("Abschlussparty", 1)
+#     print(x)

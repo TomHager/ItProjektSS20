@@ -8,6 +8,7 @@ import GroupMembershipBO from '../../api/GroupMembershipBO';
 import RetailerGroupBO from '../../api/RetailerGroupBO';
 import FavoriteBO from '../../api/FavoriteBO';
 import EntryBO from '../../api/EntryBO';
+import ShoppingListBO from '../../api/ShoppingListBO';
 
 export default class Testing extends Component {
   constructor() {
@@ -15,7 +16,7 @@ export default class Testing extends Component {
     this.state = {
       name: '',
       email: '',
-      users: [],
+      users: null,
       filteredUsers: [],
       loadingInProgress: false,
       error: null,
@@ -24,11 +25,13 @@ export default class Testing extends Component {
       retailers: null,
       favorite: null,
       lists: null,
+      entries: null,
     };
   }
 
   //User
 
+  //Läuft
   getCurrUser = () => {
     console.log('Eingeloggter User:', firebase.auth().currentUser.displayName);
     ShoppingAPI.getAPI()
@@ -38,7 +41,8 @@ export default class Testing extends Component {
       });
   };
 
-  getUsers = () => {
+  //Läuft
+  getUserByEmail = () => {
     ShoppingAPI.getAPI()
       .searchUserByEmail('berndbernd')
       .then((returnedUser) => {
@@ -46,6 +50,7 @@ export default class Testing extends Component {
       });
   };
 
+  //Läuft
   addUserToDatabase = () => {
     const newUser = new UserBO();
     newUser.setExternalId(firebase.auth().currentUser.uid);
@@ -58,10 +63,7 @@ export default class Testing extends Component {
       });
   };
 
-  deleteUser = () => {
-    ShoppingAPI.getAPI().deleteUser(5);
-  };
-
+  //Läuft
   updateUser = () => {
     const newUser = this.state.user;
     newUser[0].setName('Nemesis');
@@ -69,20 +71,14 @@ export default class Testing extends Component {
     console.log(newUser);
   };
 
-  //Retailer
-  //TODO
-  addRetailerToDatabase = () => {
-    const newRetailer = new RetailerBO();
-    newRetailer.setName('Lidl');
-    ShoppingAPI.getAPI()
-      .addRetailer(newRetailer)
-      .catch((e) => {
-        console.info(e);
-      });
+  //Läuft
+  deleteUser = () => {
+    ShoppingAPI.getAPI().deleteUser(5);
   };
 
   //Groupmembership
 
+  //Läuft
   getgroupMembershipByUserID = () => {
     ShoppingAPI.getAPI()
       .searchGroupsByMember(1)
@@ -92,6 +88,7 @@ export default class Testing extends Component {
       });
   };
 
+  //Läuft
   addGroupMembership = () => {
     const newMembership = new GroupMembershipBO();
     newMembership.setGroupMember(4);
@@ -111,10 +108,11 @@ export default class Testing extends Component {
 
   //RetailerGroup
 
+  //Läuft
   addRetailergroup = () => {
     const newMembership = new RetailerGroupBO();
-    newMembership.setRetailerGroup(6);
-    newMembership.setRetailerMember(3);
+    newMembership.setRetailerGroup(3);
+    newMembership.setRetailerMember(9);
     // const newMembership = { member: 3, group_membership: 3 };
     console.log(newMembership);
     ShoppingAPI.getAPI()
@@ -151,7 +149,7 @@ export default class Testing extends Component {
     const newFavorite = new FavoriteBO();
     newFavorite.setUnit('kg');
     newFavorite.setAmount(1);
-    newFavorite.setArticle('Birnen');
+    newFavorite.setArticle('Erdbeeren');
     newFavorite.setRetailerID(4);
     newFavorite.setGroupID(3);
     console.log(newFavorite);
@@ -169,7 +167,13 @@ export default class Testing extends Component {
     ShoppingAPI.getAPI().updateFavorite(updatedFavorite[0]);
   };
 
+  //Läuft
+  deleteFavorite = () => {
+    ShoppingAPI.getAPI().deleteFavorite(2);
+  };
+
   //Notwendig Für Shoppingliste
+
   //Läuft
   getShoppingListsByGroup = () => {
     ShoppingAPI.getAPI()
@@ -189,28 +193,37 @@ export default class Testing extends Component {
       });
   };
 
-  //TODO
-  // getEntriesByShoppingListandRetailer
+  //Läuft
+  getRetailersByGroup = () => {
+    ShoppingAPI.getAPI()
+      .searchRetailerMemberByGroup(2)
+      .then((result) => {
+        this.setState({ retailers: result });
+        console.log(this.state.retailers);
+      });
+  };
 
-  // TODO
-  // getRetailersByGroup = () => {
-  //   ShoppingAPI.getAPI()
-  //     .
-  //     .then((result) => {
-  //       this.setState({ lists: result });
-  //       console.log(this.state.lists);
-  //     });
-  // };
-  // TODO
-  // getUserByEntry = () => {
-  //   ShoppingAPI.getAPI()
-  //     .
-  //     .then((result) => {
-  //       this.setState({ lists: result });
-  //       console.log(this.state.lists);
-  //     });
-  // };
-  //TODO
+  // Läuft
+  getEntriesByShoppingListAndRetailer = () => {
+    ShoppingAPI.getAPI()
+      .searchEntryByShoppingListAndRetailer(3, 2)
+      .then((result) => {
+        this.setState({ entries: result });
+        console.log(this.state.entries);
+      });
+  };
+
+  // Läuft
+  getUserByEntry = () => {
+    ShoppingAPI.getAPI()
+      .searchUserByEntry(3)
+      .then((result) => {
+        this.setState({ users: result });
+        console.log(this.state.users);
+      });
+  };
+
+  // Läuft
   updateEntrys = () => {
     const updatedEntry = {
       id: 3,
@@ -224,27 +237,19 @@ export default class Testing extends Component {
       bought: 0,
     };
     ShoppingAPI.getAPI().updateEntry(updatedEntry[0]);
-  
   };
 
-
-    
-  // updateShoppingList = () => {
-  //   const updatedShoppingList = this.state.lists;
-  //   console.log(updatedEntry[0]);
-  //   updatedEntry[0].setArticle('Bier');
-  //   ShoppingAPI.getAPI().updateEntry(updatedEntry[0]);
-  // };
-  //TODO
+  // Läuft
   createEntry = () => {
     const newEntry = new EntryBO();
-    newEntry.setArticle('Wachteln');
-    newEntry.setAmount(23);
     newEntry.setUnit('kg');
-    newEntry.setUserId(2);
+    newEntry.setAmount(23);
+    newEntry.setArticle('Wachteln');
     newEntry.setModificationDate('2020-07-03 00:00:00');
+    newEntry.setUserId(2);
     newEntry.setRetailerId(1);
     newEntry.setShoppingListId(2);
+    newEntry.setBought(0);
     console.log(newEntry);
     ShoppingAPI.getAPI()
       .addEntry(newEntry)
@@ -252,50 +257,65 @@ export default class Testing extends Component {
         console.info(e);
       });
   };
+  //Läuft
+  createShoppingList = () => {
+    const newList = new ShoppingListBO();
+    newList.setName('Wocheneinkauf');
+    newList.setGroupId(3);
+    console.log(newList);
+    ShoppingAPI.getAPI()
+      .addShoppingList(newList)
+      .catch((e) => {
+        console.info(e);
+      });
+  };
+  //Läuft
+  updateShoppingList = () => {
+    const updatedShoppingList = this.state.lists;
+    updatedShoppingList[0].setName('BBQ Party');
+    updatedShoppingList[0].setGroupId(2);
+    console.log(updatedShoppingList[0]);
+    ShoppingAPI.getAPI().updateShoppingList(updatedShoppingList[0]);
+  };
 
-  // createShoppingList
-  // deleteShoppingList
-  // deleteListEntry
+  //Läuft
+  deleteShoppingList = () => {
+    ShoppingAPI.getAPI().deleteShoppingList(2);
+  };
 
-  // componentDidMount() {
-  //   this.getUsers();
-  // }
+  //Läuft
+  deleteListEntry = () => {
+    ShoppingAPI.getAPI().deleteEntry(4);
+  };
 
-  // getUsersByName = () => {
-  //   ShoppingAPI.getAPI()
-  //     .searchUserByName('Alex')
-  //     .then((returnedUser) => {
-  //       return this.setState({ user: returnedUser });
-  //     });
-  //   console.log(this.state.user);
-  // };
+  //RetailerList
 
-  //     .catch((e) =>
-  //       this.setState({
-  //         // Reset state with error from catch
-  //         users: [],
-  //         loadingInProgress: false, // disable loading indicator
-  //         error: e,
-  //       })
-  //     );
+  //Läuft
+  addRetailerToDatabase = () => {
+    const newRetailer = new RetailerBO();
+    newRetailer.setName('Lidl');
+    ShoppingAPI.getAPI()
+      .addRetailer(newRetailer)
+      .catch((e) => {
+        console.info(e);
+      });
+  };
 
-  //   // set loading to true
-  //   this.setState({
-  //     loadingInProgress: true,
-  //     error: null,
-  //   });
-  // };
+  //Läuft
+  deleteRetailer = () => {
+    ShoppingAPI.getAPI().deleteRetailer(2);
+  };
 
-  // displayUsers = () => console.log(this.state.users);
   componentDidMount() {
-    this.getUsers();
+    this.getUserByEmail();
     this.getFavoritesByGroup();
     this.getEntriesByShoppingList();
+    this.getShoppingListsByGroup();
   }
 
   render() {
     return (
-      <Button onClick={this.updateEntrys}>Let the testing begin!</Button>
+      <Button onClick={this.getUserByEntry}>Let the testing begin!</Button>
       // <form onSubmit={this.handleSubmit}>
       //   <input type="text" name="name" onChange={this.handleChange} />
       //   <input type="email" name="email" onChange={this.handleChange} />

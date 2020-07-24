@@ -76,6 +76,8 @@ class ShoppingAdministration(object):
         with UserMapper() as mapper:
             mapper.delete(user)
 
+
+
     """
     Group-spezifische Methoden
     """
@@ -112,7 +114,8 @@ class ShoppingAdministration(object):
     def get_groups_of_user(self, user):
         """Alle Groups des gegebenen Usser auslesen."""
         with GroupMapper() as mapper:
-            return mapper.find_by_key(user.get_id())  # Vorsicht: nicht geprüft! #todo nochmal anschauen groupmembership
+            # Vorsicht: nicht geprüft! #todo nochmal anschauen groupmembership
+            return mapper.find_by_key(user.get_id())
 
     def get_all_groups(self):
         """Alle Gruppen Objekte auslesen."""
@@ -181,11 +184,11 @@ class ShoppingAdministration(object):
         with ShoppingListMapper() as mapper:
             return mapper.find_all()
 
-    def create_shopping_list(self, shopping_list_name, group_id):
+    def create_shopping_list(self, name, groups_id):
         """Eine ShoppingList anlegen."""
         shoppinglist = ShoppingList()
-        shoppinglist.set_name(shopping_list_name)
-        shoppinglist.set_group_id(group_id)
+        shoppinglist.set_name(name)
+        shoppinglist.set_group_id(groups_id)
         shoppinglist.set_id(1)
 
         with ShoppingListMapper() as mapper:
@@ -201,7 +204,8 @@ class ShoppingAdministration(object):
         with ShoppingListMapper() as mapper:
             mapper.delete(shoppinglist)
 
-    def get_shopping_list_by_name(self, shopping_list_name):  # todo nicht fertig bzw iwas fehlt
+    # todo nicht fertig bzw iwas fehlt
+    def get_shopping_list_by_name(self, shopping_list_name):
         """ShoppingList mit übergebenem shopping-list-name auslesen."""
 
         with ShoppingListMapper() as mapper:
@@ -239,7 +243,7 @@ class ShoppingAdministration(object):
         entry.set_bought(bought)
         entry.set_id(1)
         with EntryMapper() as mapper:
-            return  mapper.insert(entry)
+            return mapper.insert(entry)
 
     def delete_entry_by_id(self, entry_id):
         """gegebenen Entry löschen."""
@@ -286,6 +290,16 @@ class ShoppingAdministration(object):
         with EntryMapper() as mapper:
             return mapper.find_entry_by_shopping_list(shopping_list_id)
 
+    def get_entry_by_group(self, group_id):
+        """Entry mit übergebenem ShoppingList auslesen."""
+        with EntryMapper() as mapper:
+            return mapper.find_entry_by_group(group_id)
+
+    def get_entry_by_shopping_list_and_retailer_id(self, shopping_list_id, retailer_id):
+        """Entry mit übergebenem ShoppingList auslesen."""
+        with EntryMapper() as mapper:
+            return mapper.find_entry_by_shopping_list_and_retailer_id(shopping_list_id, retailer_id)
+
     def save_entry(self, entry):
         """Update eines Entry Objektes"""  # todo Richtig beschrieben?
         with EntryMapper() as mapper:
@@ -295,6 +309,16 @@ class ShoppingAdministration(object):
         """Entry mit übergebenem Retailer auslesen."""
         with EntryMapper() as mapper:
             return mapper.find_entry_by_bought(bought)
+
+    def get_report_data(self, groups_id, modification_date_from, modification_date_to):
+        """Entry mit übergebenem Retailer auslesen."""
+        with EntryMapper() as mapper:
+            return mapper.get_report_data(groups_id, modification_date_from, modification_date_to)
+
+    def get_user_by_entry_id(self, number):
+        """Den Benutzer mit der gegebenen ID auslesen."""
+        with EntryMapper() as mapper:
+            return mapper.find_user_by_entry_id(number)
 
     """
     RetailerGroup-spezifische Methoden
@@ -340,7 +364,6 @@ class ShoppingAdministration(object):
         with GroupMembershipMapper() as mapper:
             return mapper.find_user_by_group(group_membership)
 
-
     def delete_group_membership(self, group_member, member):
 
         with GroupMembershipMapper() as mapper:
@@ -350,7 +373,6 @@ class ShoppingAdministration(object):
 
         with GroupMembershipMapper() as mapper:
             return mapper.find_group_by_user(member)
-
 
     """
     Favorite-spezifische Methoden

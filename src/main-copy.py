@@ -64,8 +64,7 @@ group = api.inherit('Group', bo, {
 })
 
 retailer = api.inherit('retailer', bo, {
-    'retailer_name': fields.String(attribute='_name', description='Name eines Verkäufers'),
-    'group_id': fields.Integer(attribute='_id', description='ID einer Gruppe')
+    'name': fields.String(attribute='_name', description='Name eines Verkäufers'),
 })
 
 entry = api.inherit('Entry', bo, {
@@ -112,6 +111,7 @@ group_member = api.inherit('GroupMember', bo, {
 """
 Klassen und Operationen für User
 """
+
 
 
 @ikauf.route('/user')
@@ -236,6 +236,19 @@ class UserByExternalIdOperations(Resource):
         adm = ShoppingAdministration()
         cust = adm.get_user_by_external_id(id)
         return cust
+
+@ikauf.route('/user-by-entry/<int:id>')
+@ikauf.response(500, 'Falls Server-seitiger Fehler')
+@ikauf.param('id', 'Group ID des zugehörigen ShoppingList-Objekts')
+class UserRelatedByEntryIdOperations(Resource):
+    @ikauf.marshal_with(entry)
+
+    def get(self, id):
+        """Auslesen eines bestimmten ShoppingList-Objekts nach Group ID"""
+
+        adm = ShoppingAdministration()
+        sl = adm.get_user_by_entry_id(id)
+        return sl
 
 
 """
@@ -520,7 +533,7 @@ class EntryRelatedByUserOperations(Resource):
         return e
 
 
-@ikauf.route('/entry-by-shoppin-list/<int:shopping_list_id>')
+@ikauf.route('/entry-by-shopping-list/<int:shopping_list_id>')
 @ikauf.response(500, 'Falls Server-seitiger Fehler')
 @ikauf.param('shopping_list_id', 'ShoppingList des zugehörigen Entry-Objekts')
 class EntryRelatedByShoppingListOperations(Resource):
@@ -755,7 +768,7 @@ class DeleteGroupMembershipOperations(Resource):
         return '', 200
 
 
-@ikauf.route('/create_group_membership')
+@ikauf.route('/create-group-membership')
 @ikauf.response(500, "Falls Server-seitiger Fehler")
 class GroupMembershipListOperations(Resource):
     @secured
@@ -800,6 +813,8 @@ class MemberRelatedByGroupMembershipOperations(Resource):
         adm = ShoppingAdministration()
         mem = adm.get_member_by_group_membership(group_membership)
         return mem
+
+
 
 
 """
@@ -885,6 +900,19 @@ class FavoriteOperations(Resource):
         else:
             return '', 500
 
+@ikauf.route('/favorite-by-group/<int:group_id>')
+@ikauf.response(500, 'Falls Server-seitiger Fehler')
+@ikauf.param('group_id', 'Group ID des zugehörigen ShoppingList-Objekts')
+class FavoriteRelatedByGroupId(Resource):
+    @ikauf.marshal_with(favorite)
+    @secured
+    def get(self, id):
+        """Auslesen eines bestimmten ShoppingList-Objekts nach Group ID"""
+
+        adm = ShoppingAdministration()
+        sl = adm.get_favorite_by_group(id)
+        return sl
+
 
 """
 Start der main.py um zu testen ob es funktioniert (in der lokalen Entwicklerumgebung).
@@ -894,7 +922,3 @@ Um dies zu testen muss, wie in der VL eine Db in Python vorliegen.
 if __name__ == '__main__':
     app.run(debug=True)
 
-if __name__ == '__main__':
-    adm = ShoppingAdministration()
-    x = adm.create_user("dimi", "dimitrios", "4545")
-    print(x)

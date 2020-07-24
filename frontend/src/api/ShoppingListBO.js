@@ -16,11 +16,11 @@ export default class ShoppingListBO extends BusinessObject {
   }
 
   setName(name) {
-    this.unit = name;
+    this.name = name;
   }
 
   getGroupId() {
-    return this.group_id;
+    return this.groups_id;
   }
 
   setGroupId(groupId) {

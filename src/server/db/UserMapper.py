@@ -213,6 +213,8 @@ class UserMapper(Mapper):
         cursor.close()
 
 
+
+
 if (__name__ == "__main__"):
     with UserMapper() as mapper:
         erik = User()
