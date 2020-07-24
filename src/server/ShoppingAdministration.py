@@ -182,10 +182,10 @@ class ShoppingAdministration(object):
         with ShoppingListMapper() as mapper:
             return mapper.find_all()
 
-    def create_shopping_list(self, shopping_list_name, groups_id):
+    def create_shopping_list(self, name, groups_id):
         """Eine ShoppingList anlegen."""
         shoppinglist = ShoppingList()
-        shoppinglist.set_name(shopping_list_name)
+        shoppinglist.set_name(name)
         shoppinglist.set_group_id(groups_id)
         shoppinglist.set_id(1)
 

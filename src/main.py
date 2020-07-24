@@ -592,6 +592,7 @@ class ShoppingListListOperations(Resource):
         if proposal is not None:
             x = adm.create_shopping_list(
                 proposal.get_name(), proposal.get_group_id())
+
             return x, 200
         else:
             return '', 500
