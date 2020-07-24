@@ -182,11 +182,11 @@ class ShoppingAdministration(object):
         with ShoppingListMapper() as mapper:
             return mapper.find_all()
 
-    def create_shopping_list(self, shopping_list_name, group_id):
+    def create_shopping_list(self, shopping_list_name, groups_id):
         """Eine ShoppingList anlegen."""
         shoppinglist = ShoppingList()
         shoppinglist.set_name(shopping_list_name)
-        shoppinglist.set_group_id(group_id)
+        shoppinglist.set_group_id(groups_id)
         shoppinglist.set_id(1)
 
         with ShoppingListMapper() as mapper:
@@ -241,7 +241,7 @@ class ShoppingAdministration(object):
         entry.set_bought(bought)
         entry.set_id(1)
         with EntryMapper() as mapper:
-            return  mapper.insert(entry)
+            return mapper.insert(entry)
 
     def delete_entry_by_id(self, entry_id):
         """gegebenen Entry löschen."""

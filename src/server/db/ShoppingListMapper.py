@@ -114,11 +114,11 @@ class ShoppingListMapper (Mapper):
         tuples = cursor.fetchall()
 
         try:
-            (id, name, group_id) = tuples[0]
+            (id, name, groups_id) = tuples[0]
             shoppinglist = ShoppingList()
             shoppinglist.set_id(id)
             shoppinglist.set_name(name)
-            shoppinglist.set_group_id(group_id)
+            shoppinglist.set_group_id(groups_id)
             result = shoppinglist
         except IndexError:
             """Der IndexError wird oben beim Zugriff auf tuples[0] auftreten, wenn der vorherige SELECT-Aufruf
@@ -144,11 +144,11 @@ class ShoppingListMapper (Mapper):
         cursor.execute(command)
         tuples = cursor.fetchall()
 
-        for (id, name, group_id) in tuples:
+        for (id, name, groups_id) in tuples:
             shoppinglist = ShoppingList()
             shoppinglist.set_id(id)
             shoppinglist.set_name(name)
-            shoppinglist.set_group_id(group_id)
+            shoppinglist.set_group_id(groups_id)
             result.append(shoppinglist)
 
         self._cnx.commit()
@@ -156,7 +156,7 @@ class ShoppingListMapper (Mapper):
 
         return result
 
-    def find_shopping_list_by_group(self, group_id):
+    def find_shopping_list_by_group(self, groups_id):
         """Suchen einer Shoppingliste mit vorgegebener Shoppinglist ID. Da diese eindeutig ist,
         wird genau ein Objekt zurückgegeben.
 
@@ -167,16 +167,16 @@ class ShoppingListMapper (Mapper):
 
         result = []
         cursor = self._cnx.cursor()
-        command = "SELECT id, name, groups_id FROM shoppinglists WHERE groups_id={} ORDER BY id".format(
-            group_id)
+        command = "SELECT id, name, groups_id FROM shoppinglists WHERE group_id={} ORDER BY id".format(
+            groups_id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
-        for (id, name, group_id) in tuples:
+        for (id, name, groups_id) in tuples:
             shoppinglist = ShoppingList()
             shoppinglist.set_id(id)
             shoppinglist.set_name(name)
-            shoppinglist.set_group_id(group_id)
+            shoppinglist.set_group_id(groups_id)
             result.append(shoppinglist)
 
         self._cnx.commit()
