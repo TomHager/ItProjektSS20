@@ -27,13 +27,25 @@ export default class ShoppingAPI {
   #getEntryURL = (id) => `${this.#ShoppingServerBaseURL}/entries/${id}`;
   #addEntryURL = () => `${this.#ShoppingServerBaseURL}/entry`;
   #updateEntryURL = (id) => `${this.#ShoppingServerBaseURL}/entry-by-id/${id}`;
-  #deleteEntryURL = (id) => `${this.#ShoppingServerBaseURL}/entries/${id}`;
+  #deleteEntryURL = (id) => `${this.#ShoppingServerBaseURL}/entry-by-id/${id}`;
   #searchEntryByAmountURL = (amount) =>
     `${this.#ShoppingServerBaseURL}/entries-by-name/${amount}`;
   #searchEntryByArticleURL = (articleName) =>
     `${this.#ShoppingServerBaseURL}/entry-by-article/${articleName}`;
   #searchEntriesByShoppingListURL = (shoppingListId) =>
     `${this.#ShoppingServerBaseURL}/entry-by-shopping-list/${shoppingListId}`;
+  #searchUserByEntryURL = (entryId) =>
+    `${this.#ShoppingServerBaseURL}/user-by-entry/${entryId}`;
+  #searchEntryByShoppingListAndRetailerURL = (shoppingListId, retailerId) =>
+    `${
+      this.#ShoppingServerBaseURL
+    }/entry-by-shopping-list-and-retailer/${shoppingListId}${retailerId}`;
+
+  #searchReportDataURL = (group_id,modification_date_from, modification_date_to) =>
+    `${
+      this.#ShoppingServerBaseURL
+    }/report-data/${group_id}${modification_date_from}${modification_date_to}`;
+
 
   // Favorites related
   #getFavoritesURL = () => `${this.#ShoppingServerBaseURL}/favorites`;
@@ -41,7 +53,8 @@ export default class ShoppingAPI {
   #addFavoriteURL = () => `${this.#ShoppingServerBaseURL}/favorite`;
   #updateFavoriteURL = (id) =>
     `${this.#ShoppingServerBaseURL}/favorite-by-id/${id}`;
-  #deleteFavoriteURL = (id) => `${this.#ShoppingServerBaseURL}/favorites/${id}`;
+  #deleteFavoriteURL = (id) =>
+    `${this.#ShoppingServerBaseURL}/favorite-by-id/${id}`;
   #searchFavoriteByGroupURL = (groupId) =>
     `${this.#ShoppingServerBaseURL}/favorite-by-group/${groupId}`;
 
@@ -112,11 +125,11 @@ export default class ShoppingAPI {
   #getShoppingListsURL = () => `${this.#ShoppingServerBaseURL}/shoppingLists`;
   #getShoppingListURL = (id) =>
     `${this.#ShoppingServerBaseURL}/shoppingLists/${id}`;
-  #addShoppingListURL = () => `${this.#ShoppingServerBaseURL}/shoppingLists`;
+  #addShoppingListURL = () => `${this.#ShoppingServerBaseURL}/shopping-list`;
   #updateShoppingListURL = (id) =>
-    `${this.#ShoppingServerBaseURL}/shoppingLists/${id}`;
+    `${this.#ShoppingServerBaseURL}/shopping-list-by-id/${id}`;
   #deleteShoppingListURL = (id) =>
-    `${this.#ShoppingServerBaseURL}/shoppingLists/${id}`;
+    `${this.#ShoppingServerBaseURL}/shopping-list-by-id/${id}`;
   #searchShoppingListByGroupIdURL = (groupId) =>
     `${this.#ShoppingServerBaseURL}/shopping-list-by-group-id/${groupId}`;
   #searchShoppingListByNameURL = (shoppinglistName) =>
@@ -184,8 +197,8 @@ export default class ShoppingAPI {
       body: JSON.stringify(entryBO),
     }).then((responseJSON) => {
       // We always get an array of EntryBO.fromJSON, but only need one object
-      let responseEntryBO = EntryBO.fromJSON(responseJSON)[0];
-      // console.info(entryBOs);
+      // console.info(responseJSON);
+      let responseEntryBO = EntryBO.fromJSON(responseJSON);
       return new Promise(function (resolve) {
         resolve(responseEntryBO);
       });
@@ -258,6 +271,43 @@ export default class ShoppingAPI {
       }
     );
   }
+
+  searchUserByEntry(entryId) {
+    return this.#fetchAdvanced(this.#searchUserByEntryURL(entryId)).then(
+      (responseJSON) => {
+        let entryBOs = EntryBO.fromJSON(responseJSON);
+        // console.info(entryBOs);
+        return new Promise(function (resolve) {
+          resolve(entryBOs);
+        });
+      }
+    );
+  }
+
+  searchEntryByShoppingListAndRetailer(shoppingListId, retailerId) {
+    return this.#fetchAdvanced(
+      this.#searchEntryByShoppingListAndRetailerURL(shoppingListId, retailerId)
+    ).then((responseJSON) => {
+      let entryBOs = EntryBO.fromJSON(responseJSON);
+      // console.info(entryBOs);
+      return new Promise(function (resolve) {
+        resolve(entryBOs);
+      });
+    });
+  }
+
+  searchReportDataURL(group_id,modification_date_from,modification_date_to){
+    return this.#fetchAdvanced(
+      this.#searchReportDataURL(group_id,modification_date_from,modification_date_to)
+    ).then((responseJSON) => {
+      let entryBOs = EntryBO.fromJSON(responseJSON);
+      // console.info(entryBOs);
+      return new Promise(function (resolve) {
+        resolve(entryBOs);
+      });
+    });
+  }
+
 
   // Group Methoden
 

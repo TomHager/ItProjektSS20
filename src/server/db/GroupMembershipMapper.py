@@ -76,6 +76,8 @@ class GroupMembershipMapper(Mapper):
 
         return result
 
+
+
     def find_user_by_group(self, group_membership):
         """Auslesen einer Gruppe anhand des Gruppennames.
 
