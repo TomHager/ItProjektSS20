@@ -73,7 +73,7 @@ class EntryMapper(Mapper):
                 entry.set_id(1)
 
         command = "INSERT INTO entries (id, unit, amount, article, modification_date, user_id, " \
-                  "retailer_id, shopping_list_id, bought) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)"
+                  "retailer_id, shopping_list_id, bought) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
         data = (entry.get_id(), entry.get_unit(), entry.get_amount(), entry.get_article(),
                 entry.get_modification_date(), entry.get_user_id(), entry.get_retailer_id(),
                 entry.get_shopping_list_id(), entry.get_bought())
