@@ -77,7 +77,7 @@ class Entry(bo.BusinessObject):
     def __str__(self):
         """Erzeugen einer einfachen textuellen Darstellung der jeweiligen Instanz."""
         return "Entry: {}, {}, {}, {}, {}, {}, {}, {}, {}, {}"\
-            .format(self.get_id(), self._unit, self._amount, self._article, self._modification_date, self._user_id,
+            .format(self.get_id(), self._unit, self._amount, self._article, self._modification_date, self.user_id,
                     self._retailer_id, self._shopping_list_id, self._group_id, self._bought)
 
     @staticmethod

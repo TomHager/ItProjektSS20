@@ -15,6 +15,7 @@ import {
   NativeSelect as Select,
   Checkbox,
 } from '@material-ui/core';
+import EntryBO from '../../api/EntryBO';
 // import EntryBO from '../../api/EntryBO';
 
 /**
@@ -65,6 +66,7 @@ export default class RetailerEntryList extends Component {
 
       // Search filter
       unfilteredData: [],
+      oldFilter: '',
     };
   }
   // All Asynccallbacks
@@ -74,13 +76,13 @@ export default class RetailerEntryList extends Component {
     const data = [
       {
         id: 1,
-        amount: 4,
         unit: 'Kg',
+        amount: 4,
         article: 'Apfel',
-        modification_date: this.getModDate(),
-        shopping_list_id: 1,
+        modification_date: '2020-07-05T23:59:59',
         user_id: 1,
         retailer_id: 1,
+        shopping_list_id: 1,
         bought: 0,
       },
       {
@@ -99,7 +101,7 @@ export default class RetailerEntryList extends Component {
         amount: 6,
         unit: 'g',
         article: 'Ananas',
-        modification_date: '2020-07-02T23:59:59',
+        modification_date: '2020-07-31T23:59:59',
         shopping_list_id: 1,
         user_id: 1,
         retailer_id: 2,
@@ -108,24 +110,10 @@ export default class RetailerEntryList extends Component {
     ];
     setTimeout(() => {
       this.setState({ data: data, unfilteredData: data });
-      console.log('fetch entries complete');
+      this.sortEntries(false);
+      // console.log('fetch entries complete');
     }, 1000);
   }
-
-  // Fetch all members of a group
-  // Fetch all retailer of a group
-  // fetchRetailer() {
-  //   const retailers = [
-  //     { id: 1, name: 'Edeka' },
-  //     { id: 2, name: 'Rewe' },
-  //     { id: 3, name: 'Kaufland' },
-  //     { id: 4, name: 'Test' },
-  //   ];
-  //   setTimeout(() => {
-  //     this.setState({ retailers: retailers });
-  //     console.log('fetch retailers complete');
-  //   }, 1000);
-  // }
 
   // Fetch all members of a group
   fetchMembers() {
@@ -136,7 +124,7 @@ export default class RetailerEntryList extends Component {
     ];
     setTimeout(() => {
       this.setState({ members: members });
-      console.log('fetch members complete');
+      // console.log('fetch members complete');
     }, 1000);
   }
 
@@ -149,6 +137,7 @@ export default class RetailerEntryList extends Component {
     this.setState({
       // @TODO
       // retailer: this.props.retailer
+      retailer: { id: 1, name: 'Aldi' },
       unit: units[0].name,
       editUnit: units[0].name,
     });
@@ -159,42 +148,53 @@ export default class RetailerEntryList extends Component {
 
   //Refreshs page
   refresh = () => {
-    const nData = this.state.data;
+    this.setState({
+      data: [],
+      retailers: [{ name: 'loading' }],
+      members: [{ name: 'loading' }],
+      errorAArticle: false,
+      errorAAmount: false,
+      rowIndex: -1,
+    });
+    this.componentDidMount();
+
+    document.getElementById('addArticle').value = '';
+    document.getElementById('addAmount').value = 1;
+    document.getElementById('addUnit').value = this.state.units[0].name;
+    document.getElementById('filter').value = '';
+  };
+
+  // Sort given entries
+  sortEntries = (resetSearch = true) => {
+    const nData = this.state.unfilteredData;
+    // Iterates through each object
     for (let i of nData) {
-      i.modification_date = Date.parse(i.modification_date);
+      // changes ISO Date to integer
+      if (typeof i.modification_date === 'string') {
+        i.modification_date = Date.parse(i.modification_date);
+      }
     }
-    nData.sort((a, b) => a.modification_date - b.modification_date);
-    nData.sort((a, b) => b.bought - a.bought);
-    this.setState({ data: nData });
-    console.log(nData);
-    // console.log(this.getModDate());
-    // this.setState({
-    //   data: [],
-    //   retailers: [{ name: 'loading' }],
-    //   members: [{ name: 'loading' }],
-    //   errorAArticle: false,
-    //   errorAAmount: false,
-    //   rowIndex: -1,
-    // });
-    // this.componentDidMount();
-    // document.getElementById('addArticle').value = '';
-    // document.getElementById('addAmount').value = 1;
-    // document.getElementById('addUnit').value = this.state.units[0].name;
+    // Sorts Date Integer asc
+    nData.sort((a, b) => b.modification_date - a.modification_date);
+    // Sorts Bought asc
+    nData.sort((a, b) => a.bought - b.bought);
+    this.setState({ unfilteredData: nData });
+    if (resetSearch === true) {
+      document.getElementById('filter').value = '';
+      this.setState({ oldFilter: '' });
+    }
+    this.search();
+    // console.log('Sorting complete');
   };
 
   // Search for a article in given list
-  search = (req, data) => {
+  search = (req = this.state.oldFilter) => {
     this.setState({
-      data: data.filter(
+      data: this.state.unfilteredData.filter(
         (el) => el.article.toLowerCase().indexOf(req.trim().toLowerCase()) > -1
       ),
+      oldFilter: req,
     });
-  };
-
-  // Resets search
-  resetSearch = () => {
-    document.getElementById('filter').value = '';
-    this.search('', this.state.unfilteredData);
   };
 
   // All ClickHanlder for Table
@@ -216,9 +216,8 @@ export default class RetailerEntryList extends Component {
 
   // Toggle bought boolean
   toggleBought = (entry) => {
-    console.log('update bought');
+    // console.log('update bought');
     entry.bought === 1 ? (entry.bought = 0) : (entry.bought = 1);
-    console.log(entry.bought);
     // @TODO Async Update
     // On success
     setTimeout(() => {
@@ -227,9 +226,8 @@ export default class RetailerEntryList extends Component {
         unfilteredData[unfilteredData.indexOf(this.state.oldData)] = entry;
         return { ...prevState, unfilteredData };
       });
-      // this.resetSearch();
+      this.sortEntries(false);
     }, 500);
-    console.log(entry);
   };
 
   // Display correct error input field for add
@@ -255,22 +253,28 @@ export default class RetailerEntryList extends Component {
   // Validate add entry
   validateAdd = () => {
     const { article, amount } = this.state;
-    article.trim() !== '' && amount !== '' && amount > 0
+    article.trim() !== '' && amount > 0
       ? this.addEntry()
       : this.setAddError(article, amount);
   };
 
   // Validate edit entry
   validateEdit = (id) => {
-    const { editRetailer, editArticle, editAmount, editUnit } = this.state;
-    const entry = {
-      id,
-      retailer: editRetailer,
-      article: editArticle,
-      amount: editAmount,
-      unit: editUnit,
-    };
-    editArticle.trim() !== '' && editAmount !== '' && editAmount > 0
+    const { editArticle, editAmount, editUnit, members, retailer } = this.state;
+    const entry = new EntryBO();
+    entry.setID(id);
+    entry.setArticle(editArticle);
+    entry.setAmount(editAmount);
+    entry.setUnit(editUnit);
+    entry.setModificationDate(this.getModDate());
+    // @TODO member responsible #likeAddEntry
+    entry.setUserId(members[0].name);
+    entry.setRetailerId(retailer.id);
+    entry.setShoppingListId(this.props.shoppingListId);
+    // @TODO Test
+    entry.setBought(0);
+
+    editArticle.trim() !== '' && editAmount > 0
       ? this.editEntry(entry)
       : this.setEditError(editArticle, editAmount);
   };
@@ -284,21 +288,23 @@ export default class RetailerEntryList extends Component {
   // Add method
   // Add new entry
   // @TODO Async add entry
-  addEntry() {
-    const { article, amount, unit, units } = this.state;
-    // @TODO entry should be respons of Async Add
-    const entry = {
-      id: Math.floor(Math.random() * Math.floor(500)),
-      article,
-      amount,
-      unit,
-    };
-    this.setAddError(article, amount);
-    this.setState((prevState) => {
-      const data = [...prevState.data];
-      data.unshift(entry);
-      return { ...prevState, data };
-    });
+  addEntry = () => {
+    const { article, amount, unit, units, members, retailer } = this.state;
+    this.setAddError(article, amount); // Resets errors
+    // @TODO fav should be respons of Async Add
+    const entry = new EntryBO();
+    entry.setID(Math.floor(Math.random() * Math.floor(500)));
+    entry.setArticle(article);
+    entry.setAmount(amount);
+    entry.setUnit(unit);
+    entry.setBought(0);
+    entry.setModificationDate(this.getModDate());
+    // @TODO member responsible
+    entry.setUserId(members[0].id);
+    entry.setRetailerId(retailer.id);
+    // @TODO ShoppingList prop
+    entry.setShoppingListId(1);
+
     document.getElementById('addArticle').value = '';
     document.getElementById('addAmount').value = 1;
     document.getElementById('addUnit').value = units[0].name;
@@ -308,11 +314,10 @@ export default class RetailerEntryList extends Component {
       unit: units[0].name,
     });
     // On success add to unfilteredData
-    this.state.unfilteredData.push(entry);
+    this.state.unfilteredData.unshift(entry);
     this.setState({ unfilteredData: this.state.unfilteredData });
-    this.resetSearch();
-    console.log(entry);
-  }
+    this.sortEntries();
+  };
 
   // Update method
   // Updates selected entry
@@ -326,22 +331,54 @@ export default class RetailerEntryList extends Component {
         return { ...prevState, unfilteredData };
       });
       this.toggleSelectedRow(entry);
-      this.resetSearch();
+      this.search();
     }, 500);
     console.log(entry);
   }
 
+  // Update
   updateMember(id) {
-    for (let i of this.state.unfilteredData) {
-      i.user_id = id;
+    const { unfilteredData } = this.state;
+    for (let i of unfilteredData) {
+      const entry = new EntryBO();
+      entry.setID(i.id);
+      entry.setArticle(i.article);
+      entry.setAmount(i.amount);
+      entry.setUnit(i.unit);
+      // @TODO member responsible #likeAddEntry
+      entry.setUserId(i.user_id);
+      entry.setRetailerId(id.retailer_id);
+      entry.setShoppingListId(i.shopping_list_id);
+      // @TODO Test
+      entry.setBought(i.bought);
       // @TODO Update Async for each element in list
+      if (i.bought === 0) {
+        entry.setModificationDate(this.getModDate());
+      } else {
+        entry.setModificationDate(i.modification_date);
+      }
+      // @TODO Async Update
+
+      // On success
+      this.setState((prevState) => {
+        const data = [...prevState.data];
+        data.unshift(entry);
+        return { ...prevState, data };
+      });
+      this.search();
     }
   }
 
   // Delete selected entry
   delFavorite = (id) => {
-    console.log(id);
-    // this.fetchEntries();
+    const { unfilteredData } = this.state;
+    // @TODO Async Delete Entry
+    this.setState({
+      unfilteredData: [...unfilteredData.filter((x) => x.id !== id)],
+    });
+    setTimeout(() => {
+      this.search();
+    }, 1);
   };
 
   render() {
@@ -355,7 +392,6 @@ export default class RetailerEntryList extends Component {
       errorAAmount,
       errorEArticle,
       errorEAmount,
-      unfilteredData,
     } = this.state;
     console.info('render');
     return (
@@ -401,7 +437,7 @@ export default class RetailerEntryList extends Component {
             id="filter"
             placeholder="search article"
             defaultValue=""
-            onChange={(e) => this.search(e.target.value, unfilteredData)}
+            onChange={(e) => this.search(e.target.value)}
           ></Input>
 
           {/* Table start */}
@@ -480,7 +516,7 @@ export default class RetailerEntryList extends Component {
                   <TableCell>
                     <Checkbox
                       id={`${row.id} checkbox`}
-                      defaultChecked={row.bought === 0 ? true : false}
+                      checked={row.bought === 1 ? true : false}
                       onClick={this.toggleBought.bind(this, row)}
                     ></Checkbox>
                   </TableCell>
