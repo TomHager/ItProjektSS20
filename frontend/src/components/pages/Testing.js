@@ -245,7 +245,7 @@ export default class Testing extends Component {
         console.info(e);
       });
   };
-  //TODO
+  //Läuft
   createShoppingList = () => {
     const newList = new ShoppingListBO();
     newList.setName('Wocheneinkauf');
@@ -260,7 +260,8 @@ export default class Testing extends Component {
   //TODO
   updateShoppingList = () => {
     const updatedShoppingList = this.state.lists;
-    updatedShoppingList[0].setGroupId(3);
+    updatedShoppingList[0].setName('BBQ Party');
+    updatedShoppingList[0].setGroupId(2);
     console.log(updatedShoppingList[0]);
     ShoppingAPI.getAPI().updateShoppingList(updatedShoppingList[0]);
   };
@@ -284,7 +285,7 @@ export default class Testing extends Component {
 
   render() {
     return (
-      <Button onClick={this.createShoppingList}>Let the testing begin!</Button>
+      <Button onClick={this.updateShoppingList}>Let the testing begin!</Button>
       // <form onSubmit={this.handleSubmit}>
       //   <input type="text" name="name" onChange={this.handleChange} />
       //   <input type="email" name="email" onChange={this.handleChange} />

@@ -587,10 +587,11 @@ class ShoppingListListOperations(Resource):
 
         adm = ShoppingAdministration()
 
-        prosposal = ShoppingList.from_dict(api.payload)
+        proposal = ShoppingList.from_dict(api.payload)
 
-        if prosposal is not None:
-            x = adm.create_shopping_list(prosposal.get_shopping_list_name, prosposal.get_group_id())
+        if proposal is not None:
+            x = adm.create_shopping_list(
+                proposal.get_name(), proposal.get_group_id())
             return x, 200
         else:
             return '', 500
@@ -903,10 +904,10 @@ Start der main.py um zu testen ob es funktioniert (in der lokalen Entwicklerumge
 Um dies zu testen muss, wie in der VL eine Db in Python vorliegen.
 """
 
-"""if __name__ == '__main__':
-    app.run(debug=True)"""
-
 if __name__ == '__main__':
-    adm = ShoppingAdministration()
-    x = adm.create_shopping_list("Abschlussparty", 1)
-    print(x)
+    app.run(debug=True)
+
+# if __name__ == '__main__':
+#     adm = ShoppingAdministration()
+#     x = adm.create_shopping_list("Abschlussparty", 1)
+#     print(x)
