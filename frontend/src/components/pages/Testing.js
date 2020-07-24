@@ -212,13 +212,23 @@ export default class Testing extends Component {
   // };
   //TODO
   updateEntrys = () => {
-    const updatedEntry = this.state.lists;
-    console.log(updatedEntry[0]);
-    updatedEntry[0].setArticle('Bier');
-    updatedEntry[0].setUserId(2);
+    const updatedEntry = {
+      id: 3,
+      unit: 'g',
+      amount: 6,
+      article: 'Ananas',
+      modification_date: '2020-07-02T23:59:59',
+      user_id: 1,
+      retailer_id: 2,
+      shopping_list_id: 1,
+      bought: 0,
+    };
     ShoppingAPI.getAPI().updateEntry(updatedEntry[0]);
+  
   };
 
+
+    
   // updateShoppingList = () => {
   //   const updatedShoppingList = this.state.lists;
   //   console.log(updatedEntry[0]);
@@ -285,7 +295,7 @@ export default class Testing extends Component {
 
   render() {
     return (
-      <Button onClick={this.createEntry}>Let the testing begin!</Button>
+      <Button onClick={this.updateEntrys}>Let the testing begin!</Button>
       // <form onSubmit={this.handleSubmit}>
       //   <input type="text" name="name" onChange={this.handleChange} />
       //   <input type="email" name="email" onChange={this.handleChange} />

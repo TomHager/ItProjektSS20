@@ -28,9 +28,9 @@
   <component name="ChangeListManager">
     <list default="true" id="2c1c77a4-6169-48a4-a7a4-a8dc3ff2c5dd" name="Default Changelist" comment="ShoppingAdministration.py  Teil gefixed">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/pages/Testing.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/pages/Testing.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main-copy.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/main-copy.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/server/bo/Entry.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/bo/Entry.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/server/ShoppingAdministration.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/ShoppingAdministration.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/server/db/Mapper.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/db/Mapper.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -46,7 +46,7 @@
     </option>
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="RobinFink" />
+        <entry key="$PROJECT_DIR$" value="dev" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -140,8 +140,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.main" />
         <item itemvalue="Python.main-copy" />
+        <item itemvalue="Python.main" />
         <item itemvalue="Python.GroupMapper" />
         <item itemvalue="Python.main-copy" />
         <item itemvalue="Python.main" />
@@ -285,7 +285,21 @@
       <option name="project" value="LOCAL" />
       <updated>1595540957206</updated>
     </task>
-    <option name="localTasksCounter" value="19" />
+    <task id="LOCAL-00019" summary="Entry.py, main.py Entry gefixed">
+      <created>1595545271815</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1595545271815</updated>
+    </task>
+    <task id="LOCAL-00020" summary="Entry.py  Teil gefixed">
+      <created>1595547557974</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1595547557974</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -333,40 +347,42 @@
     <MESSAGE value="Mapper.py bearbeitet" />
     <MESSAGE value="main-copy.py Favorite angepasst" />
     <MESSAGE value="Entry.py, ShoppingListMapper.py gefixed" />
-    <option name="LAST_COMMIT_MESSAGE" value="Entry.py, ShoppingListMapper.py gefixed" />
+    <MESSAGE value="Entry.py, main.py Entry gefixed" />
+    <MESSAGE value="Entry.py  Teil gefixed" />
+    <option name="LAST_COMMIT_MESSAGE" value="Entry.py  Teil gefixed" />
   </component>
   <component name="WindowStateProjectService">
     <state x="386" y="321" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1594991804807">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="386" y="321" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1594991804807" />
-    <state x="311" y="6" key="CommitChangelistDialog2" timestamp="1595517865124">
+    <state x="311" y="6" key="CommitChangelistDialog2" timestamp="1595547556013">
       <screen x="0" y="0" width="1368" height="872" />
     </state>
-    <state x="311" y="6" key="CommitChangelistDialog2/0.0.1368.872@0.0.1368.872" timestamp="1595517865124" />
+    <state x="311" y="6" key="CommitChangelistDialog2/0.0.1368.872@0.0.1368.872" timestamp="1595547556013" />
     <state x="421" y="96" key="FileChooserDialogImpl" timestamp="1595330525064">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
     <state x="421" y="96" key="FileChooserDialogImpl/0.0.1280.680@0.0.1280.680" timestamp="1595330525064" />
-    <state width="1348" height="202" key="GridCell.Tab.0.bottom" timestamp="1595545033609">
+    <state width="1348" height="202" key="GridCell.Tab.0.bottom" timestamp="1595581032184">
       <screen x="0" y="0" width="1368" height="872" />
     </state>
-    <state width="1348" height="202" key="GridCell.Tab.0.bottom/0.0.1368.872@0.0.1368.872" timestamp="1595545033609" />
+    <state width="1348" height="202" key="GridCell.Tab.0.bottom/0.0.1368.872@0.0.1368.872" timestamp="1595581032184" />
     <state width="1876" height="218" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1595447367142" />
-    <state width="1348" height="202" key="GridCell.Tab.0.center" timestamp="1595545033609">
+    <state width="1348" height="202" key="GridCell.Tab.0.center" timestamp="1595581032183">
       <screen x="0" y="0" width="1368" height="872" />
     </state>
-    <state width="1348" height="202" key="GridCell.Tab.0.center/0.0.1368.872@0.0.1368.872" timestamp="1595545033609" />
+    <state width="1348" height="202" key="GridCell.Tab.0.center/0.0.1368.872@0.0.1368.872" timestamp="1595581032183" />
     <state width="1876" height="218" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1595447367141" />
-    <state width="1348" height="202" key="GridCell.Tab.0.left" timestamp="1595545033608">
+    <state width="1348" height="202" key="GridCell.Tab.0.left" timestamp="1595581032183">
       <screen x="0" y="0" width="1368" height="872" />
     </state>
-    <state width="1348" height="202" key="GridCell.Tab.0.left/0.0.1368.872@0.0.1368.872" timestamp="1595545033608" />
+    <state width="1348" height="202" key="GridCell.Tab.0.left/0.0.1368.872@0.0.1368.872" timestamp="1595581032183" />
     <state width="1876" height="218" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1595447367141" />
-    <state width="1348" height="202" key="GridCell.Tab.0.right" timestamp="1595545033609">
+    <state width="1348" height="202" key="GridCell.Tab.0.right" timestamp="1595581032183">
       <screen x="0" y="0" width="1368" height="872" />
     </state>
-    <state width="1348" height="202" key="GridCell.Tab.0.right/0.0.1368.872@0.0.1368.872" timestamp="1595545033609" />
+    <state width="1348" height="202" key="GridCell.Tab.0.right/0.0.1368.872@0.0.1368.872" timestamp="1595581032183" />
     <state width="1876" height="218" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1595447367141" />
     <state x="184" y="84" key="MergeDialog" timestamp="1595269161372">
       <screen x="0" y="0" width="1920" height="1040" />
@@ -388,10 +404,10 @@
     <state x="186" y="81" key="SettingsEditor/0.0.1368.872@0.0.1368.872" timestamp="1591108101784" />
     <state x="209" y="86" key="SettingsEditor/0.0.1536.920@0.0.1536.920" timestamp="1595072197023" />
     <state x="261" y="97" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1595002662026" />
-    <state x="277" y="169" key="Vcs.Push.Dialog.v2" timestamp="1595541068549">
+    <state x="277" y="169" key="Vcs.Push.Dialog.v2" timestamp="1595547617695">
       <screen x="0" y="0" width="1368" height="872" />
     </state>
-    <state x="277" y="169" key="Vcs.Push.Dialog.v2/0.0.1368.872@0.0.1368.872" timestamp="1595541068549" />
+    <state x="277" y="169" key="Vcs.Push.Dialog.v2/0.0.1368.872@0.0.1368.872" timestamp="1595547617695" />
     <state x="389" y="202" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1595424095640" />
     <state x="691" y="417" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1595177953047">
       <screen x="0" y="0" width="1920" height="1040" />
