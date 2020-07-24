@@ -58,7 +58,8 @@ class ShoppingListMapper (Mapper):
                 shoppinglist.set_id(1)
 
         command = "INSERT INTO shoppinglists (id, name, group_id) VALUES (%s,%s,%s)"
-        data = (shoppinglist.get_id(), shoppinglist.get_name(), shoppinglist.get_group_id())
+        data = (shoppinglist.get_id(), shoppinglist.get_name(),
+                shoppinglist.get_group_id())
         cursor.execute(command, data)
 
         self._cnx.commit()

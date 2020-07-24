@@ -76,6 +76,8 @@ class ShoppingAdministration(object):
         with UserMapper() as mapper:
             mapper.delete(user)
 
+
+
     """
     Group-spezifische Methoden
     """
@@ -312,6 +314,11 @@ class ShoppingAdministration(object):
         """Entry mit übergebenem Retailer auslesen."""
         with EntryMapper() as mapper:
             return mapper.get_report_data(groups_id, modification_date_from, modification_date_to)
+
+    def get_user_by_entry_id(self, number):
+        """Den Benutzer mit der gegebenen ID auslesen."""
+        with EntryMapper() as mapper:
+            return mapper.find_user_by_entry_id(number)
 
     """
     RetailerGroup-spezifische Methoden

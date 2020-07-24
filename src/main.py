@@ -344,10 +344,10 @@ class RetailerListOperations(Resource):
 
         adm = ShoppingAdministration()
 
-        r = RetailerGroup.from_dict(api.payload)
+        r = Retailer.from_dict(api.payload)
 
         if r is not None:
-            x = adm.create_retailer(r)
+            x = adm.create_retailer(r.get_name())
             return x, 200
         else:
             return 'Group unknown', 500
@@ -535,6 +535,7 @@ class EntryRelatedByShoppingListOperations(Resource):
         e = adm.get_entry_by_shopping_list(shopping_list_id)
         return e
 
+
 @ikauf.route('/entry-by-shopping-list/<int:shopping_list_id>')
 @ikauf.response(500, 'Falls Server-seitiger Fehler')
 @ikauf.param('shopping_list_id', 'ShoppingList des zugehörigen Entry-Objekts')
@@ -572,7 +573,8 @@ class EntryRelatedByShoppingListOperations(Resource):
         """Auslesen eines bestimmten Entry-Objekts nach Article"""
 
         adm = ShoppingAdministration()
-        e = adm.get_entry_by_shopping_list_and_retailer_id(shopping_list_id, retailer_id)
+        e = adm.get_entry_by_shopping_list_and_retailer_id(
+            shopping_list_id, retailer_id)
         return e
 
 
@@ -632,7 +634,8 @@ class ShoppingListListOperations(Resource):
         proposal = ShoppingList.from_dict(api.payload)
 
         if proposal is not None:
-            x = adm.create_shopping_list(proposal.get_name(), proposal.get_group_id())
+            x = adm.create_shopping_list(
+                proposal.get_name(), proposal.get_group_id())
 
             return x, 200
         else:
@@ -949,7 +952,7 @@ Um dies zu testen muss, wie in der VL eine Db in Python vorliegen.
 if __name__ == '__main__':
     app.run(debug=True)
 
-"""if __name__ == '__main__':
-    adm = ShoppingAdministration()
-    x = adm.create_shopping_list("Saufparty", 4)
-    print(x)"""
+# if __name__ == '__main__':
+#     adm = ShoppingAdministration()
+#     x = adm.create_shopping_list("Abschlussparty", 1)
+#     print(x)

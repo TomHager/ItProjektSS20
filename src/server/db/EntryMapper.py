@@ -240,29 +240,6 @@ class EntryMapper(Mapper):
 
         return result
 
-    def find_user_by_entry(self, id):
-        """Auslesen aller Benutzer anhand des Benutzernamens.
-
-        :param entry Name der zugehörigen Benutzer.
-        :return Eine Sammlung mit User-Objekten, die sämtliche Benutzer
-            mit dem gewünschten Namen enthält.
-        """
-        result = []
-        cursor = self._cnx.cursor()
-        command = "SELECT user_id FROM entries WHERE id LIKE '{}' " \
-                  "ORDER BY id".format(id)
-        cursor.execute(command)
-        tuples = cursor.fetchall()
-
-        for (user_id) in tuples:
-            entry = Entry()
-            entry.set_user_id(user_id)
-            result.append(entry)
-
-        self._cnx.commit()
-        cursor.close()
-
-        return result
 
     def find_retailer_by_entry(self, id):
         """Auslesen aller Benutzer anhand der zugeordneten E-Mail-Adresse.
@@ -480,6 +457,36 @@ class EntryMapper(Mapper):
             entry.set_bought(bought)
             result.append(entry)
 
+        self._cnx.commit()
+        cursor.close()
+
+        return result
+
+    def find_user_by_entry_id(self, entry_id):
+        """Auslesen aller Benutzer anhand der zugeordneten E-Mail-Adresse.
+
+        :param user_id E-Mail-Adresse der zugehörigen Benutzer.
+        :return Eine Sammlung mit User-Objekten, die sämtliche Benutzer
+            mit der gewünschten E-Mail-Adresse enthält.
+        """
+        result = []
+        cursor = self._cnx.cursor()
+        command = "SELECT * FROM entries WHERE id={} ORDER BY id".format(entry_id)
+        cursor.execute(command)
+        tuples = cursor.fetchall()
+
+        for (id, unit, amount, article, modification_date, user_id, retailer_id, shopping_list_id, bought) in tuples:
+            entry = Entry()
+            entry.set_id(id)
+            entry.set_unit(unit)
+            entry.set_amount(amount)
+            entry.set_article(article)
+            entry.set_modification_date(modification_date)
+            entry.set_user_id(user_id)
+            entry.set_retailer_id(retailer_id)
+            entry.set_shopping_list_id(shopping_list_id)
+            entry.set_bought(bought)
+            result.append(entry)
         self._cnx.commit()
         cursor.close()
 
