@@ -121,9 +121,8 @@ export default class Favorite extends Component {
     ];
     setTimeout(() => {
       this.setState({ data: data.sort((a, b) => b.id - a.id), unfilteredData: data });
-      console.log('fetch favorites complete');
+      // console.log('fetch favorites complete');
     }, 600);
-    document.getElementById('filter').value = '';
   }
 
   // Start Callbacks
@@ -282,6 +281,7 @@ export default class Favorite extends Component {
     this.setState({
       unfilteredData: [...unfilteredData.filter((x) => x.id !== id)],
     });
+    // DON'T DELETE THIS TIMOUT!
     setTimeout(() => {
       this.resetSearch();
     }, 1);

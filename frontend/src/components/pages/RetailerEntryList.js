@@ -1,7 +1,5 @@
 import { Refresh, AddBox, Delete, Edit, Check, Clear } from '@material-ui/icons';
 import React, { Component } from 'react';
-// import ShoppingAPI from '../../api/ShoppingAPI';
-// import { addEntry } from '../../actions/shoppingList';
 import {
   Container,
   CssBaseline,
@@ -16,7 +14,7 @@ import {
   Checkbox,
 } from '@material-ui/core';
 import EntryBO from '../../api/EntryBO';
-// import EntryBO from '../../api/EntryBO';
+// import ShoppingAPI from '../../api/ShoppingAPI';
 
 /**
  * Displays entries for selected group, shoppinglist and retailer
@@ -29,7 +27,6 @@ export default class RetailerEntryList extends Component {
   constructor(props) {
     super(props);
 
-    // Init an empty state
     this.state = {
       //passed Columns and Data loaded into state
       data: [],
@@ -331,7 +328,7 @@ export default class RetailerEntryList extends Component {
         return { ...prevState, unfilteredData };
       });
       this.toggleSelectedRow(entry);
-      this.search();
+      this.sortEntries();
     }, 500);
     console.log(entry);
   }
@@ -376,6 +373,7 @@ export default class RetailerEntryList extends Component {
     this.setState({
       unfilteredData: [...unfilteredData.filter((x) => x.id !== id)],
     });
+    // DON'T DELETE THIS TIMOUT!
     setTimeout(() => {
       this.search();
     }, 1);
