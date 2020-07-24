@@ -357,6 +357,38 @@ class EntryMapper(Mapper):
 
         return result
 
+    def find_entry_by_shopping_list_and_retailer_id(self, shopping_list_id, retailer_id):
+        """Auslesen aller Benutzer anhand der zugeordneten E-Mail-Adresse.
+
+        :param shopping_list_id E-Mail-Adresse der zugehörigen Benutzer.
+        :return Eine Sammlung mit User-Objekten, die sämtliche Benutzer
+            mit der gewünschten E-Mail-Adresse enthält.
+        """
+        result = []
+        cursor = self._cnx.cursor()
+        command = "SELECT * FROM entries WHERE shopping_list_id={} AND retailer_id={} " \
+                  "ORDER BY id".format(shopping_list_id, retailer_id)
+        cursor.execute(command)
+        tuples = cursor.fetchall()
+
+        for (id, unit, amount, article, modification_date, user_id, retailer_id, shopping_list_id, bought) in tuples:
+            entry = Entry()
+            entry.set_id(id)
+            entry.set_unit(unit)
+            entry.set_amount(amount)
+            entry.set_article(article)
+            entry.set_modification_date(modification_date)
+            entry.set_user_id(user_id)
+            entry.set_retailer_id(retailer_id)
+            entry.set_shopping_list_id(shopping_list_id)
+            entry.set_bought(bought)
+            result.append(entry)
+
+        self._cnx.commit()
+        cursor.close()
+
+        return result
+
     def get_report_data(self, groups_id, modification_date_from, modification_date_to):
         """Suchen eines Eintrags mit vorgegebener ID. Da diese eindeutig ist,
                         wird genau ein Objekt zurückgegeben.

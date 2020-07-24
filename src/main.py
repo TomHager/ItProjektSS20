@@ -343,10 +343,10 @@ class RetailerListOperations(Resource):
 
         adm = ShoppingAdministration()
 
-        r = RetailerGroup.from_dict(api.payload)
+        r = Retailer.from_dict(api.payload)
 
         if r is not None:
-            x = adm.create_retailer(r)
+            x = adm.create_retailer(r.get_name())
             return x, 200
         else:
             return 'Group unknown', 500
@@ -535,6 +535,22 @@ class EntryRelatedByShoppingListOperations(Resource):
         return e
 
 
+@ikauf.route('/entry-by-shopping-list-and-retailer/<int:shopping_list_id><int:retailer_id>')
+@ikauf.response(500, 'Falls Server-seitiger Fehler')
+@ikauf.param('shopping_list_id', 'ShoppingList des zugehörigen Entry-Objekts')
+@ikauf.param('retailer_id', 'Retailer des zugehörigen Entry-Objekts')
+class EntryRelatedByShoppingListOperations(Resource):
+    @ikauf.marshal_with(entry)
+    # @secured
+    def get(self, shopping_list_id, retailer_id):
+        """Auslesen eines bestimmten Entry-Objekts nach Article"""
+
+        adm = ShoppingAdministration()
+        e = adm.get_entry_by_shopping_list_and_retailer_id(
+            shopping_list_id, retailer_id)
+        return e
+
+
 @ikauf.route('/entry-by-bought')
 @ikauf.response(500, 'Falls Server-seitiger Fehler')
 @ikauf.param('bought', 'ShoppingList des zugehörigen Entry-Objekts')
@@ -590,7 +606,9 @@ class ShoppingListListOperations(Resource):
         proposal = ShoppingList.from_dict(api.payload)
 
         if proposal is not None:
-            x = adm.create_shopping_list(proposal.get_shopping_list_name, proposal.get_group_id())
+            x = adm.create_shopping_list(
+                proposal.get_name(), proposal.get_group_id())
+
             return x, 200
         else:
             return '', 500
@@ -883,20 +901,6 @@ class FavoriteOperations(Resource):
         else:
             return '', 500
 
-@ikauf.route('/favorite-by-group/<int:id>')
-@ikauf.response(500, 'Falls Server-seitiger Fehler')
-@ikauf.param('id', 'Group ID des zugehörigen ShoppingList-Objekts')
-class FavoriteRelatedByGroupId(Resource):
-    @ikauf.marshal_with(favorite)
-
-    def get(self, id):
-        """Auslesen eines bestimmten ShoppingList-Objekts nach Group ID"""
-
-        adm = ShoppingAdministration()
-        sl = adm.get_favorite_by_group(id)
-        return sl
-
-
 
 @ikauf.route('/favorite-by-group/<int:id>')
 @ikauf.response(500, 'Falls Server-seitiger Fehler')
@@ -917,10 +921,10 @@ Start der main.py um zu testen ob es funktioniert (in der lokalen Entwicklerumge
 Um dies zu testen muss, wie in der VL eine Db in Python vorliegen.
 """
 
-"""if __name__ == '__main__':
-    app.run(debug=True)"""
-
 if __name__ == '__main__':
-    adm = ShoppingAdministration()
-    x = adm.create_shopping_list("Abschlussparty", 1)
-    print(x)
+    app.run(debug=True)
+
+# if __name__ == '__main__':
+#     adm = ShoppingAdministration()
+#     x = adm.create_shopping_list("Abschlussparty", 1)
+#     print(x)

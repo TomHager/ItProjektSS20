@@ -184,10 +184,10 @@ class ShoppingAdministration(object):
         with ShoppingListMapper() as mapper:
             return mapper.find_all()
 
-    def create_shopping_list(self, shopping_list_name, groups_id):
+    def create_shopping_list(self, name, groups_id):
         """Eine ShoppingList anlegen."""
         shoppinglist = ShoppingList()
-        shoppinglist.set_name(shopping_list_name)
+        shoppinglist.set_name(name)
         shoppinglist.set_group_id(groups_id)
         shoppinglist.set_id(1)
 
@@ -289,6 +289,11 @@ class ShoppingAdministration(object):
         """Entry mit übergebenem ShoppingList auslesen."""
         with EntryMapper() as mapper:
             return mapper.find_entry_by_shopping_list(shopping_list_id)
+
+    def get_entry_by_shopping_list_and_retailer_id(self, shopping_list_id, retailer_id):
+        """Entry mit übergebenem ShoppingList auslesen."""
+        with EntryMapper() as mapper:
+            return mapper.find_entry_by_shopping_list_and_retailer_id(shopping_list_id, retailer_id)
 
     def save_entry(self, entry):
         """Update eines Entry Objektes"""  # todo Richtig beschrieben?
