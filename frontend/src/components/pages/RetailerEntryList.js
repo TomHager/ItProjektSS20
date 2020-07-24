@@ -120,11 +120,29 @@ export default class RetailerEntryList extends Component {
       { id: 3, name: 'Dimi' },
     ];
     setTimeout(() => {
+      if (this.state.unfilteredData.length > 0) {
+        const entry = members.filter(
+          (el) => el.id.indexOf(this.state.unfilteredData[0].user_id) > -1
+        );
+        // this.array_move(this.state.members, entry.id, 0);
+        console.log(entry);
+      }
+
       this.setState({ members: members });
       // console.log('fetch members complete');
     }, 1000);
   }
 
+  // Move array element to a new position
+  array_move(arr, oldIndex, newIndex) {
+    if (newIndex >= arr.length) {
+      let k = newIndex - arr.length + 1;
+      while (k--) {
+        arr.push(undefined);
+      }
+    }
+    arr.splice(newIndex, 0, arr.splice(oldIndex, 1)[0]);
+  }
   // Start Callbacks
   componentDidMount() {
     this.fetchEntries();
@@ -133,8 +151,8 @@ export default class RetailerEntryList extends Component {
     const { units } = this.state;
     this.setState({
       // @TODO
-      // retailer: this.props.retailer
-      retailer: { id: 1, name: 'Aldi' },
+      retailer: this.props.retailer,
+      // retailer: { id: 1, name: 'Aldi' },
       unit: units[0].name,
       editUnit: units[0].name,
     });
@@ -300,7 +318,7 @@ export default class RetailerEntryList extends Component {
     entry.setUserId(members[0].id);
     entry.setRetailerId(retailer.id);
     // @TODO ShoppingList prop
-    entry.setShoppingListId(1);
+    entry.setShoppingListId(this.props.shoppingListId);
 
     document.getElementById('addArticle').value = '';
     document.getElementById('addAmount').value = 1;

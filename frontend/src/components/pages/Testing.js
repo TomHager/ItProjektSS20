@@ -9,16 +9,13 @@ import RetailerGroupBO from '../../api/RetailerGroupBO';
 import FavoriteBO from '../../api/FavoriteBO';
 import EntryBO from '../../api/EntryBO';
 import ShoppingListBO from '../../api/ShoppingListBO';
+import ReportValuesBO from '../../api/ReportValuesBO';
 
 export default class Testing extends Component {
   constructor() {
     super();
     this.state = {
-      name: '',
-      email: '',
       users: null,
-      filteredUsers: [],
-      loadingInProgress: false,
       error: null,
       user: null,
       GroupmemberShip: null,
@@ -26,6 +23,8 @@ export default class Testing extends Component {
       favorite: null,
       lists: null,
       entries: null,
+      reportEntries: null,
+      groups: null,
     };
   }
 
@@ -76,7 +75,7 @@ export default class Testing extends Component {
     ShoppingAPI.getAPI().deleteUser(5);
   };
 
-  //Groupmembership
+  //Groupmembership + Groups
 
   //Läuft
   getgroupMembershipByUserID = () => {
@@ -104,6 +103,16 @@ export default class Testing extends Component {
 
   results = () => {
     console.log(this.state.GroupmemberShip);
+  };
+
+  //Läuft
+  getGroupsByGroupId = () => {
+    ShoppingAPI.getAPI()
+      .getGroup(2)
+      .then((result) => {
+        this.setState({ groups: result });
+        console.log(this.state.groups);
+      });
   };
 
   //RetailerGroup
@@ -188,8 +197,8 @@ export default class Testing extends Component {
     ShoppingAPI.getAPI()
       .getEntriesByShoppingListId(2)
       .then((result) => {
-        this.setState({ lists: result });
-        console.log(this.state.lists);
+        this.setState({ entries: result });
+        console.log(this.state.entries);
       });
   };
 
@@ -244,7 +253,7 @@ export default class Testing extends Component {
     const newEntry = new EntryBO();
     newEntry.setUnit('kg');
     newEntry.setAmount(23);
-    newEntry.setArticle('Wachteln');
+    newEntry.setArticle('Speck');
     newEntry.setModificationDate('2020-07-03 00:00:00');
     newEntry.setUserId(2);
     newEntry.setRetailerId(1);
@@ -306,6 +315,30 @@ export default class Testing extends Component {
     ShoppingAPI.getAPI().deleteRetailer(2);
   };
 
+  // Reportgenerator
+  getEntryByGroupAndModifticationDataFromAndModificationDataTo = () => {
+    // const dateFrom = new Date('July 5, 2020');
+    // const dateTo = new Date('July 15, 2020');
+    const dateFrom = new Date('July 5, 2020 03:00:00')
+      .toISOString()
+      .substr(0, 19);
+    const dateTo = new Date('July 20, 2020 03:00:00')
+      .toISOString()
+      .substr(0, 19);
+    console.log(dateFrom);
+    console.log(dateTo);
+    // const reportValues = new ReportValuesBO();
+    // reportValues.setGroupId(3);
+    // reportValues.setModificationDateFrom('2020-07-05T01:00:00');
+    // reportValues.setModificationDateTo('2020-07-20T01:00:00');
+    ShoppingAPI.getAPI()
+      .searchReportDataURL(3, dateFrom, dateTo)
+      .then((result) => {
+        this.setState({ reportEntries: result });
+        console.log(this.state.reportEntries);
+      });
+  };
+
   componentDidMount() {
     this.getUserByEmail();
     this.getFavoritesByGroup();
@@ -315,7 +348,13 @@ export default class Testing extends Component {
 
   render() {
     return (
-      <Button onClick={this.getUserByEntry}>Let the testing begin!</Button>
+      <Button
+        onClick={
+          this.getEntryByGroupAndModifticationDataFromAndModificationDataTo
+        }
+      >
+        Let the testing begin!
+      </Button>
       // <form onSubmit={this.handleSubmit}>
       //   <input type="text" name="name" onChange={this.handleChange} />
       //   <input type="email" name="email" onChange={this.handleChange} />

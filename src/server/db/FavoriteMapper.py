@@ -89,7 +89,7 @@ class FavoriteMapper(Mapper):
         return favorite
 
     def delete(self, favorite):
-        """Löschen der Daten eines Artikel-Objekts aus der Datenbank.
+        """Löschen der Daten eines Favorite-Objekts aus der Datenbank.
 
                 :param favorite das aus der DB zu löschende "Objekt"
                 """
@@ -168,11 +168,10 @@ class FavoriteMapper(Mapper):
     #     return result
 
     def find_favorite_by_group(self, group_id):
-        """Auslesen einer Gruppe anhand des Gruppennames.
+        """Auslesen eines Favorite Objektes anhand der GruppenId.
 
-                :param member Gruppenname der gesuchten Gruppe.
-                :return Das Gruppen-Objekt,
-                    mit dem gewünschten Gruppennamen enthält.
+                :param group_id GruppenId der zugehörigen Gruppe.
+                :return Das Favorite-Objekt.                 #todo mehrere favorites zurückgegeben?
                 """
 
         result = []
