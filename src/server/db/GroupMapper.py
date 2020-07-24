@@ -17,9 +17,9 @@ class GroupMapper(Mapper):
         super().__init__()
 
     def find_all(self):
-        """Auslesen aller Einträge.
+        """Auslesen aller Gruppen Objekte
 
-                  :return Eine Sammlung mit Eintrag-Objekten.
+                  :return Eine Sammlung mit Gruppen-Objekten.
                   """
 
         result = []

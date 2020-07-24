@@ -18,7 +18,7 @@ class FavoriteMapper(Mapper):
         super().__init__()
 
     def find_all(self):
-        """Auslesen aller Artikel.
+        """Auslesen aller Favorite.
 
                :return Eine Sammlung mit Favorite-Objekten.
                """
@@ -171,7 +171,7 @@ class FavoriteMapper(Mapper):
         """Auslesen eines Favorite Objektes anhand der GruppenId.
 
                 :param group_id GruppenId der zugehörigen Gruppe.
-                :return Das Favorite-Objekt.                 #todo mehrere favorites zurückgegeben?
+                :return Alle zugehörigen Favorite-Objekt.
                 """
 
         result = []
