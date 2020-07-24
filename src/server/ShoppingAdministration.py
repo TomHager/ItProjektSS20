@@ -226,12 +226,17 @@ class ShoppingAdministration(object):
         with EntryMapper() as mapper:
             return mapper.find_all()
 
-    def create_entry(self, entry1):
+    def create_entry(self, unit, amount, article, modification_date, user_id, retailer_id, shopping_list_id,bought):
         """Einen Entry anlegen."""
         entry = Entry()
-        entry.set_unit(entry1)
-        entry.set_amount(entry1)
-        entry.set_article(entry1)
+        entry.set_unit(unit)
+        entry.set_amount(amount)
+        entry.set_article(article)
+        entry.set_modification_date(modification_date)
+        entry.set_user_id(user_id)
+        entry.set_retailer_id(retailer_id)
+        entry.set_shopping_list_id(shopping_list_id)
+        entry.set_bought(bought)
         entry.set_id(1)
 
     def delete_entry_by_id(self, entry_id):

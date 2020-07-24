@@ -432,7 +432,7 @@ class EntryListOperations(Resource):
 
         if proposal is not None:
             # todo überlgen ob : prosposal.get_entry_list() sinn macht
-            x = adm.create_entry(proposal.get_entry_name())
+            x = adm.create_entry(proposal)
             return x, 200
         else:
             return '', 500
