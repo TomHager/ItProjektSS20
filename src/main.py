@@ -608,7 +608,7 @@ class UserRelatedByEntryIdOperations(Resource):
         return sl
 
 
-@ikauf.route('/report-data/<int:group_id><string:modification_date_from><string:modification_date_to>')
+@ikauf.route('/report-data/<int:group_id>,<string:modification_date_from>,<string:modification_date_to>')
 @ikauf.response(500, 'Falls Server-seitiger Fehler')
 @ikauf.param('group_id', 'Gruppe des zugehörigen Entry-Objekts')
 @ikauf.param('modification_date_from', 'Anfangsdatum des zugehörigen Entry-Objekts')
@@ -623,17 +623,6 @@ class EntryRelatedByArticleOperations(Resource):
         e = adm.get_report_data(
             group_id, modification_date_from, modification_date_to)
         return e
-
-
-# @ikauf.route('/entry-by-modification-date/<date:date>')
-# @ikauf.route('/entry-by-modification-date/<datetime:modification_date>')
-# @ikauf.response(500, 'Falls Server-seitiger Fehler')
-# @ikauf.param('modification_date', 'ModificationDate des zugehörigen Entry-Objekts')
-# class EntryRelatedByModificationDateOperations(Resource):
-#     @ikauf.marshal_with(entry)
-#     #@secured
-#     def get(self, modification_date):
-#         """Auslesen eines bestimmten Entry-Objekts nach Article"""
 
 
 """

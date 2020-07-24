@@ -48,7 +48,7 @@ export default class ShoppingAPI {
   ) =>
     `${
       this.#ShoppingServerBaseURL
-    }/report-data/${group_id}${modification_date_from}${modification_date_to}`;
+    }/report-data/${group_id},${modification_date_from},${modification_date_to}`;
 
   // Favorites related
   #getFavoritesURL = () => `${this.#ShoppingServerBaseURL}/favorites`;

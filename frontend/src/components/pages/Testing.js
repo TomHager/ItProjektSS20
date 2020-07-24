@@ -9,6 +9,7 @@ import RetailerGroupBO from '../../api/RetailerGroupBO';
 import FavoriteBO from '../../api/FavoriteBO';
 import EntryBO from '../../api/EntryBO';
 import ShoppingListBO from '../../api/ShoppingListBO';
+import ReportValuesBO from '../../api/ReportValuesBO';
 
 export default class Testing extends Component {
   constructor() {
@@ -316,8 +317,22 @@ export default class Testing extends Component {
 
   // Reportgenerator
   getEntryByGroupAndModifticationDataFromAndModificationDataTo = () => {
+    // const dateFrom = new Date('July 5, 2020');
+    // const dateTo = new Date('July 15, 2020');
+    const dateFrom = new Date('July 5, 2020 03:00:00')
+      .toISOString()
+      .substr(0, 19);
+    const dateTo = new Date('July 20, 2020 03:00:00')
+      .toISOString()
+      .substr(0, 19);
+    console.log(dateFrom);
+    console.log(dateTo);
+    // const reportValues = new ReportValuesBO();
+    // reportValues.setGroupId(3);
+    // reportValues.setModificationDateFrom('2020-07-05T01:00:00');
+    // reportValues.setModificationDateTo('2020-07-20T01:00:00');
     ShoppingAPI.getAPI()
-      .searchReportDataURL(3, '2020-07-05', '2020-07-15')
+      .searchReportDataURL(3, dateFrom, dateTo)
       .then((result) => {
         this.setState({ reportEntries: result });
         console.log(this.state.reportEntries);

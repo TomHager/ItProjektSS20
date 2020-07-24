@@ -6,6 +6,7 @@ from datetime import datetime
 @author Robin Fink
 """
 
+
 class EntryMapper(Mapper):
     """Mapper-Klasse, die Account-Objekte auf eine relationale
     Datenbank abbildet. Hierzu wird eine Reihe von Methoden zur Verfügung
@@ -132,7 +133,8 @@ class EntryMapper(Mapper):
         tuples = cursor.fetchall()
 
         if tuples[0] is not None:
-            (id, unit, amount, article, modification_date, user_id, retailer_id, shopping_list_id, group_id, bought) = tuples[0]
+            (id, unit, amount, article, modification_date, user_id,
+             retailer_id, shopping_list_id, group_id, bought) = tuples[0]
             entry = Entry()
             entry.set_id(id)
             entry.set_unit(unit)
@@ -161,7 +163,8 @@ class EntryMapper(Mapper):
 
         result = []
         cursor = self._cnx.cursor()
-        command = "SELECT * FROM entries WHERE article Like '{}' ORDER BY article".format(article)
+        command = "SELECT * FROM entries WHERE article Like '{}' ORDER BY article".format(
+            article)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
@@ -193,7 +196,8 @@ class EntryMapper(Mapper):
 
         result = []
         cursor = self._cnx.cursor()
-        command = "SELECT unit, amount FROM entries WHERE entry={} ORDER BY entry".format(entry_id)
+        command = "SELECT unit, amount FROM entries WHERE entry={} ORDER BY entry".format(
+            entry_id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
@@ -241,7 +245,6 @@ class EntryMapper(Mapper):
 
         return result
 
-
     def find_retailer_by_entry(self, id):
         """Auslesen aller Benutzer anhand der zugeordneten E-Mail-Adresse.
 
@@ -275,7 +278,8 @@ class EntryMapper(Mapper):
         """
         result = []
         cursor = self._cnx.cursor()
-        command = "SELECT * FROM entries WHERE retailer_id LIKE '{}' ORDER BY id".format(retailer_id)
+        command = "SELECT * FROM entries WHERE retailer_id LIKE '{}' ORDER BY id".format(
+            retailer_id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
@@ -307,7 +311,8 @@ class EntryMapper(Mapper):
         """
         result = []
         cursor = self._cnx.cursor()
-        command = "SELECT * FROM entries WHERE shopping_list_id LIKE '{}' ORDER BY id".format(shopping_list_id)
+        command = "SELECT * FROM entries WHERE shopping_list_id LIKE '{}' ORDER BY id".format(
+            shopping_list_id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
@@ -339,7 +344,8 @@ class EntryMapper(Mapper):
         """
         result = []
         cursor = self._cnx.cursor()
-        command = "SELECT * FROM entries WHERE user_id LIKE '{}' ORDER BY id".format(user_id)
+        command = "SELECT * FROM entries WHERE user_id LIKE '{}' ORDER BY id".format(
+            user_id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
@@ -371,7 +377,8 @@ class EntryMapper(Mapper):
         """
         result = []
         cursor = self._cnx.cursor()
-        command = "SELECT * FROM entries WHERE group_id LIKE '{}' ORDER BY id".format(group_id)
+        command = "SELECT * FROM entries WHERE group_id LIKE '{}' ORDER BY id".format(
+            group_id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
@@ -427,7 +434,7 @@ class EntryMapper(Mapper):
 
         return result
 
-    def get_report_data(self, group_id, modification_date_from_js, modification_date_to_js):
+    def get_report_data(self, group_id, modification_date_from, modification_date_to):
         """Suchen eines Eintrags mit vorgegebener ID. Da diese eindeutig ist,
                         wird genau ein Objekt zurückgegeben.
 
@@ -435,23 +442,23 @@ class EntryMapper(Mapper):
                         :return Eintrag-Objekt, das dem übergebenen Schlüssel entspricht, None bei
                             nicht vorhandenem DB-Tupel.
                         """
-        data_string = modification_date_from_js
-        data_format = '%Y-%m-%d'
-        date_obj = datetime.strptime(data_string, data_format)
-        modification_date_from = date_obj
+        # data_string = modification_date_from_js
+        # data_format = '%Y-%m-%d'
+        # date_obj = datetime.strptime(data_string, data_format)
+        # modification_date_from = date_obj
 
-        data_string = modification_date_to_js
-        data_format = '%Y-%m-%d'
-        date_obj = datetime.strptime(data_string, data_format)
-        modification_date_to = date_obj
+        # data_string = modification_date_to_js
+        # data_format = '%Y-%m-%d'
+        # date_obj = datetime.strptime(data_string, data_format)
+        # modification_date_to = date_obj
 
         result = []
 
         cursor = self._cnx.cursor()
         command = "SELECT * FROM entries WHERE group_id={} AND bought=1 AND (modification_date " \
-                  "BETWEEN '{}' AND '{}')".format(group_id, modification_date_from, modification_date_to)
+                  "BETWEEN '{}' AND '{}')".format(
+                      group_id, modification_date_from, modification_date_to)
         print(command)
-
 
         cursor.execute(command)
         tuples = cursor.fetchall()
@@ -484,7 +491,8 @@ class EntryMapper(Mapper):
         """
         result = []
         cursor = self._cnx.cursor()
-        command = "SELECT * FROM entries WHERE id={} ORDER BY id".format(entry_id)
+        command = "SELECT * FROM entries WHERE id={} ORDER BY id".format(
+            entry_id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 

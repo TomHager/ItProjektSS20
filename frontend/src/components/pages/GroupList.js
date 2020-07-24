@@ -31,7 +31,7 @@ export default class GroupList extends Component {
     this.state = {
       groupRows: [],
       groupIndex: -1,
-      user: null,
+      currentUser: null,
       groupMemberships: [],
       group: null,
     };
@@ -50,7 +50,7 @@ export default class GroupList extends Component {
     ShoppingAPI.getAPI()
       .searchUserByEmail(firebase.auth().currentUser.email)
       .then((returnedUser) => {
-        this.setState({ user: returnedUser });
+        this.setState({ currentUser: returnedUser });
       });
   };
 
@@ -64,16 +64,16 @@ export default class GroupList extends Component {
       });
   };
 
-  getGroupsByGroupId = () => {
-    console.log('Getting groups');
-    this.getCurrUser();
-    ShoppingAPI.getAPI()
-      .getGroup(3)
-      .then((returnedGroups) => {
-        this.setState({ group: returnedGroups });
-        console.log(this.state.group);
-      });
-  };
+  // getGroupsByGroupId = () => {
+  //   for(let i = 0, i < console.log('Getting groups');
+  //   this.getCurrUser();
+  //   ShoppingAPI.getAPI()
+  //     .getGroup(this.state.groupMemberships[0])
+  //     .then((returnedGroups) => {
+  //       this.setState({ group: returnedGroups });
+  //       console.log(this.state.group);
+  //     });
+  // };
 
   deleteGroupMembership = (groupID) => {
     ShoppingAPI.getAPI()
