@@ -34,6 +34,8 @@ export default class ShoppingAPI {
     `${this.#ShoppingServerBaseURL}/entry-by-article/${articleName}`;
   #searchEntriesByShoppingListURL = (shoppingListId) =>
     `${this.#ShoppingServerBaseURL}/entry-by-shopping-list/${shoppingListId}`;
+  #searchUserByEntryURL = (entryId) =>
+    `${this.#ShoppingServerBaseURL}/user-by-entry/${entryId}`;
 
   // Favorites related
   #getFavoritesURL = () => `${this.#ShoppingServerBaseURL}/favorites`;
@@ -258,6 +260,19 @@ export default class ShoppingAPI {
       }
     );
   }
+
+  searchUserByEntry(entryId) {
+    return this.#fetchAdvanced(this.#searchUserByEntryURL(entryId)).then(
+      (responseJSON) => {
+        let entryBOs = EntryBO.fromJSON(responseJSON);
+        // console.info(entryBOs);
+        return new Promise(function (resolve) {
+          resolve(entryBOs);
+        });
+      }
+    );
+  }
+
 
   // Group Methoden
 
