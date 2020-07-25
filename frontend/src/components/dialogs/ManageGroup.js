@@ -113,7 +113,7 @@ export class EditGroup extends Component {
                   </TableRow>
                   <TableRow>
                     <TableCell>
-                      <AddUser addUser={this.addUser} />
+                      {/* <AddUser addUser={this.addUser} /> */}
                     </TableCell>
                   </TableRow>
                 </TableHead>
