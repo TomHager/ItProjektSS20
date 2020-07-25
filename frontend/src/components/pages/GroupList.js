@@ -52,12 +52,13 @@ export default class GroupList extends Component {
       .then((returnedUser) => {
         this.setState({ currentUser: returnedUser[0] });
         this.getGroupMembershipsByUserId();
+        this.getAllGroups();
       });
   };
 
-  getGroupMembershipsByUserId = (currentUser) => {
+  getGroupMembershipsByUserId = () => {
     console.log('Get groupmemberships');
-    console.log(currentUser);
+    console.log(this.state.currentUser.id);
     ShoppingAPI.getAPI()
       .searchGroupsByMember(this.state.currentUser.id)
       .then((result) => {
@@ -88,8 +89,9 @@ export default class GroupList extends Component {
     // for (let i of groupMemberships) {
     //   allGroups.filter((x) => x.id === i.group_membership);
     // }
-    console.log(groups);
-    this.setState({ filteredGroups: groups });
+    const fixedGroups = groups.map((x) => x[0]);
+    console.log(fixedGroups);
+    this.setState({ filteredGroups: fixedGroups });
     console.log(this.state.filteredGroups);
   };
 
@@ -119,7 +121,6 @@ export default class GroupList extends Component {
   //calls all Callbacks for Repor Selection
   componentDidMount = () => {
     this.getCurrUser();
-    this.getAllGroups();
     console.log('All Callbacks initialised');
   };
 
@@ -155,16 +156,16 @@ export default class GroupList extends Component {
             </TableHead>
 
             <TableBody>
-              {filteredGroups.map((x) => (
+              {filteredGroups.map((row) => (
                 <TableRow
-                  key={x.id}
+                  key={row.id}
                   // style={{
                   //   backgroundColor:
                   //     index === this.state.groupIndex ? '#0090FF' : 'white',
                   // }}
                   // onClick={this.groupClickHandler.bind(this, row)}
                 >
-                  <TableCell>{x.name}</TableCell>
+                  <TableCell>{row.name}</TableCell>
                   <TableCell>
                     <LeaveGroupAlert currentUser={user} />
                   </TableCell>

@@ -41,6 +41,7 @@ export class CreateGroup extends Component {
       groupName: '',
       createdGroup: [],
       user: {},
+      allUsers: [],
     };
   }
 
@@ -133,12 +134,41 @@ export class CreateGroup extends Component {
     });
   };
 
+  getAllUsers = () => {
+    ShoppingAPI.getAPI()
+      .getUsers()
+      .then((result) => {
+        this.setState({ allUsers: result });
+        console.log(this.state.allUsers);
+      });
+  };
+
   addUserToGroup = () => {
     this.getAddedUserByEmail();
     console.log(this.state.user);
     this.state.users.unshift(this.state.user);
     this.setState({ users: this.state.users });
     console.log(this.state.users);
+  };
+
+  // validateAddUser = () => {
+  //   for (let i of users) {
+  //     users.filter((x) => x.id === );
+  //   }
+  //   article.trim() !== '' && amount > 0
+  //     ? this.addEntry()
+  //     : this.setAddError(users);
+  // };
+
+  setAddUserError = (users) => {
+    users.trim() !== ''
+      ? this.setState({ errorUser: false })
+      : this.setState({ errorUser: true });
+  };
+
+  componentDidMount = () => {
+    this.getAllUsers();
+    console.log('All Callbacks initialised');
   };
 
   render() {
