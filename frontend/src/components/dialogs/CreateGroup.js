@@ -50,7 +50,10 @@ export class CreateGroup extends Component {
     newGroup.setName(this.state.groupName);
     ShoppingAPI.getAPI()
       .addGroup(newGroup)
-      .then(console.log('Created group: ' + this.state.groupName), this.getGroupByName())
+      .then(
+        console.log('Created group: ' + this.state.groupName),
+        this.getGroupByName()
+      )
       .catch((e) => {
         console.info(e);
       });
@@ -67,8 +70,10 @@ export class CreateGroup extends Component {
 
   addGroupMembershipForCurrentUser = (createdGroup) => {
     const newMembership = new GroupMembershipBO();
-    newMembership.setGroupMember(this.props.currentUser[0].id);
-    newMembership.setGroupMembership(this.state.createdGroup[createdGroup.length - 1].id);
+    newMembership.setGroupMember(this.props.currentUser.id);
+    newMembership.setGroupMembership(
+      this.state.createdGroup[createdGroup.length - 1].id
+    );
     // const newMembership = { member: 3, group_membership: 3 };
     console.log(newMembership);
     ShoppingAPI.getAPI()
@@ -235,11 +240,11 @@ export class CreateGroup extends Component {
             </TableContainer>
           </DialogContent>
           <DialogActions>
-            <Button onClick={this.handleClickOpen} color="primary">
+            <Button onClick={this.handleClose} color="primary">
               Cancel
             </Button>
             {/* <Button onClick={this.handleClose} color="primary"> */}
-            <Button onClick={this.handleGroupCreation} color="primary">
+            <Button onClick={this.handleClose} color="primary">
               Submit
             </Button>
           </DialogActions>

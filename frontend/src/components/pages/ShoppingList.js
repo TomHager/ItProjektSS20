@@ -34,14 +34,14 @@ export default class ShoppingList extends Component {
   // Fetch shoppinglists for group
   fetchShoppinglist() {
     ShoppingAPI.getAPI()
-      .searchShoppingListByGroupId(this.props.groupId)
+      .searchShoppingListByGroupId(2)
       .then((data) => {
         this.setState({ data });
       });
   }
 
   componentDidMount() {
-    this.fetchShoppinglists();
+    this.fetchShoppinglist();
   }
 
   toggleHidden = (id) => {
@@ -85,7 +85,9 @@ export default class ShoppingList extends Component {
             <Input
               placeholder="Einkauflslistenname"
               error={error}
-              onChange={(e) => this.setState({ shoppinglistname: e.target.value })}
+              onChange={(e) =>
+                this.setState({ shoppinglistname: e.target.value })
+              }
             />
             <IconButton>
               <Add id={'AddBtn'} onClick={(e) => this.validateAdd()} />
