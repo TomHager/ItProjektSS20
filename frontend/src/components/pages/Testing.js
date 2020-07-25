@@ -9,7 +9,6 @@ import RetailerGroupBO from '../../api/RetailerGroupBO';
 import FavoriteBO from '../../api/FavoriteBO';
 import EntryBO from '../../api/EntryBO';
 import ShoppingListBO from '../../api/ShoppingListBO';
-import ReportValuesBO from '../../api/ReportValuesBO';
 import GroupBO from '../../api/GroupBO';
 
 export default class Testing extends Component {
@@ -27,6 +26,7 @@ export default class Testing extends Component {
       reportEntries: null,
       groups: null,
       allGroups: null,
+      group: null,
     };
   }
 
@@ -123,6 +123,15 @@ export default class Testing extends Component {
       .then((result) => {
         this.setState({ allGroups: result });
         console.log(this.state.allGroups);
+      });
+  };
+
+  getGroupByName = () => {
+    ShoppingAPI.getAPI()
+      .searchGroupByName('Bravo')
+      .then((result) => {
+        this.setState({ group: result });
+        console.log(this.state.group);
       });
   };
 
@@ -340,12 +349,8 @@ export default class Testing extends Component {
   getEntryByGroupAndModifticationDataFromAndModificationDataTo = () => {
     // const dateFrom = new Date('July 5, 2020');
     // const dateTo = new Date('July 15, 2020');
-    const dateFrom = new Date('July 5, 2020 03:00:00')
-      .toISOString()
-      .substr(0, 19);
-    const dateTo = new Date('July 20, 2020 03:00:00')
-      .toISOString()
-      .substr(0, 19);
+    const dateFrom = new Date('July 5, 2020 03:00:00').toISOString().substr(0, 19);
+    const dateTo = new Date('July 20, 2020 03:00:00').toISOString().substr(0, 19);
     console.log(dateFrom);
     console.log(dateTo);
     // const reportValues = new ReportValuesBO();
@@ -370,7 +375,9 @@ export default class Testing extends Component {
 
   render() {
     return (
-      <Button onClick={this.createGroup}>Let the testing begin!</Button>
+      <Button onClick={this.getEntriesByShoppingListAndRetailer}>
+        Let the testing begin!
+      </Button>
       // <form onSubmit={this.handleSubmit}>
       //   <input type="text" name="name" onChange={this.handleChange} />
       //   <input type="email" name="email" onChange={this.handleChange} />

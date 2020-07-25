@@ -3,7 +3,7 @@ import ShoppingListList from './ShoppingListList';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
-import { IconButton } from '@material-ui/core';
+import { IconButton, Button } from '@material-ui/core';
 import { Add } from '@material-ui/icons';
 import Input from '@material-ui/core/Input';
 import ShoppingListBO from '../../api/ShoppingListBO';
@@ -28,19 +28,19 @@ export default class ShoppingList extends Component {
       {
         id: 1,
         name: 'Fest',
-        groups_id: 3,
+        group_id: 3,
         retailer_id: 1,
       },
       {
         id: 2,
         name: 'Hochzeit',
-        groups_id: 4,
+        group_id: 4,
         retailer_id: 2,
       },
       {
         id: 3,
         name: 'Abschlussfeier',
-        groups_id: 5,
+        group_id: 5,
         retailer_id: 3,
       },
     ];
@@ -75,14 +75,7 @@ export default class ShoppingList extends Component {
   };
 
   render() {
-    const {
-      error,
-      data,
-      shoppingListId,
-      groupsId,
-      rowIndex,
-      shoppinglistname,
-    } = this.state;
+    const { error, data, rowIndex, shoppinglistname } = this.state;
     return (
       <div>
         <Card
@@ -95,9 +88,7 @@ export default class ShoppingList extends Component {
             <Input
               placeholder="Einkauflslistenname"
               error={error}
-              onChange={(e) =>
-                this.setState({ shoppinglistname: e.target.value })
-              }
+              onChange={(e) => this.setState({ shoppinglistname: e.target.value })}
             />
             <IconButton>
               <Add id={'AddBtn'} onClick={(e) => this.validateAdd()} />
@@ -111,18 +102,17 @@ export default class ShoppingList extends Component {
               fontSize: '100px',
             }}
           >
-            <CardContent>
-              <Typography
-                id={elem.id}
-                onClick={() => this.toggleHidden(elem.id)}
-              >
-                {' '}
-                EinkaufsListe: {elem.name}
+            <CardContent id={elem.id}>
+              <Typography>
+                <Button
+                  id={`Btn${elem.id}`}
+                  onClick={() => this.toggleHidden(elem.id)}
+                >{`EinkaufsListe: ${elem.name}`}</Button>
                 {rowIndex === elem.id && (
-                  <Typography>
+                  <Typography id={`ShoppingList${elem.id}`}>
                     <ShoppingListList
-                      shoppingListId={shoppingListId}
-                      groupsId={groupsId}
+                      shoppingListId={elem.id}
+                      groupsId={elem.group_id}
                       shoppinglistname={shoppinglistname}
                     />
                   </Typography>

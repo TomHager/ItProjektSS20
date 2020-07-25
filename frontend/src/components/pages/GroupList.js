@@ -15,7 +15,6 @@ import ManageGroup from '../dialogs/ManageGroup';
 import CreateGroup from '../dialogs/CreateGroup';
 import LeaveGroupAlert from '../dialogs/LeaveGroupAlert';
 import firebase from 'firebase/app';
-import Button from '@material-ui/core/Button';
 
 /**
  *
@@ -31,9 +30,8 @@ export default class GroupList extends Component {
     // Init an empty state
     this.state = {
       groupRows: [],
-      currentUser: null,
+      currentUser: {},
       groupMemberships: [],
-      group: null,
       allGroups: [],
       filteredGroups: [],
     };
@@ -52,15 +50,16 @@ export default class GroupList extends Component {
     ShoppingAPI.getAPI()
       .searchUserByEmail(firebase.auth().currentUser.email)
       .then((returnedUser) => {
-        this.setState({ currentUser: returnedUser });
-        console.log(this.state.currentUser);
+        this.setState({ currentUser: returnedUser[0] });
+        this.getGroupMembershipsByUserId(this.state.currentUser);
       });
   };
 
-  getGroupMembershipsByUserId = () => {
+  getGroupMembershipsByUserId = (currentUser) => {
     console.log('Get groupmemberships');
+    console.log(currentUser);
     ShoppingAPI.getAPI()
-      .searchGroupsByMember(1)
+      .searchGroupsByMember(currentUser.id)
       .then((result) => {
         this.setState({ groupMemberships: result });
         console.log(this.state.groupMemberships);
@@ -83,6 +82,8 @@ export default class GroupList extends Component {
     for (let i of groupMemberships) {
       groups.push(allGroups.filter((x) => x.id === i.group_membership));
     }
+    // const i = allGroups.findIndex((x) => x.id === groupMemberships);
+    // groups.push(i);
     // console.log(allGroups.filter((x) => x.id.toString().indexOf('1')) > -1);
     // for (let i of groupMemberships) {
     //   allGroups.filter((x) => x.id === i.group_membership);
@@ -108,9 +109,7 @@ export default class GroupList extends Component {
       .deleteGroupMembership(groupID)
       .then(
         this.setState({
-          groupRows: this.state.groupRows.filter(
-            (group) => group.getID() !== groupID
-          ),
+          groupRows: this.state.groupRows.filter((group) => group.getID() !== groupID),
         })
       );
   };
@@ -118,13 +117,12 @@ export default class GroupList extends Component {
   //calls all Callbacks for Repor Selection
   componentDidMount = () => {
     this.getCurrUser();
-    this.getGroupMembershipsByUserId();
     this.getAllGroups();
     console.log('All Callbacks initialised');
   };
 
   render() {
-    const groupRows = this.state.groupRows;
+    // const groupRows = this.state.groupRows;
     const filteredGroups = this.state.filteredGroups;
     const { user } = this.props;
     console.log(filteredGroups);

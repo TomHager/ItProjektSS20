@@ -17,12 +17,12 @@ import {
 } from '@material-ui/core';
 import GroupAddIcon from '@material-ui/icons/GroupAdd';
 import IconButton from '@material-ui/core/IconButton';
-import AddUser from '../subcomponents/AddUser';
 import DeleteIcon from '@material-ui/icons/Delete';
 import GroupBO from '../../api/GroupBO';
 import ShoppingAPI from '../../api/ShoppingAPI';
 import { v4 as uuidv4 } from 'uuid';
 import GroupMembershipBO from '../../api/GroupMembershipBO';
+import PersonAddIcon from '@material-ui/icons/PersonAdd';
 
 /**
  *
@@ -39,44 +39,41 @@ export class CreateGroup extends Component {
       open: false,
       users: [],
       groupName: '',
-      // currentUser: 1,
+      createdGroup: [],
+      user: {},
     };
   }
 
-  // handleGroupCreation = () => {
-  //   const newGroup = new GroupBO();
-  //   newGroup.setName(this.state.groupName);
-  //   ShoppingAPI.getAPI()
-  //     .addGroup(newGroup)
-  //     .then((group) => this.handleGroupMembershipCreation(group.getID()));
-  // };
+  handleCreateGroup = (event) => {
+    event.preventDefault();
+    const newGroup = new GroupBO();
+    newGroup.setName(this.state.groupName);
+    ShoppingAPI.getAPI()
+      .addGroup(newGroup)
+      .then(
+        console.log('Created group: ' + this.state.groupName),
+        this.getGroupByName()
+      )
+      .catch((e) => {
+        console.info(e);
+      });
+  };
 
-  // handleGroupMembershipCreation = (groupId) => {
-  //   const group_list = this.state.users;
-  //   const new_group_membership = new GroupMembershipBO();
+  getGroupByName = () => {
+    ShoppingAPI.getAPI()
+      .searchGroupByName(this.state.groupName)
+      .then((result) => {
+        this.setState({ createdGroup: result });
+        this.addGroupMembershipForCurrentUser(this.state.createdGroup);
+      });
+  };
 
-  //new_group_membership.setGroupMembership(this.state.currentUser)
-  //   new_group_membership.setGroupMember(this.state.currentUser);
-
-  //   ShoppingAPI.getAPI().addGroupMember(new_group_membership);
-
-  //   group_list.map((group) =>
-  //     ShoppingAPI.getAPI()
-  //       .searchUserByName(group)
-  //       .then(
-  //         function (user) {
-  //           new_group_membership.setGroupMember(user.getID());
-  //           ShoppingAPI.getAPI().addGroupMember(new_group_membership);
-  //           console.log(new_group_membership).then(this.handleClose);
-  //         }.bind(this)
-  //       )
-  //   );
-  // };
-
-  addGroupMembership = () => {
+  addGroupMembershipForCurrentUser = (createdGroup) => {
     const newMembership = new GroupMembershipBO();
-    newMembership.setGroupMember(4);
-    newMembership.setGroupMembership(3);
+    newMembership.setGroupMember(this.props.currentUser[0].id);
+    newMembership.setGroupMembership(
+      this.state.createdGroup[createdGroup.length - 1].id
+    );
     // const newMembership = { member: 3, group_membership: 3 };
     console.log(newMembership);
     ShoppingAPI.getAPI()
@@ -86,16 +83,31 @@ export class CreateGroup extends Component {
       });
   };
 
-  addGroupMembershipForCurrentUser = () => {
+  addGroupMembership = (addedUser) => {
     const newMembership = new GroupMembershipBO();
-    newMembership.setGroupMember(this.props.currentUser[0].id);
-    newMembership.setGroupMembership(3);
+    newMembership.setGroupMember(addedUser.id);
+    newMembership.setGroupMembership(
+      this.state.createdGroup[this.state.createdGroup.length - 1].id
+    );
     // const newMembership = { member: 3, group_membership: 3 };
     console.log(newMembership);
     ShoppingAPI.getAPI()
       .addGroupMembership(newMembership)
       .catch((e) => {
         console.info(e);
+      });
+  };
+
+  getAddedUserByEmail = () => {
+    ShoppingAPI.getAPI()
+      .searchUserByEmail(this.state.userMail)
+      .then((returnedUser) => {
+        console.log(returnedUser[0]);
+        setTimeout(() => {
+          this.setState({ user: returnedUser[0] });
+          console.log(this.state.user);
+          this.addGroupMembership(this.state.user);
+        }, 1);
       });
   };
 
@@ -111,30 +123,22 @@ export class CreateGroup extends Component {
     this.setState({ groupName: event.target.value });
   };
 
+  handleMemberEmailChange = (e) => {
+    this.setState({ userMail: e.target.value });
+  };
+
   delUser = (id) => {
     this.setState({
       users: [...this.state.users.filter((user) => user.id !== id)],
     });
   };
 
-  addUser = (email) => {
-    const newUser = {
-      id: uuidv4(),
-      email,
-    };
-    this.setState({ users: [...this.state.users, newUser] });
-  };
-
-  handleCreateGroup = (event) => {
-    event.preventDefault();
-    const newGroup = new GroupBO();
-    newGroup.setName(this.state.groupName);
-    ShoppingAPI.getAPI()
-      .addGroup(newGroup)
-      .then(console.log('Created group: ' + this.state.groupName))
-      .catch((e) => {
-        console.info(e);
-      });
+  addUserToGroup = () => {
+    this.getAddedUserByEmail();
+    console.log(this.state.user);
+    this.state.users.unshift(this.state.user);
+    this.setState({ users: this.state.users });
+    console.log(this.state.users);
   };
 
   render() {
@@ -168,7 +172,7 @@ export class CreateGroup extends Component {
                 margin="dense"
                 id="name"
                 placeholder="Group name"
-                type="email"
+                type="text"
                 onChange={this.handleGroupNameOnChange}
               />
               <IconButton
@@ -191,7 +195,18 @@ export class CreateGroup extends Component {
                   </TableRow>
                   <TableRow>
                     <TableCell>
-                      <AddUser addUser={this.addUser} />
+                      <div>
+                        <TextField
+                          type="text"
+                          name="user"
+                          style={{ flex: '10', padding: '5px' }}
+                          placeholder="Add user ..."
+                          onChange={this.handleMemberEmailChange}
+                        ></TextField>
+                        <IconButton onClick={this.addUserToGroup}>
+                          <PersonAddIcon />
+                        </IconButton>
+                      </div>
                     </TableCell>
                   </TableRow>
                 </TableHead>
@@ -200,12 +215,12 @@ export class CreateGroup extends Component {
                   {users.map((row) => (
                     <TableRow
                       key={row.id}
-                      style={{
-                        backgroundColor:
-                          row.id === this.state.memberIndex
-                            ? '#0090FF'
-                            : 'white',
-                      }}
+                      // style={{
+                      //   backgroundColor:
+                      //     row.id === this.state.memberIndex
+                      //       ? '#0090FF'
+                      //       : 'white',
+                      // }}
                       // onClick={this.groupClickHandler.bind(this, row)}
                     >
                       <TableCell>{row.name}</TableCell>
