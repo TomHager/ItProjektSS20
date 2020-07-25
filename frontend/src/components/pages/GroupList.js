@@ -106,16 +106,26 @@ export default class GroupList extends Component {
   //     });
   // };
 
-  deleteGroupMembership = (groupID) => {
+  // @TODO evtl Group löschen wenn sie keinen Member mehr hat
+  deleteGroupMembership = (userId, groupID) => {
     ShoppingAPI.getAPI()
       .deleteGroupMembership(groupID)
       .then(
         this.setState({
-          groupRows: this.state.groupRows.filter(
-            (group) => group.getID() !== groupID
-          ),
+          groupRows: this.state.groupRows.filter((group) => group.getID() !== groupID),
         })
       );
+  };
+
+  // @TODO EDIT GROUP
+  editGroup = (id, name) => {
+    // CALLBACK
+    // Das ist 1 zu 1 der code aus der anderen muss vmtl bearbeitet werden
+    // const updatedGroup = this.state.newName;
+    // ShoppingAPI.getAPI()
+    //   .updateGroup(updatedGroup)
+    //   .catch((error) => console.error('Error:', error));
+    // console.log(this.state.newName);
   };
 
   //calls all Callbacks for Repor Selection
@@ -167,10 +177,14 @@ export default class GroupList extends Component {
                 >
                   <TableCell>{row.name}</TableCell>
                   <TableCell>
-                    <LeaveGroupAlert currentUser={user} />
+                    <LeaveGroupAlert
+                      groupId={row.id}
+                      leaveGroup={this.deleteGroupMembership}
+                      user={user}
+                    />
                   </TableCell>
                   <TableCell>
-                    <EditGroup />
+                    <EditGroup group={row} editGroup={this.editGroup} />
                   </TableCell>
                   <TableCell>
                     <ManageGroup />
