@@ -1,4 +1,12 @@
-import { Refresh, AddBox, Delete, Edit, Check, Clear } from '@material-ui/icons';
+import {
+  Refresh,
+  AddBox,
+  Delete,
+  Edit,
+  Check,
+  Clear,
+  Favorite,
+} from '@material-ui/icons';
 import React, { Component } from 'react';
 import {
   Container,
@@ -41,12 +49,12 @@ export default class RetailerEntryList extends Component {
       members: [{ name: 'loading' }],
       rowIndex: -1,
 
-      // Add favorite entry
+      // Add entry
       article: '',
       amount: 1,
       unit: '',
 
-      // Edit favorite entry
+      // Edit entry
       editArticle: '',
       editAmount: 1,
       editUnit: '',
@@ -77,7 +85,7 @@ export default class RetailerEntryList extends Component {
         amount: 4,
         article: 'Apfel',
         modification_date: '2020-07-05T23:59:59',
-        user_id: 1,
+        user_id: 2,
         retailer_id: 1,
         shopping_list_id: 1,
         bought: 0,
@@ -89,7 +97,7 @@ export default class RetailerEntryList extends Component {
         article: 'Birne',
         modification_date: '2020-07-02T23:59:59',
         shopping_list_id: 1,
-        user_id: 1,
+        user_id: 2,
         retailer_id: 2,
         bought: 1,
       },
@@ -100,7 +108,7 @@ export default class RetailerEntryList extends Component {
         article: 'Ananas',
         modification_date: '2020-07-31T23:59:59',
         shopping_list_id: 1,
-        user_id: 1,
+        user_id: 2,
         retailer_id: 2,
         bought: 0,
       },
@@ -120,16 +128,17 @@ export default class RetailerEntryList extends Component {
       { id: 3, name: 'Dimi' },
     ];
     setTimeout(() => {
+      // Moves person responsible to position 0 not already
       if (this.state.unfilteredData.length > 0) {
-        const entry = members.filter(
-          (el) => el.id.indexOf(this.state.unfilteredData[0].user_id) > -1
+        let index = members.findIndex(
+          (obj) => obj.id === this.state.unfilteredData[0].user_id
         );
-        // this.array_move(this.state.members, entry.id, 0);
-        console.log(entry);
+        if (index > 0) {
+          this.array_move(members, index, 0);
+        }
       }
-
       this.setState({ members: members });
-      // console.log('fetch members complete');
+      // }, 1);
     }, 1000);
   }
 
@@ -210,6 +219,22 @@ export default class RetailerEntryList extends Component {
       ),
       oldFilter: req,
     });
+  };
+
+  addFavorite = () => {
+    // @TODO get all favorites for group and Retailer
+    const favorites = [
+      { id: 1, unit: 'pack', amount: 3, retailer_id: 1, group_id: this.props.group_id },
+      { id: 2, unit: 'g', amount: 6, retailer_id: 2, group_id: this.props.group_id },
+      { id: 3, unit: 'L', amount: 1, retailer_id: 3, group_id: this.props.group_id },
+      { id: 4, unit: 'Kg', amount: 9, retailer_id: 1, group_id: this.props.group_id },
+      { id: 5, unit: 'g', amount: 13, retailer_id: 1, group_id: this.props.group_id },
+      { id: 6, unit: 'pcs', amount: 2, retailer_id: 3, group_id: this.props.group_id },
+    ];
+    // for (let i of favorites) {
+    favorites.filter((x) => x.retailer_id === this.state.retailer.id);
+    // }
+    console.log('favorites');
   };
 
   // All ClickHanlder for Table
@@ -306,7 +331,7 @@ export default class RetailerEntryList extends Component {
   addEntry = () => {
     const { article, amount, unit, units, members, retailer } = this.state;
     this.setAddError(article, amount); // Resets errors
-    // @TODO fav should be respons of Async Add
+    // @TODO entry should be respons of Async Add
     const entry = new EntryBO();
     entry.setID(Math.floor(Math.random() * Math.floor(500)));
     entry.setArticle(article);
@@ -385,7 +410,7 @@ export default class RetailerEntryList extends Component {
   }
 
   // Delete selected entry
-  delFavorite = (id) => {
+  delEntry = (id) => {
     const { unfilteredData } = this.state;
     // @TODO Async Delete Entry
     this.setState({
@@ -417,8 +442,8 @@ export default class RetailerEntryList extends Component {
 
           <h3>{retailer.name}</h3>
           {/* Refresh table content */}
-          <IconButton>
-            <Refresh id={'refreshBtn'} onClick={(e) => this.refresh()} />
+          <IconButton id={'refreshBtn'} onClick={(e) => this.refresh()}>
+            <Refresh />
           </IconButton>
           {/* @TODO #nicetohave Retailer for entries */}
           {/* <Select
@@ -455,6 +480,9 @@ export default class RetailerEntryList extends Component {
             defaultValue=""
             onChange={(e) => this.search(e.target.value)}
           ></Input>
+          <IconButton id={1} onClick={this.addFavorite.bind(this)} label="add favorites">
+            <Favorite />
+          </IconButton>
 
           {/* Table start */}
           <Table size="small">
@@ -478,7 +506,7 @@ export default class RetailerEntryList extends Component {
               </TableRow>
             </TableHead>
 
-            {/* Add new favorite row */}
+            {/* Add new entry row */}
             <TableBody>
               <TableRow>
                 <TableCell>
@@ -597,14 +625,14 @@ export default class RetailerEntryList extends Component {
                       {rowIndex === row.id ? (
                         <Clear onClick={this.toggleSelectedRow.bind(this)} />
                       ) : (
-                        <Delete onClick={this.delFavorite.bind(this, row.id)} />
+                        <Delete onClick={this.delEntry.bind(this, row.id)} />
                       )}
                     </IconButton>
                   </TableCell>
                 </TableRow>
               ))}
             </TableBody>
-            {/* End of favorite articles of group */}
+            {/* End of articles of RetailerList */}
           </Table>
         </Container>
       </React.Fragment>

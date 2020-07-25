@@ -1,99 +1,137 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import ShoppingListList from './ShoppingListList';
-import Card from '@material-ui/core/Card'
-import CardContent from '@material-ui/core/CardContent'
-import Typogrphy, { Typography } from '@material-ui/core'
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import Typography from '@material-ui/core/Typography';
+import { IconButton } from '@material-ui/core';
+import { Add } from '@material-ui/icons';
+import Input from '@material-ui/core/Input';
+import ShoppingListBO from '../../api/ShoppingListBO';
 /* import RetailerBO from '../../api/RetailerBO';
 import ShoppingAPI from '../../api/ShoppingAPI';
 import ShoppingListBo from '../../api/ShoppingListBO'; */
 
-
-
-export default class ShoppingList extends Component{
-  constructor(props){
+export default class ShoppingList extends Component {
+  constructor(props) {
     super(props);
 
     this.state = {
       data: [],
       shoppinglists: [],
-    }
+      rowIndex: -1,
+      error: false,
+    };
   }
-    //testdata
+  //testdata
   fetchShoppinglists() {
-      const data = [
-        {
-          id: 1,
-          name: "Fest",
-          groups_id: 3,
-          retailer_id: 1
-        },
-        {
-          id: 2,
-          name: "Hochzeit",
-          groups_id: 4,
-          retailer_id: 2
-        },
-        {
-          id: 3,
-          name: "Abschlussfeier",
-          groups_id: 5,
-          retailer_id: 3
-        }
-      ]
-      this.setState({data})
-    }
-  //Alle Retailers fetchen der jeweiligen Gruppe
-/*   fetchRetailers(){
-    const retailers = [{
-      id:1,
-      name: "EDEKA"
-    },
-    {
-      id:2,
-      name: "EDEKA2"
-    },
-    {
-      id:3,
-      name: "EDEKA3"
-    }]
-    this.setState({retailers})
+    const data = [
+      {
+        id: 1,
+        name: 'Fest',
+        groups_id: 3,
+        retailer_id: 1,
+      },
+      {
+        id: 2,
+        name: 'Hochzeit',
+        groups_id: 4,
+        retailer_id: 2,
+      },
+      {
+        id: 3,
+        name: 'Abschlussfeier',
+        groups_id: 5,
+        retailer_id: 3,
+      },
+    ];
+    this.setState({ data });
   }
- */
-  componentDidMount(){
-    /* this.fetchRetailers(); */
+
+  componentDidMount() {
     this.fetchShoppinglists();
   }
 
-  render(){
-    const {data,
+  toggleHidden = (id) => {
+    this.state.rowIndex === id
+      ? this.setState({ rowIndex: -1 })
+      : this.setState({ rowIndex: id });
+  };
+
+  validateAdd = () => {
+    this.state.shoppinglistname.trim() !== ''
+      ? this.AddShoppingList(this.shoppinglistname)
+      : this.setState({ error: true });
+  };
+
+  AddShoppingList = (shoppinglistname) => {
+    const { data, groupsId } = this.state;
+    const shoppinglist = new ShoppingListBO();
+    shoppinglist.setName(shoppinglistname);
+    shoppinglist.setGroupId(groupsId);
+    //@TODO shoppinglist.setId später entfernen
+    shoppinglist.setID(Math.floor(Math.random() * Math.floor(500)));
+    this.state.data.unshift(shoppinglist);
+    this.setState({ data, error: false });
+  };
+
+  render() {
+    const {
+      error,
+      data,
       shoppingListId,
       groupsId,
+      rowIndex,
       shoppinglistname,
-    } = this.state
-    return(
+    } = this.state;
+    return (
       <div>
-          {data.map((elem) => (
-            <Card>
-              <CardContent>
-                {/* <Typography>{elem.name}</Typography> */}
-                  <ShoppingListList 
-                  shoppingListId = {shoppingListId}
-                  groupsId = {groupsId}
-                  shoppinglistname = {shoppinglistname}
-                />     
-              </CardContent>
-            </Card>
-          ))}
+        <Card
+          style={{
+            margin: '5px',
+            fontSize: 'none',
+          }}
+        >
+          <CardContent>
+            <Input
+              placeholder="Einkauflslistenname"
+              error={error}
+              onChange={(e) =>
+                this.setState({ shoppinglistname: e.target.value })
+              }
+            />
+            <IconButton>
+              <Add id={'AddBtn'} onClick={(e) => this.validateAdd()} />
+            </IconButton>
+          </CardContent>
+        </Card>
+        {data.map((elem) => (
+          <Card
+            style={{
+              margin: '5px',
+              fontSize: '100px',
+            }}
+          >
+            <CardContent>
+              <Typography
+                id={elem.id}
+                onClick={() => this.toggleHidden(elem.id)}
+              >
+                {' '}
+                EinkaufsListe: {elem.name}
+                {rowIndex === elem.id && (
+                  <Typography>
+                    <ShoppingListList
+                      shoppingListId={shoppingListId}
+                      groupsId={groupsId}
+                      shoppinglistname={shoppinglistname}
+                    />
+                  </Typography>
+                )}
+              </Typography>
+            </CardContent>
+          </Card>
+        ))}
       </div>
     );
   }
 }
-
-// ruft die RetailerEntryLists richtig auf, nur wiederholen. muss auf 1 mal pro Shoppinglist geändert werden
-/*           <ShoppingListList 
-                  shoppingListId = {shoppingListId}
-                  groupsId = {groupsId}
-                  shoppinglistname = {shoppinglistname}
-                /> */
-
-/*  retailer = {retailers.find((x) => x.id === elem.retailer_id)} */

@@ -12,9 +12,9 @@ class ShoppingListMapper (Mapper):
         super().__init__()
 
     def find_all(self):
-        """Auslesen aller Benutzer unseres Systems.
+        """Auslesen aller ShoppingLists unseres Systems.
 
-        :return Eine Sammlung mit User-Objekten, die sämtliche Benutzer
+        :return Eine Sammlung mit ShoppingList-Objekten, die sämtliche ShoppingLists
                 des Systems repräsentieren.
         """
         result = []
@@ -70,7 +70,7 @@ class ShoppingListMapper (Mapper):
     def update(self, shoppinglist):
         """Wiederholtes Schreiben eines Objekts in die Datenbank.
 
-        :param shoppinglist das Objekt, das in die DB geschrieben werden soll
+        :param shoppinglist das Objekt, das in die DB geschrieben werden soll.
         """
         cursor = self._cnx.cursor()
 
@@ -160,7 +160,7 @@ class ShoppingListMapper (Mapper):
         """Suchen einer Shoppingliste mit vorgegebener Shoppinglist ID. Da diese eindeutig ist,
         wird genau ein Objekt zurückgegeben.
 
-        :param key Primärschlüsselattribut (->DB)
+        :param group_id Primärschlüsselattribut (->DB)
         :return Shoppinglist-Objekt, das dem übergebenen Schlüssel entspricht, None bei
             nicht vorhandenem DB-Tupel.
         """
