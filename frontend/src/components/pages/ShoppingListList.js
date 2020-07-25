@@ -27,7 +27,7 @@ export default class ShoppingListList extends Component {
       {
         id: 1,
         name: 'Hochzeit',
-        group_id: 4,
+        group_id: 2,
         retailer_id: 2,
       },
       {
