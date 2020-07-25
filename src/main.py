@@ -960,5 +960,5 @@ if __name__ == '__main__':
 
 # if __name__ == '__main__':
 #     adm = ShoppingAdministration()
-#     x = adm.create_shopping_list("Abschlussparty", 1)
+#     x = adm.create_entry("Kg", 2, "Käse", "2020-07-03 00:00:00", 1, 2, 3, 4, 0)
 #     print(x)

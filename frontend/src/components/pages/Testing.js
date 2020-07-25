@@ -283,12 +283,14 @@ export default class Testing extends Component {
     const newEntry = new EntryBO();
     newEntry.setUnit('kg');
     newEntry.setAmount(23);
-    newEntry.setArticle('Trüffel');
+    newEntry.setArticle('Brot');
     newEntry.setModificationDate('2020-07-03 00:00:00');
     newEntry.setUserId(2);
     newEntry.setRetailerId(1);
     newEntry.setShoppingListId(2);
+    newEntry.setGroupId(2);
     newEntry.setBought(0);
+
     console.log(newEntry);
     ShoppingAPI.getAPI()
       .addEntry(newEntry)

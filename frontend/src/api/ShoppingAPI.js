@@ -3,7 +3,6 @@ import FavoriteBO from './FavoriteBO';
 import GroupBO from './GroupBO';
 import GroupMembershipBO from './GroupMembershipBO';
 import RetailerBO from './RetailerBO';
-import RetailerEntryListBO from './RetailerEntryListBO';
 import RetailerGroupBO from './RetailerGroupBO';
 import ShoppingListBO from './ShoppingListBO';
 import UserBO from './UserBO';
@@ -88,18 +87,6 @@ export default class ShoppingAPI {
     `${this.#ShoppingServerBaseURL}/retailer-by-retailer-entry-list/${retailerEntryList}`;
   #searchRetailerByNameURL = (retailerName) =>
     `${this.#ShoppingServerBaseURL}/retailer-by-name/${retailerName}`;
-
-  // RetailerEntryLists related
-  #getRetailerEntryListsURL = () => `${this.#ShoppingServerBaseURL}/retailerEntryLists`;
-  #getRetailerEntryListURL = (id) =>
-    `${this.#ShoppingServerBaseURL}/retailerEntryLists/${id}`;
-  #addRetailerEntryListURL = () => `${this.#ShoppingServerBaseURL}/retailerEntryLists`;
-  #updateRetailerEntryListURL = (id) =>
-    `${this.#ShoppingServerBaseURL}/retailerEntryLists/${id}`;
-  #deleteRetailerEntryListURL = (id) =>
-    `${this.#ShoppingServerBaseURL}/retailerEntryLists/${id}`;
-  #searchRetailerEntryListByGroupNameURL = (groupId) =>
-    `${this.#ShoppingServerBaseURL}/retailer-entry-list-by-group/${groupId}`;
 
   // RetailerGroups related
   #getRetailerGroupsURL = () => `${this.#ShoppingServerBaseURL}/retailerGroups`;
@@ -929,95 +916,6 @@ export default class ShoppingAPI {
         // console.info(retailergroupBOs);
         return new Promise(function (resolve) {
           resolve(retailergroupBOs);
-        });
-      }
-    );
-  }
-
-  // RetailerEntryList Methoden
-
-  getRetailerEntryLists() {
-    return this.#fetchAdvanced(this.#getRetailerEntryListsURL()).then((responseJSON) => {
-      let retailerEntryListBOs = RetailerEntryListBO.fromJSON(responseJSON);
-      // console.info(retailerEntryListBOs);
-      return new Promise(function (resolve) {
-        resolve(retailerEntryListBOs);
-      });
-    });
-  }
-
-  getRetailerEntryList(retailerEntryListId) {
-    return this.#fetchAdvanced(this.#getRetailerEntryListURL(retailerEntryListId)).then(
-      (responseJSON) => {
-        // We always get an array of RetailerEntryListBOs.fromJSON, but only need one object
-        let responseRetailerEntryListBO = RetailerEntryListBO.fromJSON(responseJSON)[0];
-        // console.info(responseRetailerEntryList  BO);
-        return new Promise(function (resolve) {
-          resolve(responseRetailerEntryListBO);
-        });
-      }
-    );
-  }
-
-  addRetailerEntryList(retailerEntryListBO) {
-    return this.#fetchAdvanced(this.#addRetailerEntryListURL(), {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json, text/plain',
-        'Content-type': 'application/json',
-      },
-      body: JSON.stringify(retailerEntryListBO),
-    }).then((responseJSON) => {
-      // We always get an array of RetailerEntryListBO.fromJSON, but only need one object
-      let responseRetailerEntryListBO = RetailerEntryListBO.fromJSON(responseJSON)[0];
-      // console.info(retailerEntryListBOs);
-      return new Promise(function (resolve) {
-        resolve(responseRetailerEntryListBO);
-      });
-    });
-  }
-
-  updateRetailerEntryList(retailerEntryListBO) {
-    return this.#fetchAdvanced(
-      this.#updateRetailerEntryListURL(retailerEntryListBO.getID()),
-      {
-        method: 'PUT',
-        headers: {
-          Accept: 'application/json, text/plain',
-          'Content-type': 'application/json',
-        },
-        body: JSON.stringify(RetailerEntryListBO),
-      }
-    ).then((responseJSON) => {
-      // We always get an array of RetailerEntryListBOs.fromJSON
-      let responseRetailerEntryListBO = RetailerEntryListBO.fromJSON(responseJSON)[0];
-      // console.info(retailerEntryListBOs);
-      return new Promise(function (resolve) {
-        resolve(responseRetailerEntryListBO);
-      });
-    });
-  }
-
-  deleteRetailerEntryList(retailerEntryListId) {
-    return this.#fetchAdvanced(this.#deleteRetailerEntryListURL(retailerEntryListId), {
-      method: 'DELETE',
-    }).then((responseJSON) => {
-      // We always get an array of RetailerEntryListBO.fromJSON
-      let responseRetailerEntryListBO = RetailerEntryListBO.fromJSON(responseJSON)[0];
-      // console.info(retailerEntryListBOs);
-      return new Promise(function (resolve) {
-        resolve(responseRetailerEntryListBO);
-      });
-    });
-  }
-
-  searchRetailerEntryListByGroup(groupId) {
-    return this.#fetchAdvanced(this.#searchRetailerByNameURL(groupId)).then(
-      (responseJSON) => {
-        let retailerEntryListBOs = RetailerEntryListBO.fromJSON(responseJSON);
-        // console.info(retailerEntryListBOs);
-        return new Promise(function (resolve) {
-          resolve(retailerEntryListBOs);
         });
       }
     );

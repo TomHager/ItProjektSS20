@@ -2,7 +2,7 @@
 /.vscode
 /venv
 /node_modules
-
+/frontend/package.json
 # dependencies
 frontend/node_modules
 frontend/.pnp
