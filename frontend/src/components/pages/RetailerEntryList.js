@@ -208,7 +208,7 @@ export default class RetailerEntryList extends Component {
       this.setState({ oldFilter: '' });
     }
     this.search();
-    // console.log('Sorting complete');
+    console.log('Sorting complete');
   };
 
   // Search for a article in given list
@@ -222,20 +222,85 @@ export default class RetailerEntryList extends Component {
   };
 
   // Adds all favorites for the given retailer
-  addFavorite = () => {
+  TriggerAddFavorites = () => {
     // @TODO get all favorites for group and Retailer
-    const favorites = [
-      { id: 1, unit: 'pack', amount: 3, retailer_id: 1, group_id: this.props.groupId },
-      { id: 2, unit: 'g', amount: 6, retailer_id: 2, group_id: this.props.groupId },
-      { id: 3, unit: 'L', amount: 1, retailer_id: 3, group_id: this.props.groupId },
-      { id: 4, unit: 'Kg', amount: 9, retailer_id: 1, group_id: this.props.groupId },
-      { id: 5, unit: 'g', amount: 13, retailer_id: 1, group_id: this.props.groupId },
-      { id: 6, unit: 'pcs', amount: 2, retailer_id: 3, group_id: this.props.groupId },
+    let favorites = [
+      {
+        id: 1,
+        unit: 'pack',
+        amount: 3,
+        article: 'Vodka',
+        retailer_id: 1,
+        group_id: this.props.groupId,
+      },
+      {
+        id: 2,
+        unit: 'g',
+        amount: 6,
+        article: 'Lemonade',
+        retailer_id: 2,
+        group_id: this.props.groupId,
+      },
+      {
+        id: 3,
+        unit: 'L',
+        amount: 1,
+        article: 'Sprite',
+        retailer_id: 3,
+        group_id: this.props.groupId,
+      },
+      {
+        id: 4,
+        unit: 'Kg',
+        amount: 9,
+        article: 'Cola',
+        retailer_id: 1,
+        group_id: this.props.groupId,
+      },
+      {
+        id: 5,
+        unit: 'g',
+        amount: 13,
+        article: 'Gin',
+        retailer_id: 1,
+        group_id: this.props.groupId,
+      },
+      {
+        id: 6,
+        unit: 'pcs',
+        amount: 2,
+        article: 'Wine',
+        retailer_id: 3,
+        group_id: this.props.groupId,
+      },
     ];
-    // for (let i of favorites) {
-    favorites.filter((x) => x.retailer_id === this.state.retailer.id);
-    // }
-    console.log(favorites);
+    favorites = favorites.filter((x) => x.retailer_id === this.state.retailer.id);
+    // Adds each element of the favorites array to the list
+    for (let i of favorites) {
+      this.addFavorite(i);
+    }
+    this.sortEntries();
+  };
+
+  addFavorite = (fav) => {
+    const entry = new EntryBO();
+    entry.setID(Math.floor(Math.random() * Math.floor(500))); // @TODO id should be return Update ID On Success
+    entry.setArticle(fav.article);
+    entry.setAmount(fav.amount);
+    entry.setUnit(fav.unit);
+    entry.setBought(0);
+    entry.setModificationDate(this.getModDate());
+    entry.setUserId(this.state.members[0].id); // member responsible
+    entry.setRetailerId(this.state.retailer.id);
+    entry.setShoppingListId(this.props.shoppingListId);
+
+    // @TODO Async Callback
+
+    console.log(entry);
+    // On success add to unfilteredData
+    this.state.unfilteredData.unshift(entry);
+    this.setState({ unfilteredData: this.state.unfilteredData });
+    // this.sortEntries();
   };
 
   // All ClickHanlder for Table
@@ -308,42 +373,30 @@ export default class RetailerEntryList extends Component {
     entry.setAmount(editAmount);
     entry.setUnit(editUnit);
     entry.setModificationDate(this.getModDate());
-    // @TODO member responsible #likeAddEntry
-    entry.setUserId(members[0].name);
+    entry.setUserId(members[0].name); // Member responsible
     entry.setRetailerId(retailer.id);
     entry.setShoppingListId(this.props.shoppingListId);
-    // @TODO Test
     entry.setBought(0);
 
     editArticle.trim() !== '' && editAmount > 0
-      ? this.editEntry(entry)
+      ? this.updateEntry(entry)
       : this.setEditError(editArticle, editAmount);
   };
 
-  // Update edited entry
-  editEntry = (entry) => {
-    this.setEditError(entry.article, entry.amount);
-    this.updateEntry(entry);
-  };
-
-  // Add method
   // Add new entry
   // @TODO Async add entry
   addEntry = () => {
     const { article, amount, unit, units, members, retailer } = this.state;
     this.setAddError(article, amount); // Resets errors
-    // @TODO entry should be respons of Async Add
     const entry = new EntryBO();
-    entry.setID(Math.floor(Math.random() * Math.floor(500)));
+    entry.setID(Math.floor(Math.random() * Math.floor(500))); // @TODO id should be return Update ID On Success
     entry.setArticle(article);
     entry.setAmount(amount);
     entry.setUnit(unit);
     entry.setBought(0);
     entry.setModificationDate(this.getModDate());
-    // @TODO member responsible
-    entry.setUserId(members[0].id);
+    entry.setUserId(members[0].id); // Member responsible
     entry.setRetailerId(retailer.id);
-    // @TODO ShoppingList prop
     entry.setShoppingListId(this.props.shoppingListId);
 
     document.getElementById('addArticle').value = '';
@@ -363,6 +416,8 @@ export default class RetailerEntryList extends Component {
   // Update method
   // Updates selected entry
   updateEntry(entry) {
+    // Reset Errors
+    this.setEditError(entry.article, entry.amount);
     // @TODO Async Update
     // On success
     setTimeout(() => {
@@ -372,42 +427,37 @@ export default class RetailerEntryList extends Component {
         return { ...prevState, unfilteredData };
       });
       this.toggleSelectedRow(entry);
-      this.sortEntries();
+      this.sortEntries(false);
     }, 500);
     console.log(entry);
   }
 
-  // Update
+  // Update Member
   updateMember(id) {
-    const { unfilteredData } = this.state;
+    console.log('start update member');
+    const { unfilteredData, members } = this.state;
+    this.array_move(
+      members,
+      members.findIndex((obj) => obj.id === id),
+      0
+    );
     for (let i of unfilteredData) {
-      const entry = new EntryBO();
-      entry.setID(i.id);
-      entry.setArticle(i.article);
-      entry.setAmount(i.amount);
-      entry.setUnit(i.unit);
-      // @TODO member responsible #likeAddEntry
-      entry.setUserId(i.user_id);
-      entry.setRetailerId(id.retailer_id);
-      entry.setShoppingListId(i.shopping_list_id);
-      // @TODO Test
-      entry.setBought(i.bought);
-      // @TODO Update Async for each element in list
+      i.setUserId(id); // Set Member
+      // Only update modification date if not bought
       if (i.bought === 0) {
-        entry.setModificationDate(this.getModDate());
-      } else {
-        entry.setModificationDate(i.modification_date);
+        i.setModificationDate(this.getModDate());
       }
       // @TODO Async Update
 
       // On success
       this.setState((prevState) => {
-        const data = [...prevState.data];
-        data.unshift(entry);
-        return { ...prevState, data };
+        unfilteredData = [...prevState.unfilteredData];
+        unfilteredData[unfilteredData.indexOf(this.state.oldData)] = i;
+        return { ...prevState, unfilteredData };
       });
-      this.search();
     }
+    this.search();
+    console.log('Updated all Members');
   }
 
   // Delete selected entry
@@ -465,7 +515,7 @@ export default class RetailerEntryList extends Component {
             id="selectedMember"
             members={members}
             defaultValue={members[0].name}
-            onChange={(e) => this.setState({ members: e.target.value })}
+            onChange={(e) => this.updateMember(e.target.value)}
           >
             {members.map((option) => (
               <option key={`${option.id} member`} value={option.id}>
@@ -481,7 +531,11 @@ export default class RetailerEntryList extends Component {
             defaultValue=""
             onChange={(e) => this.search(e.target.value)}
           ></Input>
-          <IconButton id={1} onClick={this.addFavorite.bind(this)} label="add favorites">
+          <IconButton
+            id={1}
+            onClick={this.TriggerAddFavorites.bind(this)}
+            label="add favorites"
+          >
             <Favorite />
           </IconButton>
 
@@ -615,7 +669,7 @@ export default class RetailerEntryList extends Component {
                   </TableCell>
                   {/* Actions */}
                   <TableCell id={`${row.id} id`}>
-                    <IconButton id={`${row.id} btn1`}>
+                    <IconButton id={`${row.id} btn1`} disabled={row.bought === 1}>
                       {rowIndex === row.id ? (
                         <Check onClick={this.validateEdit.bind(this, row.id)} />
                       ) : (
