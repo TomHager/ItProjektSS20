@@ -15,6 +15,7 @@ import ManageGroup from '../dialogs/ManageGroup';
 import CreateGroup from '../dialogs/CreateGroup';
 import LeaveGroupAlert from '../dialogs/LeaveGroupAlert';
 import firebase from 'firebase/app';
+import Button from '@material-ui/core/Button';
 
 /**
  *
@@ -30,12 +31,11 @@ export default class GroupList extends Component {
     // Init an empty state
     this.state = {
       groupRows: [],
-      groupIndex: -1,
       currentUser: null,
       groupMemberships: [],
       group: null,
       allGroups: [],
-      filteredGroups: null,
+      filteredGroups: [],
     };
   }
 
@@ -71,17 +71,25 @@ export default class GroupList extends Component {
     ShoppingAPI.getAPI()
       .getGroups()
       .then((result) => {
-        this.setState({ allGroups: result });
-        console.log(this.state.allGroups);
+        console.log(result);
+        this.filterGroupsByGroupId(result);
       });
   };
 
-  filterGroupsByGroupId = () => {
-    groups = this.state.allGroups;
-    groupMemberships = this.state.groupMemberships;
-    const filteredGroups = groups.filter(
-      (group) => group.id === groupMemberships.id
-    );
+  filterGroupsByGroupId = (allGroups) => {
+    const groupMemberships = this.state.groupMemberships;
+    console.log(groupMemberships);
+    const groups = [];
+    for (let i of groupMemberships) {
+      groups.push(allGroups.filter((x) => x.id === i.group_membership));
+    }
+    // console.log(allGroups.filter((x) => x.id.toString().indexOf('1')) > -1);
+    // for (let i of groupMemberships) {
+    //   allGroups.filter((x) => x.id === i.group_membership);
+    // }
+    console.log(groups);
+    this.setState({ filteredGroups: groups });
+    console.log(this.state.filteredGroups);
   };
 
   // getGroupsByGroupId = () => {
@@ -117,9 +125,12 @@ export default class GroupList extends Component {
 
   render() {
     const groupRows = this.state.groupRows;
+    const filteredGroups = this.state.filteredGroups;
     const { user } = this.props;
+    console.log(filteredGroups);
     return (
       <div align="center">
+        {/* <Button onClick={}>Click</Button> */}
         <TableContainer
           style={{ width: Math.round(window.innerWidth * 0.3), margin: '3em' }}
           component={Paper}
@@ -138,22 +149,22 @@ export default class GroupList extends Component {
                 <TableCell></TableCell>
                 <TableCell></TableCell>
                 <TableCell>
-                  <CreateGroup />
+                  <CreateGroup currentUser={this.state.currentUser} />
                 </TableCell>
               </TableRow>
             </TableHead>
 
             <TableBody>
-              {groupRows.map((row) => (
+              {filteredGroups.map((x) => (
                 <TableRow
-                  key={row.id}
-                  style={{
-                    backgroundColor:
-                      row.id === this.state.groupIndex ? '#0090FF' : 'white',
-                  }}
+                  key={x.id}
+                  // style={{
+                  //   backgroundColor:
+                  //     index === this.state.groupIndex ? '#0090FF' : 'white',
+                  // }}
                   // onClick={this.groupClickHandler.bind(this, row)}
                 >
-                  <TableCell>{row.name}</TableCell>
+                  <TableCell>{x.name}</TableCell>
                   <TableCell>
                     <LeaveGroupAlert currentUser={user} />
                   </TableCell>

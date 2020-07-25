@@ -51,14 +51,14 @@ export class EditGroup extends Component {
 
   // }
 
-  async fetchUsers() {
-    const res = await fetch('http://DESKTOP-S3RCLLP:8081/api/iKauf/users');
-    const resjson = await res.json();
-    this.setState({ users: resjson });
-  }
+  // async fetchUsers() {
+  //   const res = await fetch('http://DESKTOP-S3RCLLP:8081/api/iKauf/users');
+  //   const resjson = await res.json();
+  //   this.setState({ users: resjson });
+  // }
 
   componentDidMount = () => {
-    this.fetchUsers();
+    // this.fetchUsers();
     console.log('All Callbacks initialised');
   };
 
@@ -124,7 +124,9 @@ export class EditGroup extends Component {
                       key={row.id}
                       style={{
                         backgroundColor:
-                          row.id === this.state.memberIndex ? '#0090FF' : 'white',
+                          row.id === this.state.memberIndex
+                            ? '#0090FF'
+                            : 'white',
                       }}
                       // onClick={this.groupClickHandler.bind(this, row)}
                     >

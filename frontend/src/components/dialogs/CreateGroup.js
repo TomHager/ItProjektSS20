@@ -20,9 +20,9 @@ import IconButton from '@material-ui/core/IconButton';
 import AddUser from '../subcomponents/AddUser';
 import DeleteIcon from '@material-ui/icons/Delete';
 import GroupBO from '../../api/GroupBO';
-// import GroupMembershipBO from '../../api/GroupMembershipBO';
 import ShoppingAPI from '../../api/ShoppingAPI';
 import { v4 as uuidv4 } from 'uuid';
+import GroupMembershipBO from '../../api/GroupMembershipBO';
 
 /**
  *
@@ -73,6 +73,32 @@ export class CreateGroup extends Component {
   //   );
   // };
 
+  addGroupMembership = () => {
+    const newMembership = new GroupMembershipBO();
+    newMembership.setGroupMember(4);
+    newMembership.setGroupMembership(3);
+    // const newMembership = { member: 3, group_membership: 3 };
+    console.log(newMembership);
+    ShoppingAPI.getAPI()
+      .addGroupMembership(newMembership)
+      .catch((e) => {
+        console.info(e);
+      });
+  };
+
+  addGroupMembershipForCurrentUser = () => {
+    const newMembership = new GroupMembershipBO();
+    newMembership.setGroupMember(this.props.currentUser[0].id);
+    newMembership.setGroupMembership(3);
+    // const newMembership = { member: 3, group_membership: 3 };
+    console.log(newMembership);
+    ShoppingAPI.getAPI()
+      .addGroupMembership(newMembership)
+      .catch((e) => {
+        console.info(e);
+      });
+  };
+
   handleClickOpen = () => {
     this.setState({ open: true });
   };
@@ -105,7 +131,10 @@ export class CreateGroup extends Component {
     newGroup.setName(this.state.groupName);
     ShoppingAPI.getAPI()
       .addGroup(newGroup)
-      .then(console.log('Created group: ' + this.state.groupName));
+      .then(console.log('Created group: ' + this.state.groupName))
+      .catch((e) => {
+        console.info(e);
+      });
   };
 
   render() {
@@ -144,7 +173,7 @@ export class CreateGroup extends Component {
               />
               <IconButton
                 aria-label="Edit"
-                onClick={this.handleCreateGroup.bind(this)}
+                onClick={this.handleCreateGroup}
                 style={{ float: 'left', marginTop: '1em', marginLeft: '5px' }}
               >
                 <GroupAddIcon />

@@ -64,7 +64,7 @@ export default class ShoppingAPI {
   // Groups related
   #getGroupsURL = () => `${this.#ShoppingServerBaseURL}/group`;
   #getGroupURL = (id) => `${this.#ShoppingServerBaseURL}/group/${id}`;
-  #addGroupURL = () => `${this.#ShoppingServerBaseURL}/groups`;
+  #addGroupURL = () => `${this.#ShoppingServerBaseURL}/group`;
   #updateGroupURL = (id) => `${this.#ShoppingServerBaseURL}/groups/${id}`;
   #deleteGroupURL = (id) => `${this.#ShoppingServerBaseURL}/groups/${id}`;
   #searchGroupByNameURL = (groupName) =>
@@ -487,7 +487,6 @@ export default class ShoppingAPI {
   }
 
   searchUserByEmail(email) {
-    console.info('start');
     return this.#fetchAdvanced(this.#searchUserByEmailURL(email)).then(
       (responseJSON) => {
         let responseUserBO = UserBO.fromJSON(responseJSON);

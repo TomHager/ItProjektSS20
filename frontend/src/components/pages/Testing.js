@@ -10,6 +10,7 @@ import FavoriteBO from '../../api/FavoriteBO';
 import EntryBO from '../../api/EntryBO';
 import ShoppingListBO from '../../api/ShoppingListBO';
 import ReportValuesBO from '../../api/ReportValuesBO';
+import GroupBO from '../../api/GroupBO';
 
 export default class Testing extends Component {
   constructor() {
@@ -122,6 +123,16 @@ export default class Testing extends Component {
       .then((result) => {
         this.setState({ allGroups: result });
         console.log(this.state.allGroups);
+      });
+  };
+
+  createGroup = () => {
+    const newGroup = new GroupBO();
+    newGroup.setName('Gruppe 33');
+    ShoppingAPI.getAPI()
+      .addGroup(newGroup)
+      .catch((e) => {
+        console.info(e);
       });
   };
 
@@ -359,13 +370,7 @@ export default class Testing extends Component {
 
   render() {
     return (
-      <Button
-        onClick={
-          this.getEntryByGroupAndModifticationDataFromAndModificationDataTo
-        }
-      >
-        Let the testing begin!
-      </Button>
+      <Button onClick={this.createGroup}>Let the testing begin!</Button>
       // <form onSubmit={this.handleSubmit}>
       //   <input type="text" name="name" onChange={this.handleChange} />
       //   <input type="email" name="email" onChange={this.handleChange} />
