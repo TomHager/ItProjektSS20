@@ -32,7 +32,7 @@ export default class ShoppingList extends Component {
     };
   }
   // Fetch shoppinglists for group
-  fetchShoppinglists() {
+  fetchShoppinglist() {
     ShoppingAPI.getAPI()
       .searchShoppingListByGroupId(3)
       .then((data) => {
@@ -56,14 +56,14 @@ export default class ShoppingList extends Component {
 
   validateAdd = () => {
     this.state.shoppinglistname.trim() !== ''
-      ? this.AddShoppingList(this.shoppinglistname)
+      ? this.AddShoppingList()
       : this.setState({ error: true });
   };
 
-  AddShoppingList = (shoppinglistname) => {
-    const { data, groupsId } = this.state;
+  AddShoppingList = () => {
+    const { shoppinglistname, data, groupsId } = this.state;
     const shoppinglist = new ShoppingListBO();
-    shoppinglist.setName(shoppinglistname);
+    shoppinglist.setName(shoppinglistname.trim());
     shoppinglist.setGroupId(groupsId);
     //@TODO shoppinglist.setId später entfernen
     shoppinglist.setID(Math.floor(Math.random() * Math.floor(500)));
