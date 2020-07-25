@@ -208,7 +208,7 @@ export default class RetailerEntryList extends Component {
       this.setState({ oldFilter: '' });
     }
     this.search();
-    console.log('Sorting complete');
+    // console.log('Sorting complete');
   };
 
   // Search for a article in given list
@@ -274,6 +274,8 @@ export default class RetailerEntryList extends Component {
         group_id: this.props.groupId,
       },
     ];
+
+    // On Success
     favorites = favorites.filter((x) => x.retailer_id === this.state.retailer.id);
     // Adds each element of the favorites array to the list
     for (let i of favorites) {
@@ -451,7 +453,7 @@ export default class RetailerEntryList extends Component {
 
       // On success
       this.setState((prevState) => {
-        unfilteredData = [...prevState.unfilteredData];
+        const unfilteredData = [...prevState.unfilteredData];
         unfilteredData[unfilteredData.indexOf(this.state.oldData)] = i;
         return { ...prevState, unfilteredData };
       });
