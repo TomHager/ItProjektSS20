@@ -1,4 +1,11 @@
-import { Refresh, AddBox, Delete, Edit, Check, Clear } from '@material-ui/icons';
+import {
+  Refresh,
+  AddBox,
+  Delete,
+  Edit,
+  Check,
+  Clear,
+} from '@material-ui/icons';
 import React, { Component } from 'react';
 // import ShoppingAPI from '../../api/ShoppingAPI';
 // import { addEntry } from '../../actions/shoppingList';
@@ -39,7 +46,7 @@ export default class Favorite extends Component {
         { name: 'pcs' },
         { name: 'pack' },
       ],
-      retailers: [{ name: 'loading' }],
+      retailers: [{ id: 0, name: 'loading' }],
       rowIndex: -1,
 
       // Add favorite entry
@@ -82,10 +89,16 @@ export default class Favorite extends Component {
           .then((allRetailers) => {
             const retailers = [];
             for (let i of membership) {
-              retailers.push(allRetailers.find((x) => x.id === i.retailer_member));
+              retailers.push(
+                allRetailers.find((x) => x.id === i.retailer_member)
+              );
+              console.log(allRetailers.find((x) => x.id === 2));
+              console.log(allRetailers);
+            }
+            if (retailers.length === 0) {
+              retailers.push({ id: 0, name: '404' });
             }
             console.log(retailers);
-
             // On success
             // setState before fetchfavorites because we need retailers in state
             this.setState({
@@ -106,11 +119,12 @@ export default class Favorite extends Component {
   fetchFavorites() {
     // Get all  favorites for group
     ShoppingAPI.getAPI()
-      // @TODO
-      // .searchFavoriteByGroup(this.props.groupId)
-      .searchFavoriteByGroup(2)
+      .searchFavoriteByGroup(this.props.groupId)
       .then((data) => {
-        this.setState({ data: data.sort((a, b) => b.id - a.id), unfilteredData: data });
+        this.setState({
+          data: data.sort((a, b) => b.id - a.id),
+          unfilteredData: data,
+        });
       });
     // console.log('fetch favorites complete');
   }
@@ -211,14 +225,12 @@ export default class Favorite extends Component {
     fav.setAmount(amount);
     fav.setUnit(unit);
     fav.setRetailerID(retailer);
-    fav.setGroupID(2);
-    // @TODO groupId from parent component
-    // groupId: this.props.groupId,
+    fav.setGroupID(this.props.groupId);
 
     // Async Update Favorite
     ShoppingAPI.getAPI()
-      .updateFavorite(fav)
-      .then(() => {
+      .addFavorite(fav)
+      .catch(() => {
         // On success reset inputs
         document.getElementById('addRetailer').value = retailers[0].id;
         document.getElementById('addArticle').value = '';
@@ -230,9 +242,11 @@ export default class Favorite extends Component {
           amount: 1,
           unit: units[0].name,
         });
+
+        this.fetchFavorites();
         // On success add to unfilteredData
-        this.state.unfilteredData.unshift(fav);
-        this.setState({ unfilteredData: this.state.unfilteredData });
+        // this.state.unfilteredData.unshift(fav);
+        // this.setState({ unfilteredData: this.state.unfilteredData });
         this.resetSearch();
       });
   };
@@ -247,9 +261,7 @@ export default class Favorite extends Component {
     fav.setAmount(eAmount);
     fav.setUnit(editUnit);
     fav.setRetailerID(editRetailer);
-    fav.setGroupID(2);
-    // @TODO groupId from parent component
-    // groupId: this.props.groupId
+    fav.setGroupID(this.props.groupId);
 
     editArticle.trim() !== '' && eAmount > 0
       ? this.updateFavorite(fav)
@@ -415,7 +427,9 @@ export default class Favorite extends Component {
                         key={row.retailer_id}
                         defaultValue={row.retailer_id}
                         onChange={(e) =>
-                          this.setState({ editRetailer: parseInt(e.target.value) })
+                          this.setState({
+                            editRetailer: parseInt(e.target.value),
+                          })
                         }
                       >
                         {retailers.map((option) => (
@@ -438,7 +452,9 @@ export default class Favorite extends Component {
                         id="editArticle"
                         placeholder="enter article"
                         defaultValue={row.article}
-                        onChange={(e) => this.setState({ editArticle: e.target.value })}
+                        onChange={(e) =>
+                          this.setState({ editArticle: e.target.value })
+                        }
                         error={errorEArticle}
                       ></Input>
                     ) : (
@@ -455,7 +471,9 @@ export default class Favorite extends Component {
                         id="editAmount"
                         placeholder="enter amount"
                         defaultValue={row.amount}
-                        onChange={(e) => this.setState({ editAmount: e.target.value })}
+                        onChange={(e) =>
+                          this.setState({ editAmount: e.target.value })
+                        }
                         error={errorEAmount}
                       ></Input>
                     ) : (
@@ -469,7 +487,9 @@ export default class Favorite extends Component {
                       <Select
                         id="editUnit"
                         defaultValue={row.unit}
-                        onChange={(e) => this.setState({ editUnit: e.target.value })}
+                        onChange={(e) =>
+                          this.setState({ editUnit: e.target.value })
+                        }
                       >
                         {units.map((option) => (
                           <option key={option.name}>{option.name}</option>
@@ -484,9 +504,16 @@ export default class Favorite extends Component {
                   <TableCell id={`${row.id} id`}>
                     <IconButton id={`${row.id} btn1`}>
                       {rowIndex === row.id ? (
-                        <Check onClick={this.validateUpdateFavorite.bind(this, row.id)} />
+                        <Check
+                          onClick={this.validateUpdateFavorite.bind(
+                            this,
+                            row.id
+                          )}
+                        />
                       ) : (
-                        <Edit onClick={this.toggleSelectedRow.bind(this, row)} />
+                        <Edit
+                          onClick={this.toggleSelectedRow.bind(this, row)}
+                        />
                       )}
                     </IconButton>
                     <IconButton id={`${row.id} btn2`}>

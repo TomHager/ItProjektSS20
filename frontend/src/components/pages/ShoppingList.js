@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import ShoppingListList from './ShoppingListList';
+import Favorite from './Favorite';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
@@ -7,9 +8,16 @@ import { IconButton, Button } from '@material-ui/core';
 import { Add } from '@material-ui/icons';
 import Input from '@material-ui/core/Input';
 import ShoppingListBO from '../../api/ShoppingListBO';
-/* import RetailerBO from '../../api/RetailerBO';
 import ShoppingAPI from '../../api/ShoppingAPI';
-import ShoppingListBo from '../../api/ShoppingListBO'; */
+// import RetailerBO from '../../api/RetailerBO';
+// import ShoppingListBo from '../../api/ShoppingListBO';
+
+/**
+ * Displays shoppinglists for selected group
+ *
+ * @author Erik Lebedkin
+ * @author Tom Hager
+ */
 
 export default class ShoppingList extends Component {
   constructor(props) {
@@ -20,35 +28,20 @@ export default class ShoppingList extends Component {
       shoppinglists: [],
       rowIndex: -1,
       error: false,
+      showFav: false,
     };
   }
-  //testdata
-  fetchShoppinglists() {
-    const data = [
-      {
-        id: 1,
-        name: 'Fest',
-        group_id: 3,
-        retailer_id: 1,
-      },
-      {
-        id: 2,
-        name: 'Hochzeit',
-        group_id: 4,
-        retailer_id: 2,
-      },
-      {
-        id: 3,
-        name: 'Abschlussfeier',
-        group_id: 5,
-        retailer_id: 3,
-      },
-    ];
-    this.setState({ data });
+  // Fetch shoppinglists for group
+  fetchShoppinglist() {
+    ShoppingAPI.getAPI()
+      .searchShoppingListByGroupId(2)
+      .then((data) => {
+        this.setState({ data });
+      });
   }
 
   componentDidMount() {
-    this.fetchShoppinglists();
+    this.fetchShoppinglist();
   }
 
   toggleHidden = (id) => {
@@ -57,16 +50,20 @@ export default class ShoppingList extends Component {
       : this.setState({ rowIndex: id });
   };
 
+  toggleShowFav = () => {
+    this.setState({ showFav: !this.state.showFav });
+  };
+
   validateAdd = () => {
     this.state.shoppinglistname.trim() !== ''
-      ? this.AddShoppingList(this.shoppinglistname)
+      ? this.AddShoppingList()
       : this.setState({ error: true });
   };
 
-  AddShoppingList = (shoppinglistname) => {
-    const { data, groupsId } = this.state;
+  AddShoppingList = () => {
+    const { shoppinglistname, data, groupsId } = this.state;
     const shoppinglist = new ShoppingListBO();
-    shoppinglist.setName(shoppinglistname);
+    shoppinglist.setName(shoppinglistname.trim());
     shoppinglist.setGroupId(groupsId);
     //@TODO shoppinglist.setId später entfernen
     shoppinglist.setID(Math.floor(Math.random() * Math.floor(500)));
@@ -75,7 +72,7 @@ export default class ShoppingList extends Component {
   };
 
   render() {
-    const { error, data, rowIndex, shoppinglistname } = this.state;
+    const { error, data, rowIndex, shoppinglistname, showFav } = this.state;
     return (
       <div>
         <Card
@@ -88,13 +85,29 @@ export default class ShoppingList extends Component {
             <Input
               placeholder="Einkauflslistenname"
               error={error}
-              onChange={(e) => this.setState({ shoppinglistname: e.target.value })}
+              onChange={(e) =>
+                this.setState({ shoppinglistname: e.target.value })
+              }
             />
             <IconButton>
               <Add id={'AddBtn'} onClick={(e) => this.validateAdd()} />
             </IconButton>
+
+            <Button id="FavBtn" onClick={this.toggleShowFav.bind(this)}>
+              ♥ Edit Favorites
+            </Button>
+            {showFav && (
+              <Typography id={'Fav'}>
+                <Favorite
+                  // @TODO this.props.groupId
+                  groupId={2}
+                />
+              </Typography>
+            )}
           </CardContent>
         </Card>
+
+        {/* Displays all shoppinglist of group */}
         {data.map((elem) => (
           <Card
             style={{
@@ -112,8 +125,8 @@ export default class ShoppingList extends Component {
                   <Typography id={`ShoppingList${elem.id}`}>
                     <ShoppingListList
                       shoppingListId={elem.id}
-                      groupsId={elem.group_id}
-                      shoppinglistname={shoppinglistname}
+                      groupId={elem.group_id}
+                      shoppinglistname={elem.name}
                     />
                   </Typography>
                 )}

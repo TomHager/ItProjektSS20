@@ -112,28 +112,26 @@ export default class RetailerEntryList extends Component {
             }
             console.log(members);
 
-            // // Moves person responsible to position 0 if not already
-            // let index = 0;
-            // // check if entries in this list exist
-            // if (this.state.unfilteredData.length > 0) {
-            //   // Get user responisble for entries
-            //   index = members.findIndex(
-            //     (obj) => obj.id === this.state.unfilteredData[0].user_id
-            //   );
-            // } else {
-            //   // Else get current user
-            //   ShoppingAPI.getAPI()
-            //     .searchUserByEmail(firebase.auth().currentUser.email)
-            //     .then((returnedUser) => {
-            //       index = members.findIndex(
-            //         (obj) => obj.id === returnedUser.id
-            //       );
-            //     });
-            // }
-            // // Check if User is already in index 0
-            // if (index > 0) {
-            //   this.arrayMove(members, index, 0);
-            // }
+            // Moves person responsible to position 0 if not already
+            let index = 0;
+            // check if entries in this list exist
+            if (this.state.unfilteredData.length > 0) {
+              // Get user responisble for entries
+              index = members.findIndex(
+                (obj) => obj.id === this.state.unfilteredData[0].user_id
+              );
+            } else {
+              // Else get current user
+              ShoppingAPI.getAPI()
+                .searchUserByEmail(firebase.auth().currentUser.email)
+                .then((returnedUser) => {
+                  index = members.findIndex((obj) => obj.id === returnedUser.id);
+                });
+            }
+            // Check if User is already in index 0
+            if (index > 0) {
+              this.arrayMove(members, index, 0);
+            }
             // Set user state
             console.log(members);
             this.setState({ members });
@@ -224,13 +222,12 @@ export default class RetailerEntryList extends Component {
       .searchFavoriteByGroup(this.props.groupId)
       .then((result) => {
         // On Success
-        const favorites = result.filter(
-          (x) => x.retailer_id === this.props.retailer.id
-        );
+        const favorites = result.filter((x) => x.retailer_id === this.props.retailer.id);
         // Adds each element of the favorites array to the list
         for (let i of favorites) {
           this.addFavorite(i);
         }
+        this.fetchEntries();
         this.sortEntries();
       });
   };
@@ -382,9 +379,10 @@ export default class RetailerEntryList extends Component {
           amount: 1,
           unit: units[0].name,
         });
+        this.fetchEntries();
         // On success add to unfilteredData
-        this.state.unfilteredData.unshift(entry);
-        this.setState({ unfilteredData: this.state.unfilteredData });
+        // this.state.unfilteredData.unshift(entry);
+        // this.setState({ unfilteredData: this.state.unfilteredData });
         this.sortEntries();
       });
   };
@@ -502,7 +500,7 @@ export default class RetailerEntryList extends Component {
           <Select
             id="selectedMember"
             members={members}
-            defaultValue={members[0].name}
+            defaultValue={members[0].id}
             onChange={(e) => this.updateMember(e.target.value)}
           >
             {members.map((option) => (
@@ -591,10 +589,7 @@ export default class RetailerEntryList extends Component {
                 </TableCell>
                 <TableCell>
                   <IconButton>
-                    <AddBox
-                      id={'addBtn'}
-                      onClick={this.validateAdd.bind(this)}
-                    />
+                    <AddBox id={'addBtn'} onClick={this.validateAdd.bind(this)} />
                   </IconButton>
                 </TableCell>
               </TableRow>
@@ -619,9 +614,7 @@ export default class RetailerEntryList extends Component {
                         id="editArticle"
                         placeholder="enter article"
                         defaultValue={row.article}
-                        onChange={(e) =>
-                          this.setState({ editArticle: e.target.value })
-                        }
+                        onChange={(e) => this.setState({ editArticle: e.target.value })}
                         error={errorEArticle}
                       ></Input>
                     ) : (
@@ -637,9 +630,7 @@ export default class RetailerEntryList extends Component {
                         id="editAmount"
                         placeholder="enter amount"
                         defaultValue={row.amount}
-                        onChange={(e) =>
-                          this.setState({ editAmount: e.target.value })
-                        }
+                        onChange={(e) => this.setState({ editAmount: e.target.value })}
                         error={errorEAmount}
                       ></Input>
                     ) : (
@@ -652,9 +643,7 @@ export default class RetailerEntryList extends Component {
                       <Select
                         id="editUnit"
                         defaultValue={row.unit}
-                        onChange={(e) =>
-                          this.setState({ editUnit: e.target.value })
-                        }
+                        onChange={(e) => this.setState({ editUnit: e.target.value })}
                       >
                         {units.map((option) => (
                           <option key={option.name}>{option.name}</option>
@@ -666,16 +655,11 @@ export default class RetailerEntryList extends Component {
                   </TableCell>
                   {/* Actions */}
                   <TableCell id={`${row.id} id`}>
-                    <IconButton
-                      id={`${row.id} btn1`}
-                      disabled={row.bought === 1}
-                    >
+                    <IconButton id={`${row.id} btn1`} disabled={row.bought === 1}>
                       {rowIndex === row.id ? (
                         <Check onClick={this.validateEdit.bind(this, row.id)} />
                       ) : (
-                        <Edit
-                          onClick={this.toggleSelectedRow.bind(this, row)}
-                        />
+                        <Edit onClick={this.toggleSelectedRow.bind(this, row)} />
                       )}
                     </IconButton>
                     <IconButton id={`${row.id} btn2`}>
