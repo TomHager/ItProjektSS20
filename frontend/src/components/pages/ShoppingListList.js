@@ -2,60 +2,57 @@ import React, { Component } from 'react';
 import RetailerEntryList from './RetailerEntryList';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
-/* import RetailerBO from '../../api/RetailerBO';
 import ShoppingAPI from '../../api/ShoppingAPI';
-import ShoppingListBo from '../../api/ShoppingListBO'; */
+// import RetailerBO from '../../api/RetailerBO';
+// import ShoppingListBo from '../../api/ShoppingListBO';
+
+/**
+ * Displays shoppinglists for selected group
+ *
+ * @author Erik Lebedkin
+ * @author Tom Hager
+ */
 
 export default class ShoppingListList extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      data: [],
       retailers: [],
     };
   }
-  //testdata
-  fetchShoppinglistlists() {
-    const data = [
-      {
-        id: 1,
-        name: 'Fest',
-        group_id: 3,
-        retailer_id: 1,
-      },
-      {
-        id: 1,
-        name: 'Hochzeit',
-        group_id: 2,
-        retailer_id: 2,
-      },
-      {
-        id: 1,
-        name: 'Abschlussfeier',
-        group_id: 5,
-        retailer_id: 3,
-      },
-    ];
-    this.setState({ data });
-  }
-  //Alle Retailers fetchen der jeweiligen Gruppe
+
+  // Fetch all retailer for given group
   fetchRetailers() {
-    const retailers = [
-      {
-        id: 1,
-        name: 'EDEKA',
-      },
-      {
-        id: 2,
-        name: 'EDEKA2',
-      },
-      {
-        id: 3,
-        name: 'EDEKA3',
-      },
-    ];
-    this.setState({ retailers });
+    // Fetch all retailer for group
+    ShoppingAPI.getAPI()
+      .searchRetailerMemberByGroup(2)
+      .then((membership) => {
+        // Fetch all retailers of data warehouse
+        ShoppingAPI.getAPI()
+          .getRetailers()
+          .then((allRetailers) => {
+            const retailers = [];
+            for (let i of membership) {
+              retailers.push(
+                allRetailers.find((x) => x.id === i.retailer_member)
+              );
+              console.log(allRetailers.find((x) => x.id === 2));
+              console.log(allRetailers);
+            }
+            if (retailers.length === 0) {
+              retailers.push({ id: 0, name: '404' });
+            }
+            console.log(retailers);
+            // On success
+            // setState before fetchfavorites because we need retailers in state
+            this.setState({
+              retailers,
+            });
+            // Fetch favorites after because they rely on retailer names
+            this.fetchFavorites();
+          });
+      });
   }
 
   componentDidMount() {
@@ -64,16 +61,16 @@ export default class ShoppingListList extends Component {
   }
 
   render() {
-    const { data, retailers } = this.state;
+    const { retailers } = this.state;
     return (
       <div>
-        {data.map((elem) => (
+        {retailers.map((elem) => (
           <Card>
             <CardContent style={{ marginTop: 10 }} variant="h5">
               <RetailerEntryList
-                shoppingListId={elem.id}
+                shoppingListId={this.props.shoppingListId}
                 retailer={retailers.find((x) => x.id === elem.retailer_id)}
-                groupId={elem.group_id}
+                groupId={this.props.groupId}
               />
             </CardContent>
           </Card>

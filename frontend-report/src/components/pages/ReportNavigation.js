@@ -58,6 +58,7 @@ export default class ReportNavigation extends Component {
   retailerToggleHandler() {
     this.setState({ retailerIndex: -1, retailerActive: !this.state.retailerActive });
   }
+
   retailerClickHandler(retailer) {
     if (this.state.retailerActive) {
       this.setState({ retailerIndex: retailer.id });
