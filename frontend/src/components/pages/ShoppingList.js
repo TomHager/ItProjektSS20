@@ -75,14 +75,7 @@ export default class ShoppingList extends Component {
   };
 
   render() {
-    const {
-      error,
-      data,
-      shoppingListId,
-      groupsId,
-      rowIndex,
-      shoppinglistname,
-    } = this.state;
+    const { error, data, rowIndex, shoppinglistname } = this.state;
     return (
       <div>
         <Card
@@ -119,7 +112,7 @@ export default class ShoppingList extends Component {
                   <Typography id={`ShoppingList${elem.id}`}>
                     <ShoppingListList
                       shoppingListId={elem.id}
-                      groupsId={elem.gro}
+                      groupsId={elem.group_id}
                       shoppinglistname={shoppinglistname}
                     />
                   </Typography>

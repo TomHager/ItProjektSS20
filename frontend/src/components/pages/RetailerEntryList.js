@@ -225,12 +225,12 @@ export default class RetailerEntryList extends Component {
   addFavorite = () => {
     // @TODO get all favorites for group and Retailer
     const favorites = [
-      { id: 1, unit: 'pack', amount: 3, retailer_id: 1, group_id: this.props.group_id },
-      { id: 2, unit: 'g', amount: 6, retailer_id: 2, group_id: this.props.group_id },
-      { id: 3, unit: 'L', amount: 1, retailer_id: 3, group_id: this.props.group_id },
-      { id: 4, unit: 'Kg', amount: 9, retailer_id: 1, group_id: this.props.group_id },
-      { id: 5, unit: 'g', amount: 13, retailer_id: 1, group_id: this.props.group_id },
-      { id: 6, unit: 'pcs', amount: 2, retailer_id: 3, group_id: this.props.group_id },
+      { id: 1, unit: 'pack', amount: 3, retailer_id: 1, group_id: this.props.groupId },
+      { id: 2, unit: 'g', amount: 6, retailer_id: 2, group_id: this.props.groupId },
+      { id: 3, unit: 'L', amount: 1, retailer_id: 3, group_id: this.props.groupId },
+      { id: 4, unit: 'Kg', amount: 9, retailer_id: 1, group_id: this.props.groupId },
+      { id: 5, unit: 'g', amount: 13, retailer_id: 1, group_id: this.props.groupId },
+      { id: 6, unit: 'pcs', amount: 2, retailer_id: 3, group_id: this.props.groupId },
     ];
     // for (let i of favorites) {
     favorites.filter((x) => x.retailer_id === this.state.retailer.id);
