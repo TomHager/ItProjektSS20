@@ -26,6 +26,7 @@ export default class Testing extends Component {
       reportEntries: null,
       groups: null,
       allGroups: null,
+      group: null,
     };
   }
 
@@ -122,6 +123,15 @@ export default class Testing extends Component {
       .then((result) => {
         this.setState({ allGroups: result });
         console.log(this.state.allGroups);
+      });
+  };
+
+  getGroupByName = () => {
+    ShoppingAPI.getAPI()
+      .searchGroupByName('Bravo')
+      .then((result) => {
+        this.setState({ group: result });
+        console.log(this.state.group);
       });
   };
 
@@ -365,7 +375,9 @@ export default class Testing extends Component {
 
   render() {
     return (
-      <Button onClick={this.createGroup}>Let the testing begin!</Button>
+      <Button onClick={this.getEntriesByShoppingListAndRetailer}>
+        Let the testing begin!
+      </Button>
       // <form onSubmit={this.handleSubmit}>
       //   <input type="text" name="name" onChange={this.handleChange} />
       //   <input type="email" name="email" onChange={this.handleChange} />

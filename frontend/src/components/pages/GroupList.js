@@ -30,9 +30,8 @@ export default class GroupList extends Component {
     // Init an empty state
     this.state = {
       groupRows: [],
-      currentUser: null,
+      currentUser: {},
       groupMemberships: [],
-      group: null,
       allGroups: [],
       filteredGroups: [],
     };
@@ -51,15 +50,16 @@ export default class GroupList extends Component {
     ShoppingAPI.getAPI()
       .searchUserByEmail(firebase.auth().currentUser.email)
       .then((returnedUser) => {
-        this.setState({ currentUser: returnedUser });
-        console.log(this.state.currentUser);
+        this.setState({ currentUser: returnedUser[0] });
+        this.getGroupMembershipsByUserId(this.state.currentUser);
       });
   };
 
-  getGroupMembershipsByUserId = () => {
+  getGroupMembershipsByUserId = (currentUser) => {
     console.log('Get groupmemberships');
+    console.log(currentUser);
     ShoppingAPI.getAPI()
-      .searchGroupsByMember(1)
+      .searchGroupsByMember(currentUser.id)
       .then((result) => {
         this.setState({ groupMemberships: result });
         console.log(this.state.groupMemberships);
@@ -82,6 +82,8 @@ export default class GroupList extends Component {
     for (let i of groupMemberships) {
       groups.push(allGroups.filter((x) => x.id === i.group_membership));
     }
+    // const i = allGroups.findIndex((x) => x.id === groupMemberships);
+    // groups.push(i);
     // console.log(allGroups.filter((x) => x.id.toString().indexOf('1')) > -1);
     // for (let i of groupMemberships) {
     //   allGroups.filter((x) => x.id === i.group_membership);
@@ -115,7 +117,6 @@ export default class GroupList extends Component {
   //calls all Callbacks for Repor Selection
   componentDidMount = () => {
     this.getCurrUser();
-    this.getGroupMembershipsByUserId();
     this.getAllGroups();
     console.log('All Callbacks initialised');
   };

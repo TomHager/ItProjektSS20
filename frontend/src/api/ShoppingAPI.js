@@ -61,7 +61,7 @@ export default class ShoppingAPI {
   #updateGroupURL = (id) => `${this.#ShoppingServerBaseURL}/groups/${id}`;
   #deleteGroupURL = (id) => `${this.#ShoppingServerBaseURL}/groups/${id}`;
   #searchGroupByNameURL = (groupName) =>
-    `${this.#ShoppingServerBaseURL}/retailer-by-name/${groupName}`;
+    `${this.#ShoppingServerBaseURL}/group-by-name/${groupName}`;
 
   // GroupMemberships related
   #getGroupMembershipsURL = () => `${this.#ShoppingServerBaseURL}/groupMemberships`;
