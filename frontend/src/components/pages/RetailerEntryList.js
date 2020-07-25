@@ -30,7 +30,7 @@ import firebase from 'firebase/app';
  *
  * @author Tom Hager
  */
-// Sort selected column
+
 export default class RetailerEntryList extends Component {
   constructor(props) {
     super(props);
@@ -45,7 +45,6 @@ export default class RetailerEntryList extends Component {
         { name: 'pcs' },
         { name: 'pack' },
       ],
-      retailer: { name: 'loading' },
       members: [{ name: 'loading' }],
       rowIndex: -1,
 
@@ -82,7 +81,7 @@ export default class RetailerEntryList extends Component {
     ShoppingAPI.getAPI()
       .searchEntryByShoppingListAndRetailer(
         this.props.shoppingListId,
-        this.props.retailer_id
+        this.props.retailer.id
       )
       .then((result) => {
         this.setState({ data: result, unfilteredData: result });
@@ -128,7 +127,7 @@ export default class RetailerEntryList extends Component {
             }
             // Check if User is already in index 0
             if (index > 0) {
-              this.array_move(members, index, 0);
+              this.arrayMove(members, index, 0);
             }
             // Set user state
             console.log(members);
@@ -138,7 +137,7 @@ export default class RetailerEntryList extends Component {
   }
 
   // Move array element to a new position
-  array_move(arr, oldIndex, newIndex) {
+  arrayMove(arr, oldIndex, newIndex) {
     if (newIndex >= arr.length) {
       let k = newIndex - arr.length + 1;
       while (k--) {
@@ -150,14 +149,13 @@ export default class RetailerEntryList extends Component {
 
   // Start Callbacks
   componentDidMount() {
-    this.fetchEntries(); // Also fetches users
-    // this.fetchRetailer();
     const { units } = this.state;
     this.setState({
-      retailer: this.props.retailer,
       unit: units[0].name,
       editUnit: units[0].name,
     });
+    this.fetchEntries(); // Also fetches users
+    // this.fetchRetailer();
   }
 
   // get Date as YYYY-MM-DDTHH:MM:SS
@@ -221,7 +219,7 @@ export default class RetailerEntryList extends Component {
       .searchFavoriteByGroup(this.props.groupId)
       .then((result) => {
         // On Success
-        const favorites = result.filter((x) => x.retailer_id === this.state.retailer.id);
+        const favorites = result.filter((x) => x.retailer_id === this.props.retailer.id);
         // Adds each element of the favorites array to the list
         for (let i of favorites) {
           this.addFavorite(i);
@@ -241,8 +239,9 @@ export default class RetailerEntryList extends Component {
     entry.setBought(0);
     entry.setModificationDate(this.getModDate());
     entry.setUserId(this.state.members[0].id); // member responsible
-    entry.setRetailerId(this.state.retailer.id);
+    entry.setRetailerId(this.props.retailer.id);
     entry.setShoppingListId(this.props.shoppingListId);
+    entry.setGroupId(this.props.groupId);
 
     // Async Add
     ShoppingAPI.getAPI()
@@ -321,7 +320,7 @@ export default class RetailerEntryList extends Component {
 
   // Validate edit entry
   validateEdit = (id) => {
-    const { editArticle, editAmount, editUnit, members, retailer } = this.state;
+    const { editArticle, editAmount, editUnit, members } = this.state;
     const entry = new EntryBO();
     entry.setID(id);
     entry.setArticle(editArticle);
@@ -329,8 +328,9 @@ export default class RetailerEntryList extends Component {
     entry.setUnit(editUnit);
     entry.setModificationDate(this.getModDate());
     entry.setUserId(members[0].name); // Member responsible
-    entry.setRetailerId(retailer.id);
+    entry.setRetailerId(this.props.retailer.id);
     entry.setShoppingListId(this.props.shoppingListId);
+    entry.setGroupId(this.props.groupId);
     entry.setBought(0);
 
     editArticle.trim() !== '' && editAmount > 0
@@ -341,7 +341,7 @@ export default class RetailerEntryList extends Component {
   // @TEST
   // Add new entry
   addEntry = () => {
-    const { article, amount, unit, units, members, retailer } = this.state;
+    const { article, amount, unit, units, members } = this.state;
     this.setAddError(article, amount); // Resets errors
     const entry = new EntryBO();
     entry.setID(Math.floor(Math.random() * Math.floor(500))); // @TODO id should be return Update ID On Success
@@ -351,8 +351,9 @@ export default class RetailerEntryList extends Component {
     entry.setBought(0);
     entry.setModificationDate(this.getModDate());
     entry.setUserId(members[0].id); // Member responsible
-    entry.setRetailerId(retailer.id);
+    entry.setRetailerId(this.props.retailer.id);
     entry.setShoppingListId(this.props.shoppingListId);
+    entry.setGroupId(this.props.groupId);
 
     // Async add entry
     ShoppingAPI.getAPI()
@@ -405,7 +406,7 @@ export default class RetailerEntryList extends Component {
   updateMember(id) {
     console.log('start update member');
     const { unfilteredData, members } = this.state;
-    this.array_move(
+    this.arrayMove(
       members,
       members.findIndex((obj) => obj.id === id),
       0
@@ -454,7 +455,6 @@ export default class RetailerEntryList extends Component {
 
   render() {
     const {
-      retailer,
       members,
       units,
       data,
@@ -470,7 +470,7 @@ export default class RetailerEntryList extends Component {
         <Container maxWidth="md">
           <CssBaseline />
 
-          <h3>{retailer.name}</h3>
+          <h3>{this.props.retailer.name}</h3>
           {/* Refresh table content */}
           <IconButton id={'refreshBtn'} onClick={(e) => this.refresh()}>
             <Refresh />

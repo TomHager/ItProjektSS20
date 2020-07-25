@@ -16,7 +16,7 @@ import {
 } from '@material-ui/core';
 import FavoriteBO from '../../api/FavoriteBO';
 // import RetailerBO from '../../api/RetailerBO';
-// import ShoppingAPI from "../../api/ShoppingAPI"
+import ShoppingAPI from '../../api/ShoppingAPI';
 
 /**
  * Displays favorites for given group
@@ -69,29 +69,39 @@ export default class Favorite extends Component {
     };
   }
 
-  async fetchRetailers() {
-    // @TODO fetch retailer
-    setTimeout(() => {
-      const retailers = [
-        { id: 1, name: 'Edeka' },
-        { id: 2, name: 'Rewe' },
-        { id: 3, name: 'Kaufland' },
-        { id: 9, name: 'Test' },
-      ];
-      // setState before fetchfavorites because we need retailers in state
-      this.setState({
-        retailers,
-        retailer: retailers[0].id,
-        editRetailer: retailers[0].id,
-        unit: this.state.units[0].name,
-        editUnit: this.state.units[0].name,
+  // Fetch all retailer for given group
+  fetchRetailers() {
+    // Fetch all retailer for group
+    ShoppingAPI.getAPI()
+      .searchRetailerMemberByGroup(2)
+      .then((membership) => {
+        // Fetch all retailers of data warehouse
+        ShoppingAPI.getAPI()
+          .getRetailers()
+          .then((allRetailers) => {
+            const retailers = [];
+            for (let i of membership) {
+              retailers.push(allRetailers.find((x) => x.id === i.retailer_member));
+            }
+            console.log(retailers);
+
+            // On success
+            // setState before fetchfavorites because we need retailers in state
+            this.setState({
+              retailers,
+              retailer: retailers[0].id,
+              editRetailer: retailers[0].id,
+              unit: this.state.units[0].name,
+              editUnit: this.state.units[0].name,
+            });
+            // Fetch favorites after because they rely on retailer names
+            this.fetchFavorites();
+          });
       });
-      this.fetchFavorites();
-    }, 1000);
   }
 
   // Fetching all favorites for a group
-  async fetchFavorites() {
+  fetchFavorites() {
     // @TODO fetch favorites
     const data = [
       {

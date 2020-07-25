@@ -25,13 +25,13 @@ export default class ShoppingListList extends Component {
         retailer_id: 1,
       },
       {
-        id: 2,
+        id: 1,
         name: 'Hochzeit',
         group_id: 4,
         retailer_id: 2,
       },
       {
-        id: 3,
+        id: 1,
         name: 'Abschlussfeier',
         group_id: 5,
         retailer_id: 3,
