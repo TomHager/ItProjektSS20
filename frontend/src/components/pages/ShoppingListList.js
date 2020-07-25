@@ -46,17 +46,13 @@ export default class ShoppingListList extends Component {
             console.log(retailers);
             // On success
             // setState before fetchfavorites because we need retailers in state
-            this.setState({
-              retailers,
-            });
-            // Fetch favorites after because they rely on retailer names
+            this.setState({ retailers });
           });
       });
   }
 
   componentDidMount() {
     this.fetchRetailers();
-    console.log(this.props.groupId);
   }
 
   render() {

@@ -72,7 +72,7 @@ export default class ShoppingList extends Component {
   };
 
   render() {
-    const { error, data, rowIndex, shoppinglistname, showFav } = this.state;
+    const { error, data, rowIndex, showFav } = this.state;
     return (
       <div>
         <Card
