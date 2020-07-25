@@ -283,7 +283,7 @@ export default class Testing extends Component {
     const newEntry = new EntryBO();
     newEntry.setUnit('kg');
     newEntry.setAmount(23);
-    newEntry.setArticle('Speck');
+    newEntry.setArticle('Trüffel');
     newEntry.setModificationDate('2020-07-03 00:00:00');
     newEntry.setUserId(2);
     newEntry.setRetailerId(1);
@@ -349,8 +349,12 @@ export default class Testing extends Component {
   getEntryByGroupAndModifticationDataFromAndModificationDataTo = () => {
     // const dateFrom = new Date('July 5, 2020');
     // const dateTo = new Date('July 15, 2020');
-    const dateFrom = new Date('July 5, 2020 03:00:00').toISOString().substr(0, 19);
-    const dateTo = new Date('July 20, 2020 03:00:00').toISOString().substr(0, 19);
+    const dateFrom = new Date('July 5, 2020 03:00:00')
+      .toISOString()
+      .substr(0, 19);
+    const dateTo = new Date('July 20, 2020 03:00:00')
+      .toISOString()
+      .substr(0, 19);
     console.log(dateFrom);
     console.log(dateTo);
     // const reportValues = new ReportValuesBO();
@@ -375,9 +379,7 @@ export default class Testing extends Component {
 
   render() {
     return (
-      <Button onClick={this.getEntriesByShoppingListAndRetailer}>
-        Let the testing begin!
-      </Button>
+      <Button onClick={this.createEntry}>Let the testing begin!</Button>
       // <form onSubmit={this.handleSubmit}>
       //   <input type="text" name="name" onChange={this.handleChange} />
       //   <input type="email" name="email" onChange={this.handleChange} />

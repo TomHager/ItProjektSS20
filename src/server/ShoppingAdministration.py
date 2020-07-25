@@ -18,7 +18,6 @@ from .db.FavoriteMapper import FavoriteMapper
 
 class ShoppingAdministration(object):
 
-
     def __init__(self):
         pass
 
@@ -75,7 +74,6 @@ class ShoppingAdministration(object):
     """
     Group-spezifische Methoden
     """
-
 
     def create_group(self, group_name):
         """Ein Group Objekt anlegen."""
@@ -198,7 +196,6 @@ class ShoppingAdministration(object):
         with ShoppingListMapper() as mapper:
             mapper.delete(shoppinglist)
 
-
     def get_shopping_list_by_name(self, shopping_list_name):
         """ShoppingList mit übergebenem shopping-list-name auslesen."""
 
@@ -219,13 +216,12 @@ class ShoppingAdministration(object):
     Entry-spezifische Methoden
     """
 
-
     def get_all_entrys(self):
         """Alle Entry Objekte auslesen."""
         with EntryMapper() as mapper:
             return mapper.find_all()
 
-    def create_entry(self, unit, amount, article, modification_date, user_id, retailer_id, shopping_list_id, bought):
+    def create_entry(self, unit, amount, article, modification_date, user_id, retailer_id, shopping_list_id, group_id, bought):
         """Ein Entry Objekt anlegen."""
         entry = Entry()
         entry.set_unit(unit)
@@ -235,6 +231,7 @@ class ShoppingAdministration(object):
         entry.set_user_id(user_id)
         entry.set_retailer_id(retailer_id)
         entry.set_shopping_list_id(shopping_list_id)
+        entry.set_group_id(group_id)
         entry.set_bought(bought)
         entry.set_id(1)
         with EntryMapper() as mapper:
@@ -255,7 +252,7 @@ class ShoppingAdministration(object):
         with EntryMapper() as mapper:
             return mapper.find_entry_by_article(article)
 
-    def get_unit_amount_by_entry(self, entry): #todo Braucht man des=?
+    def get_unit_amount_by_entry(self, entry):  # todo Braucht man des=?
         """Auslesen aller Messei Objekte anhand des Artikel-ID´s"""
         with EntryMapper() as mapper:
             return mapper.find_unit_amount_by_entry(entry)
@@ -301,7 +298,7 @@ class ShoppingAdministration(object):
             mapper.update(entry)
 
     def get_entry_by_bought(self, bought):
-        """Entry mit übergebenem Bought-Boolean auslesen.""" #todo richtig beschrieben bought id oder boolean?
+        """Entry mit übergebenem Bought-Boolean auslesen."""  # todo richtig beschrieben bought id oder boolean?
         with EntryMapper() as mapper:
             return mapper.find_entry_by_bought(bought)
 

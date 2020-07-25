@@ -17,7 +17,6 @@ from server.bo.GroupMembership import GroupMembership
 # selbstgeschriebener Decorator, übernimmt Authentifikation
 
 
-
 """
 Instanzieren von Flask. Am Ende dieser Datei erfolgt dann erst der 'Start' von Flask.
 """
@@ -171,7 +170,6 @@ class UserOperations(Resource):
     @ikauf.expect(user, validate=True)
     def put(self, id):
         """Update eines bestimmten User-Objekts."""
-
 
         adm = ShoppingAdministration()
         c = User.from_dict(api.payload)
@@ -427,7 +425,7 @@ class EntryListOperations(Resource):
         if proposal is not None:
             x = adm.create_entry(proposal.get_unit(), proposal.get_amount(), proposal.get_article(),
                                  proposal.get_modification_date(), proposal.get_user_id(), proposal.get_retailer_id(),
-                                 proposal.get_shopping_list_id(), proposal.get_bought())
+                                 proposal.get_shopping_list_id(), proposal.get_group_id(), proposal.get_bought())
             return x, 200
         else:
             return '', 500
@@ -611,7 +609,8 @@ class EntryRelatedByArticleOperations(Resource):
         """Auslesen eines bestimmten Entry-Objekts nach Article"""
 
         adm = ShoppingAdministration()
-        e = adm.get_report_data(group_id, modification_date_from, modification_date_to)
+        e = adm.get_report_data(
+            group_id, modification_date_from, modification_date_to)
         return e
 
 
