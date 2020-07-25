@@ -69,6 +69,7 @@ export default class Favorite extends Component {
     };
   }
 
+  // @TEST
   // Fetch all retailer for given group
   fetchRetailers() {
     // Fetch all retailer for group
@@ -100,39 +101,18 @@ export default class Favorite extends Component {
       });
   }
 
+  // @TEST
   // Fetching all favorites for a group
   fetchFavorites() {
-    // @TODO fetch favorites
-    const data = [
-      {
-        id: 1,
-        article: 'Apfel',
-        amount: 4,
-        unit: 'Kg',
-        retailer_id: 2,
-        group_id: 1,
-      },
-      {
-        id: 2,
-        article: 'Birne',
-        amount: 3,
-        unit: 'pcs',
-        retailer_id: 9,
-        group_id: 1,
-      },
-      {
-        id: 6,
-        article: 'Ananas',
-        amount: 6,
-        unit: 'g',
-        retailer_id: 3,
-        group_id: 1,
-      },
-    ];
-    setTimeout(() => {
-      this.setState({ data: data.sort((a, b) => b.id - a.id), unfilteredData: data });
-      // console.log('fetch favorites complete');
-    }, 600);
+    // Get all  favorites for group
+    ShoppingAPI.getAPI()
+      // @TODO
+      // .searchFavoriteByGroup(this.props.groupId)
+      .searchFavoriteByGroup(2)
+      .then((data) => {
+        this.setState({ data: data.sort((a, b) => b.id - a.id), unfilteredData: data });
+      });
+    // console.log('fetch favorites complete');
   }
 
   // Start Callbacks
@@ -219,6 +199,8 @@ export default class Favorite extends Component {
       : this.setAddError(article, aAmount);
   };
 
+  // @TEST
+  // Add new favorite
   addFavorite = () => {
     const { retailer, article, amount, unit, retailers, units } = this.state;
     this.setAddError(article, amount); // Resets errors
@@ -229,24 +211,30 @@ export default class Favorite extends Component {
     fav.setAmount(amount);
     fav.setUnit(unit);
     fav.setRetailerID(retailer);
-    fav.setGroupID(1);
+    fav.setGroupID(2);
     // @TODO groupId from parent component
     // groupId: this.props.groupId,
 
-    document.getElementById('addRetailer').value = retailers[0].id;
-    document.getElementById('addArticle').value = '';
-    document.getElementById('addAmount').value = 1;
-    document.getElementById('addUnit').value = units[0].name;
-    this.setState({
-      retailer: retailers[0].id,
-      article: '',
-      amount: 1,
-      unit: units[0].name,
-    });
-    // On success add to unfilteredData
-    this.state.unfilteredData.unshift(fav);
-    this.setState({ unfilteredData: this.state.unfilteredData });
-    this.resetSearch();
+    // Async Update Favorite
+    ShoppingAPI.getAPI()
+      .updateFavorite(fav)
+      .then(() => {
+        // On success reset inputs
+        document.getElementById('addRetailer').value = retailers[0].id;
+        document.getElementById('addArticle').value = '';
+        document.getElementById('addAmount').value = 1;
+        document.getElementById('addUnit').value = units[0].name;
+        this.setState({
+          retailer: retailers[0].id,
+          article: '',
+          amount: 1,
+          unit: units[0].name,
+        });
+        // On success add to unfilteredData
+        this.state.unfilteredData.unshift(fav);
+        this.setState({ unfilteredData: this.state.unfilteredData });
+        this.resetSearch();
+      });
   };
 
   // Updates selected entry
@@ -259,8 +247,7 @@ export default class Favorite extends Component {
     fav.setAmount(eAmount);
     fav.setUnit(editUnit);
     fav.setRetailerID(editRetailer);
-    fav.setGroupID(1);
-
+    fav.setGroupID(2);
     // @TODO groupId from parent component
     // groupId: this.props.groupId
 
@@ -269,32 +256,42 @@ export default class Favorite extends Component {
       : this.setEditError(editArticle, eAmount);
   };
 
+  // @TEST
+  // Update Favorite
   updateFavorite = (favorite) => {
     this.setEditError(favorite.article, favorite.amount);
-    // @TODO Async Update
-    // On success
-    setTimeout(() => {
-      this.setState((prevState) => {
-        const unfilteredData = [...prevState.unfilteredData];
-        unfilteredData[unfilteredData.indexOf(this.state.oldData)] = favorite;
-        return { ...prevState, unfilteredData };
+    // Async update favorite
+    ShoppingAPI.getAPI()
+      .updateFavorite(favorite)
+      .then(() => {
+        // On success
+        this.setState((prevState) => {
+          const unfilteredData = [...prevState.unfilteredData];
+          unfilteredData[unfilteredData.indexOf(this.state.oldData)] = favorite;
+          return { ...prevState, unfilteredData };
+        });
+        this.toggleSelectedRow(favorite);
+        this.resetSearch();
       });
-      this.toggleSelectedRow(favorite);
-      this.resetSearch();
-    }, 500);
   };
 
+  // @TEST
   // Delete selected entry
   delFavorite = (id) => {
     const { unfilteredData } = this.state;
-    // @TODO Async Delete
-    this.setState({
-      unfilteredData: [...unfilteredData.filter((x) => x.id !== id)],
-    });
-    // DON'T DELETE THIS TIMOUT!
-    setTimeout(() => {
-      this.resetSearch();
-    }, 1);
+    //Async Delete Favorite
+    ShoppingAPI.getAPI()
+      .deleteFavorite(id)
+      .then(() => {
+        // On success
+        this.setState({
+          unfilteredData: [...unfilteredData.filter((x) => x.id !== id)],
+        });
+        // DON'T DELETE THIS TIMOUT!
+        setTimeout(() => {
+          this.resetSearch();
+        }, 1);
+      });
   };
 
   render() {
