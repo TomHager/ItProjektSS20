@@ -15,7 +15,6 @@ import ManageGroup from '../dialogs/ManageGroup';
 import CreateGroup from '../dialogs/CreateGroup';
 import LeaveGroupAlert from '../dialogs/LeaveGroupAlert';
 import firebase from 'firebase/app';
-import Button from '@material-ui/core/Button';
 
 /**
  *
@@ -110,9 +109,7 @@ export default class GroupList extends Component {
       .deleteGroupMembership(groupID)
       .then(
         this.setState({
-          groupRows: this.state.groupRows.filter(
-            (group) => group.getID() !== groupID
-          ),
+          groupRows: this.state.groupRows.filter((group) => group.getID() !== groupID),
         })
       );
   };
@@ -125,7 +122,7 @@ export default class GroupList extends Component {
   };
 
   render() {
-    const groupRows = this.state.groupRows;
+    // const groupRows = this.state.groupRows;
     const filteredGroups = this.state.filteredGroups;
     const { user } = this.props;
     console.log(filteredGroups);

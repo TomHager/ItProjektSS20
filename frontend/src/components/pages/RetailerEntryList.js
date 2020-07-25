@@ -22,7 +22,8 @@ import {
   Checkbox,
 } from '@material-ui/core';
 import EntryBO from '../../api/EntryBO';
-// import ShoppingAPI from '../../api/ShoppingAPI';
+import ShoppingAPI from '../../api/ShoppingAPI';
+import firebase from 'firebase/app';
 
 /**
  * Displays entries for selected group, shoppinglist and retailer
@@ -30,7 +31,6 @@ import EntryBO from '../../api/EntryBO';
  * @author Tom Hager
  */
 // Sort selected column
-
 export default class RetailerEntryList extends Component {
   constructor(props) {
     super(props);
@@ -76,70 +76,65 @@ export default class RetailerEntryList extends Component {
   }
   // All Asynccallbacks
 
+  // @TEST
   // Fetching all entrys of a RetailerShoppingList
   fetchEntries() {
-    const data = [
-      {
-        id: 1,
-        unit: 'Kg',
-        amount: 4,
-        article: 'Apfel',
-        modification_date: '2020-07-05T23:59:59',
-        user_id: 2,
-        retailer_id: 1,
-        shopping_list_id: 1,
-        bought: 0,
-      },
-      {
-        id: 2,
-        amount: 3,
-        unit: 'pcs',
-        article: 'Birne',
-        modification_date: '2020-07-02T23:59:59',
-        shopping_list_id: 1,
-        user_id: 2,
-        retailer_id: 2,
-        bought: 1,
-      },
-      {
-        id: 3,
-        amount: 6,
-        unit: 'g',
-        article: 'Ananas',
-        modification_date: '2020-07-31T23:59:59',
-        shopping_list_id: 1,
-        user_id: 2,
-        retailer_id: 2,
-        bought: 0,
-      },
-    ];
-    setTimeout(() => {
-      this.setState({ data: data, unfilteredData: data });
-      this.sortEntries(false);
-      // console.log('fetch entries complete');
-    }, 1000);
+    ShoppingAPI.getAPI()
+      .searchEntryByShoppingListAndRetailer(
+        this.props.shoppingListId,
+        this.props.retailer_id
+      )
+      .then((result) => {
+        this.setState({ data: result, unfilteredData: result });
+        this.sortEntries(false);
+        // start fetch Members
+        this.fetchMembers();
+        // console.log('fetch entries complete');
+      });
   }
 
+  // @TEST
   // Fetch all members of a group
   fetchMembers() {
-    const members = [
-      { id: 1, name: 'Tom' },
-      { id: 2, name: 'Robin' },
-      { id: 3, name: 'Dimi' },
-    ];
-    setTimeout(() => {
-      // Moves person responsible to position 0 not already
-      if (this.state.unfilteredData.length > 0) {
-        let index = members.findIndex(
-          (obj) => obj.id === this.state.unfilteredData[0].user_id
-        );
-        if (index > 0) {
-          this.array_move(members, index, 0);
-        }
-      }
-      this.setState({ members: members });
-      // }, 1);
-    }, 1000);
+    // Fetch all users of group
+    ShoppingAPI.getAPI()
+      .searchMembersByGroup(this.props.groupId)
+      .then((membership) => {
+        // Fetch all users of data warehouse
+        ShoppingAPI.getAPI()
+          .getUsers()
+          .then((users) => {
+            const members = [];
+            for (let i of membership) {
+              members.push(users.find((x) => x.id === i.member));
+            }
+            console.log(members);
+
+            // Moves person responsible to position 0 if not already
+            let index = 0;
+            // check if entries in this list exist
+            if (this.state.unfilteredData.length > 0) {
+              // Get user responisble for entries
+              index = members.findIndex(
+                (obj) => obj.id === this.state.unfilteredData[0].user_id
+              );
+            } else {
+              // Else get current user
+              ShoppingAPI.getAPI()
+                .searchUserByEmail(firebase.auth().currentUser.email)
+                .then((returnedUser) => {
+                  index = members.findIndex((obj) => obj.id === returnedUser.id);
+                });
+            }
+            // Check if User is already in index 0
+            if (index > 0) {
+              this.array_move(members, index, 0);
+            }
+            // Set user state
+            console.log(members);
+            this.setState({ members });
+          });
+      });
   }
 
   // Move array element to a new position
@@ -152,16 +147,14 @@ export default class RetailerEntryList extends Component {
     }
     arr.splice(newIndex, 0, arr.splice(oldIndex, 1)[0]);
   }
+
   // Start Callbacks
   componentDidMount() {
-    this.fetchEntries();
+    this.fetchEntries(); // Also fetches users
     // this.fetchRetailer();
-    this.fetchMembers();
     const { units } = this.state;
     this.setState({
-      // @TODO
       retailer: this.props.retailer,
-      // retailer: { id: 1, name: 'Aldi' },
       unit: units[0].name,
       editUnit: units[0].name,
     });
@@ -180,12 +173,12 @@ export default class RetailerEntryList extends Component {
       errorAAmount: false,
       rowIndex: -1,
     });
-    this.componentDidMount();
-
     document.getElementById('addArticle').value = '';
     document.getElementById('addAmount').value = 1;
     document.getElementById('addUnit').value = this.state.units[0].name;
     document.getElementById('filter').value = '';
+
+    this.componentDidMount();
   };
 
   // Sort given entries
@@ -221,20 +214,45 @@ export default class RetailerEntryList extends Component {
     });
   };
 
-  addFavorite = () => {
-    // @TODO get all favorites for group and Retailer
-    const favorites = [
-      { id: 1, unit: 'pack', amount: 3, retailer_id: 1, group_id: this.props.group_id },
-      { id: 2, unit: 'g', amount: 6, retailer_id: 2, group_id: this.props.group_id },
-      { id: 3, unit: 'L', amount: 1, retailer_id: 3, group_id: this.props.group_id },
-      { id: 4, unit: 'Kg', amount: 9, retailer_id: 1, group_id: this.props.group_id },
-      { id: 5, unit: 'g', amount: 13, retailer_id: 1, group_id: this.props.group_id },
-      { id: 6, unit: 'pcs', amount: 2, retailer_id: 3, group_id: this.props.group_id },
-    ];
-    // for (let i of favorites) {
-    favorites.filter((x) => x.retailer_id === this.state.retailer.id);
-    // }
-    console.log('favorites');
+  // @TEST
+  // Adds all favorites for the given retailer
+  TriggerAddFavorites = () => {
+    ShoppingAPI.getAPI()
+      .searchFavoriteByGroup(this.props.groupId)
+      .then((result) => {
+        // On Success
+        const favorites = result.filter((x) => x.retailer_id === this.state.retailer.id);
+        // Adds each element of the favorites array to the list
+        for (let i of favorites) {
+          this.addFavorite(i);
+        }
+        this.sortEntries();
+      });
+  };
+
+  // @TEST
+  // Adds favorite as entry
+  addFavorite = (fav) => {
+    const entry = new EntryBO();
+    entry.setID(Math.floor(Math.random() * Math.floor(500))); // @TODO id should be return Update ID On Success
+    entry.setArticle(fav.article);
+    entry.setAmount(fav.amount);
+    entry.setUnit(fav.unit);
+    entry.setBought(0);
+    entry.setModificationDate(this.getModDate());
+    entry.setUserId(this.state.members[0].id); // member responsible
+    entry.setRetailerId(this.state.retailer.id);
+    entry.setShoppingListId(this.props.shoppingListId);
+
+    // Async Add
+    ShoppingAPI.getAPI()
+      .addEntry(entry)
+      .catch((e) => {
+        console.log(e);
+        // On success add to unfilteredData
+        this.state.unfilteredData.unshift(entry);
+        this.setState({ unfilteredData: this.state.unfilteredData });
+      });
   };
 
   // All ClickHanlder for Table
@@ -258,16 +276,19 @@ export default class RetailerEntryList extends Component {
   toggleBought = (entry) => {
     // console.log('update bought');
     entry.bought === 1 ? (entry.bought = 0) : (entry.bought = 1);
-    // @TODO Async Update
-    // On success
-    setTimeout(() => {
-      this.setState((prevState) => {
-        const unfilteredData = [...prevState.unfilteredData];
-        unfilteredData[unfilteredData.indexOf(this.state.oldData)] = entry;
-        return { ...prevState, unfilteredData };
+
+    // Async update entry
+    ShoppingAPI.getAPI()
+      .updateEntry(entry)
+      .then(() => {
+        // On success
+        this.setState((prevState) => {
+          const unfilteredData = [...prevState.unfilteredData];
+          unfilteredData[unfilteredData.indexOf(this.state.oldData)] = entry;
+          return { ...prevState, unfilteredData };
+        });
+        this.sortEntries(false);
       });
-      this.sortEntries(false);
-    }, 500);
   };
 
   // Display correct error input field for add
@@ -307,119 +328,128 @@ export default class RetailerEntryList extends Component {
     entry.setAmount(editAmount);
     entry.setUnit(editUnit);
     entry.setModificationDate(this.getModDate());
-    // @TODO member responsible #likeAddEntry
-    entry.setUserId(members[0].name);
+    entry.setUserId(members[0].name); // Member responsible
     entry.setRetailerId(retailer.id);
     entry.setShoppingListId(this.props.shoppingListId);
-    // @TODO Test
     entry.setBought(0);
 
     editArticle.trim() !== '' && editAmount > 0
-      ? this.editEntry(entry)
+      ? this.updateEntry(entry)
       : this.setEditError(editArticle, editAmount);
   };
 
-  // Update edited entry
-  editEntry = (entry) => {
-    this.setEditError(entry.article, entry.amount);
-    this.updateEntry(entry);
-  };
-
-  // Add method
+  // @TEST
   // Add new entry
-  // @TODO Async add entry
   addEntry = () => {
     const { article, amount, unit, units, members, retailer } = this.state;
     this.setAddError(article, amount); // Resets errors
-    // @TODO entry should be respons of Async Add
     const entry = new EntryBO();
-    entry.setID(Math.floor(Math.random() * Math.floor(500)));
+    entry.setID(Math.floor(Math.random() * Math.floor(500))); // @TODO id should be return Update ID On Success
     entry.setArticle(article);
     entry.setAmount(amount);
     entry.setUnit(unit);
     entry.setBought(0);
     entry.setModificationDate(this.getModDate());
-    // @TODO member responsible
-    entry.setUserId(members[0].id);
+    entry.setUserId(members[0].id); // Member responsible
     entry.setRetailerId(retailer.id);
-    // @TODO ShoppingList prop
     entry.setShoppingListId(this.props.shoppingListId);
 
-    document.getElementById('addArticle').value = '';
-    document.getElementById('addAmount').value = 1;
-    document.getElementById('addUnit').value = units[0].name;
-    this.setState({
-      article: '',
-      amount: 1,
-      unit: units[0].name,
-    });
-    // On success add to unfilteredData
-    this.state.unfilteredData.unshift(entry);
-    this.setState({ unfilteredData: this.state.unfilteredData });
-    this.sortEntries();
+    // Async add entry
+    ShoppingAPI.getAPI()
+      .addEntry(entry)
+      .then((result) => {
+        console.log(result);
+        console.log('Es geht doch');
+      })
+      .catch((e) => {
+        console.info(e);
+        // On success resets add inputs
+        document.getElementById('addArticle').value = '';
+        document.getElementById('addAmount').value = 1;
+        document.getElementById('addUnit').value = units[0].name;
+        this.setState({
+          article: '',
+          amount: 1,
+          unit: units[0].name,
+        });
+        // On success add to unfilteredData
+        this.state.unfilteredData.unshift(entry);
+        this.setState({ unfilteredData: this.state.unfilteredData });
+        this.sortEntries();
+      });
   };
 
-  // Update method
+  // @TEST
   // Updates selected entry
   updateEntry(entry) {
-    // @TODO Async Update
-    // On success
-    setTimeout(() => {
-      this.setState((prevState) => {
-        const unfilteredData = [...prevState.unfilteredData];
-        unfilteredData[unfilteredData.indexOf(this.state.oldData)] = entry;
-        return { ...prevState, unfilteredData };
+    // Reset Errors
+    this.setEditError(entry.article, entry.amount);
+
+    // Async update entry
+    ShoppingAPI.getAPI()
+      .updateEntry(entry)
+      .then(() => {
+        // On success
+        this.setState((prevState) => {
+          const unfilteredData = [...prevState.unfilteredData];
+          unfilteredData[unfilteredData.indexOf(this.state.oldData)] = entry;
+          return { ...prevState, unfilteredData };
+        });
+        this.toggleSelectedRow(entry);
+        this.sortEntries(false);
       });
-      this.toggleSelectedRow(entry);
-      this.sortEntries();
-    }, 500);
-    console.log(entry);
   }
 
-  // Update
+  // @TEST
+  // Update Member
   updateMember(id) {
-    const { unfilteredData } = this.state;
+    console.log('start update member');
+    const { unfilteredData, members } = this.state;
+    this.array_move(
+      members,
+      members.findIndex((obj) => obj.id === id),
+      0
+    );
     for (let i of unfilteredData) {
-      const entry = new EntryBO();
-      entry.setID(i.id);
-      entry.setArticle(i.article);
-      entry.setAmount(i.amount);
-      entry.setUnit(i.unit);
-      // @TODO member responsible #likeAddEntry
-      entry.setUserId(i.user_id);
-      entry.setRetailerId(id.retailer_id);
-      entry.setShoppingListId(i.shopping_list_id);
-      // @TODO Test
-      entry.setBought(i.bought);
-      // @TODO Update Async for each element in list
+      i.setUserId(id); // Set Member
+      // Only update modification date if not bought
       if (i.bought === 0) {
-        entry.setModificationDate(this.getModDate());
-      } else {
-        entry.setModificationDate(i.modification_date);
+        i.setModificationDate(this.getModDate());
       }
-      // @TODO Async Update
 
-      // On success
-      this.setState((prevState) => {
-        const data = [...prevState.data];
-        data.unshift(entry);
-        return { ...prevState, data };
-      });
-      this.search();
+      // Async update entry
+      ShoppingAPI.getAPI()
+        .updateEntry(i)
+        .then(() => {
+          // On success
+          this.setState((prevState) => {
+            const unfilteredData = [...prevState.unfilteredData];
+            unfilteredData[unfilteredData.indexOf(this.state.oldData)] = i;
+            return { ...prevState, unfilteredData };
+          });
+        });
     }
+    this.search();
+    console.log('Updated all Members');
   }
 
+  // @TEST
   // Delete selected entry
   delEntry = (id) => {
     const { unfilteredData } = this.state;
-    // @TODO Async Delete Entry
-    this.setState({
-      unfilteredData: [...unfilteredData.filter((x) => x.id !== id)],
-    });
-    // DON'T DELETE THIS TIMOUT!
-    setTimeout(() => {
-      this.search();
-    }, 1);
+
+    // Async Delete Entry
+    ShoppingAPI.getAPI()
+      .deleteEntry(id)
+      .then(() => {
+        this.setState({
+          unfilteredData: [...unfilteredData.filter((x) => x.id !== id)],
+        });
+        // DON'T DELETE THIS TIMOUT!
+        setTimeout(() => {
+          this.search();
+        }, 1);
+      });
   };
 
   render() {
@@ -464,7 +494,7 @@ export default class RetailerEntryList extends Component {
             id="selectedMember"
             members={members}
             defaultValue={members[0].name}
-            onChange={(e) => this.setState({ members: e.target.value })}
+            onChange={(e) => this.updateMember(e.target.value)}
           >
             {members.map((option) => (
               <option key={`${option.id} member`} value={option.id}>
@@ -480,7 +510,11 @@ export default class RetailerEntryList extends Component {
             defaultValue=""
             onChange={(e) => this.search(e.target.value)}
           ></Input>
-          <IconButton id={1} onClick={this.addFavorite.bind(this)} label="add favorites">
+          <IconButton
+            id={1}
+            onClick={this.TriggerAddFavorites.bind(this)}
+            label="add favorites"
+          >
             <Favorite />
           </IconButton>
 
@@ -614,7 +648,7 @@ export default class RetailerEntryList extends Component {
                   </TableCell>
                   {/* Actions */}
                   <TableCell id={`${row.id} id`}>
-                    <IconButton id={`${row.id} btn1`}>
+                    <IconButton id={`${row.id} btn1`} disabled={row.bought === 1}>
                       {rowIndex === row.id ? (
                         <Check onClick={this.validateEdit.bind(this, row.id)} />
                       ) : (
