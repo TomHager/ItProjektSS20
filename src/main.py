@@ -17,7 +17,6 @@ from server.bo.GroupMembership import GroupMembership
 # selbstgeschriebener Decorator, übernimmt Authentifikation
 
 
-
 """
 Instanzieren von Flask. Am Ende dieser Datei erfolgt dann erst der 'Start' von Flask.
 """
@@ -171,7 +170,6 @@ class UserOperations(Resource):
     @ikauf.expect(user, validate=True)
     def put(self, id):
         """Update eines bestimmten User-Objekts."""
-
 
         adm = ShoppingAdministration()
         c = User.from_dict(api.payload)
@@ -611,7 +609,8 @@ class EntryRelatedByArticleOperations(Resource):
         """Auslesen eines bestimmten Entry-Objekts nach Article"""
 
         adm = ShoppingAdministration()
-        e = adm.get_report_data(group_id, modification_date_from, modification_date_to)
+        e = adm.get_report_data(
+            group_id, modification_date_from, modification_date_to)
         return e
 
 
@@ -956,10 +955,10 @@ Start der main.py um zu testen ob es funktioniert (in der lokalen Entwicklerumge
 Um dies zu testen muss, wie in der VL eine Db in Python vorliegen.
 """
 
-"""if __name__ == '__main__':
-    app.run(debug=True)"""
+if __name__ == '__main__':
+    app.run(debug=True)
 
-"""if __name__ == '__main__':
-     adm = ShoppingAdministration()
-     x = adm.create_entry("Kg",2,"Käse", "2020-07-03 00:00:00", 1,2,3,4,0)
-     print(x)"""
+# if __name__ == '__main__':
+#     adm = ShoppingAdministration()
+#     x = adm.create_entry("Kg", 2, "Käse", "2020-07-03 00:00:00", 1, 2, 3, 4, 0)
+#     print(x)

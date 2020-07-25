@@ -264,18 +264,23 @@ export default class Testing extends Component {
 
   // Läuft
   updateEntrys = () => {
-    const updatedEntry = {
-      id: 3,
-      unit: 'g',
-      amount: 6,
-      article: 'Ananas',
-      modification_date: '2020-07-02T23:59:59',
-      user_id: 1,
-      retailer_id: 2,
-      shopping_list_id: 1,
-      bought: 0,
-    };
-    ShoppingAPI.getAPI().updateEntry(updatedEntry[0]);
+    const updatedEntry = this.state.entries;
+    // updatedEntry[0].setAmount(100);
+    updatedEntry[0].setID(updatedEntry[0].id);
+    updatedEntry[0].setArticle(updatedEntry[0].article);
+    updatedEntry[0].setAmount(updatedEntry[0].amount);
+    updatedEntry[0].setUnit(updatedEntry[0].unit);
+    updatedEntry[0].setModificationDate(updatedEntry[0].modification_date);
+    updatedEntry[0].setUserId(updatedEntry[0].user_id); // Member responsible
+    updatedEntry[0].setRetailerId(updatedEntry[0].retailer_id);
+    updatedEntry[0].setShoppingListId(updatedEntry[0].shopping_list_id);
+    updatedEntry[0].setGroupId(55);
+    updatedEntry[0].setBought(0);
+    this.test(updatedEntry[0]);
+  };
+
+  test = (entry) => {
+    ShoppingAPI.getAPI().updateEntry(entry);
   };
 
   // Läuft
@@ -283,12 +288,14 @@ export default class Testing extends Component {
     const newEntry = new EntryBO();
     newEntry.setUnit('kg');
     newEntry.setAmount(23);
-    newEntry.setArticle('Speck');
+    newEntry.setArticle('Müsli');
     newEntry.setModificationDate('2020-07-03 00:00:00');
-    newEntry.setUserId(2);
+    newEntry.setUserId(4);
     newEntry.setRetailerId(1);
     newEntry.setShoppingListId(2);
+    newEntry.setGroupId(3);
     newEntry.setBought(0);
+
     console.log(newEntry);
     ShoppingAPI.getAPI()
       .addEntry(newEntry)
@@ -349,8 +356,12 @@ export default class Testing extends Component {
   getEntryByGroupAndModifticationDataFromAndModificationDataTo = () => {
     // const dateFrom = new Date('July 5, 2020');
     // const dateTo = new Date('July 15, 2020');
-    const dateFrom = new Date('July 5, 2020 03:00:00').toISOString().substr(0, 19);
-    const dateTo = new Date('July 20, 2020 03:00:00').toISOString().substr(0, 19);
+    const dateFrom = new Date('July 5, 2020 03:00:00')
+      .toISOString()
+      .substr(0, 19);
+    const dateTo = new Date('July 20, 2020 03:00:00')
+      .toISOString()
+      .substr(0, 19);
     console.log(dateFrom);
     console.log(dateTo);
     // const reportValues = new ReportValuesBO();
@@ -368,16 +379,14 @@ export default class Testing extends Component {
   componentDidMount() {
     // this.getUserByEmail();
     // this.getFavoritesByGroup();
-    // this.getEntriesByShoppingList();
+    this.getEntriesByShoppingList();
     // this.getShoppingListsByGroup();
     this.getAllGroups();
   }
 
   render() {
     return (
-      <Button onClick={this.getEntriesByShoppingListAndRetailer}>
-        Let the testing begin!
-      </Button>
+      <Button onClick={this.updateEntrys}>Let the testing begin!</Button>
       // <form onSubmit={this.handleSubmit}>
       //   <input type="text" name="name" onChange={this.handleChange} />
       //   <input type="email" name="email" onChange={this.handleChange} />

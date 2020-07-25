@@ -13,6 +13,7 @@ export default class EntryBO extends BusinessObject {
     userId,
     retailerId,
     shoppingListId,
+    groupId,
     bought
   ) {
     super();
@@ -23,6 +24,7 @@ export default class EntryBO extends BusinessObject {
     this.user_id = userId;
     this.retailer_id = retailerId;
     this.shopping_list_id = shoppingListId;
+    this.group_id = groupId;
     this.bought = bought;
   }
 
@@ -80,6 +82,14 @@ export default class EntryBO extends BusinessObject {
 
   setShoppingListId(shoppingListId) {
     this.shopping_list_id = shoppingListId;
+  }
+
+  getGroupId() {
+    return this.group_id;
+  }
+
+  setGroupId(groupId) {
+    this.group_id = groupId;
   }
 
   getBought() {

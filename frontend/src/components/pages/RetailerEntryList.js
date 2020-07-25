@@ -84,6 +84,9 @@ export default class RetailerEntryList extends Component {
         this.props.retailer.id
       )
       .then((result) => {
+        console.log(result);
+        // console.log(this.props.shoppingListId);
+        // console.log(this.props.retailer.id);
         this.setState({ data: result, unfilteredData: result });
         this.sortEntries(false);
         // start fetch Members
@@ -109,26 +112,28 @@ export default class RetailerEntryList extends Component {
             }
             console.log(members);
 
-            // Moves person responsible to position 0 if not already
-            let index = 0;
-            // check if entries in this list exist
-            if (this.state.unfilteredData.length > 0) {
-              // Get user responisble for entries
-              index = members.findIndex(
-                (obj) => obj.id === this.state.unfilteredData[0].user_id
-              );
-            } else {
-              // Else get current user
-              ShoppingAPI.getAPI()
-                .searchUserByEmail(firebase.auth().currentUser.email)
-                .then((returnedUser) => {
-                  index = members.findIndex((obj) => obj.id === returnedUser.id);
-                });
-            }
-            // Check if User is already in index 0
-            if (index > 0) {
-              this.arrayMove(members, index, 0);
-            }
+            // // Moves person responsible to position 0 if not already
+            // let index = 0;
+            // // check if entries in this list exist
+            // if (this.state.unfilteredData.length > 0) {
+            //   // Get user responisble for entries
+            //   index = members.findIndex(
+            //     (obj) => obj.id === this.state.unfilteredData[0].user_id
+            //   );
+            // } else {
+            //   // Else get current user
+            //   ShoppingAPI.getAPI()
+            //     .searchUserByEmail(firebase.auth().currentUser.email)
+            //     .then((returnedUser) => {
+            //       index = members.findIndex(
+            //         (obj) => obj.id === returnedUser.id
+            //       );
+            //     });
+            // }
+            // // Check if User is already in index 0
+            // if (index > 0) {
+            //   this.arrayMove(members, index, 0);
+            // }
             // Set user state
             console.log(members);
             this.setState({ members });
@@ -219,7 +224,9 @@ export default class RetailerEntryList extends Component {
       .searchFavoriteByGroup(this.props.groupId)
       .then((result) => {
         // On Success
-        const favorites = result.filter((x) => x.retailer_id === this.props.retailer.id);
+        const favorites = result.filter(
+          (x) => x.retailer_id === this.props.retailer.id
+        );
         // Adds each element of the favorites array to the list
         for (let i of favorites) {
           this.addFavorite(i);
@@ -232,7 +239,7 @@ export default class RetailerEntryList extends Component {
   // Adds favorite as entry
   addFavorite = (fav) => {
     const entry = new EntryBO();
-    entry.setID(Math.floor(Math.random() * Math.floor(500))); // @TODO id should be return Update ID On Success
+    // entry.setID(Math.floor(Math.random() * Math.floor(500))); // @TODO id should be return Update ID On Success
     entry.setArticle(fav.article);
     entry.setAmount(fav.amount);
     entry.setUnit(fav.unit);
@@ -242,7 +249,6 @@ export default class RetailerEntryList extends Component {
     entry.setRetailerId(this.props.retailer.id);
     entry.setShoppingListId(this.props.shoppingListId);
     entry.setGroupId(this.props.groupId);
-
     // Async Add
     ShoppingAPI.getAPI()
       .addEntry(entry)
@@ -274,8 +280,9 @@ export default class RetailerEntryList extends Component {
   // Toggle bought boolean
   toggleBought = (entry) => {
     // console.log('update bought');
-    entry.bought === 1 ? (entry.bought = 0) : (entry.bought = 1);
-
+    entry.bought === 1 ? entry.setBought(0) : entry.setBought(1);
+    entry.setModificationDate(this.getModDate());
+    console.log(entry);
     // Async update entry
     ShoppingAPI.getAPI()
       .updateEntry(entry)
@@ -324,14 +331,15 @@ export default class RetailerEntryList extends Component {
     const entry = new EntryBO();
     entry.setID(id);
     entry.setArticle(editArticle);
-    entry.setAmount(editAmount);
+    entry.setAmount(parseInt(editAmount));
     entry.setUnit(editUnit);
     entry.setModificationDate(this.getModDate());
-    entry.setUserId(members[0].name); // Member responsible
+    entry.setUserId(members[0].id); // Member responsible
     entry.setRetailerId(this.props.retailer.id);
     entry.setShoppingListId(this.props.shoppingListId);
     entry.setGroupId(this.props.groupId);
     entry.setBought(0);
+    console.log(entry);
 
     editArticle.trim() !== '' && editAmount > 0
       ? this.updateEntry(entry)
@@ -354,6 +362,7 @@ export default class RetailerEntryList extends Component {
     entry.setRetailerId(this.props.retailer.id);
     entry.setShoppingListId(this.props.shoppingListId);
     entry.setGroupId(this.props.groupId);
+    console.log(entry);
 
     // Async add entry
     ShoppingAPI.getAPI()
@@ -582,7 +591,10 @@ export default class RetailerEntryList extends Component {
                 </TableCell>
                 <TableCell>
                   <IconButton>
-                    <AddBox id={'addBtn'} onClick={this.validateAdd.bind(this)} />
+                    <AddBox
+                      id={'addBtn'}
+                      onClick={this.validateAdd.bind(this)}
+                    />
                   </IconButton>
                 </TableCell>
               </TableRow>
@@ -607,7 +619,9 @@ export default class RetailerEntryList extends Component {
                         id="editArticle"
                         placeholder="enter article"
                         defaultValue={row.article}
-                        onChange={(e) => this.setState({ editArticle: e.target.value })}
+                        onChange={(e) =>
+                          this.setState({ editArticle: e.target.value })
+                        }
                         error={errorEArticle}
                       ></Input>
                     ) : (
@@ -623,7 +637,9 @@ export default class RetailerEntryList extends Component {
                         id="editAmount"
                         placeholder="enter amount"
                         defaultValue={row.amount}
-                        onChange={(e) => this.setState({ editAmount: e.target.value })}
+                        onChange={(e) =>
+                          this.setState({ editAmount: e.target.value })
+                        }
                         error={errorEAmount}
                       ></Input>
                     ) : (
@@ -636,7 +652,9 @@ export default class RetailerEntryList extends Component {
                       <Select
                         id="editUnit"
                         defaultValue={row.unit}
-                        onChange={(e) => this.setState({ editUnit: e.target.value })}
+                        onChange={(e) =>
+                          this.setState({ editUnit: e.target.value })
+                        }
                       >
                         {units.map((option) => (
                           <option key={option.name}>{option.name}</option>
@@ -648,11 +666,16 @@ export default class RetailerEntryList extends Component {
                   </TableCell>
                   {/* Actions */}
                   <TableCell id={`${row.id} id`}>
-                    <IconButton id={`${row.id} btn1`} disabled={row.bought === 1}>
+                    <IconButton
+                      id={`${row.id} btn1`}
+                      disabled={row.bought === 1}
+                    >
                       {rowIndex === row.id ? (
                         <Check onClick={this.validateEdit.bind(this, row.id)} />
                       ) : (
-                        <Edit onClick={this.toggleSelectedRow.bind(this, row)} />
+                        <Edit
+                          onClick={this.toggleSelectedRow.bind(this, row)}
+                        />
                       )}
                     </IconButton>
                     <IconButton id={`${row.id} btn2`}>
