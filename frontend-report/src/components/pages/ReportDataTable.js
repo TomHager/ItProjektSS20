@@ -8,6 +8,7 @@ import {
   TableHead,
   TableRow,
   Paper,
+  Input,
 } from '@material-ui/core';
 
 /**
@@ -24,6 +25,7 @@ export default class ReportDataTable extends Component {
     // Init an empty state
     this.state = {
       data: [],
+      unfilteredData: [],
     };
   }
 
@@ -31,7 +33,7 @@ export default class ReportDataTable extends Component {
     ShoppingAPI.getAPI()
       .searchEntryByGroup(this.props.groupId)
       .then((data) => {
-        this.setState({ data });
+        this.filterData(data);
       });
   }
 
@@ -40,15 +42,33 @@ export default class ReportDataTable extends Component {
     ShoppingAPI.getAPI()
       .searchReportDataURL(groupId, dateFrom, dateTo)
       .then((data) => {
-        this.setState({ data });
+        this.filterData(data);
       });
   }
 
-  // componentDidMount = () => {
-  //   this.props.dateFrom === ''
-  //     ? this.fetchEntriesByGroup()
-  //     : this.fetchEntriesByGroupAndTime();
-  // };
+  componentDidMount = () => {
+    this.props.dateFrom === ''
+      ? this.fetchEntriesByGroup()
+      : this.fetchEntriesByGroupAndTime();
+  };
+
+  filterData(array) {
+    let data = [];
+    if (this.props.retailerId !== -1) {
+      data = array.filter((x) => x.retialer_id === this.props.retailerId);
+    } else {
+      data = array;
+    }
+    this.setState({ data, unfilteredData: data });
+  }
+
+  search = (req) => {
+    this.setState({
+      data: this.state.unfilteredData.filter(
+        (el) => el.article.toLowerCase().indexOf(req.trim().toLowerCase()) > -1
+      ),
+    });
+  };
 
   render() {
     const { data } = this.state;
@@ -60,6 +80,15 @@ export default class ReportDataTable extends Component {
         }}
         component={Paper}
       >
+        {/* Search articles */}
+        <Input
+          type="text"
+          id="filter"
+          placeholder="search article"
+          defaultValue=""
+          onChange={(e) => this.search(e.target.value)}
+        ></Input>
+
         <Table
           size="small"
           aria-label="spanning table"

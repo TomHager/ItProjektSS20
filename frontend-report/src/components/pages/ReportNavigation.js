@@ -11,7 +11,8 @@ import {
   Typography,
 } from '@material-ui/core';
 import ReportDataTable from './ReportDataTable';
-// import ShoppingAPI from "../../api/ShoppingAPI";
+import ShoppingAPI from '../../api/ShoppingAPI';
+import firebase from 'firebase/app';
 
 /**
  * Displays the Navigation for the report generator
@@ -39,25 +40,54 @@ export default class ReportNavigation extends Component {
 
   // Fetch groups for user
   async fetchGroups() {
-    const groupRows = [
-      { id: 1, name: 'Batman' },
-      { id: 2, name: 'Robin' },
-    ];
-    setTimeout(() => {
-      this.setState({ groupRows });
-    }, 500);
+    const groupRows = [];
+    // Fetch current user
+    ShoppingAPI.getAPI()
+      .searchUserByEmail(firebase.auth().currentUser.email)
+      .then((user) => {
+        // Fetch all groupId by user
+        ShoppingAPI.getAPI(user.id)
+          .searchGroupsByMember()
+          .then((groupMember) => {
+            if (groupMember.length > 0) {
+              // Fetch all groups
+              ShoppingAPI.getAPI()
+                .getGroups()
+                .then((allGroups) => {
+                  for (let i of groupMember)
+                    groupRows.push(allGroups.find((x) => x.id === i.group_membership));
+                });
+              // Else user has no groups
+            } else {
+              groupRows.push([{ id: 0, name: '404 not fround' }]);
+            }
+          });
+      });
+    this.setState({ groupRows });
   }
 
-  // Fetch retailers for given group
-  fetchRetailers(id) {
-    const retailerRows = [
-      { id: 1, name: 'Edeka' },
-      { id: 2, name: 'Lidel' },
-      { id: 5, name: 'Target' },
-    ];
-    setTimeout(() => {
-      this.setState({ retailerRows });
-    }, 500);
+  // Fetch all retailer for given group
+  fetchRetailers(groupId) {
+    // Fetch all retailer for group
+    ShoppingAPI.getAPI()
+      .searchRetailerMemberByGroup(groupId)
+      .then((membership) => {
+        // Fetch all retailers of data warehouse
+        ShoppingAPI.getAPI()
+          .getRetailers()
+          .then((allRetailers) => {
+            const retailerRows = [];
+            for (let i of membership) {
+              retailerRows.push(allRetailers.find((x) => x.id === i.retailer_member));
+            }
+            if (retailerRows.length === 0) {
+              retailerRows.push({ id: 0, name: '404' });
+            }
+            // On success
+            // setState before fetchfavorites because we need retailers in state
+            this.setState({ retailerRows });
+          });
+      });
   }
 
   //calls all Callbacks for Repor Selection
