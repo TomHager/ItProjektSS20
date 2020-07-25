@@ -8,9 +8,9 @@ import { IconButton, Button } from '@material-ui/core';
 import { Add } from '@material-ui/icons';
 import Input from '@material-ui/core/Input';
 import ShoppingListBO from '../../api/ShoppingListBO';
-/* import RetailerBO from '../../api/RetailerBO';
 import ShoppingAPI from '../../api/ShoppingAPI';
-import ShoppingListBo from '../../api/ShoppingListBO'; */
+// import RetailerBO from '../../api/RetailerBO';
+// import ShoppingListBo from '../../api/ShoppingListBO';
 
 /**
  * Displays shoppinglists for selected group
@@ -31,29 +31,13 @@ export default class ShoppingList extends Component {
       showFav: false,
     };
   }
-  //testdata
-  fetchShoppinglists() {
-    const data = [
-      {
-        id: 1,
-        name: 'Fest',
-        group_id: 3,
-        retailer_id: 1,
-      },
-      {
-        id: 2,
-        name: 'Hochzeit',
-        group_id: 4,
-        retailer_id: 2,
-      },
-      {
-        id: 3,
-        name: 'Abschlussfeier',
-        group_id: 5,
-        retailer_id: 3,
-      },
-    ];
-    this.setState({ data });
+  // Fetch shoppinglists for group
+  fetchShoppinglistlists() {
+    ShoppingAPI.getAPI()
+      .searchShoppingListByGroupId(this.props.groupId)
+      .then((data) => {
+        this.setState({ data });
+      });
   }
 
   componentDidMount() {
@@ -140,7 +124,7 @@ export default class ShoppingList extends Component {
                     <ShoppingListList
                       shoppingListId={elem.id}
                       groupsId={elem.group_id}
-                      shoppinglistname={shoppinglistname}
+                      shoppinglistname={elem.name}
                     />
                   </Typography>
                 )}
