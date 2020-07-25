@@ -283,7 +283,7 @@ export default class Testing extends Component {
     const newEntry = new EntryBO();
     newEntry.setUnit('kg');
     newEntry.setAmount(23);
-    newEntry.setArticle('Brot');
+    newEntry.setArticle('Kirschen');
     newEntry.setModificationDate('2020-07-03 00:00:00');
     newEntry.setUserId(2);
     newEntry.setRetailerId(1);
@@ -381,7 +381,9 @@ export default class Testing extends Component {
 
   render() {
     return (
-      <Button onClick={this.createEntry}>Let the testing begin!</Button>
+      <Button onClick={this.getEntriesByShoppingListAndRetailer}>
+        Let the testing begin!
+      </Button>
       // <form onSubmit={this.handleSubmit}>
       //   <input type="text" name="name" onChange={this.handleChange} />
       //   <input type="email" name="email" onChange={this.handleChange} />

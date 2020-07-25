@@ -45,7 +45,7 @@ export default class RetailerEntryList extends Component {
         { name: 'pcs' },
         { name: 'pack' },
       ],
-      retailer: { name: 'loading' },
+      retailer: { id: 0, name: 'loading' },
       members: [{ name: 'loading' }],
       rowIndex: -1,
 
@@ -79,13 +79,19 @@ export default class RetailerEntryList extends Component {
   // @TEST
   // Fetching all entrys of a RetailerShoppingList
   fetchEntries() {
+    console.log(this.props.shoppingListId);
+    console.log(this.state.retailer.id);
     ShoppingAPI.getAPI()
       .searchEntryByShoppingListAndRetailer(
-        this.props.shoppingListId,
-        this.props.retailer.id
+        // this.props.shoppingListId,
+        // this.props.retailer.id
+        3,
+        1
       )
       .then((result) => {
         console.log(result);
+        // console.log(this.props.shoppingListId);
+        // console.log(this.props.retailer.id);
         this.setState({ data: result, unfilteredData: result });
         this.sortEntries(false);
         // start fetch Members
@@ -153,7 +159,6 @@ export default class RetailerEntryList extends Component {
 
   // Start Callbacks
   componentDidMount() {
-    this.fetchEntries(); // Also fetches users
     // this.fetchRetailer();
     const { units } = this.state;
     this.setState({
@@ -161,6 +166,7 @@ export default class RetailerEntryList extends Component {
       unit: units[0].name,
       editUnit: units[0].name,
     });
+    this.fetchEntries(); // Also fetches users
   }
 
   // get Date as YYYY-MM-DDTHH:MM:SS
@@ -248,6 +254,7 @@ export default class RetailerEntryList extends Component {
     entry.setUserId(this.state.members[0].id); // member responsible
     entry.setRetailerId(this.state.retailer.id);
     entry.setShoppingListId(this.props.shoppingListId);
+    entry.setGroupId(this.props.groupId);
     console.log(entry);
     // Async Add
     ShoppingAPI.getAPI()
@@ -358,6 +365,7 @@ export default class RetailerEntryList extends Component {
     entry.setUserId(members[0].id); // Member responsible
     entry.setRetailerId(retailer.id);
     entry.setShoppingListId(this.props.shoppingListId);
+    entry.setGroupId(this.props.groupId);
 
     // Async add entry
     ShoppingAPI.getAPI()
