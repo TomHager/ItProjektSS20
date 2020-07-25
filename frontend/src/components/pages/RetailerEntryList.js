@@ -480,7 +480,7 @@ export default class RetailerEntryList extends Component {
             defaultValue=""
             onChange={(e) => this.search(e.target.value)}
           ></Input>
-          <IconButton id={1} onClick={this.addFavorite.bind(this)}>
+          <IconButton id={1} onClick={this.addFavorite.bind(this)} label="add favorites">
             <Favorite />
           </IconButton>
 

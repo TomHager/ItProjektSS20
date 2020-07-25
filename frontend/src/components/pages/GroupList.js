@@ -77,11 +77,10 @@ export default class GroupList extends Component {
   };
 
   filterGroupsByGroupId = () => {
-    groups = this.state.allGroups;
-    groupMemberships = this.state.groupMemberships;
-    const filteredGroups = groups.filter(
-      (group) => group.id === groupMemberships.id
-    );
+    const groups = this.state.allGroups;
+    const groupMemberships = this.state.groupMemberships;
+    const filteredGroups = groups.filter((group) => group.id === groupMemberships.id);
+    console.log(filteredGroups);
   };
 
   // getGroupsByGroupId = () => {
@@ -100,9 +99,7 @@ export default class GroupList extends Component {
       .deleteGroupMembership(groupID)
       .then(
         this.setState({
-          groupRows: this.state.groupRows.filter(
-            (group) => group.getID() !== groupID
-          ),
+          groupRows: this.state.groupRows.filter((group) => group.getID() !== groupID),
         })
       );
   };
