@@ -20,7 +20,7 @@ import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import GroupBO from '../../api/GroupBO';
 import ShoppingAPI from '../../api/ShoppingAPI';
-import { v4 as uuidv4 } from 'uuid';
+// import { v4 as uuidv4 } from 'uuid';
 import GroupMembershipBO from '../../api/GroupMembershipBO';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 
@@ -50,10 +50,7 @@ export class CreateGroup extends Component {
     newGroup.setName(this.state.groupName);
     ShoppingAPI.getAPI()
       .addGroup(newGroup)
-      .then(
-        console.log('Created group: ' + this.state.groupName),
-        this.getGroupByName()
-      )
+      .then(console.log('Created group: ' + this.state.groupName), this.getGroupByName())
       .catch((e) => {
         console.info(e);
       });
@@ -71,9 +68,7 @@ export class CreateGroup extends Component {
   addGroupMembershipForCurrentUser = (createdGroup) => {
     const newMembership = new GroupMembershipBO();
     newMembership.setGroupMember(this.props.currentUser[0].id);
-    newMembership.setGroupMembership(
-      this.state.createdGroup[createdGroup.length - 1].id
-    );
+    newMembership.setGroupMembership(this.state.createdGroup[createdGroup.length - 1].id);
     // const newMembership = { member: 3, group_membership: 3 };
     console.log(newMembership);
     ShoppingAPI.getAPI()

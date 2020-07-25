@@ -30,7 +30,7 @@ import firebase from 'firebase/app';
  *
  * @author Tom Hager
  */
-// Sort selected column
+
 export default class RetailerEntryList extends Component {
   constructor(props) {
     super(props);
@@ -45,7 +45,6 @@ export default class RetailerEntryList extends Component {
         { name: 'pcs' },
         { name: 'pack' },
       ],
-      retailer: { id: 0, name: 'loading' },
       members: [{ name: 'loading' }],
       rowIndex: -1,
 
@@ -79,14 +78,10 @@ export default class RetailerEntryList extends Component {
   // @TEST
   // Fetching all entrys of a RetailerShoppingList
   fetchEntries() {
-    console.log(this.props.shoppingListId);
-    console.log(this.state.retailer.id);
     ShoppingAPI.getAPI()
       .searchEntryByShoppingListAndRetailer(
-        // this.props.shoppingListId,
-        // this.props.retailer.id
-        3,
-        1
+        this.props.shoppingListId,
+        this.props.retailer.id
       )
       .then((result) => {
         console.log(result);
@@ -117,28 +112,28 @@ export default class RetailerEntryList extends Component {
             }
             console.log(members);
 
-            // Moves person responsible to position 0 if not already
-            let index = 0;
-            // check if entries in this list exist
-            if (this.state.unfilteredData.length > 0) {
-              // Get user responisble for entries
-              index = members.findIndex(
-                (obj) => obj.id === this.state.unfilteredData[0].user_id
-              );
-            } else {
-              // Else get current user
-              ShoppingAPI.getAPI()
-                .searchUserByEmail(firebase.auth().currentUser.email)
-                .then((returnedUser) => {
-                  index = members.findIndex(
-                    (obj) => obj.id === returnedUser.id
-                  );
-                });
-            }
-            // Check if User is already in index 0
-            if (index > 0) {
-              this.array_move(members, index, 0);
-            }
+            // // Moves person responsible to position 0 if not already
+            // let index = 0;
+            // // check if entries in this list exist
+            // if (this.state.unfilteredData.length > 0) {
+            //   // Get user responisble for entries
+            //   index = members.findIndex(
+            //     (obj) => obj.id === this.state.unfilteredData[0].user_id
+            //   );
+            // } else {
+            //   // Else get current user
+            //   ShoppingAPI.getAPI()
+            //     .searchUserByEmail(firebase.auth().currentUser.email)
+            //     .then((returnedUser) => {
+            //       index = members.findIndex(
+            //         (obj) => obj.id === returnedUser.id
+            //       );
+            //     });
+            // }
+            // // Check if User is already in index 0
+            // if (index > 0) {
+            //   this.arrayMove(members, index, 0);
+            // }
             // Set user state
             console.log(members);
             this.setState({ members });
@@ -147,7 +142,7 @@ export default class RetailerEntryList extends Component {
   }
 
   // Move array element to a new position
-  array_move(arr, oldIndex, newIndex) {
+  arrayMove(arr, oldIndex, newIndex) {
     if (newIndex >= arr.length) {
       let k = newIndex - arr.length + 1;
       while (k--) {
@@ -159,14 +154,13 @@ export default class RetailerEntryList extends Component {
 
   // Start Callbacks
   componentDidMount() {
-    // this.fetchRetailer();
     const { units } = this.state;
     this.setState({
-      retailer: this.props.retailer,
       unit: units[0].name,
       editUnit: units[0].name,
     });
     this.fetchEntries(); // Also fetches users
+    // this.fetchRetailer();
   }
 
   // get Date as YYYY-MM-DDTHH:MM:SS
@@ -231,7 +225,7 @@ export default class RetailerEntryList extends Component {
       .then((result) => {
         // On Success
         const favorites = result.filter(
-          (x) => x.retailer_id === this.state.retailer.id
+          (x) => x.retailer_id === this.props.retailer.id
         );
         // Adds each element of the favorites array to the list
         for (let i of favorites) {
@@ -252,10 +246,9 @@ export default class RetailerEntryList extends Component {
     entry.setBought(0);
     entry.setModificationDate(this.getModDate());
     entry.setUserId(this.state.members[0].id); // member responsible
-    entry.setRetailerId(this.state.retailer.id);
+    entry.setRetailerId(this.props.retailer.id);
     entry.setShoppingListId(this.props.shoppingListId);
     entry.setGroupId(this.props.groupId);
-    console.log(entry);
     // Async Add
     ShoppingAPI.getAPI()
       .addEntry(entry)
@@ -287,8 +280,9 @@ export default class RetailerEntryList extends Component {
   // Toggle bought boolean
   toggleBought = (entry) => {
     // console.log('update bought');
-    entry.bought === 1 ? (entry.bought = 0) : (entry.bought = 1);
-
+    entry.bought === 1 ? entry.setBought(0) : entry.setBought(1);
+    entry.setModificationDate(this.getModDate());
+    console.log(entry);
     // Async update entry
     ShoppingAPI.getAPI()
       .updateEntry(entry)
@@ -333,17 +327,19 @@ export default class RetailerEntryList extends Component {
 
   // Validate edit entry
   validateEdit = (id) => {
-    const { editArticle, editAmount, editUnit, members, retailer } = this.state;
+    const { editArticle, editAmount, editUnit, members } = this.state;
     const entry = new EntryBO();
     entry.setID(id);
     entry.setArticle(editArticle);
-    entry.setAmount(editAmount);
+    entry.setAmount(parseInt(editAmount));
     entry.setUnit(editUnit);
     entry.setModificationDate(this.getModDate());
-    entry.setUserId(members[0].name); // Member responsible
-    entry.setRetailerId(retailer.id);
+    entry.setUserId(members[0].id); // Member responsible
+    entry.setRetailerId(this.props.retailer.id);
     entry.setShoppingListId(this.props.shoppingListId);
+    entry.setGroupId(this.props.groupId);
     entry.setBought(0);
+    console.log(entry);
 
     editArticle.trim() !== '' && editAmount > 0
       ? this.updateEntry(entry)
@@ -353,7 +349,7 @@ export default class RetailerEntryList extends Component {
   // @TEST
   // Add new entry
   addEntry = () => {
-    const { article, amount, unit, units, members, retailer } = this.state;
+    const { article, amount, unit, units, members } = this.state;
     this.setAddError(article, amount); // Resets errors
     const entry = new EntryBO();
     entry.setID(Math.floor(Math.random() * Math.floor(500))); // @TODO id should be return Update ID On Success
@@ -363,9 +359,10 @@ export default class RetailerEntryList extends Component {
     entry.setBought(0);
     entry.setModificationDate(this.getModDate());
     entry.setUserId(members[0].id); // Member responsible
-    entry.setRetailerId(retailer.id);
+    entry.setRetailerId(this.props.retailer.id);
     entry.setShoppingListId(this.props.shoppingListId);
     entry.setGroupId(this.props.groupId);
+    console.log(entry);
 
     // Async add entry
     ShoppingAPI.getAPI()
@@ -418,7 +415,7 @@ export default class RetailerEntryList extends Component {
   updateMember(id) {
     console.log('start update member');
     const { unfilteredData, members } = this.state;
-    this.array_move(
+    this.arrayMove(
       members,
       members.findIndex((obj) => obj.id === id),
       0
@@ -467,7 +464,6 @@ export default class RetailerEntryList extends Component {
 
   render() {
     const {
-      retailer,
       members,
       units,
       data,
@@ -483,7 +479,7 @@ export default class RetailerEntryList extends Component {
         <Container maxWidth="md">
           <CssBaseline />
 
-          <h3>{retailer.name}</h3>
+          <h3>{this.props.retailer.name}</h3>
           {/* Refresh table content */}
           <IconButton id={'refreshBtn'} onClick={(e) => this.refresh()}>
             <Refresh />
