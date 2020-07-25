@@ -502,7 +502,7 @@ export default class RetailerEntryList extends Component {
           <Select
             id="selectedMember"
             members={members}
-            defaultValue={members[0].name}
+            defaultValue={members[0].id}
             onChange={(e) => this.updateMember(e.target.value)}
           >
             {members.map((option) => (
