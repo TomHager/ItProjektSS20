@@ -44,18 +44,13 @@ export default class ShoppingListList extends Component {
             console.log(retailers);
             // On success
             // setState before fetchfavorites because we need retailers in state
-            this.setState({
-              retailers,
-            });
-            // Fetch favorites after because they rely on retailer names
-            this.fetchFavorites();
+            this.setState({ retailers });
           });
       });
   }
 
   componentDidMount() {
     this.fetchRetailers();
-    this.fetchShoppinglistlists();
   }
 
   render() {
@@ -67,7 +62,7 @@ export default class ShoppingListList extends Component {
             <CardContent style={{ marginTop: 10 }} variant="h5">
               <RetailerEntryList
                 shoppingListId={this.props.shoppingListId}
-                retailer={retailers.find((x) => x.id === elem.retailer_id)}
+                retailer={retailers.find((x) => x.id === elem.id)}
                 groupId={this.props.groupId}
               />
             </CardContent>

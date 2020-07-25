@@ -1,12 +1,5 @@
 import React, { Component } from 'react';
-import { Button } from '@material-ui/core';
-import firebase from 'firebase/app';
-import EntryBO from 'src/api/EntryBO';
-import GroupBO from '.src/api/GroupBO';
-import ShoppingAPI from 'src/api//ShoppingAPI';
-import UserBO from '../';
-
-
+import ShoppingAPI from '../../api/ShoppingAPI';
 import {
   Table,
   TableBody,
@@ -15,13 +8,13 @@ import {
   TableHead,
   TableRow,
   Paper,
-  // Button,
 } from '@material-ui/core';
 
 /**
  * Displays the data table for the report generator
  *
  * @author Lukas Rutkauskas
+ * @author Tom Hager
  */
 
 export default class ReportDataTable extends Component {
@@ -30,58 +23,35 @@ export default class ReportDataTable extends Component {
 
     // Init an empty state
     this.state = {
-      entryRows: [],
-      entryIndex: -1,
-      name: '',
-      email: '',
-      users: [],
-      filteredUsers: [],
-      loadingInProgress: false,
-      error: null,
-      user: null,
-      GroupmemberShip: null,
-      retailers: null,
-      favorite: null,
-      lists: null,
+      data: [],
     };
   }
 
-  async fetchEntries() {
-    const res = await fetch('http://DESKTOP-DU328LQ:8081/api/iKauf/entries');
-    const resjson = await res.json();
-    this.setState({ entryRows: resjson });
-    this.calculateSumOfAmount.bind(this);
-    console.log(this.state.entryRows);
+  fetchEntriesByGroup() {
+    ShoppingAPI.getAPI()
+      .searchEntryByGroup(this.props.groupId)
+      .then((data) => {
+        this.setState({ data });
+      });
   }
 
-  componentDidMount = () => {
-    this.fetchEntries();
-  };
-
-  calculateSumOfAmount() {
-    var o = {};
-    const a = this.state.entryRows;
-
-    a.forEach((i) => {
-      var name = i.name;
-      i.amount = parseInt(i.amount);
-      if (!o[name]) {
-        return (o[name] = i);
-      }
-      return (o[name].amount = o[name].amount + i.amount);
-    });
-
-    console.log(o);
-    var a2 = [];
-    Object.keys(o).forEach((key) => {
-      a2.push(o[key]);
-    });
-    this.setState({ entryRows: a2 });
-    console.log(a2);
+  fetchEntriesByGroupAndTime() {
+    const { groupId, dateFrom, dateTo } = this.props;
+    ShoppingAPI.getAPI()
+      .searchReportDataURL(groupId, dateFrom, dateTo)
+      .then((data) => {
+        this.setState({ data });
+      });
   }
+
+  // componentDidMount = () => {
+  //   this.props.dateFrom === ''
+  //     ? this.fetchEntriesByGroup()
+  //     : this.fetchEntriesByGroupAndTime();
+  // };
 
   render() {
-    const entryRows = this.state.entryRows;
+    const { data } = this.state;
     return (
       <TableContainer
         style={{
@@ -90,7 +60,6 @@ export default class ReportDataTable extends Component {
         }}
         component={Paper}
       >
-        {/* Group Table */}
         <Table
           size="small"
           aria-label="spanning table"
@@ -106,18 +75,13 @@ export default class ReportDataTable extends Component {
             </TableRow>
           </TableHead>
 
+          {/* Report Table */}
           <TableBody>
-            {entryRows.map((row) => (
-              <TableRow
-                key={row.id}
-                style={{
-                  backgroundColor: row.id === this.state.groupIndex ? '#0090FF' : 'white',
-                }}
-              >
-                <TableCell>{row.name}</TableCell>
+            {data.map((row) => (
+              <TableRow key={row.id}>
+                <TableCell>{row.article}</TableCell>
                 <TableCell>{row.amount}</TableCell>
                 <TableCell>{row.unit}</TableCell>
-                <TableCell></TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -125,33 +89,4 @@ export default class ReportDataTable extends Component {
       </TableContainer>
     );
   }
-
-
-  getEntriesByShoppingList = () => {
-    ShoppingAPI.getAPI()
-      .getEntriesByShoppingListId(2)
-      .then((result) => {
-        this.setState({ lists: result });
-        console.log(this.state.lists);
-      });
-  };
-
-  componentDidMount() {
-    this.getUsers();
-    this.getFavoritesByGroup();
-    this.getEntriesByShoppingList();
-    this.getShoppingListsByGroup();
-  }
-
-  render() {
-    return (
-      <Button onClick={this.getEntriesByShoppingList}>Let the testing begin!</Button>
-      // <form onSubmit={this.handleSubmit}>
-      //   <input type="text" name="name" onChange={this.handleChange} />
-      //   <input type="email" name="email" onChange={this.handleChange} />
-      //   <input type="submit" value="Add user" />{' '}
-      // </form>
-    );
-  }
 }
-

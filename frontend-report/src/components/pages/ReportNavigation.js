@@ -8,7 +8,9 @@ import {
   TableRow,
   Paper,
   Button,
+  Typography,
 } from '@material-ui/core';
+import ReportDataTable from './ReportDataTable';
 // import ShoppingAPI from "../../api/ShoppingAPI";
 
 /**
@@ -28,64 +30,94 @@ export default class ReportNavigation extends Component {
       retailerRows: [],
       retailerIndex: -1,
       retailerActive: false,
+      timeActive: true,
       timeFrom: '',
       timeTo: '',
+      submit: false,
     };
   }
-  onChange = (e) => this.setState({ ...this.state, [e.target.name]: e.target.value });
 
-  //Group Functions
+  // Fetch groups for user
   async fetchGroups() {
-    const res = await fetch('http://DESKTOP-DU328LQ:8081/api/iKauf/groups');
-    const resjson = await res.json();
-    this.setState({ groupRows: resjson });
-    console.log(resjson);
+    const groupRows = [
+      { id: 1, name: 'Batman' },
+      { id: 2, name: 'Robin' },
+    ];
+    setTimeout(() => {
+      this.setState({ groupRows });
+    }, 500);
   }
 
-  groupClickHandler(group) {
-    this.setState({ groupIndex: group.id });
-    console.log(`Selected: ${group.name} with index of ${group.id}`);
-  }
-
-  // Retailer Functions
-  async fetchRetailers() {
-    const res = await fetch('http://DESKTOP-DU328LQ:8081/api/iKauf/entries');
-    const resjson = await res.json();
-    this.setState({ retailerRows: resjson });
-    console.log(resjson);
-  }
-
-  retailerToggleHandler() {
-    this.setState({ retailerIndex: -1, retailerActive: !this.state.retailerActive });
-  }
-
-  retailerClickHandler(retailer) {
-    if (this.state.retailerActive) {
-      this.setState({ retailerIndex: retailer.id });
-      console.log(`Selected: ${retailer.name} with index of ${retailer.id}`);
-    }
+  // Fetch retailers for given group
+  fetchRetailers(id) {
+    const retailerRows = [
+      { id: 1, name: 'Edeka' },
+      { id: 2, name: 'Lidel' },
+      { id: 5, name: 'Target' },
+    ];
+    setTimeout(() => {
+      this.setState({ retailerRows });
+    }, 500);
   }
 
   //calls all Callbacks for Repor Selection
   componentDidMount = () => {
     this.fetchGroups();
-    this.fetchRetailers();
-    console.log('All Callbacks initialised');
   };
 
+  groupClickHandler(group) {
+    this.setState({ groupIndex: group.id, submit: false });
+    this.fetchRetailers(group.id);
+  }
+
+  retailerToggleHandler() {
+    this.setState({
+      retailerIndex: -1,
+      retailerActive: !this.state.retailerActive,
+      submit: false,
+    });
+  }
+
+  retailerClickHandler(retailer) {
+    if (this.state.retailerActive) {
+      this.setState({ retailerIndex: retailer.id, submit: false });
+    }
+  }
+
+  timeToggleHandler() {
+    this.setState({
+      timeFrom: '',
+      timeTo: '',
+      timeActive: !this.state.timeActive,
+      submit: false,
+    });
+    document.getElementById('timeTo').value = '';
+    document.getElementById('timeFrom').value = '';
+  }
+
+  submitClickHandler() {
+    this.setState({ submit: true });
+  }
+
   render() {
-    const { groupRows, retailerRows, timeFrom, timeTo } = this.state;
+    const {
+      groupRows,
+      retailerRows,
+      retailerActive,
+      timeActive,
+      timeFrom,
+      timeTo,
+      submit,
+      groupIndex,
+      retailerIndex,
+    } = this.state;
     return (
       <TableContainer
-        style={{ width: Math.round(window.innerWidth * 0.3) }}
+        // style={{ width: Math.round(window.innerWidth * 0.3) }}
         component={Paper}
       >
         {/* Group Table */}
-        <Table
-          size="small"
-          aria-label="spanning table"
-          style={{ height: Math.round(window.innerHeight * 0.3) }}
-        >
+        <Table size="small" aria-label="spanning table">
           <TableHead>
             <TableRow>
               <TableCell>
@@ -128,7 +160,7 @@ export default class ReportNavigation extends Component {
                   style={{ backgroundColor: 'lightblue' }}
                   onClick={this.retailerToggleHandler.bind(this)}
                 >
-                  Disable Filter
+                  {retailerActive ? 'Disable Filter' : 'Enable Fitler'}
                 </Button>
               </TableCell>
             </TableRow>
@@ -155,16 +187,20 @@ export default class ReportNavigation extends Component {
         </Table>
 
         {/* Time Select */}
-        <Table>
+        <Table
+          size="small"
+          style={{
+            backgroundColor: this.state.timeActive ? 'grey' : 'white',
+          }}
+        >
           <TableHead>
-            <TableCell>Select Time Range </TableCell>
+            <TableCell>Select Time Range</TableCell>
             <TableCell>
               <Button
                 style={{ backgroundColor: 'lightblue' }}
-                onClick={this.retailerToggleHandler.bind(this)}
-                innerHTML={'Enable Filter'}
+                onClick={this.timeToggleHandler.bind(this)}
               >
-                {this.value}
+                {timeActive ? 'Enable Fitler' : 'Disable Filter'}
               </Button>
             </TableCell>
           </TableHead>
@@ -172,16 +208,34 @@ export default class ReportNavigation extends Component {
             <TableCell>
               From:
               <input
+                id="timeFrom"
                 type="date"
                 name="timeFrom"
-                value={timeFrom}
-                onChange={this.onChange}
+                disabled={timeActive}
+                onChange={(e) => this.setState({ timeFrom: e.target.value })}
               />
                 To:
-              <input type="date" name="timeTo" value={timeTo} onChange={this.onChange} />
+              <input
+                id="timeTo"
+                type="date"
+                name="timeTo"
+                disabled={timeActive}
+                onChange={(e) => this.setState({ timeTo: e.target.value })}
+              />
             </TableCell>
           </TableBody>
         </Table>
+        <Typography onClick={this.submitClickHandler.bind(this)}>Submit Query</Typography>
+        {submit && (
+          <Typography id="report">
+            <ReportDataTable
+              groupId={groupIndex}
+              retailerId={retailerIndex}
+              timeFrom={timeFrom}
+              timeTo={timeTo}
+            />
+          </Typography>
+        )}
       </TableContainer>
     );
   }
