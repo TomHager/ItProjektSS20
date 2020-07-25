@@ -28,7 +28,11 @@
   <component name="ChangeListManager">
     <list default="true" id="2c1c77a4-6169-48a4-a7a4-a8dc3ff2c5dd" name="Default Changelist" comment="ShoppingAdministration.py  Teil gefixed">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-report/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-report/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-report/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-report/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-report/src/components/pages/ReportDataTable.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-report/src/components/pages/ReportDataTable.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/server/ShoppingAdministration.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/ShoppingAdministration.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -352,7 +356,14 @@
       <option name="project" value="LOCAL" />
       <updated>1595625819774</updated>
     </task>
-    <option name="localTasksCounter" value="26" />
+    <task id="LOCAL-00026" summary="Kleine Änderung">
+      <created>1595628051222</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1595628051222</updated>
+    </task>
+    <option name="localTasksCounter" value="27" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -407,7 +418,8 @@
     <MESSAGE value="Zeit-Problem" />
     <MESSAGE value="ShoppingAdministration.py" />
     <MESSAGE value="ShoppingAdministration.py  Teil gefixed" />
-    <option name="LAST_COMMIT_MESSAGE" value="ShoppingAdministration.py  Teil gefixed" />
+    <MESSAGE value="Kleine Änderung" />
+    <option name="LAST_COMMIT_MESSAGE" value="Kleine Änderung" />
   </component>
   <component name="WindowStateProjectService">
     <state x="386" y="321" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1594991804807">
@@ -443,10 +455,10 @@
     </state>
     <state width="1348" height="202" key="GridCell.Tab.0.right/0.0.1368.872@0.0.1368.872" timestamp="1595622427998" />
     <state width="949" height="281" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1595597818854" />
-    <state x="131" y="70" key="MergeDialog" timestamp="1595625955959">
+    <state x="131" y="70" key="MergeDialog" timestamp="1595687168502">
       <screen x="0" y="0" width="1368" height="872" />
     </state>
-    <state x="131" y="70" key="MergeDialog/0.0.1368.872@0.0.1368.872" timestamp="1595625955959" />
+    <state x="131" y="70" key="MergeDialog/0.0.1368.872@0.0.1368.872" timestamp="1595687168502" />
     <state x="147" y="74" key="MergeDialog/0.0.1536.920@0.0.1536.920" timestamp="1595081036130" />
     <state x="184" y="84" key="MergeDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1595269161372" />
     <state x="261" y="142" width="712" height="485" key="MultipleFileMergeDialog" timestamp="1595625955997">
@@ -465,20 +477,20 @@
     <state x="186" y="81" key="SettingsEditor/0.0.1368.872@0.0.1368.872" timestamp="1591108101784" />
     <state x="209" y="86" key="SettingsEditor/0.0.1536.920@0.0.1536.920" timestamp="1595072197023" />
     <state x="261" y="97" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1595002662026" />
-    <state x="277" y="169" key="Vcs.Push.Dialog.v2" timestamp="1595627406935">
+    <state x="277" y="169" key="Vcs.Push.Dialog.v2" timestamp="1595628122061">
       <screen x="0" y="0" width="1368" height="872" />
     </state>
-    <state x="277" y="169" key="Vcs.Push.Dialog.v2/0.0.1368.872@0.0.1368.872" timestamp="1595627406935" />
+    <state x="277" y="169" key="Vcs.Push.Dialog.v2/0.0.1368.872@0.0.1368.872" timestamp="1595628122061" />
     <state x="389" y="202" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1595598501182" />
     <state x="492" y="350" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1595625886840">
       <screen x="0" y="0" width="1368" height="872" />
     </state>
     <state x="492" y="350" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1368.872@0.0.1368.872" timestamp="1595625886840" />
     <state x="691" y="417" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1040@0.0.1920.1040" timestamp="1595177953047" />
-    <state x="284" y="148" key="git4idea.branch.GitSmartOperationDialog" timestamp="1595625791483">
+    <state x="284" y="148" key="git4idea.branch.GitSmartOperationDialog" timestamp="1595687152285">
       <screen x="0" y="0" width="1368" height="872" />
     </state>
-    <state x="284" y="148" key="git4idea.branch.GitSmartOperationDialog/0.0.1368.872@0.0.1368.872" timestamp="1595625791483" />
+    <state x="284" y="148" key="git4idea.branch.GitSmartOperationDialog/0.0.1368.872@0.0.1368.872" timestamp="1595687152285" />
     <state x="599" y="205" key="git4idea.branch.GitSmartOperationDialog/0.0.1536.920@0.0.1536.920" timestamp="1595082924229" />
     <state x="749" y="232" key="git4idea.branch.GitSmartOperationDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1595163924336" />
     <state x="103" y="193" width="672" height="569" key="search.everywhere.popup" timestamp="1595615152038">

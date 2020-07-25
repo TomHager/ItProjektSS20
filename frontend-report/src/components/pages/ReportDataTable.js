@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { Button } from '@material-ui/core';
 import firebase from 'firebase/app';
-import EntryBO from 'src/api/EntryBO';
-import GroupBO from '.src/api/GroupBO';
-import ShoppingAPI from 'src/api//ShoppingAPI';
-import UserBO from '../';
+import EntryBO from '../../api/EntryBO';
+import GroupBO from '../../api/GroupBO';
+import ShoppingAPI from '../../api/ShoppingAPI';
+import UserBO from '../../api/UserBO';
 
 
 import {
@@ -123,34 +123,6 @@ export default class ReportDataTable extends Component {
           </TableBody>
         </Table>
       </TableContainer>
-    );
-  }
-
-
-  getEntriesByShoppingList = () => {
-    ShoppingAPI.getAPI()
-      .getEntriesByShoppingListId(2)
-      .then((result) => {
-        this.setState({ lists: result });
-        console.log(this.state.lists);
-      });
-  };
-
-  componentDidMount() {
-    this.getUsers();
-    this.getFavoritesByGroup();
-    this.getEntriesByShoppingList();
-    this.getShoppingListsByGroup();
-  }
-
-  render() {
-    return (
-      <Button onClick={this.getEntriesByShoppingList}>Let the testing begin!</Button>
-      // <form onSubmit={this.handleSubmit}>
-      //   <input type="text" name="name" onChange={this.handleChange} />
-      //   <input type="email" name="email" onChange={this.handleChange} />
-      //   <input type="submit" value="Add user" />{' '}
-      // </form>
     );
   }
 }

@@ -427,7 +427,7 @@ class EntryListOperations(Resource):
         if proposal is not None:
             x = adm.create_entry(proposal.get_unit(), proposal.get_amount(), proposal.get_article(),
                                  proposal.get_modification_date(), proposal.get_user_id(), proposal.get_retailer_id(),
-                                 proposal.get_shopping_list_id(), proposal.get_bought(), proposal.get_group_id())
+                                 proposal.get_shopping_list_id(), proposal.get_group_id(), proposal.get_bought())
             return x, 200
         else:
             return '', 500
@@ -956,10 +956,10 @@ Start der main.py um zu testen ob es funktioniert (in der lokalen Entwicklerumge
 Um dies zu testen muss, wie in der VL eine Db in Python vorliegen.
 """
 
-#if __name__ == '__main__':
-#    app.run(debug=True)
+"""if __name__ == '__main__':
+    app.run(debug=True)"""
 
-if __name__ == '__main__':
+"""if __name__ == '__main__':
      adm = ShoppingAdministration()
      x = adm.create_entry("Kg",2,"Käse", "2020-07-03 00:00:00", 1,2,3,4,0)
-     print(x)
+     print(x)"""
