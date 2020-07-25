@@ -221,6 +221,7 @@ export default class RetailerEntryList extends Component {
     });
   };
 
+  // Adds all favorites for the given retailer
   addFavorite = () => {
     // @TODO get all favorites for group and Retailer
     const favorites = [
@@ -234,7 +235,7 @@ export default class RetailerEntryList extends Component {
     // for (let i of favorites) {
     favorites.filter((x) => x.retailer_id === this.state.retailer.id);
     // }
-    console.log('favorites');
+    console.log(favorites);
   };
 
   // All ClickHanlder for Table
