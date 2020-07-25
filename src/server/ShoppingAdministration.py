@@ -225,7 +225,7 @@ class ShoppingAdministration(object):
         with EntryMapper() as mapper:
             return mapper.find_all()
 
-    def create_entry(self, unit, amount, article, modification_date, user_id, retailer_id, shopping_list_id, bought):
+    def create_entry(self, unit, amount, article, modification_date, user_id, retailer_id, group_id, shopping_list_id, bought):
         """Ein Entry Objekt anlegen."""
         entry = Entry()
         entry.set_unit(unit)
@@ -236,6 +236,7 @@ class ShoppingAdministration(object):
         entry.set_retailer_id(retailer_id)
         entry.set_shopping_list_id(shopping_list_id)
         entry.set_bought(bought)
+        entry.set_group_id(group_id)
         entry.set_id(1)
         with EntryMapper() as mapper:
             return mapper.insert(entry)
