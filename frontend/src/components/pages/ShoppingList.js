@@ -34,14 +34,14 @@ export default class ShoppingList extends Component {
   // Fetch shoppinglists for group
   fetchShoppinglist() {
     ShoppingAPI.getAPI()
-      .searchShoppingListByGroupId(3)
+      .searchShoppingListByGroupId(2)
       .then((data) => {
         this.setState({ data });
       });
   }
 
   componentDidMount() {
-    this.fetchShoppinglists();
+    this.fetchShoppinglist();
   }
 
   toggleHidden = (id) => {
@@ -125,7 +125,7 @@ export default class ShoppingList extends Component {
                   <Typography id={`ShoppingList${elem.id}`}>
                     <ShoppingListList
                       shoppingListId={elem.id}
-                      groupsId={elem.group_id}
+                      groupId={elem.group_id}
                       shoppinglistname={elem.name}
                     />
                   </Typography>

@@ -50,14 +50,13 @@ export default class ShoppingListList extends Component {
               retailers,
             });
             // Fetch favorites after because they rely on retailer names
-            this.fetchFavorites();
           });
       });
   }
 
   componentDidMount() {
     this.fetchRetailers();
-    this.fetchShoppinglistlists();
+    console.log(this.props.groupId);
   }
 
   render() {
@@ -69,7 +68,7 @@ export default class ShoppingListList extends Component {
             <CardContent style={{ marginTop: 10 }} variant="h5">
               <RetailerEntryList
                 shoppingListId={this.props.shoppingListId}
-                retailer={retailers.find((x) => x.id === elem.retailer_id)}
+                retailer={retailers.find((x) => x.id === elem.id)}
                 groupId={this.props.groupId}
               />
             </CardContent>
