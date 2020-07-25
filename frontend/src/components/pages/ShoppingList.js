@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import ShoppingListList from './ShoppingListList';
+import Favorite from './Favorite';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
@@ -11,6 +12,13 @@ import ShoppingListBO from '../../api/ShoppingListBO';
 import ShoppingAPI from '../../api/ShoppingAPI';
 import ShoppingListBo from '../../api/ShoppingListBO'; */
 
+/**
+ * Displays shoppinglists for selected group
+ *
+ * @author Erik Lebedkin
+ * @author Tom Hager
+ */
+
 export default class ShoppingList extends Component {
   constructor(props) {
     super(props);
@@ -20,6 +28,7 @@ export default class ShoppingList extends Component {
       shoppinglists: [],
       rowIndex: -1,
       error: false,
+      showFav: false,
     };
   }
   //testdata
@@ -57,6 +66,10 @@ export default class ShoppingList extends Component {
       : this.setState({ rowIndex: id });
   };
 
+  toggleShowFav = () => {
+    this.setState({ showFav: !this.state.showFav });
+  };
+
   validateAdd = () => {
     this.state.shoppinglistname.trim() !== ''
       ? this.AddShoppingList(this.shoppinglistname)
@@ -75,7 +88,7 @@ export default class ShoppingList extends Component {
   };
 
   render() {
-    const { error, data, rowIndex, shoppinglistname } = this.state;
+    const { error, data, rowIndex, shoppinglistname, showFav } = this.state;
     return (
       <div>
         <Card
@@ -93,8 +106,22 @@ export default class ShoppingList extends Component {
             <IconButton>
               <Add id={'AddBtn'} onClick={(e) => this.validateAdd()} />
             </IconButton>
+
+            <Button id="FavBtn" onClick={this.toggleShowFav.bind(this)}>
+              ♥ Edit Favorites
+            </Button>
+            {showFav && (
+              <Typography id={'Fav'}>
+                <Favorite
+                  // @TODO this.props.groupId
+                  groupId={2}
+                />
+              </Typography>
+            )}
           </CardContent>
         </Card>
+
+        {/* Displays all shoppinglist of group */}
         {data.map((elem) => (
           <Card
             style={{

@@ -106,9 +106,7 @@ export default class Favorite extends Component {
   fetchFavorites() {
     // Get all  favorites for group
     ShoppingAPI.getAPI()
-      // @TODO
-      // .searchFavoriteByGroup(this.props.groupId)
-      .searchFavoriteByGroup(2)
+      .searchFavoriteByGroup(this.props.groupId)
       .then((data) => {
         this.setState({ data: data.sort((a, b) => b.id - a.id), unfilteredData: data });
       });
@@ -211,9 +209,7 @@ export default class Favorite extends Component {
     fav.setAmount(amount);
     fav.setUnit(unit);
     fav.setRetailerID(retailer);
-    fav.setGroupID(2);
-    // @TODO groupId from parent component
-    // groupId: this.props.groupId,
+    fav.setGroupID(this.props.groupId);
 
     // Async Update Favorite
     ShoppingAPI.getAPI()
@@ -230,9 +226,11 @@ export default class Favorite extends Component {
           amount: 1,
           unit: units[0].name,
         });
+
+        this.fetchFavorites();
         // On success add to unfilteredData
-        this.state.unfilteredData.unshift(fav);
-        this.setState({ unfilteredData: this.state.unfilteredData });
+        // this.state.unfilteredData.unshift(fav);
+        // this.setState({ unfilteredData: this.state.unfilteredData });
         this.resetSearch();
       });
   };
@@ -247,9 +245,7 @@ export default class Favorite extends Component {
     fav.setAmount(eAmount);
     fav.setUnit(editUnit);
     fav.setRetailerID(editRetailer);
-    fav.setGroupID(2);
-    // @TODO groupId from parent component
-    // groupId: this.props.groupId
+    fav.setGroupID(this.props.groupId);
 
     editArticle.trim() !== '' && eAmount > 0
       ? this.updateFavorite(fav)
