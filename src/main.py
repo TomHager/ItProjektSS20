@@ -29,6 +29,11 @@ def app_index():
     return send_from_directory("static/app", "index.html")
 
 
+@app.route("/report")
+def report_index():
+    return send_from_directory("static/report", "index.html")
+
+
 """
 Modell gebaut, welches die Datenstruktur beschreibt. Auf dieser Basis tauschen Cliets und Sever Daten aus.
 """
