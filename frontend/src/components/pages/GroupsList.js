@@ -22,7 +22,7 @@ import GroupBO from '../../api/GroupBO';
 export default class GroupManagement extends Component {
   constructor(props) {
     super(props);
-    // currentUser
+    // user
 
     // Init an empty state
     this.state = {
@@ -43,7 +43,7 @@ export default class GroupManagement extends Component {
   // Fetch all groups of user
   fetchGroupsForUser = () => {
     ShoppingAPI.getAPI()
-      .searchGroupsByMember(this.props.currentUser.id)
+      .searchGroupsByMember(this.props.user.id)
       .then((groupMemberships) => {
         if (groupMemberships.length > 0) {
           ShoppingAPI.getAPI()
@@ -62,7 +62,7 @@ export default class GroupManagement extends Component {
 
   // Start Callbacks
   componentDidMount() {
-    this.setState({ user: this.props.currentUser });
+    this.setState({ user: this.props.user });
     this.fetchCurrentUser();
     console.log('Mount');
   }
