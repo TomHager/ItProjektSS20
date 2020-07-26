@@ -152,8 +152,7 @@ export default class App extends React.Component {
                 <Route exact path="/groupList">
                   <GroupsList user={this.state.currentUser} />
                 </Route>
-                <Route path="/shoppinglist">
-                  <ShoppingList />
+                <Route path="/shoppinglist/:groupId" component={ShoppingList}>
                 </Route>
                 <Route path="/retailerEntryList">
                   <RetailerEntryList />
