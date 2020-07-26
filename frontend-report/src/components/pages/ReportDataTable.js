@@ -33,6 +33,7 @@ export default class ReportDataTable extends Component {
     ShoppingAPI.getAPI()
       .searchEntryByGroup(this.props.groupId)
       .then((data) => {
+        console.log(data);
         this.filterData(data);
       });
   }
@@ -40,7 +41,11 @@ export default class ReportDataTable extends Component {
   fetchEntriesByGroupAndTime() {
     const { groupId, dateFrom, dateTo } = this.props;
     ShoppingAPI.getAPI()
-      .searchReportDataURL(groupId, dateFrom, dateTo)
+      .searchReportDataURL(
+        groupId,
+        '2020-07-02T01:00:00',
+        '2020-07-28T01:00:00'
+      )
       .then((data) => {
         this.filterData(data);
       });
@@ -55,7 +60,7 @@ export default class ReportDataTable extends Component {
   filterData(array) {
     let data = [];
     if (this.props.retailerId !== -1) {
-      data = array.filter((x) => x.retialer_id === this.props.retailerId);
+      data = array.filter((x) => x.retailer_id === this.props.retailerId);
     } else {
       data = array;
     }

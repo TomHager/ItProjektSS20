@@ -103,6 +103,10 @@ export default class Testing extends Component {
       });
   };
 
+  deleteGroupMembership = () => {
+    ShoppingAPI.getAPI().deleteGroupMembership(4, 3);
+  };
+
   results = () => {
     console.log(this.state.GroupmemberShip);
   };
@@ -386,7 +390,9 @@ export default class Testing extends Component {
 
   render() {
     return (
-      <Button onClick={this.updateEntrys}>Let the testing begin!</Button>
+      <Button onClick={this.deleteGroupMembership}>
+        Let the testing begin!
+      </Button>
       // <form onSubmit={this.handleSubmit}>
       //   <input type="text" name="name" onChange={this.handleChange} />
       //   <input type="email" name="email" onChange={this.handleChange} />
