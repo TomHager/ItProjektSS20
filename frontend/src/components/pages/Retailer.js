@@ -45,6 +45,18 @@ export default class RetailerList extends Component {
         ShoppingAPI.getAPI()
           .getRetailers()
           .then((allRetailers) => {
+            
+            // Add new Retailer to RetailerGroupList
+            if(!justFetch){
+              const matchingRetailers = allRetailers.find(x=> x.name === name)
+              const newMembership = new RetailerGroupBO();
+              newMembership.setRetailerGroup(this.state.groupId);
+              newMembership.setRetailerMember(matchingRetailers.id);
+              ShoppingAPI.getAPI().addRetailerGroup(membership).then().catch((e)=>console.error(e));
+              console.log(newMembership)
+              membership.push(newMembership)
+              }
+          //load retailer
             const retailers = [];
             for (let i of membership) {
               retailers.push(
@@ -53,16 +65,8 @@ export default class RetailerList extends Component {
             }
             // On success
             this.setState({              retailers,            });
-
-            // Add new Retailer to RetailerGroupList
-            if(!justFetch){
-              const matchingRetailers = allRetailers.find(x=> x.name === name)
-              const membership = new RetailerGroupBO();
-              membership.setRetailerGroup(this.state.groupId);
-              membership.setRetailerMember(matchingRetailers.id);
-              ShoppingAPI.getAPI().addRetailerGroup(membership).catch();
-              }
           });
+
       });
 
   }

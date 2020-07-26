@@ -32,7 +32,7 @@ export default class ShoppingList extends Component {
       error: false,
       showFav: false,
       showRetailer: false,
-      groupId: this.props.match.params.groupId.toString()
+      groupId: parseInt(this.props.match.params.groupId)
     };
   }
   // Fetch shoppinglists for group
