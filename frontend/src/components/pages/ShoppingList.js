@@ -30,13 +30,13 @@ export default class ShoppingList extends Component {
       rowIndex: -1,
       error: false,
       showFav: false,
+      groupId: this.props.match.params.groupId.toString()
     };
   }
   // Fetch shoppinglists for group
   fetchShoppinglist() {
-    const { groupId } = this.props.location.state;
     ShoppingAPI.getAPI()
-      .searchShoppingListByGroupId(groupId)
+      .searchShoppingListByGroupId(this.state.groupId)
       .then((data) => {
         this.setState({ data });
       });
@@ -74,7 +74,8 @@ export default class ShoppingList extends Component {
   };
 
   render() {
-    const { error, data, rowIndex, showFav } = this.state;
+    const { error, data, rowIndex, showFav, groupId } = this.state;
+    console.log("params", this.props.match.params)
     return (
       <div>
         <Card
@@ -100,7 +101,7 @@ export default class ShoppingList extends Component {
               <Typography id={'Fav'}>
                 <Favorite
                   // @TEST this.props.groupId
-                  groupId={this.props.location.state.groupId}
+                  groupId={groupId}
                 />
               </Typography>
             )}

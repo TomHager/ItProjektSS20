@@ -1,6 +1,6 @@
 import { Add, Edit } from '@material-ui/icons';
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Route, Link } from 'react-router-dom';
 import {
   Container,
   CssBaseline,
@@ -208,16 +208,9 @@ export default class GroupsList extends Component {
           {data.map((row) => (
             <Typography id={row.id}>
               {/* Button to link to shoppinglist of group */}
-              <Button
-                component={Link}
-                to={{
-                  pathname: '/shoppingList',
-                  state: {
-                    groupId: row.id,
-                  },
-                }}
-              >
+              <Button id={`link ${row.id}`} component={Link} to={`shoppingList/${row.id}`} >
                 {row.name}
+
               </Button>
 
               {/* Manage selected group */}
