@@ -9,6 +9,7 @@ import {
   TableRow,
   Paper,
   IconButton,
+  TextField,
   // Typography,
 } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
@@ -19,8 +20,10 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import PersonIcon from '@material-ui/icons/Person';
 import DeleteIcon from '@material-ui/icons/Delete';
 // import AddUser from '../subcomponents/AddUser';
-// import { v4 as uuidv4 } from 'uuid';
 import UserBO from '../../api/UserBO';
+import PersonAddIcon from '@material-ui/icons/PersonAdd';
+import GroupMembershipBO from '../../api/GroupMembershipBO';
+import ShoppingAPI from '../../api/ShoppingAPI';
 
 /**
  *
@@ -36,6 +39,7 @@ export class EditGroup extends Component {
       users: [],
       memberIndex: -1,
       open: false,
+      user: {},
     };
   }
 
@@ -47,15 +51,49 @@ export class EditGroup extends Component {
     this.setState({ open: false });
   };
 
-  // handleSubmit = () => {
+  handleMemberEmailChange = (e) => {
+    this.setState({ userMail: e.target.value });
+  };
 
-  // }
+  delUser = (id) => {
+    this.setState({
+      users: [...this.state.users.filter((user) => user.id !== id)],
+    });
+  };
 
-  // async fetchUsers() {
-  //   const res = await fetch('http://DESKTOP-S3RCLLP:8081/api/iKauf/users');
-  //   const resjson = await res.json();
-  //   this.setState({ users: resjson });
-  // }
+  addGroupMembership = (addedUser) => {
+    const newMembership = new GroupMembershipBO();
+    newMembership.setGroupMember(addedUser.id);
+    newMembership.setGroupMembership(this.state.currentGroup.id);
+    // const newMembership = { member: 3, group_membership: 3 };
+    console.log(newMembership);
+    ShoppingAPI.getAPI()
+      .addGroupMembership(newMembership)
+      .catch((e) => {
+        console.info(e);
+      });
+  };
+
+  getAddedUserByEmail = () => {
+    ShoppingAPI.getAPI()
+      .searchUserByEmail(this.state.userMail)
+      .then((returnedUser) => {
+        console.log(returnedUser[0]);
+        setTimeout(() => {
+          this.setState({ user: returnedUser[0] });
+          console.log(this.state.user);
+          this.addGroupMembership(this.state.user);
+        }, 1);
+      });
+  };
+
+  addUserToGroup = () => {
+    this.getAddedUserByEmail();
+    console.log(this.state.user);
+    this.state.users.unshift(this.state.user);
+    this.setState({ users: this.state.users });
+    console.log(this.state.users);
+  };
 
   componentDidMount = () => {
     // this.fetchUsers();
@@ -112,7 +150,20 @@ export class EditGroup extends Component {
                     </TableCell>
                   </TableRow>
                   <TableRow>
-                    <TableCell>{/* <AddUser addUser={this.addUser} /> */}</TableCell>
+                    <TableCell>
+                      <div>
+                        <TextField
+                          type="text"
+                          name="user"
+                          style={{ flex: '10', padding: '5px' }}
+                          placeholder="Add user ..."
+                          onChange={this.handleMemberEmailChange}
+                        ></TextField>
+                        <IconButton onClick={this.addUserToGroup}>
+                          <PersonAddIcon />
+                        </IconButton>
+                      </div>
+                    </TableCell>
                   </TableRow>
                 </TableHead>
 
@@ -122,7 +173,9 @@ export class EditGroup extends Component {
                       key={row.id}
                       style={{
                         backgroundColor:
-                          row.id === this.state.memberIndex ? '#0090FF' : 'white',
+                          row.id === this.state.memberIndex
+                            ? '#0090FF'
+                            : 'white',
                       }}
                       // onClick={this.groupClickHandler.bind(this, row)}
                     >

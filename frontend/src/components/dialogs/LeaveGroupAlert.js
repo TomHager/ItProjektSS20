@@ -38,7 +38,9 @@ export default class LeaveGroupAlert extends Component {
     this.setState({ membership: resjson });
   }
 
-  delMembership = () => {};
+  delMembership = () => {
+    this.props.delMembership(this.props.user.id, this.props.groupId);
+  };
 
   render() {
     const open = this.state.open;

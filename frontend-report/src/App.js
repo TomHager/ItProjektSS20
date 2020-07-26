@@ -1,11 +1,10 @@
-import React from "react";
-import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
+import React from 'react';
+import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
 // import { Container, ThemeProvider, CssBaseline } from '@material-ui/core';
-import Header from "./components/layout/Header";
-import About from "./components/pages/About";
-import ReportNavigation from "./components/pages/ReportNavigation";
-import ReportDataTable from "./components/pages/ReportDataTable";
-import { Grid } from "@material-ui/core";
+import Header from './components/layout/Header';
+import About from './components/pages/About';
+import ReportNavigation from './components/pages/ReportNavigation';
+import { Grid } from '@material-ui/core';
 
 // import Theme from './Theme';
 // import SignIn from './components/pages/SignIn';
@@ -36,7 +35,7 @@ class App extends React.Component {
   /** Renders the whole app */
   render() {
     return (
-      <div style={{ backgroundColor: "#f4f4f4" }}>
+      <div style={{ backgroundColor: '#f4f4f4' }}>
         <Router basename={process.env.PUBLIC_URL}>
           <Header />
           <Redirect from="/" to="/report" />
@@ -44,9 +43,6 @@ class App extends React.Component {
             <Grid container direction="row">
               <Grid item>
                 <ReportNavigation />
-              </Grid>
-              <Grid>
-                <ReportDataTable />
               </Grid>
             </Grid>
           </Route>

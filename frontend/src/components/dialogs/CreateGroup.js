@@ -6,7 +6,6 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
-  // DialogContentText,
   DialogTitle,
   Table,
   TableBody,
@@ -20,14 +19,13 @@ import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import GroupBO from '../../api/GroupBO';
 import ShoppingAPI from '../../api/ShoppingAPI';
-// import { v4 as uuidv4 } from 'uuid';
 import GroupMembershipBO from '../../api/GroupMembershipBO';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 
 /**
  *
- *
  * @author Lukas Rutkauskas
+ * @author Tom Hager
  */
 
 export class CreateGroup extends Component {
@@ -41,21 +39,18 @@ export class CreateGroup extends Component {
       groupName: '',
       createdGroup: [],
       user: {},
+      allUsers: [],
+      errorEmail: false,
+      errorGroup: false,
     };
   }
 
-  handleCreateGroup = (event) => {
-    event.preventDefault();
-    const newGroup = new GroupBO();
-    newGroup.setName(this.state.groupName);
+  getAllUsers = () => {
     ShoppingAPI.getAPI()
-      .addGroup(newGroup)
-      .then(
-        console.log('Created group: ' + this.state.groupName),
-        this.getGroupByName()
-      )
-      .catch((e) => {
-        console.info(e);
+      .getUsers()
+      .then((result) => {
+        this.setState({ allUsers: result });
+        console.log(this.state.allUsers);
       });
   };
 
@@ -65,21 +60,6 @@ export class CreateGroup extends Component {
       .then((result) => {
         this.setState({ createdGroup: result });
         this.addGroupMembershipForCurrentUser(this.state.createdGroup);
-      });
-  };
-
-  addGroupMembershipForCurrentUser = (createdGroup) => {
-    const newMembership = new GroupMembershipBO();
-    newMembership.setGroupMember(this.props.currentUser.id);
-    newMembership.setGroupMembership(
-      this.state.createdGroup[createdGroup.length - 1].id
-    );
-    // const newMembership = { member: 3, group_membership: 3 };
-    console.log(newMembership);
-    ShoppingAPI.getAPI()
-      .addGroupMembership(newMembership)
-      .catch((e) => {
-        console.info(e);
       });
   };
 
@@ -111,23 +91,50 @@ export class CreateGroup extends Component {
       });
   };
 
-  handleClickOpen = () => {
-    this.setState({ open: true });
+  componentDidMount = () => {
+    this.getAllUsers();
+    console.log('All Callbacks initialised');
   };
 
-  handleClose = () => {
-    this.setState({ open: false });
+  handleCreateGroup = () => {
+    this.setState({ errorEmail: false });
+    const newGroup = new GroupBO();
+    newGroup.setName(this.state.groupName);
+    ShoppingAPI.getAPI()
+      .addGroup(newGroup)
+      .then(console.log('Created group: ' + this.state.groupName), this.getGroupByName())
+      .catch((e) => {
+        console.info(e);
+      });
   };
 
-  handleGroupNameOnChange = (event) => {
-    this.setState({ groupName: event.target.value });
+  addGroupMembershipForCurrentUser = (createdGroup) => {
+    const newMembership = new GroupMembershipBO();
+    newMembership.setGroupMember(this.props.currentUser.id);
+    newMembership.setGroupMembership(this.state.createdGroup[createdGroup.length - 1].id);
+    // const newMembership = { member: 3, group_membership: 3 };
+    console.log(newMembership);
+    ShoppingAPI.getAPI()
+      .addGroupMembership(newMembership)
+      .catch((e) => {
+        console.info(e);
+      });
   };
 
-  handleMemberEmailChange = (e) => {
-    this.setState({ userMail: e.target.value });
-  };
+  // handleClickOpen = () => {
+  //   this.setState({ open: true });
+  // };
 
-  delUser = (id) => {
+  // handleClose = () => {
+  //   this.setState({ open: false });
+  // };
+
+  // handleGroupNameOnChange = (event) => {
+  //   this.setState({ groupName: event.target.value });
+  // };
+
+  deleteUser = (id) => {
+    ShoppingAPI.getAPI().deleteUser(id);
     this.setState({
       users: [...this.state.users.filter((user) => user.id !== id)],
     });
@@ -141,21 +148,34 @@ export class CreateGroup extends Component {
     console.log(this.state.users);
   };
 
+  // @TODO Wird nicht aufgeruden und würde this.handleCreateGroup aufrufen und nicht add User
+  validateAddUser = () => {
+    const { userMail } = this.state;
+    users.filter((x) => x.email === userMail.trim())
+      ? this.setState({ errorEmail: true })
+      : this.handleCreateGroup();
+  };
+
+  setAddUserError = (users) => {
+    users.trim() !== ''
+      ? this.setState({ errorUser: false })
+      : this.setState({ errorUser: true });
+  };
+
   render() {
-    const open = this.state.open;
-    const users = this.state.users;
+    const { open, users, errorEmail, errorGroup } = this.state;
     return (
       <div>
         <IconButton
           aria-label="Edit"
           style={{ float: 'right' }}
-          onClick={this.handleClickOpen}
+          onClick={this.setState({ open: true })}
         >
           <GroupAddIcon />
         </IconButton>
         <Dialog
           open={open}
-          onClose={this.handleClose}
+          onClose={this.setState({ open: false })}
           aria-labelledby="form-dialog-title"
           fullScreen={true}
           align="center"
@@ -173,11 +193,11 @@ export class CreateGroup extends Component {
                 id="name"
                 placeholder="Group name"
                 type="text"
-                onChange={this.handleGroupNameOnChange}
+                onChange={(e) => this.setState({ groupName: event.target.value })}
               />
               <IconButton
                 aria-label="Edit"
-                onClick={this.handleCreateGroup}
+                onClick={this.handleCreateGroup()}
                 style={{ float: 'left', marginTop: '1em', marginLeft: '5px' }}
               >
                 <GroupAddIcon />
@@ -199,11 +219,13 @@ export class CreateGroup extends Component {
                         <TextField
                           type="text"
                           name="user"
+                          label="usermail"
                           style={{ flex: '10', padding: '5px' }}
                           placeholder="Add user ..."
-                          onChange={this.handleMemberEmailChange}
+                          error={errorEmail}
+                          onChange={(e) => this.setState({ userMail: e.target.value })}
                         ></TextField>
-                        <IconButton onClick={this.addUserToGroup}>
+                        <IconButton onClick={this.validateAddUser()}>
                           <PersonAddIcon />
                         </IconButton>
                       </div>
@@ -228,7 +250,7 @@ export class CreateGroup extends Component {
                         <IconButton
                           aria-label="Edit"
                           style={{ float: 'right' }}
-                          onClick={this.delUser.bind(this, row.id)}
+                          onClick={this.deleteUser.bind(this, row.id)}
                         >
                           <DeleteIcon />
                         </IconButton>
@@ -240,11 +262,11 @@ export class CreateGroup extends Component {
             </TableContainer>
           </DialogContent>
           <DialogActions>
-            <Button onClick={this.handleClose} color="primary">
+            <Button onClick={this.setState({ open: false })} color="primary">
               Cancel
             </Button>
             {/* <Button onClick={this.handleClose} color="primary"> */}
-            <Button onClick={this.handleClose} color="primary">
+            <Button onClick={this.setState({ open: false })} color="primary">
               Submit
             </Button>
           </DialogActions>

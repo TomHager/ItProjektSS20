@@ -44,6 +44,8 @@ export default class ShoppingAPI {
     `${
       this.#ShoppingServerBaseURL
     }/report-data/${group_id},${modification_date_from},${modification_date_to}`;
+  #searchEntryByGroupUrl = (groupId) =>
+    `${this.#ShoppingServerBaseURL}/entry-by-group/${groupId}`;
 
   // Favorites related
   #getFavoritesURL = () => `${this.#ShoppingServerBaseURL}/favorites`;
@@ -279,6 +281,18 @@ export default class ShoppingAPI {
         resolve(entryBOs);
       });
     });
+  }
+
+  searchEntryByGroup(group_id) {
+    return this.#fetchAdvanced(this.#searchEntryByGroupUrl(group_id)).then(
+      (responseJSON) => {
+        let entryBOs = EntryBO.fromJSON(responseJSON);
+        // console.info(entryBOs);
+        return new Promise(function (resolve) {
+          resolve(entryBOs);
+        });
+      }
+    );
   }
 
   // Group Methoden

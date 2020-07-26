@@ -33,8 +33,9 @@ export default class ShoppingList extends Component {
   }
   // Fetch shoppinglists for group
   fetchShoppinglist() {
+    const { groupId } = this.props.location.state;
     ShoppingAPI.getAPI()
-      .searchShoppingListByGroupId(2)
+      .searchShoppingListByGroupId(groupId)
       .then((data) => {
         this.setState({ data });
       });
@@ -72,7 +73,7 @@ export default class ShoppingList extends Component {
   };
 
   render() {
-    const { error, data, rowIndex, shoppinglistname, showFav } = this.state;
+    const { error, data, rowIndex, showFav } = this.state;
     return (
       <div>
         <Card
@@ -85,9 +86,7 @@ export default class ShoppingList extends Component {
             <Input
               placeholder="Einkauflslistenname"
               error={error}
-              onChange={(e) =>
-                this.setState({ shoppinglistname: e.target.value })
-              }
+              onChange={(e) => this.setState({ shoppinglistname: e.target.value })}
             />
             <IconButton>
               <Add id={'AddBtn'} onClick={(e) => this.validateAdd()} />

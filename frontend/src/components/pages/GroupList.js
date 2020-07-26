@@ -52,12 +52,13 @@ export default class GroupList extends Component {
       .then((returnedUser) => {
         this.setState({ currentUser: returnedUser[0] });
         this.getGroupMembershipsByUserId();
+        this.getAllGroups();
       });
   };
 
-  getGroupMembershipsByUserId = (currentUser) => {
+  getGroupMembershipsByUserId = () => {
     console.log('Get groupmemberships');
-    console.log(currentUser);
+    console.log(this.state.currentUser.id);
     ShoppingAPI.getAPI()
       .searchGroupsByMember(this.state.currentUser.id)
       .then((result) => {
@@ -88,8 +89,9 @@ export default class GroupList extends Component {
     // for (let i of groupMemberships) {
     //   allGroups.filter((x) => x.id === i.group_membership);
     // }
-    console.log(groups);
-    this.setState({ filteredGroups: groups });
+    const fixedGroups = groups.map((x) => x[0]);
+    console.log(fixedGroups);
+    this.setState({ filteredGroups: fixedGroups });
     console.log(this.state.filteredGroups);
   };
 
@@ -104,22 +106,31 @@ export default class GroupList extends Component {
   //     });
   // };
 
-  deleteGroupMembership = (groupID) => {
+  // @TODO evtl Group löschen wenn sie keinen Member mehr hat
+  deleteGroupMembership = (userId, groupID) => {
     ShoppingAPI.getAPI()
       .deleteGroupMembership(groupID)
       .then(
         this.setState({
-          groupRows: this.state.groupRows.filter(
-            (group) => group.getID() !== groupID
-          ),
+          groupRows: this.state.groupRows.filter((group) => group.getID() !== groupID),
         })
       );
+  };
+
+  // @TODO EDIT GROUP
+  editGroup = (id, name) => {
+    // CALLBACK
+    // Das ist 1 zu 1 der code aus der anderen muss vmtl bearbeitet werden
+    // const updatedGroup = this.state.newName;
+    // ShoppingAPI.getAPI()
+    //   .updateGroup(updatedGroup)
+    //   .catch((error) => console.error('Error:', error));
+    // console.log(this.state.newName);
   };
 
   //calls all Callbacks for Repor Selection
   componentDidMount = () => {
     this.getCurrUser();
-    this.getAllGroups();
     console.log('All Callbacks initialised');
   };
 
@@ -155,21 +166,36 @@ export default class GroupList extends Component {
             </TableHead>
 
             <TableBody>
-              {filteredGroups.map((x) => (
+              {filteredGroups.map((row) => (
                 <TableRow
-                  key={x.id}
+                  key={row.id}
                   // style={{
                   //   backgroundColor:
                   //     index === this.state.groupIndex ? '#0090FF' : 'white',
                   // }}
                   // onClick={this.groupClickHandler.bind(this, row)}
                 >
-                  <TableCell>{x.name}</TableCell>
                   <TableCell>
-                    <LeaveGroupAlert currentUser={user} />
+                    <Link
+                      to={{
+                        pathname: '/shoppingList',
+                        state: {
+                          groupId: row.id,
+                        },
+                      }}
+                    >
+                      {row.name}
+                    </Link>
                   </TableCell>
                   <TableCell>
-                    <EditGroup />
+                    <LeaveGroupAlert
+                      groupId={row.id}
+                      leaveGroup={this.deleteGroupMembership}
+                      user={user}
+                    />
+                  </TableCell>
+                  <TableCell>
+                    <EditGroup group={row} editGroup={this.editGroup} />
                   </TableCell>
                   <TableCell>
                     <ManageGroup />
