@@ -138,18 +138,10 @@ userMatch = i
       });
   };
 
-  // @TEST FIX 404 not Found API LINK: iKauf/groups/id
   // Update GroupName
   UpdateGroupName = () => {
-    const group = new GroupBO();
-    group.setID(this.props.groupId);
-    group.setName(this.state.editGroupName.trim());
-    ShoppingAPI.getAPI()
-      .updateGroup(group)
-      .then(() => {
-        // On success
-        this.setState({ groupName: group.name, editGroupActive: false });
-      });
+    this.props.updateGroup(this.props.groupId, this.state.editGroupName.trim())
+    this.setState({groupName: this.state.editGroupName, editGroupActive: false})
   };
 
   leaveGroup = () => {
