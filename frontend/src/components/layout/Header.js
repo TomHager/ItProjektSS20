@@ -55,7 +55,6 @@ class Header extends Component {
               <Tab label="Group" component={RouterLink} to={`/groupList`} />
               {/* <Tab label="Profile" component={RouterLink} to={`/profile`} /> */}
               <Tab label="About" component={RouterLink} to={`/about`} />
-              {/* <Tab label="Testing" component={RouterLink} to={`/testing`} /> */}
             </Tabs>
           ) : null}
         </Paper>

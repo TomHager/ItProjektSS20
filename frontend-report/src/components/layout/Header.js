@@ -38,12 +38,15 @@ class Header extends Component {
       <div style={{ backgroundColor: '#f4f4f4' }}>
         <Paper variant="outlined">
           <ProfileDropDown user={user} />
-          <Typography variant="h3" component="h1" align="center">
-            <b>iKauf</b> your statistic Shopping App
+          <Typography
+            variant="h3"
+            component="h1"
+            align="center"
+            style={{ padding: '20px' }}
+          >
+            iKauf statistics
           </Typography>
-          <Typography variant="h4" component="h2" align="center">
-            <u>Report</u>
-          </Typography>
+          <Typography variant="h4" component="h2" align="center"></Typography>
           {user ? (
             <Tabs
               indicatorColor="primary"
