@@ -16,6 +16,7 @@ import CreateGroup from '../dialogs/CreateGroup';
 import LeaveGroupAlert from '../dialogs/LeaveGroupAlert';
 import firebase from 'firebase/app';
 import { Link } from 'react-router-dom';
+import GroupBO from '../../api/GroupBO';
 
 /**
  *
@@ -38,33 +39,25 @@ export default class GroupList extends Component {
     };
   }
 
-  //Group Functions
-  // async fetchGroups() {
-  //   const res = await fetch('http://DESKTOP-S3RCLLP:8081/api/iKauf/groups');
-  //   const resjson = await res.json();
-  //   this.setState({ groupRows: resjson });
-  //   console.log(this.state.groupRows);
-  // }
-
   getCurrUser = () => {
-    console.log('Eingeloggter User:', firebase.auth().currentUser.displayName);
     ShoppingAPI.getAPI()
       .searchUserByEmail(firebase.auth().currentUser.email)
-      .then((returnedUser) => {
-        this.setState({ currentUser: returnedUser[0] });
-        this.getGroupMembershipsByUserId();
-        this.getAllGroups();
+      .then((user) => {
+        this.getGroupMembershipsByUserId(user[0]);
       });
   };
 
-  getGroupMembershipsByUserId = () => {
-    console.log('Get groupmemberships');
-    console.log(this.state.currentUser.id);
+  getGroupMembershipsByUserId = (currentUser) => {
+    this.setState({ currentUser });
     ShoppingAPI.getAPI()
-      .searchGroupsByMember(this.state.currentUser.id)
-      .then((result) => {
-        this.setState({ groupMemberships: result });
-        console.log(this.state.groupMemberships);
+      .searchGroupsByMember(currentUser.id)
+      .then((groupMemberships) => {
+        if (groupMemberships.length > 0) {
+          console.log(groupMemberships);
+          this.setState({ groupMemberships });
+          this.getAllGroups();
+        }
+        // @TODO evtl fix for no Group
       });
   };
 
@@ -77,6 +70,12 @@ export default class GroupList extends Component {
       });
   };
 
+  //calls all Callbacks for Repor Selection
+  componentDidMount = () => {
+    this.getCurrUser();
+    console.log('All Callbacks initialised');
+  };
+
   filterGroupsByGroupId = (allGroups) => {
     const groupMemberships = this.state.groupMemberships;
     console.log(groupMemberships);
@@ -84,64 +83,46 @@ export default class GroupList extends Component {
     for (let i of groupMemberships) {
       groups.push(allGroups.filter((x) => x.id === i.group_membership));
     }
-    // const i = allGroups.findIndex((x) => x.id === groupMemberships);
-    // groups.push(i);
-    // console.log(allGroups.filter((x) => x.id.toString().indexOf('1')) > -1);
-    // for (let i of groupMemberships) {
-    //   allGroups.filter((x) => x.id === i.group_membership);
-    // }
     const fixedGroups = groups.map((x) => x[0]);
     console.log(fixedGroups);
     this.setState({ filteredGroups: fixedGroups });
     console.log(this.state.filteredGroups);
   };
 
-  // getGroupsByGroupId = () => {
-  //   for(let i = 0, i < console.log('Getting groups');
-  //   this.getCurrUser();
-  //   ShoppingAPI.getAPI()
-  //     .getGroup(this.state.groupMemberships[0])
-  //     .then((returnedGroups) => {
-  //       this.setState({ group: returnedGroups });
-  //       console.log(this.state.group);
-  //     });
-  // };
-
   // @TODO evtl Group löschen wenn sie keinen Member mehr hat
-  deleteGroupMembership = (userId, groupID) => {
+  deleteGroupMembership = (groupId, userId) => {
     ShoppingAPI.getAPI()
-      .deleteGroupMembership(groupID)
-      .then(
-        this.setState({
-          groupRows: this.state.groupRows.filter(
-            (group) => group.getID() !== groupID
-          ),
-        })
-      );
+      .deleteGroupMembership(groupId, userId)
+      .then(() => this.checkForEmptyGroup(groupId));
+    this.setState({
+      groupRows: this.state.groupRows.filter((group) => group.getID() !== groupId),
+    });
   };
 
-  // @TODO EDIT GROUP
+  checkForEmptyGroup = (groupId) => {
+    ShoppingAPI.getAPI()
+      .searchMembersByGroup(groupId)
+      .then((groupMemberships) => {
+        if (groupMemberships.length === 0) {
+          ShoppingAPI.getAPI().deleteGroup(groupId);
+        }
+      });
+  };
+
+  // @TEST
   editGroup = (id, name) => {
-    // CALLBACK
-    // Das ist 1 zu 1 der code aus der anderen muss vmtl bearbeitet werden
-    // const updatedGroup = this.state.newName;
-    // ShoppingAPI.getAPI()
-    //   .updateGroup(updatedGroup)
-    //   .catch((error) => console.error('Error:', error));
-    // console.log(this.state.newName);
-  };
-
-  //calls all Callbacks for Repor Selection
-  componentDidMount = () => {
-    this.getCurrUser();
-    console.log('All Callbacks initialised');
+    const group = new GroupBO();
+    group.setID(id);
+    group.setName(name);
+    ShoppingAPI.getAPI()
+      .updateGroup(group)
+      .catch((error) => console.error('Error:', error));
+    console.log(this.state.newName);
   };
 
   render() {
     // const groupRows = this.state.groupRows;
-    const filteredGroups = this.state.filteredGroups;
-    const { user } = this.props;
-    console.log(filteredGroups);
+    const { filteredGroups, currentUser } = this.state;
     return (
       <div align="center">
         {/* <Button onClick={}>Click</Button> */}
@@ -163,7 +144,7 @@ export default class GroupList extends Component {
                 <TableCell></TableCell>
                 <TableCell></TableCell>
                 <TableCell>
-                  <CreateGroup currentUser={this.state.currentUser} />
+                  <CreateGroup currentUser={currentUser} />
                 </TableCell>
               </TableRow>
             </TableHead>
@@ -195,7 +176,7 @@ export default class GroupList extends Component {
                     <LeaveGroupAlert
                       groupId={row.id}
                       leaveGroup={this.deleteGroupMembership}
-                      user={user}
+                      user={currentUser}
                     />
                   </TableCell>
                   <TableCell>
