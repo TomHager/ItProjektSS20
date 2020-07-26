@@ -7,7 +7,7 @@ import {
   TableHead,
   TableRow,
   Paper,
-  // IconButton,
+  Button,
 } from '@material-ui/core';
 import ShoppingAPI from '../../api/ShoppingAPI';
 import EditGroup from '../dialogs/EditGroup';
