@@ -15,6 +15,7 @@ import ManageGroup from '../dialogs/ManageGroup';
 import CreateGroup from '../dialogs/CreateGroup';
 import LeaveGroupAlert from '../dialogs/LeaveGroupAlert';
 import firebase from 'firebase/app';
+import { Link } from 'react-router-dom';
 
 /**
  *
@@ -176,7 +177,8 @@ export default class GroupList extends Component {
                   // onClick={this.groupClickHandler.bind(this, row)}
                 >
                   <TableCell>
-                    <Link
+                    <Button
+                      component={Link}
                       to={{
                         pathname: '/shoppingList',
                         state: {
@@ -185,7 +187,7 @@ export default class GroupList extends Component {
                       }}
                     >
                       {row.name}
-                    </Link>
+                    </Button>
                   </TableCell>
                   <TableCell>
                     <LeaveGroupAlert
