@@ -2,11 +2,11 @@ import React from 'react';
 import { HashRouter as Router, Route, Redirect } from 'react-router-dom';
 import { Grid } from '@material-ui/core';
 import Header from './components/layout/Header';
-// import Register from "./components/layout/Register";
 import * as firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
 import ReportNavigation from './components/pages/ReportNavigation';
+import ReportDataTable from './components/pages/ReportDataTable';
 import About from './components/pages/About';
 import SignIn from './components/pages/SignIn';
 
@@ -126,7 +126,10 @@ export default class App extends React.Component {
                   <Grid container direction="row">
                     <Grid item>
                       <ReportNavigation />
-                    </Grid>
+                      </Grid>
+                      {/* <Grid item xc={7}>
+                        <ReportDataTable/>
+                    </Grid> */}
                   </Grid>
                 </Route>
                 <Route path="/about">

@@ -32,8 +32,8 @@ export default class ReportNavigation extends Component {
       retailerIndex: -1,
       retailerActive: false,
       timeActive: true,
-      timeFrom: '',
-      timeTo: '',
+      timeFrom: null,
+      timeTo: null,
       submit: false,
     };
   }
@@ -122,8 +122,8 @@ export default class ReportNavigation extends Component {
     console.log(this.state.timeTo);
     console.log(this.state.timeFrom);
     this.setState({
-      timeFrom: '',
-      timeTo: '',
+      timeFrom: null,
+      timeTo: null,
       timeActive: !this.state.timeActive,
       submit: false,
     });
@@ -131,8 +131,20 @@ export default class ReportNavigation extends Component {
     document.getElementById('timeFrom').value = '';
   }
 
+  timeFromHandler(e){
+  this.setState({ timeFrom: e.target.value, submit: false})
+  }
+
+  timeToHandler(e){
+    this.setState({ timeFrom: e.target.value, submit: false})
+    }
+
   submitClickHandler() {
-    this.setState({ submit: true });
+      const { timeFrom, timeTo, timeActive } = this.state;
+    if(timeFrom === null || timeTo === null){
+      this.setState({ submit: true, timeActive: false });
+    }
+    this.setState({submit: true})
   }
 
   render() {
@@ -249,7 +261,7 @@ export default class ReportNavigation extends Component {
                 type="date"
                 name="timeFrom"
                 disabled={timeActive}
-                onChange={(e) => this.setState({ timeFrom: e.target.value })}
+                onChange={(e) => this.timeFromHandler(e) }
               />
                 To:
               <input
@@ -257,12 +269,23 @@ export default class ReportNavigation extends Component {
                 type="date"
                 name="timeTo"
                 disabled={timeActive}
-                onChange={(e) => this.setState({ timeTo: e.target.value })}
+                onChange={(e) => this.timeToHandler(e) }
               />
             </TableCell>
           </TableBody>
         </Table>
-        <Typography onClick={this.submitClickHandler.bind(this)}>
+        <Typography id="Sub" onClick={this.submitClickHandler.bind(this)}>
+        {/* <Button
+                      component={Link}
+                      to={{
+                        pathname: '/reportTable',
+                        state: {
+                          groupId: row.id,
+                        },
+                      }}
+                    >
+          Submit Query
+                    </Button> */}
           Submit Query
         </Typography>
         {submit && (
