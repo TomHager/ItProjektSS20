@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import ShoppingListList from './ShoppingListList';
 import Favorite from './Favorite';
+import Retailer from './Retailer';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
@@ -30,6 +31,7 @@ export default class ShoppingList extends Component {
       rowIndex: -1,
       error: false,
       showFav: false,
+      showRetailer: false,
       groupId: this.props.match.params.groupId.toString()
     };
   }
@@ -53,7 +55,11 @@ export default class ShoppingList extends Component {
   };
 
   toggleShowFav = () => {
-    this.setState({ showFav: !this.state.showFav });
+    this.setState({ showFav: !this.state.showFav, shorRetailer: false });
+  };
+
+  toggleShowRetailer = () => {
+    this.setState({ showRetailer: !this.state.showRetailer, showFav: false });
   };
 
   validateAdd = () => {
@@ -74,7 +80,7 @@ export default class ShoppingList extends Component {
   };
 
   render() {
-    const { error, data, rowIndex, showFav, groupId } = this.state;
+    const { error, data, rowIndex, showFav,showRetailer, groupId } = this.state;
     console.log("params", this.props.match.params)
     return (
       <div>
@@ -97,10 +103,19 @@ export default class ShoppingList extends Component {
             <Button id="FavBtn" onClick={this.toggleShowFav.bind(this)}>
               ♥ Edit Favorites
             </Button>
+            <Button id="RetailerBtn" onClick={this.toggleShowRetailer.bind(this)}>Retailer</Button>
+
+
             {showFav && (
               <Typography id={'Fav'}>
                 <Favorite
-                  // @TEST this.props.groupId
+                  groupId={groupId}
+                />
+              </Typography>
+            )}
+                        {showRetailer && (
+              <Typography id={'Retailer'}>
+                <Retailer
                   groupId={groupId}
                 />
               </Typography>

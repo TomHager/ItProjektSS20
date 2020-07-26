@@ -15,7 +15,6 @@ import {
 } from '@material-ui/core';
 import GroupMembershipBO from '../../api/GroupMembershipBO';
 import ShoppingAPI from '../../api/ShoppingAPI';
-import GroupBO from '../../api/GroupBO';
 
 /**
  * Displays favorites for given group

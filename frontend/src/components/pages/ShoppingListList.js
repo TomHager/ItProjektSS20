@@ -37,8 +37,6 @@ export default class ShoppingListList extends Component {
               retailers.push(
                 allRetailers.find((x) => x.id === i.retailer_member)
               );
-              console.log(allRetailers.find((x) => x.id === 2));
-              console.log(allRetailers);
             }
             if (retailers.length === 0) {
               retailers.push({ id: 0, name: '404' });
