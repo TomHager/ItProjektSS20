@@ -7,6 +7,7 @@ import {
   TableHead,
   TableRow,
   Paper,
+  Button,
 } from '@material-ui/core';
 import ShoppingAPI from '../../api/ShoppingAPI';
 import EditGroup from '../dialogs/EditGroup';
@@ -15,6 +16,7 @@ import CreateGroup from '../dialogs/CreateGroup';
 import LeaveGroupAlert from '../dialogs/LeaveGroupAlert';
 import firebase from 'firebase/app';
 import { Link } from 'react-router-dom';
+import GroupBO from '../../api/GroupBO';
 
 /**
  *
@@ -53,9 +55,11 @@ export default class GroupList extends Component {
     ShoppingAPI.getAPI()
       .searchGroupsByMember(this.state.currentUser.id)
       .then((groupMemberships) => {
-        this.setState({ groupMemberships });
-        console.log(this.state.groupMemberships);
-        this.getAllGroups();
+        if (groupMemberships.length > 0) {
+          this.setState({ groupMemberships });
+          console.log(this.state.groupMemberships);
+          this.getAllGroups();
+        }
       });
   };
 
@@ -91,12 +95,10 @@ export default class GroupList extends Component {
   deleteGroupMembership = (groupId, userId) => {
     ShoppingAPI.getAPI()
       .deleteGroupMembership(groupId, userId)
-      .then(
-        this.setState({
-          groupRows: this.state.groupRows.filter((group) => group.getID() !== groupID),
-        })
-        this.checkForEmptyGroup()
-      );
+      .then(() => this.checkForEmptyGroup(groupId));
+    this.setState({
+      groupRows: this.state.groupRows.filter((group) => group.getID() !== groupId),
+    });
   };
 
   checkForEmptyGroup = (groupId) => {
