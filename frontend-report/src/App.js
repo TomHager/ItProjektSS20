@@ -107,7 +107,7 @@ export default class App extends React.Component {
    */
   componentDidMount() {
     firebase.initializeApp(this.#firebaseConfig);
-    firebase.auth().languageCode = 'de';
+    firebase.auth().languageCode = 'en';
     firebase.auth().onAuthStateChanged(this.handleAuthStateChange);
   }
 

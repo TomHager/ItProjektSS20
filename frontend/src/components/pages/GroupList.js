@@ -15,6 +15,7 @@ import ManageGroup from '../dialogs/ManageGroup';
 import CreateGroup from '../dialogs/CreateGroup';
 import LeaveGroupAlert from '../dialogs/LeaveGroupAlert';
 import firebase from 'firebase/app';
+import { Link } from 'react-router-dom';
 
 /**
  *
@@ -112,7 +113,9 @@ export default class GroupList extends Component {
       .deleteGroupMembership(groupID)
       .then(
         this.setState({
-          groupRows: this.state.groupRows.filter((group) => group.getID() !== groupID),
+          groupRows: this.state.groupRows.filter(
+            (group) => group.getID() !== groupID
+          ),
         })
       );
   };

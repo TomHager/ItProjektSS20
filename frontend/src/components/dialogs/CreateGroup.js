@@ -102,7 +102,10 @@ export class CreateGroup extends Component {
     newGroup.setName(this.state.groupName);
     ShoppingAPI.getAPI()
       .addGroup(newGroup)
-      .then(console.log('Created group: ' + this.state.groupName), this.getGroupByName())
+      .then(
+        console.log('Created group: ' + this.state.groupName),
+        this.getGroupByName()
+      )
       .catch((e) => {
         console.info(e);
       });
@@ -111,7 +114,9 @@ export class CreateGroup extends Component {
   addGroupMembershipForCurrentUser = (createdGroup) => {
     const newMembership = new GroupMembershipBO();
     newMembership.setGroupMember(this.props.currentUser.id);
-    newMembership.setGroupMembership(this.state.createdGroup[createdGroup.length - 1].id);
+    newMembership.setGroupMembership(
+      this.state.createdGroup[createdGroup.length - 1].id
+    );
     // const newMembership = { member: 3, group_membership: 3 };
     console.log(newMembership);
     ShoppingAPI.getAPI()
@@ -151,7 +156,7 @@ export class CreateGroup extends Component {
   // @TODO Wird nicht aufgeruden und würde this.handleCreateGroup aufrufen und nicht add User
   validateAddUser = () => {
     const { userMail } = this.state;
-    users.filter((x) => x.email === userMail.trim())
+    this.state.users.filter((x) => x.email === userMail.trim())
       ? this.setState({ errorEmail: true })
       : this.handleCreateGroup();
   };
@@ -193,7 +198,7 @@ export class CreateGroup extends Component {
                 id="name"
                 placeholder="Group name"
                 type="text"
-                onChange={(e) => this.setState({ groupName: event.target.value })}
+                onChange={(e) => this.setState({ groupName: e.target.value })}
               />
               <IconButton
                 aria-label="Edit"
@@ -223,7 +228,9 @@ export class CreateGroup extends Component {
                           style={{ flex: '10', padding: '5px' }}
                           placeholder="Add user ..."
                           error={errorEmail}
-                          onChange={(e) => this.setState({ userMail: e.target.value })}
+                          onChange={(e) =>
+                            this.setState({ userMail: e.target.value })
+                          }
                         ></TextField>
                         <IconButton onClick={this.validateAddUser()}>
                           <PersonAddIcon />
