@@ -46,8 +46,8 @@ export default class ReportNavigation extends Component {
       .searchUserByEmail(firebase.auth().currentUser.email)
       .then((user) => {
         // Fetch all groupId by user
-        ShoppingAPI.getAPI(user.id)
-          .searchGroupsByMember()
+        ShoppingAPI.getAPI()
+          .searchGroupsByMember(user[0].id)
           .then((groupMember) => {
             if (groupMember.length > 0) {
               // Fetch all groups
@@ -55,7 +55,9 @@ export default class ReportNavigation extends Component {
                 .getGroups()
                 .then((allGroups) => {
                   for (let i of groupMember)
-                    groupRows.push(allGroups.find((x) => x.id === i.group_membership));
+                    groupRows.push(
+                      allGroups.find((x) => x.id === i.group_membership)
+                    );
                 });
               // Else user has no groups
             } else {
@@ -78,7 +80,9 @@ export default class ReportNavigation extends Component {
           .then((allRetailers) => {
             const retailerRows = [];
             for (let i of membership) {
-              retailerRows.push(allRetailers.find((x) => x.id === i.retailer_member));
+              retailerRows.push(
+                allRetailers.find((x) => x.id === i.retailer_member)
+              );
             }
             if (retailerRows.length === 0) {
               retailerRows.push({ id: 0, name: '404' });
@@ -161,7 +165,8 @@ export default class ReportNavigation extends Component {
               <TableRow
                 key={row.id}
                 style={{
-                  backgroundColor: row.id === this.state.groupIndex ? '#0090FF' : 'white',
+                  backgroundColor:
+                    row.id === this.state.groupIndex ? '#0090FF' : 'white',
                 }}
                 onClick={this.groupClickHandler.bind(this, row)}
               >
@@ -255,7 +260,9 @@ export default class ReportNavigation extends Component {
             </TableCell>
           </TableBody>
         </Table>
-        <Typography onClick={this.submitClickHandler.bind(this)}>Submit Query</Typography>
+        <Typography onClick={this.submitClickHandler.bind(this)}>
+          Submit Query
+        </Typography>
         {submit && (
           <Typography id="report">
             <ReportDataTable

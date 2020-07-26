@@ -57,9 +57,9 @@ export class CreateGroup extends Component {
   getGroupByName = () => {
     ShoppingAPI.getAPI()
       .searchGroupByName(this.state.groupName)
-      .then((result) => {
-        this.setState({ createdGroup: result });
-        this.addGroupMembershipForCurrentUser(this.state.createdGroup);
+      .then((createdGroup) => {
+        this.setState({ createdGroup });
+        this.addGroupMembershipForCurrentUser(createdGroup);
       });
   };
 
@@ -69,12 +69,12 @@ export class CreateGroup extends Component {
     newMembership.setGroupMembership(
       this.state.createdGroup[this.state.createdGroup.length - 1].id
     );
-    // const newMembership = { member: 3, group_membership: 3 };
     console.log(newMembership);
     ShoppingAPI.getAPI()
       .addGroupMembership(newMembership)
       .catch((e) => {
-        console.info(e);
+        this.state.users.unshift(addedUser);
+        this.setState({ users: this.state.users });
       });
   };
 
@@ -108,6 +108,12 @@ export class CreateGroup extends Component {
       });
   };
 
+  validateAddGroup = () => {
+    this.state.groupName.trim() !== ''
+      ? this.handleCreateGroup()
+      : this.setState({ errorGroup: true });
+  };
+
   addGroupMembershipForCurrentUser = (createdGroup) => {
     const newMembership = new GroupMembershipBO();
     newMembership.setGroupMember(this.props.currentUser.id);
@@ -121,18 +127,6 @@ export class CreateGroup extends Component {
       });
   };
 
-  // handleClickOpen = () => {
-  //   this.setState({ open: true });
-  // };
-
-  // handleClose = () => {
-  //   this.setState({ open: false });
-  // };
-
-  // handleGroupNameOnChange = (event) => {
-  //   this.setState({ groupName: event.target.value });
-  // };
-
   deleteUser = (id) => {
     ShoppingAPI.getAPI().deleteUser(id);
     this.setState({
@@ -140,26 +134,12 @@ export class CreateGroup extends Component {
     });
   };
 
-  addUserToGroup = () => {
-    this.getAddedUserByEmail();
-    console.log(this.state.user);
-    this.state.users.unshift(this.state.user);
-    this.setState({ users: this.state.users });
-    console.log(this.state.users);
-  };
-
   // @TODO Wird nicht aufgeruden und würde this.handleCreateGroup aufrufen und nicht add User
   validateAddUser = () => {
     const { userMail } = this.state;
-    users.filter((x) => x.email === userMail.trim())
+    this.state.users.filter((x) => x.email === userMail.trim())
       ? this.setState({ errorEmail: true })
-      : this.handleCreateGroup();
-  };
-
-  setAddUserError = (users) => {
-    users.trim() !== ''
-      ? this.setState({ errorUser: false })
-      : this.setState({ errorUser: true });
+      : this.getAddedUserByEmail();
   };
 
   render() {
@@ -193,11 +173,12 @@ export class CreateGroup extends Component {
                 id="name"
                 placeholder="Group name"
                 type="text"
-                onChange={(e) => this.setState({ groupName: event.target.value })}
+                error={errorGroup}
+                onChange={(e) => this.setState({ groupName: e.target.value })}
               />
               <IconButton
                 aria-label="Edit"
-                onClick={this.handleCreateGroup()}
+                onClick={this.validateAddGroup()}
                 style={{ float: 'left', marginTop: '1em', marginLeft: '5px' }}
               >
                 <GroupAddIcon />

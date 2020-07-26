@@ -85,7 +85,7 @@ export class EditGroup extends Component {
               label="Group name"
               type="text"
               defaultValue={this.props.group.name}
-              onChange={(e) => this.setState({ newName: event.target.value })}
+              onChange={(e) => this.setState({ newName: e.target.value })}
               fullWidth
             />
           </DialogContent>

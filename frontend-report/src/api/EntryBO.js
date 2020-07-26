@@ -5,12 +5,27 @@ import BusinessObject from './BusinessObject';
  */
 
 export default class EntryBO extends BusinessObject {
-  constructor(unit, amount, name, modificationDate) {
+  constructor(
+    unit,
+    amount,
+    article,
+    modificationDate,
+    userId,
+    retailerId,
+    shoppingListId,
+    groupId,
+    bought
+  ) {
     super();
     this.unit = unit;
     this.amount = amount;
-    this.name = name;
+    this.article = article;
     this.modification_date = modificationDate;
+    this.user_id = userId;
+    this.retailer_id = retailerId;
+    this.shopping_list_id = shoppingListId;
+    this.group_id = groupId;
+    this.bought = bought;
   }
 
   getUnit() {
@@ -29,20 +44,60 @@ export default class EntryBO extends BusinessObject {
     this.amount = amount;
   }
 
-  getName() {
-    return this.name;
+  getArticle() {
+    return this.article;
   }
 
-  setName(name) {
-    this.name = name;
+  setArticle(article) {
+    this.article = article;
   }
 
-  getModificationDate(modificationDate) {
+  getModificationDate() {
     return this.modification_date;
   }
 
   setModificationDate(modificationDate) {
     this.modification_date = modificationDate;
+  }
+
+  getUserId() {
+    return this.user_id;
+  }
+
+  setUserId(userId) {
+    this.user_id = userId;
+  }
+
+  getRetailerId() {
+    return this.retailer_id;
+  }
+
+  setRetailerId(retailerId) {
+    this.retailer_id = retailerId;
+  }
+
+  getShoppingListId() {
+    return this.shopping_list_id;
+  }
+
+  setShoppingListId(shoppingListId) {
+    this.shopping_list_id = shoppingListId;
+  }
+
+  getGroupId() {
+    return this.group_id;
+  }
+
+  setGroupId(groupId) {
+    this.group_id = groupId;
+  }
+
+  getBought() {
+    return this.bought;
+  }
+
+  setBought(bought) {
+    this.bought = bought;
   }
 
   /*
@@ -56,7 +111,7 @@ export default class EntryBO extends BusinessObject {
 
     */
 
-  // Returns an Array of CustomerBOs from a given JSON structure
+  // Returns an Array of EntryBOs from a given JSON structure
   static fromJSON(entries) {
     let result = [];
 
