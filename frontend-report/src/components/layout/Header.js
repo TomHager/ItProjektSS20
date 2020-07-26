@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Paper, Typography, Tabs, Tab } from '@material-ui/core';
 import { Link as RouterLink } from 'react-router-dom';
+import ProfileDropDown from '../dialogs/ProfileDropDown';
 
 /**
  * Shows the header with the main navigation Tabs within a Paper.
@@ -31,20 +32,19 @@ class Header extends Component {
 
   /** Renders the component */
   render() {
-    // const { user } = this.props;
+    const { user } = this.props;
 
     return (
       <div style={{ backgroundColor: '#f4f4f4' }}>
         <Paper variant="outlined">
-          {/* <ProfileDropDown user={user} /> */}
+          <ProfileDropDown user={user} />
           <Typography variant="h3" component="h1" align="center">
             <b>iKauf</b> your statistic Shopping App
           </Typography>
           <Typography variant="h4" component="h2" align="center">
             <u>Report</u>
           </Typography>
-          {
-            //   user ?
+          {user ? (
             <Tabs
               indicatorColor="primary"
               textColor="primary"
@@ -55,8 +55,7 @@ class Header extends Component {
               <Tab label="My Report" component={RouterLink} to={`/report`} />
               <Tab label="About" component={RouterLink} to={`/about`} />
             </Tabs>
-            // : null
-          }
+          ) : null}
         </Paper>
       </div>
     );

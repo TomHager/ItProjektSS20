@@ -120,7 +120,7 @@ export default class App extends React.Component {
             // Is a user signed in?
             this.state.currentUser ? (
               <>
-                <Header />
+                <Header user={this.state.currentUser} />
                 <Redirect from="/" to="/report" />
                 <Route exact path="/report">
                   <Grid container direction="row">

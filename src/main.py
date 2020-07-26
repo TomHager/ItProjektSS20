@@ -791,7 +791,7 @@ Klassen und Operationen für GroupMembership
 """
 
 
-@ikauf.route('/group-membership-delete/<int:group_membership><int:member>')
+@ikauf.route('/group-membership-delete/<int:group_membership>,<int:member>')
 @ikauf.response(500, 'Falls Server-seitiger Fehler')
 @ikauf.param('group_membership', 'ID des Membership-Objetks')
 @ikauf.param('member', 'ID des Member-Objekts')

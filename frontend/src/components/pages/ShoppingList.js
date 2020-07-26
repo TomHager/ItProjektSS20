@@ -15,13 +15,14 @@ import ShoppingAPI from '../../api/ShoppingAPI';
 /**
  * Displays shoppinglists for selected group
  *
- * @author Erik Lebedkin
  * @author Tom Hager
+ * @author Erik Lebedkin
  */
 
 export default class ShoppingList extends Component {
   constructor(props) {
     super(props);
+    // groupId
 
     this.state = {
       data: [],
@@ -98,8 +99,8 @@ export default class ShoppingList extends Component {
             {showFav && (
               <Typography id={'Fav'}>
                 <Favorite
-                  // @TODO this.props.groupId
-                  groupId={2}
+                  // @TEST this.props.groupId
+                  groupId={this.props.location.state.groupId}
                 />
               </Typography>
             )}

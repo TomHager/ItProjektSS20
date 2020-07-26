@@ -119,6 +119,8 @@ export default class ReportNavigation extends Component {
   }
 
   timeToggleHandler() {
+    console.log(this.state.timeTo);
+    console.log(this.state.timeFrom);
     this.setState({
       timeFrom: '',
       timeTo: '',

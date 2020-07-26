@@ -40,26 +40,24 @@ export default class GroupList extends Component {
   }
 
   getCurrUser = () => {
-    console.log('Eingeloggter User:', firebase.auth().currentUser.displayName);
     ShoppingAPI.getAPI()
       .searchUserByEmail(firebase.auth().currentUser.email)
-      .then((currentUser) => {
-        this.setState({ currentUser });
-        this.getGroupMembershipsByUserId();
+      .then((user) => {
+        this.getGroupMembershipsByUserId(user[0]);
       });
   };
 
-  getGroupMembershipsByUserId = () => {
-    console.log('Get groupmemberships');
-    console.log(this.state.currentUser.id);
+  getGroupMembershipsByUserId = (currentUser) => {
+    this.setState({ currentUser });
     ShoppingAPI.getAPI()
-      .searchGroupsByMember(this.state.currentUser.id)
+      .searchGroupsByMember(currentUser.id)
       .then((groupMemberships) => {
         if (groupMemberships.length > 0) {
+          console.log(groupMemberships);
           this.setState({ groupMemberships });
-          console.log(this.state.groupMemberships);
           this.getAllGroups();
         }
+        // @TODO evtl fix for no Group
       });
   };
 
@@ -124,9 +122,7 @@ export default class GroupList extends Component {
 
   render() {
     // const groupRows = this.state.groupRows;
-    const filteredGroups = this.state.filteredGroups;
-    const { user } = this.props;
-    console.log(filteredGroups);
+    const { filteredGroups, currentUser } = this.state;
     return (
       <div align="center">
         {/* <Button onClick={}>Click</Button> */}
@@ -148,7 +144,7 @@ export default class GroupList extends Component {
                 <TableCell></TableCell>
                 <TableCell></TableCell>
                 <TableCell>
-                  <CreateGroup currentUser={this.state.currentUser} />
+                  <CreateGroup currentUser={currentUser} />
                 </TableCell>
               </TableRow>
             </TableHead>
@@ -180,7 +176,7 @@ export default class GroupList extends Component {
                     <LeaveGroupAlert
                       groupId={row.id}
                       leaveGroup={this.deleteGroupMembership}
-                      user={user}
+                      user={currentUser}
                     />
                   </TableCell>
                   <TableCell>
