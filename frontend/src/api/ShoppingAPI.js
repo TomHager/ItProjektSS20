@@ -72,8 +72,8 @@ export default class ShoppingAPI {
   #addGroupMembershipURL = () => `${this.#ShoppingServerBaseURL}/create-group-membership`;
   #updateGroupMembershipURL = (id) =>
     `${this.#ShoppingServerBaseURL}/groupMemberships/${id}`;
-  #deleteGroupMembershipURL = (id) =>
-    `${this.#ShoppingServerBaseURL}/groupMemberships/${id}`;
+  #deleteGroupMembershipURL = (groupId, userId) =>
+    `${this.#ShoppingServerBaseURL}/group-memberships-delete/${groupId},${userId}`;
   #searchGroupsByMemberURL = (userId) =>
     `${this.#ShoppingServerBaseURL}/groupmembership-by-member/${userId}`;
   #searchMembersByGroupURL = (groupId) =>
@@ -813,8 +813,8 @@ export default class ShoppingAPI {
     });
   }
 
-  deleteGroupMembership(groupMembershipId) {
-    return this.#fetchAdvanced(this.#deleteGroupMembershipURL(groupMembershipId), {
+  deleteGroupMembership(groupId, userId) {
+    return this.#fetchAdvanced(this.#deleteGroupMembershipURL(groupId, userId), {
       method: 'DELETE',
     }).then((responseJSON) => {
       // We always get an array of GroupMembershipBO.fromJSON
