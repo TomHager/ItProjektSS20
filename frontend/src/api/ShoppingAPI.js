@@ -60,8 +60,8 @@ export default class ShoppingAPI {
   #getGroupsURL = () => `${this.#ShoppingServerBaseURL}/group`;
   #getGroupURL = (id) => `${this.#ShoppingServerBaseURL}/group/${id}`;
   #addGroupURL = () => `${this.#ShoppingServerBaseURL}/group`;
-  #updateGroupURL = (id) => `${this.#ShoppingServerBaseURL}/groups/${id}`;
-  #deleteGroupURL = (id) => `${this.#ShoppingServerBaseURL}/groups/${id}`;
+  #updateGroupURL = (id) => `${this.#ShoppingServerBaseURL}/group/${id}`;
+  #deleteGroupURL = (id) => `${this.#ShoppingServerBaseURL}/group/${id}`;
   #searchGroupByNameURL = (groupName) =>
     `${this.#ShoppingServerBaseURL}/group-by-name/${groupName}`;
 
@@ -73,7 +73,7 @@ export default class ShoppingAPI {
   #updateGroupMembershipURL = (id) =>
     `${this.#ShoppingServerBaseURL}/groupMemberships/${id}`;
   #deleteGroupMembershipURL = (groupId, userId) =>
-    `${this.#ShoppingServerBaseURL}/group-memberships-delete/${groupId},${userId}`;
+    `${this.#ShoppingServerBaseURL}/group-membership-delete/${groupId},${userId}`;
   #searchGroupsByMemberURL = (userId) =>
     `${this.#ShoppingServerBaseURL}/groupmembership-by-member/${userId}`;
   #searchMembersByGroupURL = (groupId) =>

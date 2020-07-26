@@ -736,7 +736,7 @@ Klassen und Operationen für RetailerGroup
 """
 
 
-@ikauf.route('/retailer-group-delete/<int:retailer_group><int:retailer_member>')
+@ikauf.route('/retailer-group-delete/<int:retailer_group>,<int:retailer_member>')
 @ikauf.response(500, 'Falls Server-seitiger Fehler')
 @ikauf.param('retailer_group', 'ID des RetailerGroup-Objetks')
 @ikauf.param('retailer_member', 'ID des RetailerMember-Objekts')
@@ -969,7 +969,7 @@ Um dies zu testen muss, wie in der VL eine Db in Python vorliegen.
 if __name__ == '__main__':
     app.run(debug=True)
 
-# if __name__ == '__main__':
-#     adm = ShoppingAdministration()
-#     x = adm.create_entry("Kg", 2, "Käse", "2020-07-03 00:00:00", 1, 2, 3, 4, 0)
-#     print(x)
+"""if __name__ == '__main__':
+     adm = ShoppingAdministration()
+     x = adm.delete_group_membership(2,2)
+     print(x)"""

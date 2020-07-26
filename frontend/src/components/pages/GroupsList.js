@@ -166,6 +166,21 @@ export default class GroupsList extends Component {
       });
   };
 
+  updateGroupName= (groupId, groupName) =>{
+    const group = new GroupBO();
+    group.setID(groupId);
+    group.setName(groupName);
+    ShoppingAPI.getAPI()
+      .updateGroup(group)
+      .then(() => {
+        // On success
+        this.setState((prevState) => {
+          const data = [...prevState.data];
+          data[data.indexOf(this.state.data.find(x => x.id === group.id))] = group;
+          return { ...prevState, data };
+        });      });
+  }
+
   render() {
     const { data, errorGroup, rowIndex } = this.state;
     console.log('render');
@@ -215,6 +230,7 @@ export default class GroupsList extends Component {
                     groupId={row.id}
                     groupName={row.name}
                     leaveGroup={this.leaveGroup}
+                    updateGroup={this.updateGroupName}
                   />
                 </Typography>
               )}
