@@ -1,5 +1,5 @@
 # Flask import da der Service darauf basiert
-from flask import Flask
+from flask import Flask, send_from_directory
 from flask_restx import Resource, Api, fields
 from flask_cors import CORS
 
@@ -22,6 +22,12 @@ Instanzieren von Flask. Am Ende dieser Datei erfolgt dann erst der 'Start' von F
 """
 
 app = Flask(__name__)
+
+
+@app.route("/app")
+def app_index():
+    return send_from_directory("static/app", "index.html")
+
 
 """
 Modell gebaut, welches die Datenstruktur beschreibt. Auf dieser Basis tauschen Cliets und Sever Daten aus.

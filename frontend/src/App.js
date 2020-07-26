@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
+import { HashRouter as Router, Route, Redirect } from 'react-router-dom';
 // import { Container, ThemeProvider, CssBaseline } from '@material-ui/core';
 import Header from './components/layout/Header';
 import Retailer from './components/pages/Retailer';
