@@ -69,19 +69,28 @@ export default class ShoppingList extends Component {
   };
 
   AddShoppingList = () => {
-    const { shoppinglistname, data, groupsId } = this.state;
+    const { shoppinglistname, groupId } = this.state;
     const shoppinglist = new ShoppingListBO();
     shoppinglist.setName(shoppinglistname.trim());
-    shoppinglist.setGroupId(groupsId);
-    //@TODO shoppinglist.setId später entfernen
+    shoppinglist.setGroupId(groupId);
     shoppinglist.setID(Math.floor(Math.random() * Math.floor(500)));
-    this.state.data.unshift(shoppinglist);
-    this.setState({ data, error: false });
+
+    console.log(shoppinglist)
+    ShoppingAPI.getAPI()
+    .addShoppingList(shoppinglist)
+    .catch((e) => {
+      console.info(e);
+      // On success
+      // this.state.data.push(shoppinglist);
+      // this.setState({ data, error: false });
+      this.fetchShoppinglist()
+      document.getElementById('AddSL').value = '';
+      
+    });
   };
 
   render() {
     const { error, data, rowIndex, showFav,showRetailer, groupId } = this.state;
-    console.log("params", this.props.match.params)
     return (
       <div>
         <Card
@@ -92,6 +101,7 @@ export default class ShoppingList extends Component {
         >
           <CardContent>
             <Input
+            id="AddSL"
               placeholder="Einkauflslistenname"
               error={error}
               onChange={(e) => this.setState({ shoppinglistname: e.target.value })}

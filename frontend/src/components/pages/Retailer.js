@@ -36,7 +36,7 @@ export default class RetailerList extends Component {
   }
 
   // Fetch all retailer for given group
-  fetchRetailers(justFetch=true) {
+  fetchRetailers(justFetch=true, name="") {
     // Fetch all retailer for group
     ShoppingAPI.getAPI()
       .searchRetailerMemberByGroup(this.state.groupId)
@@ -56,12 +56,11 @@ export default class RetailerList extends Component {
 
             // Add new Retailer to RetailerGroupList
             if(!justFetch){
+              const matchingRetailers = allRetailers.find(x=> x.name === name)
               const membership = new RetailerGroupBO();
               membership.setRetailerGroup(this.state.groupId);
-              membership.setRetailerMember(retailers[retailers.length -1].id);
-              ShoppingAPI.getAPI()
-                .addRetailerGroup(membership)
-                .catch();
+              membership.setRetailerMember(matchingRetailers.id);
+              ShoppingAPI.getAPI().addRetailerGroup(membership).catch();
               }
           });
       });
@@ -102,10 +101,12 @@ export default class RetailerList extends Component {
 
     // Right soluction but no response
     // this.setState({ retailers: [...this.state.retailers, newRetailer] });
+  console.log(retailer)
     ShoppingAPI.getAPI()
       .addRetailer(retailer)
       .catch((e) => {
-        this.fetchRetailers(false);
+        this.fetchRetailers(false, name);
+
       });
   };
 
