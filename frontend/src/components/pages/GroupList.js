@@ -175,7 +175,18 @@ export default class GroupList extends Component {
                   // }}
                   // onClick={this.groupClickHandler.bind(this, row)}
                 >
-                  <TableCell>{row.name}</TableCell>
+                  <TableCell>
+                    <Link
+                      to={{
+                        pathname: '/shoppingList',
+                        state: {
+                          groupId: row.id,
+                        },
+                      }}
+                    >
+                      {row.name}
+                    </Link>
+                  </TableCell>
                   <TableCell>
                     <LeaveGroupAlert
                       groupId={row.id}
