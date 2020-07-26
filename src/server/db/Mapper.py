@@ -19,7 +19,7 @@ class Mapper(AbstractContextManager, ABC):
         if os.getenv('GAE_ENV', '').startswith('standard'):
 
             self._cnx = connector.connect(user='demo', password='demo',
-                                          unix_socket='/it-projekt-ss20:europe-west3:shoppinglistapp-db-gruppe7',
+                                          unix_socket='/cloudsql/it-projekt-ss20:europe-west3:shoppinglistapp-db-gruppe7',
                                           database='it_projekt_db_ss20')
 
         else:
