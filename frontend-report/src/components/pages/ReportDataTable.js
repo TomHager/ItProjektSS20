@@ -78,15 +78,10 @@ export default class ReportDataTable extends Component {
   render() {
     const { data } = this.state;
     return (
-      <TableContainer
-        style={{
-          width: Math.round(window.innerWidth * 0.68),
-          marginLeft: '2em',
-        }}
-        component={Paper}
-      >
+      <TableContainer component={Paper}>
         {/* Search articles */}
         <Input
+          style={{ marginLeft: '20px' }}
           type="text"
           id="filter"
           placeholder="search article"

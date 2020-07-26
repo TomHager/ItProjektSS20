@@ -124,7 +124,7 @@ export default class App extends React.Component {
                 <Redirect from="/" to="/report" />
                 <Route exact path="/report">
                   <Grid container direction="row">
-                    <Grid item>
+                    <Grid style={{ margin: '5px auto' }}>
                       <ReportNavigation />
                     </Grid>
                   </Grid>

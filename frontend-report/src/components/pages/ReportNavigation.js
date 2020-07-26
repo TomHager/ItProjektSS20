@@ -148,10 +148,7 @@ export default class ReportNavigation extends Component {
       retailerIndex,
     } = this.state;
     return (
-      <TableContainer
-        // style={{ width: Math.round(window.innerWidth * 0.3) }}
-        component={Paper}
-      >
+      <TableContainer component={Paper}>
         {/* Group Table */}
         <Table size="small" aria-label="spanning table">
           <TableHead>
@@ -168,7 +165,7 @@ export default class ReportNavigation extends Component {
                 key={row.id}
                 style={{
                   backgroundColor:
-                    row.id === this.state.groupIndex ? '#0090FF' : 'white',
+                    row.id === this.state.groupIndex ? '#C0C6F1' : 'white',
                 }}
                 onClick={this.groupClickHandler.bind(this, row)}
               >
@@ -194,7 +191,8 @@ export default class ReportNavigation extends Component {
               </TableCell>
               <TableCell>
                 <Button
-                  style={{ backgroundColor: 'lightblue' }}
+                  size="small"
+                  style={{ backgroundColor: '#C0C6F1', float: 'right' }}
                   onClick={this.retailerToggleHandler.bind(this)}
                 >
                   {retailerActive ? 'Disable Filter' : 'Enable Fitler'}
@@ -210,7 +208,7 @@ export default class ReportNavigation extends Component {
                 style={{
                   backgroundColor:
                     row.id === this.state.retailerIndex
-                      ? '#0090FF'
+                      ? '#C0C6F1'
                       : 'white' | this.state.retailerActive
                       ? 'white'
                       : 'grey',
@@ -234,7 +232,8 @@ export default class ReportNavigation extends Component {
             <TableCell>Select Time Range</TableCell>
             <TableCell>
               <Button
-                style={{ backgroundColor: 'lightblue' }}
+                size="small"
+                style={{ backgroundColor: '#C0C6F1', float: 'right' }}
                 onClick={this.timeToggleHandler.bind(this)}
               >
                 {timeActive ? 'Enable Fitler' : 'Disable Filter'}
@@ -262,7 +261,14 @@ export default class ReportNavigation extends Component {
             </TableCell>
           </TableBody>
         </Table>
-        <Typography onClick={this.submitClickHandler.bind(this)}>
+        <Typography
+          style={{
+            paddingLeft: '18px',
+            paddingTop: '10px',
+            paddingBottom: '10px',
+          }}
+          onClick={this.submitClickHandler.bind(this)}
+        >
           Submit Query
         </Typography>
         {submit && (
