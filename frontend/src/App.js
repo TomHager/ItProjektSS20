@@ -13,6 +13,7 @@ import * as firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
 import Register from './components/layout/Register';
+import About from './components/pages/About';
 
 // import Theme from './Theme';
 import SignIn from './components/pages/SignIn';
@@ -152,8 +153,10 @@ export default class App extends React.Component {
                 <Route exact path="/groupList">
                   <GroupsList user={this.state.currentUser} />
                 </Route>
-                <Route path="/shoppinglist/:groupId" component={ShoppingList}>
-                </Route>
+                <Route
+                  path="/shoppinglist/:groupId"
+                  component={ShoppingList}
+                ></Route>
                 <Route path="/retailerEntryList">
                   <RetailerEntryList />
                 </Route>
@@ -161,10 +164,7 @@ export default class App extends React.Component {
                   <Favorite />
                 </Route>
                 <Route path="/about">
-                  <Retailer />
-                </Route>
-                <Route path="/testing">
-                  <Testing />
+                  <About />
                 </Route>
               </>
             ) : (

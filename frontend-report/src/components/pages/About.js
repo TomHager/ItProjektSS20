@@ -30,21 +30,25 @@ function About() {
           <br />
           <Typography>written by Group 7</Typography>
           <br />
-          <Typography align="left">Tom Hager th@hdm-stuttgart.de</Typography>
-          <br />
           <Typography align="left">
-            Erik Lebedkin el@hdm-stuttgart.de
+            Tom Hager: th116@hdm-stuttgart.de
           </Typography>
           <br />
           <Typography align="left">
-            Lukas Rutkauskas lr057@hdm-stuttgart.de
+            Erik Lebedkin: el027@hdm-stuttgart.de
           </Typography>
           <br />
           <Typography align="left">
-            Dimitrios Apazidis da@hdm-stuttgart.de
+            Lukas Rutkauskas: lr057@hdm-stuttgart.de
           </Typography>
           <br />
-          <Typography align="left">Robin Fink rf@hdm-stuttgart.de</Typography>
+          <Typography align="left">
+            Dimitrios Apazidis: da038@hdm-stuttgart.de
+          </Typography>
+          <br />
+          <Typography align="left">
+            Robin Fink: rf022@hdm-stuttgart.de
+          </Typography>
         </div>
       </Paper>
     </div>
