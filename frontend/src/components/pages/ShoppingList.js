@@ -55,7 +55,7 @@ export default class ShoppingList extends Component {
   };
 
   toggleShowFav = () => {
-    this.setState({ showFav: !this.state.showFav, shorRetailer: false });
+    this.setState({ showFav: !this.state.showFav, showRetailer: false });
   };
 
   toggleShowRetailer = () => {
