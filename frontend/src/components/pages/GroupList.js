@@ -179,7 +179,8 @@ export default class GroupList extends Component {
                   // onClick={this.groupClickHandler.bind(this, row)}
                 >
                   <TableCell>
-                    <Link
+                    <Button
+                      component={Link}
                       to={{
                         pathname: '/shoppingList',
                         state: {
@@ -188,7 +189,7 @@ export default class GroupList extends Component {
                       }}
                     >
                       {row.name}
-                    </Link>
+                    </Button>
                   </TableCell>
                   <TableCell>
                     <LeaveGroupAlert
