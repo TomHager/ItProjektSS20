@@ -9,13 +9,15 @@ import {
   Paper,
   // IconButton,
 } from '@material-ui/core';
-// import ShoppingAPI from "../../api/ShoppingAPI";
 import DeleteRetailerAlert from '../dialogs/DeleteRetailerAlert';
 import AddRetailer from '../subcomponents/AddRetailer';
-import { v4 as uuidv4 } from 'uuid';
+import RetailerBO from "../../api/RetailerBO"
+import RetailerGroupBO from "../../api/RetailerGroupBO"
+import ShoppingAPI from "../../api/ShoppingAPI";
 
 /**
  *
+ * @author Tom Hager
  * @author Robin Fink
  * @author Lukas Rutkauskas
  */
@@ -29,38 +31,87 @@ export default class RetailerList extends Component {
       retailerRows: [],
       retailers: [],
       retailerName: '',
+      groupId: this.props.groupId,
     };
   }
 
-  //Retailer Functions
-  async fetchRetailer() {
-    const res = await fetch('http://DESKTOP-S3RCLLP:8081/api/iKauf/retailers');
-    const resjson = await res.json();
-    this.setState({ retailerRows: resjson });
-    console.log(resjson);
+  // Fetch all retailer for given group
+  fetchRetailers(justFetch=true, name="") {
+    // Fetch all retailer for group
+    ShoppingAPI.getAPI()
+      .searchRetailerMemberByGroup(this.state.groupId)
+      .then((membership) => {
+        // Fetch all retailers of data warehouse
+        ShoppingAPI.getAPI()
+          .getRetailers()
+          .then((allRetailers) => {
+            
+            // Add new Retailer to RetailerGroupList
+            if(!justFetch){
+              const matchingRetailers = allRetailers.find(x=> x.name === name)
+              const newMembership = new RetailerGroupBO();
+              newMembership.setRetailerGroup(this.state.groupId);
+              newMembership.setRetailerMember(matchingRetailers.id);
+              ShoppingAPI.getAPI().addRetailerGroup(membership).then().catch((e)=>console.error(e));
+              console.log(newMembership)
+              membership.push(newMembership)
+              }
+          //load retailer
+            const retailers = [];
+            for (let i of membership) {
+              retailers.push(
+                allRetailers.find((x) => x.id === i.retailer_member)
+                );
+            }
+            // On success
+            this.setState({              retailers,            });
+          });
+
+      });
+
   }
 
   //calls all Callbacks for Repor Selection
   componentDidMount = () => {
-    this.fetchRetailer();
+    this.fetchRetailers();
     console.log('All Callbacks initialised');
   };
 
+  // Delte Retailer
   delRetailer = (id) => {
-    console.log(id);
-    this.setState({
-      retailers: [...this.state.retailers.filter((retailer) => retailer.id !== id)],
-    });
+    ShoppingAPI.getAPI().deleteRetailerGroup(this.state.groupId, id).then(()=>{
+      this.setState({
+        retailers: [...this.state.retailers.filter((retailer) => retailer.id !== id)],
+      });
+      // this.checkRetailerGroups(id);
+    })
   };
 
-  addRetailer = (name) => {
-    const newRetailer = {
-      id: uuidv4(),
-      name,
-    };
-    this.setState({ retailers: [...this.state.retailers, newRetailer] });
+  // Not Implemented in API and Backend
+  //Delete RetilerGroup
+  // checkRetailerGroups(retailreId){
+  //   // get all entries for retailergroup
+  //   const membership = []
+  //   if(membership.length = 0) {
+  //     ShoppingAPI.getAPI().deleteRetailer(retailerId);
+  //   }
+  // }
 
-    console.log(`add Retailer ${this.state.retailers}`);
+  // Add Retailer
+  addRetailer = (name) => {
+    const retailer = new RetailerBO();
+    retailer.setID(Math.floor(Math.random() * Math.floor(500))); 
+    retailer.setName(name)
+
+    // Right soluction but no response
+    // this.setState({ retailers: [...this.state.retailers, newRetailer] });
+  console.log(retailer)
+    ShoppingAPI.getAPI()
+      .addRetailer(retailer)
+      .catch((e) => {
+        this.fetchRetailers(false, name);
+
+      });
   };
 
   render() {

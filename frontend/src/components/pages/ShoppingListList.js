@@ -26,7 +26,7 @@ export default class ShoppingListList extends Component {
   fetchRetailers() {
     // Fetch all retailer for group
     ShoppingAPI.getAPI()
-      .searchRetailerMemberByGroup(2)
+      .searchRetailerMemberByGroup(this.props.groupId)
       .then((membership) => {
         // Fetch all retailers of data warehouse
         ShoppingAPI.getAPI()
@@ -37,12 +37,10 @@ export default class ShoppingListList extends Component {
               retailers.push(
                 allRetailers.find((x) => x.id === i.retailer_member)
               );
-              console.log(allRetailers.find((x) => x.id === 2));
-              console.log(allRetailers);
             }
-            if (retailers.length === 0) {
-              retailers.push({ id: 0, name: '404' });
-            }
+            // if (retailers.length === 0) {
+            //   retailers.push({ id: 0, name: 404 });
+            // }
             console.log(retailers);
             // On success
             // setState before fetchfavorites because we need retailers in state

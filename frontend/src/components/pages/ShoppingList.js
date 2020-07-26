@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import ShoppingListList from './ShoppingListList';
 import Favorite from './Favorite';
+import Retailer from './Retailer';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
@@ -30,7 +31,8 @@ export default class ShoppingList extends Component {
       rowIndex: -1,
       error: false,
       showFav: false,
-      groupId: this.props.match.params.groupId.toString()
+      showRetailer: false,
+      groupId: parseInt(this.props.match.params.groupId)
     };
   }
   // Fetch shoppinglists for group
@@ -53,7 +55,11 @@ export default class ShoppingList extends Component {
   };
 
   toggleShowFav = () => {
-    this.setState({ showFav: !this.state.showFav });
+    this.setState({ showFav: !this.state.showFav, showRetailer: false });
+  };
+
+  toggleShowRetailer = () => {
+    this.setState({ showRetailer: !this.state.showRetailer, showFav: false });
   };
 
   validateAdd = () => {
@@ -63,19 +69,28 @@ export default class ShoppingList extends Component {
   };
 
   AddShoppingList = () => {
-    const { shoppinglistname, data, groupsId } = this.state;
+    const { shoppinglistname, groupId } = this.state;
     const shoppinglist = new ShoppingListBO();
     shoppinglist.setName(shoppinglistname.trim());
-    shoppinglist.setGroupId(groupsId);
-    //@TODO shoppinglist.setId später entfernen
+    shoppinglist.setGroupId(groupId);
     shoppinglist.setID(Math.floor(Math.random() * Math.floor(500)));
-    this.state.data.unshift(shoppinglist);
-    this.setState({ data, error: false });
+
+    console.log(shoppinglist)
+    ShoppingAPI.getAPI()
+    .addShoppingList(shoppinglist)
+    .catch((e) => {
+      console.info(e);
+      // On success
+      // this.state.data.push(shoppinglist);
+      // this.setState({ data, error: false });
+      this.fetchShoppinglist()
+      document.getElementById('AddSL').value = '';
+      
+    });
   };
 
   render() {
-    const { error, data, rowIndex, showFav, groupId } = this.state;
-    console.log("params", this.props.match.params)
+    const { error, data, rowIndex, showFav,showRetailer, groupId } = this.state;
     return (
       <div>
         <Card
@@ -86,6 +101,7 @@ export default class ShoppingList extends Component {
         >
           <CardContent>
             <Input
+            id="AddSL"
               placeholder="Einkauflslistenname"
               error={error}
               onChange={(e) => this.setState({ shoppinglistname: e.target.value })}
@@ -97,10 +113,19 @@ export default class ShoppingList extends Component {
             <Button id="FavBtn" onClick={this.toggleShowFav.bind(this)}>
               ♥ Edit Favorites
             </Button>
+            <Button id="RetailerBtn" onClick={this.toggleShowRetailer.bind(this)}>Retailer</Button>
+
+
             {showFav && (
               <Typography id={'Fav'}>
                 <Favorite
-                  // @TEST this.props.groupId
+                  groupId={groupId}
+                />
+              </Typography>
+            )}
+                        {showRetailer && (
+              <Typography id={'Retailer'}>
+                <Retailer
                   groupId={groupId}
                 />
               </Typography>
