@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
+import { HashRouter as Router, Route, Redirect } from 'react-router-dom';
 import { Grid } from '@material-ui/core';
 import Header from './components/layout/Header';
 // import Register from "./components/layout/Register";

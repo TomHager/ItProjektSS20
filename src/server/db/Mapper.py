@@ -18,15 +18,15 @@ class Mapper(AbstractContextManager, ABC):
 
         if os.getenv('GAE_ENV', '').startswith('standard'):
 
-            """self._cnx = connector.connect(user='demo', password='demo',
-                                          unix_socket='/cloudsql/python-bankprojekt-thies:europe-west3:bank-db-thies',
-                                          database='ikauf')"""
+            self._cnx = connector.connect(user='demo', password='demo',
+                                          unix_socket='/cloudsql/it-projekt-ss20:europe-west3:shoppinglistapp-db-gruppe7',
+                                          database='it_projekt_db_ss20')
 
         else:
 
             self._cnx = connector.connect(user='root', password='root',
                                           host='127.0.0.1',
-                                          database='it-projekt-ss2020')
+                                          database='it projekt ss20')
 
         return self
 
