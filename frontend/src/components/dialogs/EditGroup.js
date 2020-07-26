@@ -8,8 +8,6 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import EditIcon from '@material-ui/icons/Edit';
 import IconButton from '@material-ui/core/IconButton';
-import ShoppingAPI from '../../api/ShoppingAPI';
-// import ShoppingAPI from "../../api/ShoppingAPI";
 
 /**
  *
@@ -24,6 +22,7 @@ export class EditGroup extends Component {
     this.state = {
       open: false,
       newName: '',
+      error: false,
     };
   }
 
@@ -54,17 +53,10 @@ export class EditGroup extends Component {
   //     );
   // };
 
-  handleUpdate = (event) => {
-    event.preventDefault();
-    const updatedGroup = this.state.newName;
-    ShoppingAPI.getAPI()
-      .updateGroup(updatedGroup)
-      .catch((error) => console.error('Error:', error));
-    console.log(this.state.newName);
-  };
-
-  handleGroupNameChange = (event) => {
-    this.setState({ newName: event.target.value });
+  handleUpdate = () => {
+    this.state.newName.trim() !== ''
+      ? this.props.EditGroup(this.state.newName.trim(), this.props.group.id)
+      : this.setState({ error: true });
   };
 
   render() {
@@ -92,7 +84,8 @@ export class EditGroup extends Component {
               id="name"
               label="Group name"
               type="text"
-              onChange={this.handleGroupNameChange}
+              defaultValue={this.props.group.name}
+              onChange={(e) => this.setState({ newName: event.target.value })}
               fullWidth
             />
           </DialogContent>
