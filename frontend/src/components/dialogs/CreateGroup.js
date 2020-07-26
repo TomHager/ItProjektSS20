@@ -37,8 +37,6 @@ export class CreateGroup extends Component {
       open: false,
       users: [],
       groupName: '',
-      createdGroup: [],
-      user: {},
       allUsers: [],
       errorEmail: false,
       errorGroup: false,
@@ -48,9 +46,9 @@ export class CreateGroup extends Component {
   getAllUsers = () => {
     ShoppingAPI.getAPI()
       .getUsers()
-      .then((result) => {
-        this.setState({ allUsers: result });
-        console.log(this.state.allUsers);
+      .then((allUsers) => {
+        console.log(allUsers)
+        this.setState({ allUsers });
       });
   };
 
@@ -58,7 +56,6 @@ export class CreateGroup extends Component {
     ShoppingAPI.getAPI()
       .searchGroupByName(this.state.groupName)
       .then((createdGroup) => {
-        this.setState({ createdGroup });
         this.addGroupMembershipForCurrentUser(createdGroup);
       });
   };
@@ -73,7 +70,7 @@ export class CreateGroup extends Component {
     ShoppingAPI.getAPI()
       .addGroupMembership(newMembership)
       .catch((e) => {
-        this.state.users.unshift(addedUser);
+        this.state.users.push(addedUser);
         this.setState({ users: this.state.users });
       });
   };
@@ -81,12 +78,10 @@ export class CreateGroup extends Component {
   getAddedUserByEmail = () => {
     ShoppingAPI.getAPI()
       .searchUserByEmail(this.state.userMail)
-      .then((returnedUser) => {
-        console.log(returnedUser[0]);
+      .then((user) => {
+        console.log(user[0]);
         setTimeout(() => {
-          this.setState({ user: returnedUser[0] });
-          console.log(this.state.user);
-          this.addGroupMembership(this.state.user);
+          this.addGroupMembership(user[0]);
         }, 1);
       });
   };
@@ -117,7 +112,7 @@ export class CreateGroup extends Component {
   addGroupMembershipForCurrentUser = (createdGroup) => {
     const newMembership = new GroupMembershipBO();
     newMembership.setGroupMember(this.props.currentUser.id);
-    newMembership.setGroupMembership(this.state.createdGroup[createdGroup.length - 1].id);
+    newMembership.setGroupMembership(createdGroup[createdGroup.length - 1].id);
     // const newMembership = { member: 3, group_membership: 3 };
     console.log(newMembership);
     ShoppingAPI.getAPI()
@@ -136,26 +131,31 @@ export class CreateGroup extends Component {
 
   // @TODO Wird nicht aufgeruden und würde this.handleCreateGroup aufrufen und nicht add User
   validateAddUser = () => {
-    const { userMail } = this.state;
-    this.state.users.filter((x) => x.email === userMail.trim())
+    const { userMail, allUsers } = this.state;
+    allUsers.filter((x) => x.email === userMail.trim())
       ? this.setState({ errorEmail: true })
       : this.getAddedUserByEmail();
   };
 
+  toggleOpen = () => {
+    this.setState({open: !this.state.open})
+  }
+
   render() {
+    console.log(this.state.allUsers)
     const { open, users, errorEmail, errorGroup } = this.state;
     return (
       <div>
         <IconButton
           aria-label="Edit"
           style={{ float: 'right' }}
-          onClick={this.setState({ open: true })}
+          onClick={this.toggleOpen}
         >
           <GroupAddIcon />
         </IconButton>
         <Dialog
           open={open}
-          onClose={this.setState({ open: false })}
+          onClose={this.toggleOpen}
           aria-labelledby="form-dialog-title"
           fullScreen={true}
           align="center"
@@ -206,7 +206,7 @@ export class CreateGroup extends Component {
                           error={errorEmail}
                           onChange={(e) => this.setState({ userMail: e.target.value })}
                         ></TextField>
-                        <IconButton onClick={this.validateAddUser()}>
+                        <IconButton onClick={this.validateAddUser}>
                           <PersonAddIcon />
                         </IconButton>
                       </div>
@@ -243,11 +243,11 @@ export class CreateGroup extends Component {
             </TableContainer>
           </DialogContent>
           <DialogActions>
-            <Button onClick={this.setState({ open: false })} color="primary">
+            <Button onClick={this.toggleOpen} color="primary">
               Cancel
             </Button>
             {/* <Button onClick={this.handleClose} color="primary"> */}
-            <Button onClick={this.setState({ open: false })} color="primary">
+            <Button onClick={this.toggleOpen} color="primary">
               Submit
             </Button>
           </DialogActions>

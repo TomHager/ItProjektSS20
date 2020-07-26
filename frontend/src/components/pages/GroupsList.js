@@ -12,6 +12,8 @@ import {
 import GroupMembershipBO from '../../api/GroupMembershipBO';
 import ShoppingAPI from '../../api/ShoppingAPI';
 import GroupBO from '../../api/GroupBO';
+import firebase from 'firebase/app';
+import GroupManagement from "./GroupManagement"
 
 /**
  * Displays favorites for given group
@@ -19,7 +21,7 @@ import GroupBO from '../../api/GroupBO';
  * @author Tom Hager
  */
 
-export default class GroupManagement extends Component {
+export default class GroupsList extends Component {
   constructor(props) {
     super(props);
     // user
@@ -40,10 +42,20 @@ export default class GroupManagement extends Component {
   }
 
   //All Fetch Fucnstions
-  // Fetch all groups of user
-  fetchGroupsForUser = () => {
+  
+  fetchCurrentUser = () => {
     ShoppingAPI.getAPI()
-      .searchGroupsByMember(this.props.user.id)
+      .searchUserByEmail(firebase.auth().currentUser.email)
+      .then((user) => {
+        this.setState({ user:user[0] });
+        this.fetchGroupsForUser(user[0]);
+      });
+  };
+
+  // Fetch all groups of user
+  fetchGroupsForUser = (user) => {
+    ShoppingAPI.getAPI()
+      .searchGroupsByMember(user.id)
       .then((groupMemberships) => {
         if (groupMemberships.length > 0) {
           ShoppingAPI.getAPI()
@@ -128,16 +140,21 @@ export default class GroupManagement extends Component {
       });
   };
 
+
+  //@TODO FIX
   // Delete User from Group
   leaveGroup = (groupId) => {
+    console.log(this.state.user)
     ShoppingAPI.getAPI()
       .deleteGroupMembership(groupId, this.state.user.id)
-      .then(() => this.checkForEmptyGroup(groupId));
+      .then(() => {
+      this.checkForEmptyGroup(groupId);
     this.setState({
       data: this.state.data.filter((x) => x.id !== groupId),
-    });
+    })});
   };
 
+  //@TEST
   // Delete group if no users are found for group
   checkForEmptyGroup = (groupId) => {
     ShoppingAPI.getAPI()
@@ -189,11 +206,11 @@ export default class GroupManagement extends Component {
               </Button>
 
               {/* Manage selected group */}
-              <IconButton onClick={this.toggleSelectedRow(row)}>
+              <IconButton onClick={this.toggleSelectedRow.bind(this,row)}>
                 <Edit />
               </IconButton>
               {rowIndex === row.id && (
-                <Typography>
+                <Typography id="selectedGroup">
                   <GroupManagement
                     groupId={row.id}
                     groupName={row.name}

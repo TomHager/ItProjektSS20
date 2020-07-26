@@ -57,6 +57,8 @@ export default class GroupManagement extends Component {
       .then((users) => {
         this.setState({ users });
         this.getUserForGroup(users);
+        console.log("users")
+        console.log(users)
       });
   };
 
@@ -70,27 +72,49 @@ export default class GroupManagement extends Component {
           data.push(users.find((x) => x.id === i.member));
         }
         this.setState({ data });
+        console.log("data")
+        console.log(data)
       });
   };
 
   // Start Callbacks
   componentDidMount() {
+    console.log("ITS HERE")
+    console.log(this.props.groupId)
+    console.log(this.props.groupName)
+
     this.setState({ groupName: this.props.groupName });
-    this.fetchAllUser;
-    console.log('Mount');
+    this.fetchAllUser();
+  }
+
+  triggerEdit = () =>{
+    console.log(this.state.groupName)
+    this.setState({
+      editGroupActive: true,
+      editGroupName: this.state.groupName,
+    })
   }
 
   // Validate Add User
   validateAddUser = () => {
-    const { userEmail, users } = this.state;
-    let req = new RegExp(userEmail.trim(), 'g');
-    users.match(req)
+    const { userEmail, users , data} = this.state;
+    let userMatch = null
+    for(let i of users) {
+      console.log(i.email)
+      if(i.email.toLowerCase() === userEmail.toLowerCase().trim()) {
+userMatch = i
+      }
+    }
+    if(userMatch !== null){
+    data.find(x => x.email ===userMatch.email) !== undefined
       ? this.setState({ errorEmail: true })
-      : this.AddUser(users.match(req));
+      : this.AddUser(userMatch);
+  }
   };
 
   // Validate Edit Group
   validateEditGroup = () => {
+    console.log(this.state.editGroupName)
     this.state.editGroupName.trim() !== ''
       ? this.UpdateGroupName()
       : this.setState({ errorGroup: true });
@@ -99,7 +123,6 @@ export default class GroupManagement extends Component {
   // @TEST
   // Add User
   AddUser = (user) => {
-    const { users, userEmail } = this.state;
     // Get given User
     const newMembership = new GroupMembershipBO();
     newMembership.setGroupMembership(this.props.groupId);
@@ -115,7 +138,7 @@ export default class GroupManagement extends Component {
       });
   };
 
-  // @TEST
+  // @TEST FIX 404 not Found API LINK: iKauf/groups/id
   // Update GroupName
   UpdateGroupName = () => {
     const group = new GroupBO();
@@ -148,13 +171,14 @@ export default class GroupManagement extends Component {
                 <TableCell>Gruppe:</TableCell>
                 <TableCell>
                   {!editGroupActive ? (
-                    { groupName }
+                     <b>{groupName}</b>
                   ) : (
                     <Input
                       id="editGroup"
                       type="test"
                       placeholder="enter new group name"
                       label="Group Name"
+                      defaultValue={groupName}
                       error={errorGroup}
                       onChange={(e) => this.setState({ editGroupName: e.target.value })}
                     ></Input>
@@ -162,12 +186,7 @@ export default class GroupManagement extends Component {
                 </TableCell>
                 <TableCell>
                   {!editGroupActive ? (
-                    <IconButton
-                      onClick={this.setState({
-                        editGroupActive: frue,
-                        editGroup: groupName,
-                      })}
-                    >
+                    <IconButton                      onClick={this.triggerEdit}                    >
                       <Edit />
                     </IconButton>
                   ) : (
@@ -184,7 +203,7 @@ export default class GroupManagement extends Component {
           <Typography id="add">
             <Input
               id="addEmail"
-              type="email"
+              type="text"
               placeholder="enter new email"
               label="User email"
               error={errorEmail}
@@ -200,7 +219,7 @@ export default class GroupManagement extends Component {
             <Typography id={row.id}>{row.email}</Typography>
           ))}
 
-          <Button onClick={this.leaveGroup}>Leave Group</Button>
+          <Button id="leaveBtn" onClick={this.leaveGroup}>Leave Group</Button>
         </Container>
       </React.Fragment>
     );
