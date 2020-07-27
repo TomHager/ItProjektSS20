@@ -199,9 +199,9 @@ export default class Favorite extends Component {
   validateAddFavorite = () => {
     const { article, amount, retailers } = this.state;
     const aAmount = Math.round(amount * 1000) / 1000;
-    article.trim() !== '' && aAmount > 0 && retailers[0].name !== 404
+    article.trim() !== '' && Math.round(aAmount) > 0 && retailers[0].name !== 404
       ? this.addFavorite()
-      : this.setAddError(article, aAmount);
+      : this.setAddError(article, Math.round(aAmount));
   };
 
   // @TEST
@@ -213,7 +213,7 @@ export default class Favorite extends Component {
     const fav = new FavoriteBO();
     fav.setID(Math.floor(Math.random() * Math.floor(500)));
     fav.setArticle(article);
-    fav.setAmount(amount);
+    fav.setAmount(Math.round(amount));
     fav.setUnit(unit);
     fav.setRetailerID(retailer);
     fav.setGroupID(this.props.groupId);
