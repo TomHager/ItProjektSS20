@@ -33,9 +33,10 @@ export default class Favorite extends Component {
       //passed Columns and Data loaded into state
       data: [],
       units: [
-        { name: 'Kg' },
-        { name: 'L' },
+        { name: 'kg' },
         { name: 'g' },
+        { name: 'l' },
+        { name: 'ml' },
         { name: 'pcs' },
         { name: 'pack' },
       ],

@@ -40,13 +40,21 @@ export default class ShoppingList extends Component {
     ShoppingAPI.getAPI()
       .searchShoppingListByGroupId(this.state.groupId)
       .then((data) => {
-        this.setState({ data });
+        this.sortEntries(data);
       });
   }
 
   componentDidMount() {
     this.fetchShoppinglist();
   }
+
+  // Sort given entries
+  sortEntries = (data) => {
+    const nData = data;
+    // Sorts Date Integer asc
+    nData.sort((a, b) => b.id - a.id);
+    this.setState({ data: nData });
+  };
 
   toggleHidden = (id) => {
     this.state.rowIndex === id
