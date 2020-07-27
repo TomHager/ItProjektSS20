@@ -57,14 +57,22 @@ export default class RetailerList extends Component {
                 .catch((e) => console.error(e));
               console.log(newMembership);
               membership.push(newMembership);
+              //load retailer
+              const retailers = [];
+              for (let i of membership) {
+                retailers.push(allRetailers.find((x) => x.id === i.retailer_member));
+              }
+              // On success
+              this.setState({ retailers });
+            } else {
+              //load retailer
+              const retailers = [];
+              for (let i of membership) {
+                retailers.push(allRetailers.find((x) => x.id === i.retailer_member));
+              }
+              // On success
+              this.setState({ retailers });
             }
-            //load retailer
-            const retailers = [];
-            for (let i of membership) {
-              retailers.push(allRetailers.find((x) => x.id === i.retailer_member));
-            }
-            // On success
-            this.setState({ retailers });
           });
       });
   }
