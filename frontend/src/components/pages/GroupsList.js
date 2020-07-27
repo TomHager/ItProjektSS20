@@ -13,7 +13,7 @@ import GroupMembershipBO from '../../api/GroupMembershipBO';
 import ShoppingAPI from '../../api/ShoppingAPI';
 import GroupBO from '../../api/GroupBO';
 import firebase from 'firebase/app';
-import GroupManagement from "./GroupManagement"
+import GroupManagement from './GroupManagement';
 
 /**
  * Displays favorites for given group
@@ -42,12 +42,12 @@ export default class GroupsList extends Component {
   }
 
   //All Fetch Fucnstions
-  
+
   fetchCurrentUser = () => {
     ShoppingAPI.getAPI()
       .searchUserByEmail(firebase.auth().currentUser.email)
       .then((user) => {
-        this.setState({ user:user[0] });
+        this.setState({ user: user[0] });
         this.fetchGroupsForUser(user[0]);
       });
   };
@@ -140,18 +140,18 @@ export default class GroupsList extends Component {
       });
   };
 
-
   //@TODO FIX
   // Delete User from Group
   leaveGroup = (groupId) => {
-    console.log(this.state.user)
+    console.log(this.state.user);
     ShoppingAPI.getAPI()
       .deleteGroupMembership(groupId, this.state.user.id)
       .then(() => {
-      this.checkForEmptyGroup(groupId);
-    this.setState({
-      data: this.state.data.filter((x) => x.id !== groupId),
-    })});
+        this.checkForEmptyGroup(groupId);
+        this.setState({
+          data: this.state.data.filter((x) => x.id !== groupId),
+        });
+      });
   };
 
   //@TEST
@@ -166,7 +166,7 @@ export default class GroupsList extends Component {
       });
   };
 
-  updateGroupName= (groupId, groupName) =>{
+  updateGroupName = (groupId, groupName) => {
     const group = new GroupBO();
     group.setID(groupId);
     group.setName(groupName);
@@ -176,10 +176,11 @@ export default class GroupsList extends Component {
         // On success
         this.setState((prevState) => {
           const data = [...prevState.data];
-          data[data.indexOf(this.state.data.find(x => x.id === group.id))] = group;
+          data[data.indexOf(this.state.data.find((x) => x.id === group.id))] = group;
           return { ...prevState, data };
-        });      });
-  }
+        });
+      });
+  };
 
   render() {
     const { data, errorGroup, rowIndex } = this.state;
@@ -208,13 +209,16 @@ export default class GroupsList extends Component {
           {data.map((row) => (
             <Typography id={row.id}>
               {/* Button to link to shoppinglist of group */}
-              <Button id={`link ${row.id}`} component={Link} to={`shoppingList/${row.id}`} >
+              <Button
+                id={`link ${row.id}`}
+                component={Link}
+                to={`shoppingList/${row.id}`}
+              >
                 {row.name}
-
               </Button>
 
               {/* Manage selected group */}
-              <IconButton onClick={this.toggleSelectedRow.bind(this,row)}>
+              <IconButton onClick={this.toggleSelectedRow.bind(this, row)}>
                 <Edit />
               </IconButton>
               {rowIndex === row.id && (

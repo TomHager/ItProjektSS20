@@ -17,7 +17,6 @@ export default class AddRetailer extends Component {
     error: false,
   };
 
-
   // onSubmit = (e) => {
   //   e.preventDefault();
 
@@ -29,11 +28,10 @@ export default class AddRetailer extends Component {
   };
 
   handleCreateRetailer = () => {
-this.props.addRetailer(this.state.retailerName)
-this.setState({error:false})
-document.getElementById("retailerInput").value=""
+    this.props.addRetailer(this.state.retailerName);
+    this.setState({ error: false });
+    document.getElementById('retailerInput').value = '';
   };
-
 
   render() {
     return (
@@ -44,7 +42,7 @@ document.getElementById("retailerInput").value=""
           name="retailer"
           style={{ flex: '10', padding: '5px' }}
           placeholder="Enter Retailername ..."
-          onChange={e=> this.setState({retailerName: e.target.value})}
+          onChange={(e) => this.setState({ retailerName: e.target.value })}
           error={this.state.error}
         ></TextField>
         <IconButton onClick={this.validateCreate.bind(this)}>

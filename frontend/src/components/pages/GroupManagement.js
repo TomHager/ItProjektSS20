@@ -56,8 +56,8 @@ export default class GroupManagement extends Component {
       .then((users) => {
         this.setState({ users });
         this.getUserForGroup(users);
-        console.log("users")
-        console.log(users)
+        console.log('users');
+        console.log(users);
       });
   };
 
@@ -71,49 +71,49 @@ export default class GroupManagement extends Component {
           data.push(users.find((x) => x.id === i.member));
         }
         this.setState({ data });
-        console.log("data")
-        console.log(data)
+        console.log('data');
+        console.log(data);
       });
   };
 
   // Start Callbacks
   componentDidMount() {
-    console.log("ITS HERE")
-    console.log(this.props.groupId)
-    console.log(this.props.groupName)
+    console.log('ITS HERE');
+    console.log(this.props.groupId);
+    console.log(this.props.groupName);
 
     this.setState({ groupName: this.props.groupName });
     this.fetchAllUser();
   }
 
-  triggerEdit = () =>{
-    console.log(this.state.groupName)
+  triggerEdit = () => {
+    console.log(this.state.groupName);
     this.setState({
       editGroupActive: true,
       editGroupName: this.state.groupName,
-    })
-  }
+    });
+  };
 
   // Validate Add User
   validateAddUser = () => {
-    const { userEmail, users , data} = this.state;
-    let userMatch = null
-    for(let i of users) {
-      console.log(i.email)
-      if(i.email.toLowerCase() === userEmail.toLowerCase().trim()) {
-userMatch = i
+    const { userEmail, users, data } = this.state;
+    let userMatch = null;
+    for (let i of users) {
+      console.log(i.email);
+      if (i.email.toLowerCase() === userEmail.toLowerCase().trim()) {
+        userMatch = i;
       }
     }
-    if(userMatch !== null){
-    data.find(x => x.email ===userMatch.email) !== undefined
-      ? this.setState({ errorEmail: true })
-      : this.AddUser(userMatch);
-  }
+    if (userMatch !== null) {
+      data.find((x) => x.email === userMatch.email) !== undefined
+        ? this.setState({ errorEmail: true })
+        : this.AddUser(userMatch);
+    }
   };
 
   // Validate Edit Group
   validateEditGroup = () => {
-    console.log(this.state.editGroupName)
+    console.log(this.state.editGroupName);
     this.state.editGroupName.trim() !== ''
       ? this.UpdateGroupName()
       : this.setState({ errorGroup: true });
@@ -139,8 +139,8 @@ userMatch = i
 
   // Update GroupName
   UpdateGroupName = () => {
-    this.props.updateGroup(this.props.groupId, this.state.editGroupName.trim())
-    this.setState({groupName: this.state.editGroupName, editGroupActive: false})
+    this.props.updateGroup(this.props.groupId, this.state.editGroupName.trim());
+    this.setState({ groupName: this.state.editGroupName, editGroupActive: false });
   };
 
   leaveGroup = () => {
@@ -162,7 +162,7 @@ userMatch = i
                 <TableCell>Gruppe:</TableCell>
                 <TableCell>
                   {!editGroupActive ? (
-                     <b>{groupName}</b>
+                    <b>{groupName}</b>
                   ) : (
                     <Input
                       id="editGroup"
@@ -177,7 +177,7 @@ userMatch = i
                 </TableCell>
                 <TableCell>
                   {!editGroupActive ? (
-                    <IconButton                      onClick={this.triggerEdit}                    >
+                    <IconButton onClick={this.triggerEdit}>
                       <Edit />
                     </IconButton>
                   ) : (
@@ -210,7 +210,9 @@ userMatch = i
             <Typography id={row.id}>{row.email}</Typography>
           ))}
 
-          <Button id="leaveBtn" onClick={this.leaveGroup}>Leave Group</Button>
+          <Button id="leaveBtn" onClick={this.leaveGroup}>
+            Leave Group
+          </Button>
         </Container>
       </React.Fragment>
     );

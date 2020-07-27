@@ -55,9 +55,7 @@ export default class ReportNavigation extends Component {
                 .getGroups()
                 .then((allGroups) => {
                   for (let i of groupMember)
-                    groupRows.push(
-                      allGroups.find((x) => x.id === i.group_membership)
-                    );
+                    groupRows.push(allGroups.find((x) => x.id === i.group_membership));
                 });
               // Else user has no groups
             } else {
@@ -80,9 +78,7 @@ export default class ReportNavigation extends Component {
           .then((allRetailers) => {
             const retailerRows = [];
             for (let i of membership) {
-              retailerRows.push(
-                allRetailers.find((x) => x.id === i.retailer_member)
-              );
+              retailerRows.push(allRetailers.find((x) => x.id === i.retailer_member));
             }
             if (retailerRows.length === 0) {
               retailerRows.push({ id: 0, name: '404' });
@@ -131,20 +127,20 @@ export default class ReportNavigation extends Component {
     document.getElementById('timeFrom').value = '';
   }
 
-  timeFromHandler(e){
-  this.setState({ timeFrom: e.target.value, submit: false})
+  timeFromHandler(e) {
+    this.setState({ timeFrom: e.target.value, submit: false });
   }
 
-  timeToHandler(e){
-    this.setState({ timeFrom: e.target.value, submit: false})
-    }
+  timeToHandler(e) {
+    this.setState({ timeFrom: e.target.value, submit: false });
+  }
 
   submitClickHandler() {
-      const { timeFrom, timeTo, timeActive } = this.state;
-    if(timeFrom === null || timeTo === null){
+    const { timeFrom, timeTo, timeActive } = this.state;
+    if (timeFrom === null || timeTo === null) {
       this.setState({ submit: true, timeActive: false });
     }
-    this.setState({submit: true})
+    this.setState({ submit: true });
   }
 
   render() {
@@ -179,8 +175,7 @@ export default class ReportNavigation extends Component {
               <TableRow
                 key={row.id}
                 style={{
-                  backgroundColor:
-                    row.id === this.state.groupIndex ? '#0090FF' : 'white',
+                  backgroundColor: row.id === this.state.groupIndex ? '#0090FF' : 'white',
                 }}
                 onClick={this.groupClickHandler.bind(this, row)}
               >
@@ -261,7 +256,7 @@ export default class ReportNavigation extends Component {
                 type="date"
                 name="timeFrom"
                 disabled={timeActive}
-                onChange={(e) => this.timeFromHandler(e) }
+                onChange={(e) => this.timeFromHandler(e)}
               />
                 To:
               <input
@@ -269,13 +264,13 @@ export default class ReportNavigation extends Component {
                 type="date"
                 name="timeTo"
                 disabled={timeActive}
-                onChange={(e) => this.timeToHandler(e) }
+                onChange={(e) => this.timeToHandler(e)}
               />
             </TableCell>
           </TableBody>
         </Table>
         <Typography id="Sub" onClick={this.submitClickHandler.bind(this)}>
-        {/* <Button
+          {/* <Button
                       component={Link}
                       to={{
                         pathname: '/reportTable',

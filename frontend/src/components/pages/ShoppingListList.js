@@ -34,9 +34,7 @@ export default class ShoppingListList extends Component {
           .then((allRetailers) => {
             const retailers = [];
             for (let i of membership) {
-              retailers.push(
-                allRetailers.find((x) => x.id === i.retailer_member)
-              );
+              retailers.push(allRetailers.find((x) => x.id === i.retailer_member));
             }
             // if (retailers.length === 0) {
             //   retailers.push({ id: 0, name: 404 });

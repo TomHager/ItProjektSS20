@@ -32,7 +32,7 @@ export default class ShoppingList extends Component {
       error: false,
       showFav: false,
       showRetailer: false,
-      groupId: parseInt(this.props.match.params.groupId)
+      groupId: parseInt(this.props.match.params.groupId),
     };
   }
   // Fetch shoppinglists for group
@@ -75,22 +75,21 @@ export default class ShoppingList extends Component {
     shoppinglist.setGroupId(groupId);
     shoppinglist.setID(Math.floor(Math.random() * Math.floor(500)));
 
-    console.log(shoppinglist)
+    console.log(shoppinglist);
     ShoppingAPI.getAPI()
-    .addShoppingList(shoppinglist)
-    .catch((e) => {
-      console.info(e);
-      // On success
-      // this.state.data.push(shoppinglist);
-      // this.setState({ data, error: false });
-      this.fetchShoppinglist()
-      document.getElementById('AddSL').value = '';
-      
-    });
+      .addShoppingList(shoppinglist)
+      .catch((e) => {
+        console.info(e);
+        // On success
+        // this.state.data.push(shoppinglist);
+        // this.setState({ data, error: false });
+        this.fetchShoppinglist();
+        document.getElementById('AddSL').value = '';
+      });
   };
 
   render() {
-    const { error, data, rowIndex, showFav,showRetailer, groupId } = this.state;
+    const { error, data, rowIndex, showFav, showRetailer, groupId } = this.state;
     return (
       <div>
         <Card
@@ -101,7 +100,7 @@ export default class ShoppingList extends Component {
         >
           <CardContent>
             <Input
-            id="AddSL"
+              id="AddSL"
               placeholder="Einkauflslistenname"
               error={error}
               onChange={(e) => this.setState({ shoppinglistname: e.target.value })}
@@ -113,21 +112,18 @@ export default class ShoppingList extends Component {
             <Button id="FavBtn" onClick={this.toggleShowFav.bind(this)}>
               ♥ Edit Favorites
             </Button>
-            <Button id="RetailerBtn" onClick={this.toggleShowRetailer.bind(this)}>Retailer</Button>
-
+            <Button id="RetailerBtn" onClick={this.toggleShowRetailer.bind(this)}>
+              Retailer
+            </Button>
 
             {showFav && (
               <Typography id={'Fav'}>
-                <Favorite
-                  groupId={groupId}
-                />
+                <Favorite groupId={groupId} />
               </Typography>
             )}
-                        {showRetailer && (
+            {showRetailer && (
               <Typography id={'Retailer'}>
-                <Retailer
-                  groupId={groupId}
-                />
+                <Retailer groupId={groupId} />
               </Typography>
             )}
           </CardContent>

@@ -30,7 +30,7 @@ export default class ReportDataTable extends Component {
   }
 
   fetchEntriesByGroup() {
-    console.log("ONLY GROUP")
+    console.log('ONLY GROUP');
     ShoppingAPI.getAPI()
       .searchEntryByGroup(this.props.groupId)
       .then((data) => {
@@ -40,13 +40,13 @@ export default class ReportDataTable extends Component {
   }
 
   fetchEntriesByGroupAndTime() {
-    console.log("DATE GROUP")
+    console.log('DATE GROUP');
     const { groupId, dateFrom, dateTo } = this.props;
     ShoppingAPI.getAPI()
       .searchReportDataURL(
         groupId,
         new Date().toISOString(dateFrom),
-        new Date().toISOString(dateTo),
+        new Date().toISOString(dateTo)
       )
       .then((data) => {
         this.filterData(data);
@@ -54,10 +54,10 @@ export default class ReportDataTable extends Component {
   }
 
   componentDidMount = () => {
-    if(this.props.groupId > 0) {
-    this.props.dateFrom !== null && this.props.dateTo !== null 
-      ? this.fetchEntriesByGroup()
-      : this.fetchEntriesByGroupAndTime();
+    if (this.props.groupId > 0) {
+      this.props.dateFrom !== null && this.props.dateTo !== null
+        ? this.fetchEntriesByGroup()
+        : this.fetchEntriesByGroupAndTime();
     }
   };
 

@@ -1,11 +1,4 @@
-import {
-  Refresh,
-  AddBox,
-  Delete,
-  Edit,
-  Check,
-  Clear,
-} from '@material-ui/icons';
+import { Refresh, AddBox, Delete, Edit, Check, Clear } from '@material-ui/icons';
 import React, { Component } from 'react';
 // import ShoppingAPI from '../../api/ShoppingAPI';
 // import { addEntry } from '../../actions/shoppingList';
@@ -89,9 +82,7 @@ export default class Favorite extends Component {
           .then((allRetailers) => {
             const retailers = [];
             for (let i of membership) {
-              retailers.push(
-                allRetailers.find((x) => x.id === i.retailer_member)
-                );
+              retailers.push(allRetailers.find((x) => x.id === i.retailer_member));
             }
             if (retailers.length === 0) {
               retailers.push({ id: 0, name: 404 });
@@ -108,7 +99,7 @@ export default class Favorite extends Component {
             });
             // Fetch favorites after because they rely on retailer names
             this.fetchFavorites();
-            console.log(retailers)
+            console.log(retailers);
           });
       });
   }
@@ -451,9 +442,7 @@ export default class Favorite extends Component {
                         id="editArticle"
                         placeholder="enter article"
                         defaultValue={row.article}
-                        onChange={(e) =>
-                          this.setState({ editArticle: e.target.value })
-                        }
+                        onChange={(e) => this.setState({ editArticle: e.target.value })}
                         error={errorEArticle}
                       ></Input>
                     ) : (
@@ -470,9 +459,7 @@ export default class Favorite extends Component {
                         id="editAmount"
                         placeholder="enter amount"
                         defaultValue={row.amount}
-                        onChange={(e) =>
-                          this.setState({ editAmount: e.target.value })
-                        }
+                        onChange={(e) => this.setState({ editAmount: e.target.value })}
                         error={errorEAmount}
                       ></Input>
                     ) : (
@@ -486,9 +473,7 @@ export default class Favorite extends Component {
                       <Select
                         id="editUnit"
                         defaultValue={row.unit}
-                        onChange={(e) =>
-                          this.setState({ editUnit: e.target.value })
-                        }
+                        onChange={(e) => this.setState({ editUnit: e.target.value })}
                       >
                         {units.map((option) => (
                           <option key={option.name}>{option.name}</option>
@@ -503,16 +488,9 @@ export default class Favorite extends Component {
                   <TableCell id={`${row.id} id`}>
                     <IconButton id={`${row.id} btn1`}>
                       {rowIndex === row.id ? (
-                        <Check
-                          onClick={this.validateUpdateFavorite.bind(
-                            this,
-                            row.id
-                          )}
-                        />
+                        <Check onClick={this.validateUpdateFavorite.bind(this, row.id)} />
                       ) : (
-                        <Edit
-                          onClick={this.toggleSelectedRow.bind(this, row)}
-                        />
+                        <Edit onClick={this.toggleSelectedRow.bind(this, row)} />
                       )}
                     </IconButton>
                     <IconButton id={`${row.id} btn2`}>
