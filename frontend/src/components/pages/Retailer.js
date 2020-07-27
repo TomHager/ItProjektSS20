@@ -68,7 +68,7 @@ export default class RetailerList extends Component {
     newMembership.setRetailerMember(matchingRetailers.id);
     console.log(newMembership);
     ShoppingAPI.getAPI()
-      .addRetailerGroup(membership)
+      .addRetailerGroup(newMembership)
       .then()
       .catch((e) => console.error(e));
     membership.push(newMembership);
@@ -117,7 +117,6 @@ export default class RetailerList extends Component {
 
     // Right soluction but no response
     // this.setState({ retailers: [...this.state.retailers, newRetailer] });
-    console.log(retailer);
     ShoppingAPI.getAPI()
       .addRetailer(retailer)
       .catch((e) => {

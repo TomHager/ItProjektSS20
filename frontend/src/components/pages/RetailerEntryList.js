@@ -236,7 +236,7 @@ export default class RetailerEntryList extends Component {
   // Adds favorite as entry
   addFavorite = (fav) => {
     const entry = new EntryBO();
-    // entry.setID(Math.floor(Math.random() * Math.floor(500))); // @TODO id should be return Update ID On Success
+    entry.setID(Math.floor(Math.random() * Math.floor(500))); // @TODO id should be return Update ID On Success
     entry.setArticle(fav.article);
     entry.setAmount(fav.amount);
     entry.setUnit(fav.unit);
@@ -309,7 +309,7 @@ export default class RetailerEntryList extends Component {
     article.trim() !== ''
       ? this.setState({ errorEArticle: false })
       : this.setState({ errorEArticle: true });
-    amount !== '' && amount > 0
+    amount > 0
       ? this.setState({ errorEAmount: false })
       : this.setState({ errorEAmount: true });
   };
@@ -317,18 +317,19 @@ export default class RetailerEntryList extends Component {
   // Validate add entry
   validateAdd = () => {
     const { article, amount } = this.state;
-    article.trim() !== '' && amount > 0
+    article.trim() !== '' && Math.round(amount) >= 1
       ? this.addEntry()
-      : this.setAddError(article, amount);
+      : this.setAddError(article, Math.round(amount));
   };
 
   // Validate edit entry
   validateEdit = (id) => {
     const { editArticle, editAmount, editUnit, members } = this.state;
+    const amount = parseInt(editAmount);
     const entry = new EntryBO();
     entry.setID(id);
     entry.setArticle(editArticle);
-    entry.setAmount(parseInt(editAmount));
+    entry.setAmount(Math.round(amount));
     entry.setUnit(editUnit);
     entry.setModificationDate(this.getModDate());
     entry.setUserId(members[0].id); // Member responsible
@@ -338,9 +339,9 @@ export default class RetailerEntryList extends Component {
     entry.setBought(0);
     console.log(entry);
 
-    editArticle.trim() !== '' && editAmount > 0
+    editArticle.trim() !== '' && Math.round(amount) >= 1
       ? this.updateEntry(entry)
-      : this.setEditError(editArticle, editAmount);
+      : this.setEditError(editArticle, Math.round(amount));
   };
 
   // @TEST
@@ -351,7 +352,7 @@ export default class RetailerEntryList extends Component {
     const entry = new EntryBO();
     entry.setID(Math.floor(Math.random() * Math.floor(500))); // @TODO id should be return Update ID On Success
     entry.setArticle(article);
-    entry.setAmount(amount);
+    entry.setAmount(Math.round(amount));
     entry.setUnit(unit);
     entry.setBought(0);
     entry.setModificationDate(this.getModDate());
