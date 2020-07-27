@@ -47,23 +47,7 @@ export default class RetailerList extends Component {
           .then((allRetailers) => {
             // Add new Retailer to RetailerGroupList
             if (!justFetch) {
-              const matchingRetailers = allRetailers.find((x) => x.name === name);
-              const newMembership = new RetailerGroupBO();
-              newMembership.setRetailerGroup(this.state.groupId);
-              newMembership.setRetailerMember(matchingRetailers.id);
-              ShoppingAPI.getAPI()
-                .addRetailerGroup(membership)
-                .then()
-                .catch((e) => console.error(e));
-              console.log(newMembership);
-              membership.push(newMembership);
-              //load retailer
-              const retailers = [];
-              for (let i of membership) {
-                retailers.push(allRetailers.find((x) => x.id === i.retailer_member));
-              }
-              // On success
-              this.setState({ retailers });
+              this.addNewRetailer(membership, allRetailers, name);
             } else {
               //load retailer
               const retailers = [];
@@ -76,6 +60,26 @@ export default class RetailerList extends Component {
           });
       });
   }
+
+  addNewRetailer = (membership, allRetailers, name) => {
+    const matchingRetailers = allRetailers.find((x) => x.name === name);
+    const newMembership = new RetailerGroupBO();
+    newMembership.setRetailerGroup(this.state.groupId);
+    newMembership.setRetailerMember(matchingRetailers.id);
+    console.log(newMembership);
+    ShoppingAPI.getAPI()
+      .addRetailerGroup(membership)
+      .then()
+      .catch((e) => console.error(e));
+    membership.push(newMembership);
+    //load retailer
+    const retailers = [];
+    for (let i of membership) {
+      retailers.push(allRetailers.find((x) => x.id === i.retailer_member));
+    }
+    // On success
+    this.setState({ retailers });
+  };
 
   //calls all Callbacks for Repor Selection
   componentDidMount = () => {
